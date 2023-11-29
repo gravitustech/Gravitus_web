@@ -138,6 +138,10 @@ export const P2P_SendPicture_URL = () => {
   return 'api/activity/nuevoP2P/sendPicture';
 };
 
+export const P2P_AppealMessages_URL = () => {
+  return 'api/activity/nuevoP2P/v2/appealMessages';
+};
+
 // Post Data
 export const P2P_AppealToEscrow_URL = () => {
   return 'api/activity/nuevoP2P/v2/appealToEscrow';
