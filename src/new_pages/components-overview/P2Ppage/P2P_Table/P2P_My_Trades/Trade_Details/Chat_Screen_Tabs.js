@@ -7,8 +7,8 @@ import Chatscreen from './Chat_Screen';
 import AppealChatscreen from './Chat_Screen_APL';
 import CustomSnackBar from 'src/components/snackbar';
 
-import useSWR from 'swr';
-import { P2P_TradeMessages_URL, fetcherP2P } from 'src/api_ng/peer2peer_ng';
+import useSWR, { mutate } from 'swr';
+import { P2P_AppealMessages_URL, P2P_TradeMessages_URL, fetcherP2P } from 'src/api_ng/peer2peer_ng';
 import { getConfig_ng, setConfig_ng } from '../../../../../../utils_ng/localStorage_ng';
 
 const Chat_Appeal_Tab = ({ resultdata, counterPart, appealMessage }) => {
@@ -19,7 +19,7 @@ const Chat_Appeal_Tab = ({ resultdata, counterPart, appealMessage }) => {
   const [value, setValue] = React.useState('0'); // Chat or Appeal Tab
   const orderDetails = resultdata?.orderDetails;
 
-  console.log('appealMessage', appealMessage)
+  console.log('orderDetails', orderDetails)
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -30,14 +30,31 @@ const Chat_Appeal_Tab = ({ resultdata, counterPart, appealMessage }) => {
       platformId: getConfig_ng('P2PPair').platformId
     };
 
-    const { data, error, isLoading, isValidating, mutate } = useSWR([P2P_TradeMessages_URL(), postData], fetcherP2P, {
+    const { data, error, isLoading, isValidating } = useSWR([P2P_TradeMessages_URL(), postData], fetcherP2P, {
       revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
     });
 
-    return { data: data, error: error, isLoading, mutate }
+    return { data, error, isLoading }
   }
 
-  const { data, error, mutate } = useTradeMessages();
+  const { data, error } = useTradeMessages();
+
+  function useAppealMessages() {
+    var postData = {
+      platformId: getConfig_ng('P2PPair').platformId,
+      orderId: orderDetails?.orderId,
+    };
+
+    const { data, error, isLoading, isValidating } = useSWR([P2P_AppealMessages_URL(), postData], fetcherP2P, {
+      revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
+    });
+
+    return { data, error, isLoading }
+  }
+
+  const { data: Appealdata, error: Appealerror } = useAppealMessages();
+
+  console.log('AppealData', Appealdata);
 
   return (
     <>

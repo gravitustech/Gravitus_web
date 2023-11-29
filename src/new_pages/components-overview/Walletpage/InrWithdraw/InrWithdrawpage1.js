@@ -1,29 +1,25 @@
 import React, { useState } from 'react';
-import CardInr from './Card';
+import { useNavigate } from 'react-router-dom';
 
-import { Grid, Typography, Stack, OutlinedInput, FormHelperText, Button, TextField, useTheme, InputAdornment, Box, IconButton } from '@mui/material';
+import { Grid, Typography, Stack, OutlinedInput, FormHelperText, Button, TextField, 
+  useTheme, InputAdornment, Box, IconButton 
+} from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import Autocomplete from '@mui/material/Autocomplete';
+
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import AnimateButton from '../../../../components/@extended/AnimateButton';
-import Autocomplete from '@mui/material/Autocomplete';
-import { useNavigate } from 'react-router-dom';
+
+import CardInr from './Card';
 import UserBankdeatils from './UserBankdeatils';
 import { NumericFormatCustom } from '../NumericFormatCustom';
+import AnimateButton from '../../../../components/@extended/AnimateButton';
+
 import useSWR from 'swr';
 import { fetcher, getWalletURLINRWidthdraw, postWidthdrawData } from '../../../../api/wallet';
 import { sendOtpSecurity } from '../../../../api/profile';
 
-const InrWithdrawpage1 = ({
-  inrWithdrawData,
-  setSnackbarMessage,
-  setSnackbarOpen,
-  setFormikValues,
-  formikValues,
-  setStep,
-  step,
-  securityData
-}) => {
+const InrWithdrawpage1 = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen, setFormikValues, formikValues, setStep, step, securityData }) => {
 
   const theme = useTheme();
   const navigate = useNavigate();

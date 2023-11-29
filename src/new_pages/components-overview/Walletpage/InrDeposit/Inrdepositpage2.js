@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+
 import { Grid, Typography, Stack, Button, useTheme, Box } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import AnimateButton from '../../../../components/@extended/AnimateButton';
-import { Link as RouterLink } from 'react-router-dom';
-import CardInr from '../InrWithdraw/Card';
-import doticon from '../../../../assets/images/gravitusimage/doticon.svg';
+
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+
+import CardInr from '../InrWithdraw/Card';
+import doticon from '../../../../assets/images/gravitusimage/doticon.svg';
 
 const InrDepositpage2 = ({ depositFrom, depositTo, setStep, setFormikValues, formikValues, setSnackbarMessage, setSnackbarOpen }) => {
 

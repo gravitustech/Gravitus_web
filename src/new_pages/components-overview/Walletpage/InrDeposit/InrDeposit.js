@@ -1,17 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-
-import { Grid, Typography, Stack, OutlinedInput, FormHelperText, Button, TextField, useTheme } from '@mui/material';
-import AnimateButton from '../../../../components/@extended/AnimateButton';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import Autocomplete from '@mui/material/Autocomplete';
-
-import CardInr from '../InrWithdraw/Card';
-import doticon from '../../../../assets/images/gravitusimage/doticon.svg';
-import { NumericFormatCustom } from '../NumericFormatCustom';
 import InrDepositpage2 from './Inrdepositpage2';
 import InrDepositpage3 from './Inrdepositpage3';
 import InrDepositpage1 from './Inrdepositpage1';
@@ -22,13 +10,11 @@ import { fetcher, getWalletURLINRDeposit } from '../../../../api/wallet';
 
 const InrDeposit = () => {
 
-  const theme = useTheme();
-
-  const DepositMode = [{ DepositMode: 'IMPS' }];
   const [step, setStep] = useState(1);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
   const [formikValues, setFormikValues] = useState({ term1: false, term2: false, term3: false, term4: false });
+
   const { data, error, isLoading } = useSWR(
     getWalletURLINRDeposit(),
     (url) => fetcher(url, { accountType: 'GRAVITUS', postData: { walletId: 17 } })

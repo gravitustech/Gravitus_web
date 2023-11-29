@@ -1,33 +1,24 @@
 import React, { useState } from 'react';
-import {
-  Grid,
-  Typography,
-  Stack,
-  OutlinedInput,
-  FormHelperText,
-  Button,
-  TextField,
-  useTheme,
-  Box,
-  Card,
-  IconButton,
-  styled,
-  Tooltip
-} from '@mui/material';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+
 import { Field, Formik } from 'formik';
 import * as Yup from 'yup';
+
+import { Grid, Typography, Stack, OutlinedInput, FormHelperText, Button,
+  TextField, useTheme, Box, Card, IconButton, styled, Tooltip
+} from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import AnimateButton from '../../../../components/@extended/AnimateButton';
 import Autocomplete from '@mui/material/Autocomplete';
-// import { Link as RouterLink } from 'react-router-dom';
-import CardInr from '../InrWithdraw/Card';
-import GravitusBankdeatils from './GravitusBankdeatils';
 import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import warninggif from '../../../../assets/images/gravitusimage/warninggif.svg';
-import { postINRDepositData } from '../../../../api/wallet';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import { DeleteForever } from '@mui/icons-material';
+
+import CardInr from '../InrWithdraw/Card';
+import GravitusBankdeatils from './GravitusBankdeatils';
+import warninggif from '../../../../assets/images/gravitusimage/warninggif.svg';
+
+import { postINRDepositData } from '../../../../api/wallet';
+
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',
@@ -39,21 +30,25 @@ const VisuallyHiddenInput = styled('input')({
   whiteSpace: 'nowrap',
   width: 1
 });
-const InrDepositpage3 = ({
-  depositFrom,
-  depositTo,
-  setStep,
-  setFormikValues,
-  formikValues,
-  setSnackbarOpen,
-  setSnackbarMessage,
-  walletId
-}) => {
-  const [open, setOpen] = useState(false);
+
+const InrDepositpage3 = ({ depositFrom, depositTo, setStep, setFormikValues, formikValues, setSnackbarOpen, setSnackbarMessage, walletId }) => {
+
+  const theme = useTheme();
+
   let formData = new FormData();
-  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const [open, setOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
   const [selectedFileURL, setSelectedFileURL] = useState();
+  // const [dialogOpen, setDialogOpen] = useState(false);
+
+  const Accounts = [{
+    Beneficiary: depositFrom?.accountName,
+    BankName: depositFrom?.bankName,
+    AcNumber: depositFrom?.accountNo,
+    IFSCCode: depositFrom?.IFSCCode,
+    payMode: depositFrom?.payMode,
+  }];
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
@@ -67,17 +62,22 @@ const InrDepositpage3 = ({
 
     reader.readAsDataURL(file);
   };
+
   const handleOpen = () => {
     setOpen(true);
   };
+
   const handlePrev = () => {
     setStep(2);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleConfirm = async () => {
     console.log({ formikValues });
+
     formData.append(
       'updateInfo',
       JSON.stringify({
@@ -89,6 +89,7 @@ const InrDepositpage3 = ({
         receiptNo: formikValues.utrId
       })
     );
+    
     formData.append('fileName', selectedFile.name);
     formData.append('fileI', selectedFileURL);
     try {
@@ -108,14 +109,6 @@ const InrDepositpage3 = ({
     setOpen(false);
   };
 
-  const theme = useTheme();
-  const Accounts = [{
-    Beneficiary: depositFrom?.accountName,
-    BankName: depositFrom?.bankName,
-    AcNumber: depositFrom?.accountNo,
-    IFSCCode: depositFrom?.IFSCCode,
-    payMode: depositFrom?.payMode,
-  }];
   return (
     <>
       {/* <Grid pl={15} pt={2}>
@@ -316,61 +309,6 @@ const InrDepositpage3 = ({
                             );
                           }}
                         </Field>
-                        {/* <Card
-                          sx={{
-                            // width: ' 330.98px',
-                            height: '100%',
-                            boxShadow: 'none',
-                            borderRadius: '5px',
-                            border: '2px solid',
-                            borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
-                            backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
-                          }}
-                        >
-                          <Stack
-                            sx={{
-                              alignItems: 'center',
-                              textAlign: 'center'
-                            }}
-                          >
-                            {selectedFileURL ? (
-                              <Box>
-                                <img src={selectedFileURL} alt="wew" width="90%" height="100%" />
-                                <Tooltip title="click to clear the image" placement="top" arrow>
-                                  <DeleteForever
-                                    onClick={() => setSelectedFileURL(null)}
-                                    sx={{
-                                      cursor: 'pointer',
-                                      color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
-                                    }}
-                                  />
-                                </Tooltip>
-                              </Box>
-                            ) : (
-                              <IconButton
-                                disableRipple
-                                component="label"
-                                sx={{
-                                  p: 12,
-                                  alignItems: 'center',
-                                  textAlign: 'center'
-                                }}
-                              >
-                                <Tooltip disableFocusListener disableTouchListener title="click to upload payment screenhot" placement="top" arrow>
-                                  <AddCircleOutlinedIcon
-                                    sx={{
-                                      width: '46px',
-                                      height: '46px',
-                                      color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary'
-                                    }}
-                                  />
-                                </Tooltip>
-
-                                <VisuallyHiddenInput type="file" accept="image/*" onChange={handleFileUpload} />
-                              </IconButton>
-                            )}
-                          </Stack>
-                        </Card> */}
                       </Stack>
                       {touched.file && errors.file && (
                         <FormHelperText error id="standard-weight-helper-text-file">

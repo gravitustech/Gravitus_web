@@ -40,6 +40,7 @@ const InrDepositpage1 = ({ depositFrom, depositTo, setStep, setFormikValues, for
   const goBack = () => {
     navigate(-1);
   }
+  
   return (
     <>
       {depositFrom && depositTo && (
