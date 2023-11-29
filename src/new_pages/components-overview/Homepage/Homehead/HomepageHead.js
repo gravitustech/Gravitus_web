@@ -26,7 +26,7 @@ const HomepageHead = () => {
               A foundational tool for novice users to gain insight into the cryptocurrency world.
             </Typography>
             <Stack pt={3}>
-              <Button variant='homespotbutton' component={RouterLink} to="/spot">
+              <Button variant='homespotbutton' component={RouterLink} to="/Spotpage">
                 TRADE NOW
               </Button>
             </Stack>

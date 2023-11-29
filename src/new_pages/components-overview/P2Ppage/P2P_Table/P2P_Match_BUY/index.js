@@ -33,7 +33,8 @@ import {
   InputAdornment,
   Collapse,
   Pagination,
-  Dialog
+  Dialog,
+  CircularProgress
 } from '@mui/material';
 
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
@@ -97,7 +98,7 @@ function OrderTableBody(props) {
 
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
-  
+
   const theme = useTheme();
   const formikRef = useRef();
 
@@ -151,7 +152,7 @@ function OrderTableBody(props) {
       setFieldValue('quantity', secondValue);
     }
   };
-  
+
   // Inputs
   const [inputs, setInputs] = useState({ totalamount: 0, quantity: 0 });
 
@@ -180,14 +181,14 @@ function OrderTableBody(props) {
         handleCloseDialog();
         setIsLoading(false);
 
-        if(res.error.name == "Missing Authorization") {
+        if (res.error.name == "Missing Authorization") {
           // Logout User
         }
         else if (res.error.name == "Invalid Authorization") {
           // Logout User
         }
         else {
-          if(res.error.name != undefined) {
+          if (res.error.name != undefined) {
             setSnackbarMessage({ msg: res.error.name, success: false });
             setSnackbarOpen(true);
           }
@@ -206,14 +207,14 @@ function OrderTableBody(props) {
   };
 
   useEffect(() => {
-    let P2PMatchEvt = '/P2PMatch_'+ getConfig_sp().userId +'/POST';
-    socket.on(P2PMatchEvt, function(res) { 
-      
+    let P2PMatchEvt = '/P2PMatch_' + getConfig_sp().userId + '/POST';
+    socket.on(P2PMatchEvt, function (res) {
+
       setIsLoading(false);
       handleCloseDialog();
-      
+
       console.log(res);
-      if(res.error != 'ok') {
+      if (res.error != 'ok') {
         setSnackbarMessage({ msg: res.error, success: false });
         setSnackbarOpen(true);
       }
@@ -233,9 +234,9 @@ function OrderTableBody(props) {
 
         // Move to Buy or Sell OrderDetails
         if (res.result.buyerId === getConfig_sp().userId) {
-          navigate('/Buyer_Trade_Dts', { state: {orderId : res.result.orderId}});
+          navigate('/Buyer_Trade_Dts', { state: { orderId: res.result.orderId } });
         } else if (res.result.sellerId === getConfig_sp().userId) {
-          navigate('/Seller_Trade_Dts', { state: {orderId : res.result.orderId}});
+          navigate('/Seller_Trade_Dts', { state: { orderId: res.result.orderId } });
         }
       }
     });
@@ -243,7 +244,7 @@ function OrderTableBody(props) {
     return () => {
       socket.off(P2PMatchEvt);
     };
-  
+
   }, []);
 
   return (
@@ -607,7 +608,7 @@ function OrderTableBody(props) {
                             variant="contained4"
                             onClick={() => handleConfirm()}
                           >
-                            Confirm
+                            {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Confirm'}
                           </Button>
                         </Stack>
                       </Stack>

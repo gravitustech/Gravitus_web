@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
 
-import { Grid, OutlinedInput,Stack, Typography, useTheme, FormHelperText,
-  Button, IconButton, TextField, InputAdornment } from '@mui/material';
+import {
+  Grid, OutlinedInput, Stack, Typography, useTheme, FormHelperText,
+  Button, IconButton, TextField, InputAdornment
+} from '@mui/material';
 
 import Dialog from '@mui/material/Dialog';
 import CloseIcon from '@mui/icons-material/Close';
@@ -21,6 +23,36 @@ import { sendOtpSecurity, withdrawSecurity } from '../../../../../../api/profile
 import { Send_OTP } from '../../../../../../../src/api_ng/system_ng';
 import { Estimate_Withdrawal, Sign_Withdrawal, postDataWallet } from '../../../../../../../src/api_ng/wallet_ng';
 
+const Email = ({ email }) => {
+  const theme = useTheme();
+  const firstTwo = email.slice(0, 4);
+  const lastTwo = email.slice(-10);
+  const middle = '*******';
+
+  const maskedEmail = `${firstTwo}${middle}${lastTwo}`;
+
+  return (
+    <>
+      {maskedEmail}
+    </>
+  );
+};
+
+const Mobilenumber = ({ number }) => {
+  const theme = useTheme();
+  const firstTwo = number.slice(0, 2);
+  const lastTwo = number.slice(-2);
+  const middle = '******';
+
+  const Mobilenumber = `${firstTwo}${middle}${lastTwo}`;
+
+  return (
+    <>
+      {Mobilenumber}
+    </>
+  );
+};
+
 const Textfields = ({ walletId, walletData, securityData, walletList, setWalletId, setHistoryData, setWalletData, setSnackbarMessage, setSnackbarOpen }) => {
   const theme = useTheme();
   const [color, setColor] = useState('');
@@ -34,7 +66,7 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
   const [showSignWDL, setShowSignWDL] = useState(false);
   const [checkWithdraw, setCheckWithdraw] = useState(null);
   const [confirmOrSignWDL, setConfirmOrSignWDL] = useState(false);
-  
+
   const formikEW = useRef();
   const formikSW = useRef();
 
@@ -42,7 +74,7 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
     if (e.target.name === 'amount') {
       const firstValue = parseFloat(e.target.value);
       const secondValue = isNaN(firstValue) ? '' : firstValue + walletData?.estFees;
-      
+
       setFieldValue('amount', e.target.value);
       setFieldValue('totalAmount', secondValue);
     }
@@ -65,7 +97,7 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
       if (Object.keys(data.result).length) {
         setSnackbarMessage({ msg: 'OTP Sent successfully', success: true });
         setSnackbarOpen(true);
-        
+
         if (!isResendMOTP && action === 'sendMOTP') {
           setIsResendMOTP(true);
           setResendMOTP('RESEND OTP');
@@ -87,19 +119,19 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
   function signWithdrawal(postData) {
     postDataWallet(Sign_Withdrawal(), postData).then(function (res) {
       console.log(res);
-      
+
       if (res.error !== 'ok') {
         handleCloseDialog();
         setIsLoading(false);
 
-        if(res.error.name == "Missing Authorization") {
+        if (res.error.name == "Missing Authorization") {
           // Logout User
         }
         else if (res.error.name == "Invalid Authorization") {
           // Logout User
         }
         else {
-          if(res.error.name != undefined) {
+          if (res.error.name != undefined) {
             setSnackbarMessage({ msg: res.error.name, success: false });
             setSnackbarOpen(true);
           }
@@ -119,20 +151,20 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
         setSnackbarOpen(true);
 
         formikSW.current.resetForm({
-          values  :{
-            gcode   : '',
-            otpmail : '',
-            otpmbl  : ''
+          values: {
+            gcode: '',
+            otpmail: '',
+            otpmbl: ''
           }
         });
 
         formikEW.current.resetForm({
-          values :{
-            address     : '',
-            amount      : '',
-            totalAmount : '',
-            coin        : null,
-            submit      : null
+          values: {
+            address: '',
+            amount: '',
+            totalAmount: '',
+            coin: null,
+            submit: null
           }
         });
       }
@@ -156,11 +188,11 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
       <Formik
         innerRef={formikEW}
         initialValues={{
-          address     : '',
-          amount      : '',
-          totalAmount : '',
-          coin        : null,
-          submit      : null
+          address: '',
+          amount: '',
+          totalAmount: '',
+          coin: null,
+          submit: null
         }}
         validationSchema={Yup.object().shape({
           coin: Yup.object().nullable().required("Please select the coin*"),
@@ -349,7 +381,7 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
                         <CloseIcon />
                       </IconButton>
                     </Stack>
-  
+
                     <Stack pt={1} direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                       <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                         {' '}
@@ -359,7 +391,7 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
                         {values.address}
                       </Typography>
                     </Stack>
-  
+
                     <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                       <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                         Amount
@@ -368,7 +400,7 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
                         {values.amount} {walletData?.walletInfo?.crypto}
                       </Typography>
                     </Stack>
-  
+
                     <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                       <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                         {' '}
@@ -378,7 +410,7 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
                         {values.totalAmount} {walletData?.walletInfo?.crypto}
                       </Typography>
                     </Stack>
-  
+
                     <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                       <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                         Estimated Fee
@@ -387,7 +419,7 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
                         {walletData?.estFees} {walletData?.walletInfo?.crypto}
                       </Typography>
                     </Stack>
-  
+
                     <Stack pt={1} direction="row" spacing={0} justifyContent="space-around">
                       <Button variant="contained5" onClick={closeConfirmOrSignWDL}>
                         Cancel
@@ -399,7 +431,7 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
                   </Stack>
                 )
               ) : (
-                <Stack p={4} spacing={2.5}>
+                <Stack p={4} spacing={2.5} width={480}>
                   <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                     Widthdraw Security
                   </Typography>
@@ -418,13 +450,13 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                       const phoneOTP = values.otpmbl;
                       const googleOTP = values.gcode;
-                      
+
                       const signData = {
-                        walletId    : walletId,
-                        toAddress   : checkWithdraw.address,
-                        amount      : checkWithdraw.amount,
-                        verifyType  : 'wSecurity',
-                        emailOTP    : values.otpmail,
+                        walletId: walletId,
+                        toAddress: checkWithdraw.address,
+                        amount: checkWithdraw.amount,
+                        verifyType: 'wSecurity',
+                        emailOTP: values.otpmail,
                         ...(securityData?.pSecurity?.enabled === '1' && { phoneOTP }),
                         ...(securityData?.gSecurity?.enabled === '1' && { googleOTP })
                       };
@@ -449,7 +481,7 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
                                     variant="body1"
                                     sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                                   >
-                                    OTP will be send to {securityData?.pSecurity?.authKey}
+                                    OTP will be send to  <Mobilenumber number={securityData?.pSecurity?.authKey} /> 
                                   </Typography>
                                   <OutlinedInput
                                     id="otpmbl-login"
@@ -486,7 +518,7 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
                                 variant="body1"
                                 sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                               >
-                                OTP will be send to {securityData?.mSecurity?.authKey}
+                                OTP will be send to <Email email={securityData?.mSecurity?.authKey}/>
                               </Typography>
                               <OutlinedInput
                                 id="otpmail-login"

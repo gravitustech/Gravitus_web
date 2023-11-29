@@ -4,7 +4,7 @@ import ordersuccessgif from '../../../../../../assets/images/gravitusimage/order
 import {
   Typography, Stack, Avatar, useTheme, Grid, Card, TextField, FormHelperText,
   IconButton, Box, Stepper, Step, StepLabel, Button, Badge, Dialog, Autocomplete,
-  TextareaAutosize, Modal, Tooltip
+  TextareaAutosize, Modal, Tooltip, CircularProgress
 } from '@mui/material';
 
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
@@ -25,6 +25,7 @@ import Trade_Price_Dts from './Trade_Price_Dts';
 
 import ImageCropper from 'src/components/_cropper';
 import { P2P_OrderDetails_URL, P2P_AppealToEscrow_URL, P2P_OrderClosure_URL, formDataP2P, postDataP2P, P2P_Appeal_Cancel } from 'src/api_ng/peer2peer_ng';
+import { useNavigate } from 'react-router';
 
 const StyledTextarea = styled(TextareaAutosize)(({ theme, error }) => ({
   width: 'auto',
@@ -153,12 +154,18 @@ function ColorlibStepIcon(props) {
 const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
   const theme = useTheme();
   const formikAPL = useRef();
+  const navigate = useNavigate();
 
   const resultdata = data?.result;
   const counterPart = data?.result?.counterPart;
   const orderDetails = data?.result?.orderDetails;
 
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(
+    resultdata?.actionCaption === "Order Timed Out" ? 2 :
+      resultdata?.superStatus === 2 ? 2 :
+        resultdata?.superStatus === 0 ? 0 : 1
+  );
+
   const [skipped, setSkipped] = React.useState(new Set());
 
   const [open, setOpen] = useState(false); // Confirm Dialog
@@ -168,8 +175,13 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
   const [imageToCrop, setImageToCrop] = React.useState(undefined);
   const [croppedImage, setCroppedImage] = React.useState(undefined);
 
+  //
+  const goBack = () => {
+    navigate(-1);
+  }
+
   // Content not used
-  const steps = ['Select campaign settings', 'Create an ad group'];
+  const steps = ['Disabled step', 'Appeal and Confirm step', 'Completed and Cancelled step'];
 
   // Appeal reason
   const Reason = [{ Reason: "I have not received payment yet" }, { Reason: "I have received only a partial amount" }];
@@ -337,7 +349,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
           setAppealInputs({ reason: '', message: '', submit: null });
           setImageToCrop(undefined);
           setCroppedImage(undefined);
-
+          handleButtonClick()
           mutate(P2P_OrderDetails_URL);
           formikAPL.current.resetForm({
             values: {
@@ -406,6 +418,121 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
       case 0:
         return (
           <>
+            <Stack pt={2} pl={2} pr={2} sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+              <Stack pt={2} direction="row" justifyContent="space-between">
+                <Stack>
+                  <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                    {resultdata?.actionCaption}
+                  </Typography>
+                  <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                    {resultdata?.actionMessage} {resultdata?.leftOverMins} minutes.
+                  </Typography>
+                </Stack>
+                <Stack pt={0.8}>
+                  <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                    {resultdata?.leftOverMins} minutes
+                  </Typography>
+                  <Typography textAlign='end' variant="subtitle2" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                    Duration
+                  </Typography>
+                </Stack>
+              </Stack>
+
+              {/* buyorderdeatils */}
+              <Trade_Price_Dts orderDetails={orderDetails} />
+
+              <Stack pt={3}>
+                <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                  Payment Methods
+                </Typography>
+              </Stack>
+
+              <Stack pt={3}>
+                <Card
+                  contentSX={{ p: 2.25 }}
+                  sx={{
+                    border: 'none',
+                    boxShadow: 'none'
+                  }}
+                >
+                  <Stack
+                    sx={{
+                      color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary',
+                      backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
+                    }}
+                    pr={1}
+                    pt={1}
+                    pb={1}
+                  >
+                    <UpiImpsTabs orderDetails={orderDetails} />
+                  </Stack>
+                </Card>
+              </Stack>
+              <Stack direction="row" spacing={3} pt={3}>
+                <Button variant="sellAppealbutton" disabled >
+                  Appeal
+                </Button>
+                <Button disabled type="submit" variant="confirmrecipt">
+                  Confirm Receipt
+                </Button>
+                {/* {
+                  resultdata?.action_1 === 'disabled' ? (
+                    <Button variant="sellAppealbutton" disabled >
+                      Appeal
+                    </Button>
+                  ) :
+                    (
+                      <Button variant="sellAppealbutton" onClick={handleButtonClick} >
+                        Appeal
+                      </Button>
+                    )
+                }
+                {
+                  resultdata?.action_1 === 'disabled' ? (
+                    <Button disabled type="submit" variant="confirmrecipt">
+                      Confirm Receipt
+                    </Button>
+                  ) :
+                    (
+                      <Button onClick={openConfirmDlg} type="submit" variant="confirmrecipt">
+                        Confirm Receipt
+                      </Button>
+                    )
+                } */}
+
+              </Stack>
+
+              <Dialog
+                onClose={closeConfirmDlg}
+                open={open}
+              >
+                <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <img src={warninggif} alt='warninggif' />
+                  <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                    Confirm ?
+                  </Typography>
+                  <Typography textAlign='center' variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                    I confirm that the payment was received with <br /> the correct amount and sender information.
+                  </Typography>
+                  <Stack pt={1} direction='row' spacing={2} justifyContent='space-between'>
+                    <Button variant="contained5" onClick={closeConfirmDlg}>
+                      Cancel
+                    </Button>
+                    <Button
+                      // onClick={handleNext}
+                      onClick={releaseCrypto}
+                      variant="contained4">
+                      Confirm
+                    </Button>
+                  </Stack>
+                </Stack>
+              </Dialog>
+            </Stack>
+          </>
+        );
+      case 1:
+        return (
+          <>
             {!isHidden ? (
               <Stack pt={2} pl={2} pr={2} sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                 <Stack pt={2} direction="row" justifyContent="space-between">
@@ -414,16 +541,32 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                       {resultdata?.actionCaption}
                     </Typography>
                     <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                      {resultdata?.actionMessage} {resultdata?.leftOverMins} minutes.
+                      {resultdata?.actionMessage} {
+                        resultdata?.appealStatus === '1' ? (
+                          <></>
+                        ) : (
+                          <>
+                            {resultdata?.leftOverMins} minutes.
+                          </>
+                        )
+                      }
                     </Typography>
                   </Stack>
                   <Stack pt={0.8}>
-                    <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                      {resultdata?.leftOverMins} minutes
-                    </Typography>
-                    <Typography textAlign='end' variant="subtitle2" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                      Duration
-                    </Typography>
+                    {
+                      resultdata?.appealStatus === '1' ? (
+                        <></>
+                      ) : (
+                        <>
+                          <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                            {resultdata?.leftOverMins} minutes
+                          </Typography>
+                          <Typography textAlign='end' variant="subtitle2" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                            Duration
+                          </Typography>
+                        </>
+                      )
+                    }
                   </Stack>
                 </Stack>
 
@@ -459,30 +602,26 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                 </Stack>
                 <Stack direction="row" spacing={3} pt={3}>
                   {
-                    resultdata?.action_1 === 'disabled' ? (
-                      <Button variant="sellAppealbutton" disabled >
-                        Appeal
-                      </Button>
-                    ) :
-                      (
+                    resultdata?.actionLabel_2 === 'Confirm Receipt' ? (
+                      <>
                         <Button variant="sellAppealbutton" onClick={handleButtonClick} >
                           Appeal
                         </Button>
-                      )
-                  }
-                  {
-                    resultdata?.action_1 === 'disabled' ? (
-                      <Button disabled type="submit" variant="confirmrecipt">
-                        Confirm Receipt
-                      </Button>
-                    ) :
-                      (
                         <Button onClick={openConfirmDlg} type="submit" variant="confirmrecipt">
                           Confirm Receipt
                         </Button>
-                      )
+                      </>
+                    ) : (
+                      <>
+                        <Button variant="sellAppealbutton" onClick={goBack} >
+                          Close
+                        </Button>
+                        <Button onClick={() => AppealCancel(orderDetails)} type="submit" variant="confirmrecipt">
+                          {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Cancel Appeal'}
+                        </Button>
+                      </>
+                    )
                   }
-
                 </Stack>
 
                 <Dialog
@@ -505,7 +644,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                         // onClick={handleNext}
                         onClick={releaseCrypto}
                         variant="contained4">
-                        Confirm
+                        {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Confirm'}
                       </Button>
                     </Stack>
                   </Stack>
@@ -516,7 +655,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                 <Stack pt={2} direction="row" justifyContent="space-between">
                   <Stack spacing={1}>
                     <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                      {resultdata?.actionCaption}
+                      Appeal to Escrow
                     </Typography>
                     <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                       {resultdata?.actionMessage}
@@ -745,14 +884,14 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                           </Modal>
 
                           <Stack direction="row" spacing={3} pt={3}>
-                            {resultdata?.action_2 === 'sodc.cancelAppeal()' ? (
+                            {/* {resultdata?.action_2 === 'sodc.cancelAppeal()' ? (
                               <Button variant="p2pcancelbutton" onClick={() => AppealCancel(orderDetails)}>Cancel Appeal</Button>
                             ) : (
                               <Button variant="p2pcancelbutton" onClick={handleButtonClick}>Cancel</Button>
-                            )}
-
+                            )} */}
+                            <Button variant="p2pcancelbutton" onClick={handleButtonClick}>Cancel</Button>
                             <Button type="submit" variant="confirmrecipt" onClick={() => handleAppeal(values)} >
-                              File a Appeal
+                              {isLoading ? <CircularProgress color="inherit" size={30} /> : 'File a Appeal'}
                             </Button>
                           </Stack>
                         </form>
@@ -764,10 +903,10 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
             )}
           </>
         );
-      case 1:
+      case 2:
         return (
           <Stack>
-            <Stack pt={5} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Stack pt={0} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               {resultdata?.actionCaption === "Order Completed" ? (
                 <img src={ordersuccessgif} alt='ordersuccessgif' />
               ) : (
@@ -869,11 +1008,15 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
               stepProps.completed = false;
             }
             return (
-              <Step key={label} {...stepProps}>
-                <StepLabel StepIconComponent={ColorlibStepIcon} {...labelProps}>
-                  {' '}
-                </StepLabel>
-              </Step>
+              resultdata?.actionCaption === "Order Timed Out" || resultdata?.superStatus >= 2 ? (
+                <></>
+              ) : (
+                <Step key={label} {...stepProps}>
+                  <StepLabel StepIconComponent={ColorlibStepIcon} {...labelProps}>
+                    {' '}
+                  </StepLabel>
+                </Step>
+              )
             );
           })}
         </Stepper>

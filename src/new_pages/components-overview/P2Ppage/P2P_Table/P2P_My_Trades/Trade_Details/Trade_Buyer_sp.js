@@ -1,15 +1,17 @@
 import ordersuccessgif from '../../../../../../assets/images/gravitusimage/ordersuccesgif.svg';
 import warninggif from '../../../../../../assets/images/gravitusimage/warninggif.svg';
+import Copyicon from '../../../../../../assets/images/gravitusimage/copyicon.svg';
 
 import {
   Typography, Stack, Avatar, useTheme, Grid, Card, OutlinedInput,
   FormHelperText, IconButton, TextField, Box, Stepper, Step, StepLabel,
-  Button, Dialog, TextareaAutosize, Autocomplete, Badge, Modal, Tooltip,
+  Button, Dialog, TextareaAutosize, Autocomplete, Badge, Modal, Tooltip, CircularProgress,
 } from '@mui/material';
 
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 
+import DoneIcon from '@mui/icons-material/Done';
 import { Check, DeleteForever } from '@mui/icons-material';
 import { styled } from "@mui/material/styles";
 
@@ -23,9 +25,11 @@ import * as Yup from 'yup';
 import UpiImpsTabs from './Payment_Tabs';
 import Trade_Price_Dts from './Trade_Price_Dts';
 
-import { P2P_OrderDetails_URL, P2P_AppealToEscrow_URL, P2P_ReleaseRequest_URL, formDataP2P } from '../../../../../../api_ng/peer2peer_ng';
-import ImageCropper from '../../../../../../components/_cropper/index';
 import { useNavigate } from 'react-router';
+import CopyToClipboard from 'react-copy-to-clipboard';
+
+import { P2P_OrderDetails_URL, P2P_AppealToEscrow_URL, P2P_ReleaseRequest_URL, formDataP2P, P2P_Appeal_Cancel, postDataP2P } from '../../../../../../api_ng/peer2peer_ng';
+import ImageCropper from '../../../../../../components/_cropper/index';
 
 const StyledTextarea = styled(TextareaAutosize)(({ theme, error }) => ({
   width: 'auto',
@@ -161,7 +165,11 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
   const counterPart = data?.result?.counterPart;
   const orderDetails = data?.result?.orderDetails;
 
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = React.useState(
+    resultdata?.actionCaption === "Order Timed Out" ? 3 :
+      resultdata?.superStatus === 3 ? 3
+        : (resultdata?.superStatus === 0 ? 0 : 2)
+  );
   const [skipped, setSkipped] = useState(new Set());
 
   const [open, setOpen] = useState(false); // Confirm Dialog
@@ -172,6 +180,17 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
 
   const [imageToCrop, setImageToCrop] = React.useState(undefined);
   const [croppedImage, setCroppedImage] = React.useState(undefined);
+
+  const [copied, setCopied] = useState(false);
+
+  //
+  const handleCopy = () => {
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
 
   //
   const goBack = () => {
@@ -243,6 +262,50 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
       reader.readAsDataURL(event.target.files[0]);
     }
   };
+
+  const AppealCancel = (orderDetails) => {
+    var postData = {
+      platformId: orderDetails?.platformId,
+      orderId: orderDetails?.orderId,
+    };
+
+    postDataP2P(P2P_Appeal_Cancel(), postData).then(function (res) {
+      console.log("res", res);
+
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            console.log('res', res.error.name)
+            setSnackbarMessage({ msg: 'Appeal cancelled', success: false });
+            setSnackbarOpen(true);
+            handleButtonClick()
+            mutate(P2P_OrderDetails_URL);
+          }
+          else {
+            console.log('res.error', res.error)
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        // Set timeout for future usecase
+        // setSnackbarMessage({ msg: 'Refresh Now', success: false });
+        // setSnackbarOpen(true);
+
+        // Logic moved to sock update
+      }
+    }, function (err) {
+      setSnackbarMessage({ msg: err, success: false });
+      setSnackbarOpen(true);
+      // Logout User
+    });
+  }
 
   const releaseRequest = () => {
     if (croppedImage != undefined) {
@@ -375,7 +438,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
           setAppealInputs({ reason: '', message: '', submit: null });
           setImageToCrop(undefined);
           setCroppedImage(undefined);
-
+          handleButtonClick();
           mutate(P2P_OrderDetails_URL);
           formikAPL.current.resetForm({
             values: {
@@ -473,14 +536,21 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                 </Typography>
               </Stack>
               <Stack pt={0.8}>
-                <Typography pl={4} variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                <Typography pl={10} variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                   {resultdata?.leftOverMins} Minutes
                 </Typography>
                 <Typography textAlign='end' variant="subtitle2" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                   Duration
                 </Typography>
-                <Typography variant="h4" pt={3} sx={{ color: theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' }}>
+                <Typography pl={4} variant="h4" pt={3} sx={{ color: theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' }}>
                   {orderDetails?.amount} {orderDetails?.pricePair}
+                  <CopyToClipboard text={orderDetails?.amount} onCopy={handleCopy}>
+                    <Tooltip placement="top" disableFocusListener title={copied ? 'Copied' : 'Click to copy'} arrow>
+                      <IconButton disableRipple>
+                        {copied ? <DoneIcon color="#C1C1C1" /> : <img src={Copyicon} alt="copy" style={{ cursor: 'pointer' }} />}
+                      </IconButton>
+                    </Tooltip>
+                  </CopyToClipboard>
                 </Typography>
               </Stack>
             </Stack>
@@ -723,7 +793,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                       Cancel
                     </Button>
                     <Button onClick={releaseRequest} variant="contained4">
-                      Confirm
+                      {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Confirm'}
                     </Button>
                   </Stack>
                 </Stack>
@@ -742,16 +812,32 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                       {resultdata?.actionCaption}
                     </Typography>
                     <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                      {resultdata?.actionMessage} {resultdata?.leftOverMins} minutes.
+                      {resultdata?.actionMessage} {
+                        resultdata?.appealStatus === '1' ? (
+                          <></>
+                        ) : (
+                          <>
+                            {resultdata?.leftOverMins} minutes.
+                          </>
+                        )
+                      }
                     </Typography>
                   </Stack>
                   <Stack pt={0.8}>
-                    <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                      {resultdata?.leftOverMins} minutes
-                    </Typography>
-                    <Typography textAlign='end' variant="subtitle2" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                      Duration
-                    </Typography>
+                    {
+                      resultdata?.appealStatus === '1' ? (
+                        <></>
+                      ) : (
+                        <>
+                          <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                            {resultdata?.leftOverMins} minutes
+                          </Typography>
+                          <Typography textAlign='end' variant="subtitle2" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                            Duration
+                          </Typography>
+                        </>
+                      )
+                    }
                   </Stack>
                 </Stack>
 
@@ -785,10 +871,31 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                 </Stack>
 
                 <Stack direction="row" spacing={3} pt={3}>
-                  <Button disableRipple variant="p2pcancelbutton" sx={{ cursor: 'not-allowed' }}>Cancel</Button>
-                  <Button type="submit" variant="p2pnextbutton" onClick={handleButtonClick}>
-                    Appeal
-                  </Button>
+                  {
+                    resultdata?.actionLabel_2 === 'Cancel Appeal' ? (
+                      <>
+                        <Button disableRipple variant="p2pcancelbutton" onClick={goBack}>Close</Button>
+                        <Button type="submit" variant="p2pnextbutton" onClick={() => AppealCancel(orderDetails)}>
+                          {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Cancel Appeal'}
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        {
+                          resultdata?.actionLabel_2 === 'Appeal' ? (
+                            <>
+                              <Button disableRipple variant="p2pcancelbutton" sx={{ cursor: 'not-allowed' }}>Cancel</Button>
+                              <Button type="submit" variant="p2pnextbutton" onClick={handleButtonClick}>
+                                Appeal
+                              </Button></>
+                          ) : (
+                            <>
+                            </>
+                          )
+                        }
+                      </>
+                    )
+                  }
                 </Stack>
               </Stack>
             ) : (
@@ -796,7 +903,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                 <Stack pt={2} direction="row" justifyContent="space-between">
                   <Stack spacing={1}>
                     <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                      {resultdata?.actionCaption}
+                      Appeal To EScrow
                     </Typography>
                     <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                       {resultdata?.actionMessage}
@@ -828,7 +935,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                       try {
                         setStatus({ success: false });
                         setSubmitting(false);
-                        handleAppeal(values);
+                        // handleAppeal(values);
                       } catch (err) {
                         setStatus({ success: false });
                         setErrors({ submit: err.message });
@@ -1027,8 +1134,8 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                           </Modal>
                           <Stack direction="row" spacing={3} pt={3}>
                             <Button variant="p2pcancelbutton" onClick={handleButtonClick}>Cancel</Button>
-                            <Button type="submit" variant="p2pnextbutton">
-                              File a Appeal
+                            <Button type="submit" variant="p2pnextbutton" onClick={() => handleAppeal(values)}>
+                              {isLoading ? <CircularProgress color="inherit" size={30} /> : 'File a Appeal'}
                             </Button>
                           </Stack>
                         </form>
@@ -1043,7 +1150,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
       case 3:
         return (
           <Stack>
-            <Stack pt={5} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Stack pt={0} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               {resultdata?.actionCaption === "Order Completed" ? (
                 <img src={ordersuccessgif} alt='ordersuccessgif' />
               ) : (
@@ -1137,26 +1244,30 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
 
       {/* Stepper */}
       <Box sx={{ width: '100%' }} pt={5}>
-            <Stepper activeStep={activeStep} connector={<ColorlibConnector />}>
-              {steps.map((label, index) => {
-                const stepProps = {};
-                const labelProps = {};
-                if (isStepOptional(index)) {
-                  labelProps.optional = <Typography variant="subtitle1"></Typography>;
-                }
-                if (isStepSkipped(index)) {
-                  stepProps.completed = false;
-                }
-                return (
-                  <Step key={label} {...stepProps}>
-                    <StepLabel StepIconComponent={ColorlibStepIcon} {...labelProps}>
-                      {' '}
-                    </StepLabel>
-                  </Step>
-                );
-              })}
-            </Stepper>
-        
+        <Stepper activeStep={activeStep} connector={<ColorlibConnector />}>
+          {steps.map((label, index) => {
+            const stepProps = {};
+            const labelProps = {};
+            if (isStepOptional(index)) {
+              labelProps.optional = <Typography variant="subtitle1"></Typography>;
+            }
+            if (isStepSkipped(index)) {
+              stepProps.completed = false;
+            }
+            return (
+              resultdata?.actionCaption === "Order Timed Out" || resultdata?.superStatus >= 3 ? (
+                <></>
+              ) : (
+                <Step key={label} {...stepProps}>
+                  <StepLabel StepIconComponent={ColorlibStepIcon} {...labelProps}>
+                    {' '}
+                  </StepLabel>
+                </Step>
+              )
+            );
+          })}
+        </Stepper>
+
         <React.Fragment>
           {getStepContent(activeStep)}
         </React.Fragment>

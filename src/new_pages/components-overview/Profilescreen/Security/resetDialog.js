@@ -11,10 +11,40 @@ import {
   useTheme
 } from '@mui/material';
 import { Formik } from 'formik';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { resetSecurity, sendOtpSecurity } from '../../../../api/profile';
 import AnimateButton from 'src/components/@extended/AnimateButton';
 import * as Yup from 'yup';
+
+const Email = ({ email }) => {
+  const theme = useTheme();
+  const firstTwo = email.slice(0, 4);
+  const lastTwo = email.slice(-10);
+  const middle = '*******';
+
+  const maskedEmail = `${firstTwo}${middle}${lastTwo}`;
+
+  return (
+    <>
+      {maskedEmail}
+    </>
+  );
+};
+
+const Mobilenumber = ({ number }) => {
+  const theme = useTheme();
+  const firstTwo = number.slice(0, 2);
+  const lastTwo = number.slice(-2);
+  const middle = '******';
+
+  const Mobilenumber = `${firstTwo}${middle}${lastTwo}`;
+
+  return (
+    <>
+      {Mobilenumber}
+    </>
+  );
+};
 
 const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessage, setSnackbarOpen, action, mutate }) => {
   const theme = useTheme();
@@ -152,9 +182,9 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
           {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
             <form noValidate onSubmit={handleSubmit}>
               {action === 'greset' && securityData?.pSecurity?.enabled === '1' && (
-                <Stack spacing={1} pt={3}>
+                <Stack spacing={1} pt={3} width={440}>
                   <InputLabel htmlFor="otpmbl-login" variant="subtitle3">
-                    OTP will sent to  {securityData?.pSecurity?.authKey}
+                    OTP will sent to <Mobilenumber number={securityData?.pSecurity?.authKey} />
                   </InputLabel>
                   <OutlinedInput
                     id="otpmbl-login"
@@ -201,9 +231,9 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
                   )}
                 </Stack>
               )}
-              <Stack spacing={1} pt={3}>
+              <Stack spacing={1} pt={3} width={440}>
                 <InputLabel htmlFor="email-login" variant="body2">
-                  OTP will sent to {securityData?.mSecurity?.authKey}
+                  OTP will sent to <Email email={securityData?.mSecurity?.authKey} />
                 </InputLabel>
                 <OutlinedInput
                   id="email-login"
@@ -250,7 +280,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
                 )}
               </Stack>
               {action === 'preset' && securityData?.gSecurity?.enabled === '1' && (
-                <Stack spacing={1} pt={3}>
+                <Stack spacing={1} pt={3} width={440}>
                   <InputLabel htmlFor="authcode-login" variant="subtitle3">
                     Enter the Google Authentication Code
                   </InputLabel>

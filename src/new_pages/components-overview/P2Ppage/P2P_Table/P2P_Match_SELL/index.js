@@ -38,6 +38,7 @@ import {
   FormGroup,
   Checkbox,
   FormControlLabel,
+  CircularProgress,
 } from '@mui/material';
 
 import HIW_Sell from '../_HIW_Sell';
@@ -92,7 +93,7 @@ function OrderTableBody(props) {
 
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
-  
+
   const theme = useTheme();
   const formikRef = useRef();
 
@@ -148,7 +149,7 @@ function OrderTableBody(props) {
   };
 
   // Inputs
-  const [inputs, setInputs] = useState({ quantity: '',  totalamount: '', paymentoption: [] });
+  const [inputs, setInputs] = useState({ quantity: '', totalamount: '', paymentoption: [] });
 
   // Update Sell Tds
   const SellTds = (parseFloat(inputs.quantity) - (parseFloat(inputs.quantity) * 0.010)).toFixed(pairInfo?.quantityFloat);
@@ -169,24 +170,24 @@ function OrderTableBody(props) {
       side: 2,
       rQuantity: inputs.quantity,
       amount: inputs.totalamount,
-      paymodes: inputs.paymentoption.map((mode) => ({ mode : mode, checked : true })),
+      paymodes: inputs.paymentoption.map((mode) => ({ mode: mode, checked: true })),
     };
 
     postDataP2P(P2P_MatchTrade_URL(), postData).then(function (res) {
       console.log(res);
-      
+
       if (res.error !== 'ok') {
         handleCloseDialog();
         setIsLoading(false);
 
-        if(res.error.name == "Missing Authorization") {
+        if (res.error.name == "Missing Authorization") {
           // Logout User
         }
         else if (res.error.name == "Invalid Authorization") {
           // Logout User
         }
         else {
-          if(res.error.name != undefined) {
+          if (res.error.name != undefined) {
             setSnackbarMessage({ msg: res.error.name, success: false });
             setSnackbarOpen(true);
           }
@@ -205,14 +206,14 @@ function OrderTableBody(props) {
   };
 
   useEffect(() => {
-    let P2PMatchEvt = '/P2PMatch_'+ getConfig_sp().userId +'/POST';
-    socket.on(P2PMatchEvt, function(res) { 
-      
+    let P2PMatchEvt = '/P2PMatch_' + getConfig_sp().userId + '/POST';
+    socket.on(P2PMatchEvt, function (res) {
+
       setIsLoading(false);
       handleCloseDialog();
-      
+
       console.log(res);
-      if(res.error != 'ok') {
+      if (res.error != 'ok') {
         setSnackbarMessage({ msg: res.error, success: false });
         setSnackbarOpen(true);
       }
@@ -233,9 +234,9 @@ function OrderTableBody(props) {
 
         // Move to Buy or Sell OrderDetails
         if (res.result.buyerId === getConfig_sp().userId) {
-          navigate('/Buyer_Trade_Dts', { state: {orderId : res.result.orderId}});
+          navigate('/Buyer_Trade_Dts', { state: { orderId: res.result.orderId } });
         } else if (res.result.sellerId === getConfig_sp().userId) {
-          navigate('/Seller_Trade_Dts', { state: {orderId : res.result.orderId}});
+          navigate('/Seller_Trade_Dts', { state: { orderId: res.result.orderId } });
         }
       }
     });
@@ -243,7 +244,7 @@ function OrderTableBody(props) {
     return () => {
       socket.off(P2PMatchEvt);
     };
-  
+
   }, []);
 
   return (
@@ -616,7 +617,7 @@ function OrderTableBody(props) {
                                         // to="/sellorderpage"
                                         onClick={() => handleConfirm()}
                                         variant="confirmsell">
-                                        Confirm
+                                        {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Confirm'}
                                       </Button>
                                     </Stack>
                                   </Stack>

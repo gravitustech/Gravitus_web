@@ -1,154 +1,80 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
-  Grid,
-  Stack,
-  Button,
-  Typography,
-  FormHelperText,
-  OutlinedInput,
-  useTheme,
-  TextField,
-  Card,
-  IconButton,
-  styled,
-  Box,
-  Dialog,
-  Tooltip
+  Grid, Stack, Button, Typography, FormHelperText, OutlinedInput,
+  useTheme, TextField, Card, IconButton, Box, Tooltip, Modal, Autocomplete
 } from '@mui/material';
+
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import Notes from '../Payment/Notes';
-import Autocomplete from '@mui/material/Autocomplete';
-import { useNavigate } from 'react-router';
-import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
-import { updateIdentity } from '../../../../api/profile';
-import { useState } from 'react';
-import { DeleteForever } from '@mui/icons-material';
-import ReactCrop from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
 
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1
-});
+import { useNavigate } from 'react-router';
+
+import DeleteForever from '@mui/icons-material/DeleteForever';
+import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
+
+import ImageCropper from 'src/components/_cropper';
+import { updateIdentity } from '../../../../api/profile';
+
 
 const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData }) => {
   const theme = useTheme();
-  let formData = new FormData();
   const navigate = useNavigate();
-  const imgRef = useRef(null);
-  const hiddenAnchorRef = useRef(null);
-  const previewCanvasRef = useRef(null);
 
-  const blobUrlRef = useRef('');
+  let formData = new FormData();
   const Identity = [{ Identity: 'PANCARD' }];
-  const [selectedFile, setSelectedFile] = useState();
-  const [selectedFileURL, setSelectedFileURL] = useState(null);
-  const [croppedFileURL, setCroppedFileURL] = useState(null);
-  const [selectedIdentity, setSelectedIdentity] = useState(userData?.docType || '');
+
+  const [imageToCrop, setImageToCrop] = React.useState(undefined);
+  const [croppedImage, setCroppedImage] = React.useState(undefined);
+
+  const [modalOpen, setModalOpen] = React.useState(false); // Show modal
+
+  const handleModalOpen = () => {
+    document.getElementById('superFile')?.click();
+    setTimeout(function () {
+      setModalOpen(true);
+    }, 1000);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false)
+    setCroppedImage(undefined)
+  };
+  const handleModalUpolad = () => {
+    setModalOpen(false)
+  };
+  const onUploadFile = (event) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+
+      reader.addEventListener('load', () => {
+        setImageToCrop(reader.result)
+      });
+
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
 
   const handleNavigate = () => {
     navigate('/profile/support');
     setValue('4');
   };
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    console.log({ file });
-    setSelectedFile(file);
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setSelectedFileURL(reader.result);
-    };
-
-    reader.readAsDataURL(file);
-  };
   useEffect(() => {
-    setCroppedFileURL(userData.imagePath);
+    setCroppedImage(userData.imagePath);
   }, []);
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const handleButtonClick = () => {
-    setIsDialogOpen(true);
+  // Modal View Style - Appeal
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%', left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 1024, height: 'auto',
+    bgcolor: 'background.paper',
+    border: '1px solid #808080 !important',
+    boxShadow: 24, p: 4,
+    textAlign: 'center'
   };
 
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
-  };
-  const initialCrop = {
-    unit: '25kb', // Change this to 'px' if you want to specify pixel values
-    x: 25,
-    y: 25,
-    width: 50,
-    height: 50
-  };
-
-  const [crop, setCrop] = useState(initialCrop);
-  const [completedCrop, setCompletedCrop] = useState(initialCrop);
-  const [aspect, setAspect] = useState(16 / 9);
-
-  // function onImageLoad(e) {
-  //   if (aspect) {
-  //     const { width, height } = e.currentTarget
-  //     setCrop(centerAspectCrop(width, height, aspect))
-  //   }
-  // }
-
-  const handleImageCrop = async () => {
-    const image = imgRef.current;
-    const previewCanvas = previewCanvasRef.current;
-
-    console.log({ completedCrop }, { previewCanvas });
-
-    if (completedCrop && image) {
-      const scaleX = image.naturalWidth / image.width;
-      const scaleY = image.naturalHeight / image.height;
-
-      const offscreen = new OffscreenCanvas(completedCrop.width * scaleX, completedCrop.height * scaleY);
-      // You might want { type: "image/jpeg", quality: <0 to 1> } to
-      // reduce image size
-      const ctx = offscreen.getContext('2d');
-      if (!ctx) {
-        throw new Error('No 2d context');
-      }
-      console.log('chk', 0, 0, image.width, image.height, 0, 0, offscreen.width, offscreen.height);
-      ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, offscreen.width, offscreen.height);
-      const blob = await offscreen.convertToBlob({
-        type: 'image/png'
-      });
-      console.log({ blob });
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setCroppedFileURL(reader.result);
-      };
-
-      reader.readAsDataURL(blob);
-      // if (blobUrlRef.current) {
-      //   URL.revokeObjectURL(blobUrlRef.current);
-      // }
-      // blobUrlRef.current = URL.createObjectURL(blob);
-      // hiddenAnchorRef.current.href = blobUrlRef.current;
-      // hiddenAnchorRef.current.click();
-    } else {
-      console.log('here');
-    }
-    handlecloseClick();
-  };
-
-  const handlecloseClick = () => {
-    handleCloseDialog();
-    setSelectedFileURL(null);
-  };
   return (
     <>
       <Formik
@@ -165,11 +91,11 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           console.log({ values });
           formData.append('updateInfo', JSON.stringify({ fullName: values.name, pancard: values.pannumber, docType: values.docType }));
-          formData.append('fileName', selectedFile.name);
-          if (croppedFileURL) {
-            formData.append('fileI', croppedFileURL);
+          formData.append('fileName', imageToCrop.name);
+          if (croppedImage) {
+            formData.append('fileI', croppedImage);
           } else {
-            formData.append('fileI', selectedFileURL);
+            formData.append('fileI', imageToCrop);
           }
 
           try {
@@ -298,8 +224,8 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
                 <Stack pt={1}>
                   <Card
                     sx={{
-                      // width: ' 330.98px',
-                      height: '180px',
+                      width: '100%',
+                      height: '100%',
                       boxShadow: 'none',
                       borderRadius: '5px',
                       border: '2px solid',
@@ -308,18 +234,19 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
                     }}
                   >
                     <Stack
+                      pt={5}
                       sx={{
                         alignItems: 'center',
                         textAlign: 'center'
                       }}
                     >
-                      {croppedFileURL ? (
+                      {croppedImage ? (
                         <Box>
-                          <img src={croppedFileURL} alt="wew" width="120px" height="160px" />
-                          {userData.status !== '1' && (
+                          <img src={croppedImage} alt="wew" width="100%" height='auto' />
+                          {userData.status === '0'  && (
                             <Tooltip title="click to clear the image" placement="top" arrow>
                               <DeleteForever
-                                onClick={() => setCroppedFileURL(null)}
+                                onClick={() => setCroppedImage(null)}
                                 sx={{
                                   cursor: 'pointer',
                                   color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
@@ -331,12 +258,9 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
                       ) : (
                         <IconButton
                           disableRipple
-                          component="label"
-                          onClick={handleButtonClick}
+                          onClick={handleModalOpen}
                           sx={{
-                            pt: 12,
-                            alignItems: 'center',
-                            textAlign: 'center'
+                            paddingBottom: '46px',
                           }}
                         >
                           <AddCircleOutlinedIcon
@@ -346,91 +270,71 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
                               color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary'
                             }}
                           />
-                          {/* <VisuallyHiddenInput type="file" accept="image/*" onChange={handleFileUpload} /> */}
+                          <input id="superFile" type="file" accept="image/*" onChange={onUploadFile} style={{ display: 'none' }} />
                         </IconButton>
                       )}
                     </Stack>
+                    <Modal
+                      open={modalOpen}
+                      onClose={handleModalClose}
+                      aria-labelledby="modal-modal-title"
+                      aria-describedby="modal-modal-description">
+                      <Box sx={modalStyle}>
+                        <Grid container spacing={0}>
+                          {/* <Stack direction='row' spacing={1}> */}
+                          <Grid xs={12} md={6}>
+                            <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Selected Image</Typography>
+                            <Box >
+                              <ImageCropper
+                                imageToCrop={imageToCrop}
+                                onImageCropped={(croppedImage) => setCroppedImage(croppedImage)}
+                              >
+                              </ImageCropper>
+                            </Box>
+                          </Grid>
+                          <Grid xs={12} md={6}>
+                            <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Cropped Image</Typography>
+                            {
+                              croppedImage &&
+                              <Box
+                                display="flex"
+                                justifyContent="center"
+                                alignItems="center"
+                                maxHeight="auto"
+                                maxWidth="auto"
+                              >
+                                <img
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    minHeight: 'auto',
+                                    maxHeight: 'auto',
+                                    maxWidth: "auto"
+                                  }}
+                                  alt="Cropped Img"
+                                  src={croppedImage}
+                                />
+                              </Box>
+                            }
+                          </Grid>
+                          {/* </Stack> */}
+                        </Grid>
+                        <Stack pt={1} direction="row" spacing={2} justifyContent="space-around">
+                          <Button variant="contained5" onClick={handleModalClose}>
+                            Cancel
+                          </Button>
+                          <Button variant="contained4"
+                            onClick={handleModalUpolad}
+                          >
+                            Upload
+                          </Button>
+                        </Stack>
+                      </Box>
+                    </Modal>
                   </Card>
                 </Stack>
               </Grid>
-
-              <Dialog open={isDialogOpen} onClose={handlecloseClick}>
-                <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                    UPLOAD PANCARD
-                  </Typography>
-                  <Card
-                    sx={{
-                      height: '180px',
-                      width: '100%',
-                      boxShadow: 'none',
-                      borderRadius: '5px',
-                      border: '2px solid',
-                      borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
-                      backgroundColor: theme.palette.mode === 'dark' ? 'text.primary' : 'text.cardbackground'
-                    }}
-                  >
-                    <Stack
-                      sx={{
-                        alignItems: 'center',
-                        textAlign: 'center'
-                      }}
-                    >
-                      {selectedFileURL ? (
-                        <Box>
-                          <ReactCrop crop={crop} onChange={(c) => setCrop(c)} onComplete={(c) => setCompletedCrop(c)}>
-                            <img src={selectedFileURL} alt="wew" width="100%" height="180px" ref={imgRef} />
-                          </ReactCrop>
-                          <Tooltip title="click to clear the image" placement="top" arrow>
-                            <DeleteForever
-                              onClick={() => setSelectedFileURL(null)}
-                              sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                            />
-                          </Tooltip>
-                        </Box>
-                      ) : (
-                        <>
-                          <IconButton
-                            disableRipple
-                            component="label"
-                            onClick={handleButtonClick}
-                            sx={{
-                              pt: 12,
-                              alignItems: 'center',
-                              textAlign: 'center'
-                            }}
-                          >
-                            <Typography
-                              variant="title2"
-                              sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                            >
-                              Select File
-                            </Typography>
-                            <VisuallyHiddenInput type="file" accept="image/*" onChange={handleFileUpload} />
-                          </IconButton>
-                        </>
-                      )}
-                    </Stack>
-                  </Card>
-                  {/* <canvas
-                    ref={previewCanvasRef}
-                    style={{
-                      border: '1px solid black',
-                      objectFit: 'contain',
-                      width: completedCrop.width,
-                      height: completedCrop.height
-                    }}
-                  /> */}
-                  <Stack pt={1} direction="row" spacing={2} justifyContent="space-between">
-                    <Button variant="contained5" onClick={handlecloseClick}>
-                      Cancel
-                    </Button>
-                    <Button variant="contained4" onClick={handleImageCrop}>
-                      Upload
-                    </Button>
-                  </Stack>
-                </Stack>
-              </Dialog>
 
               <Grid item xs={12}>
                 <Stack direction="row" spacing={3} pt={2}>

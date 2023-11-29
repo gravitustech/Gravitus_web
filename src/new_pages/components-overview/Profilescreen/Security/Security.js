@@ -78,6 +78,36 @@ const IOSSwitch = styled((props) => <Switch focusVisibleClassName=".Mui-focusVis
 
 const Email = ({ email }) => {
   const theme = useTheme();
+  const firstTwo = email.slice(0, 4);
+  const lastTwo = email.slice(-10);
+  const middle = '*******';
+
+  const maskedEmail = `${firstTwo}${middle}${lastTwo}`;
+
+  return (
+    <>
+      {maskedEmail}
+    </>
+  );
+};
+
+const Mobilenumber = ({ number }) => {
+  const theme = useTheme();
+  const firstTwo = number.slice(0, 2);
+  const lastTwo = number.slice(-2);
+  const middle = '******';
+
+  const Mobilenumber = `${firstTwo}${middle}${lastTwo}`;
+
+  return (
+    <>
+      {Mobilenumber}
+    </>
+  );
+};
+
+const EmailUpdate = ({ email }) => {
+  const theme = useTheme();
   const firstTwo = email.slice(0, 2);
   const lastTwo = email.slice(-10);
   const middle = '*******';
@@ -91,7 +121,7 @@ const Email = ({ email }) => {
   );
 };
 
-const Mobilenumber = ({ number }) => {
+const MobilenumberUpdate = ({ number }) => {
   const theme = useTheme();
   const firstTwo = number.slice(0, 2);
   const lastTwo = number.slice(-2);
@@ -305,8 +335,8 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
 
                 {/* G-AUTH Enable dialog box */}
                 <FormControlLabel onClick={handleClickOpenDialog} control={<IOSSwitch checked={securityData?.gShow === 'true'} />} />
-                <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title">
-                  <Stack p={4} spacing={2.5}>
+                <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title" >
+                  <Stack p={4} spacing={2.5}width={540}>
                     <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                       G-Authenticator Security
                     </Typography>
@@ -373,7 +403,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                                           variant="body1"
                                           sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                                         >
-                                          OTP will be send to {securityData?.pSecurity?.authKey}
+                                          OTP will be send to <Mobilenumber number={securityData?.pSecurity?.authKey} />
                                         </Typography>
                                         <OutlinedInput
                                           id="otpmbl-login"
@@ -415,7 +445,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                                       variant="body1"
                                       sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                                     >
-                                      OTP will be send to {securityData?.mSecurity?.authKey}
+                                      OTP will be send to <Email email={securityData?.mSecurity?.authKey} />
                                     </Typography>
                                     <OutlinedInput
                                       id="otpmail-login"
@@ -583,7 +613,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
               <Typography pt={1} variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                 SMS Authentication
               </Typography>
-              {securityData?.pSecurity && <Mobilenumber number={securityData?.pSecurity?.authKey} />}
+              {securityData?.pSecurity && <MobilenumberUpdate number={securityData?.pSecurity?.authKey} />}
               <Stack direction="row" spacing={4}>
                 {securityData?.pShow === 'true' && (
                   <Button variant="transparent" onClick={() => handleReset('preset')}>
@@ -596,7 +626,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                 {/* SMS Enable dialog box */}
                 <FormControlLabel onClick={smshandleClickOpenDialog} control={<IOSSwitch checked={securityData?.pShow === 'true'} />} />
                 <Dialog open={smsopenDialog} onClose={smshandleCloseDialog} aria-labelledby="dialog-title">
-                  <Stack p={4} spacing={2}>
+                  <Stack p={4} spacing={2} width={520}>
                     <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                       SMS Security
                     </Typography>
@@ -614,10 +644,10 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                       validationSchema={
                         otpState
                           ? Yup.object().shape({
-                              otpmbl: Yup.string().max(5).required('OTP is requried*'),
-                              otpmail: Yup.string().max(5).required('OTP is requried*'),
-                              gcode: securityData?.gSecurity?.enabled === '1' && Yup.string().max(6).required('G-Code is requried*')
-                            })
+                            otpmbl: Yup.string().max(5).required('OTP is requried*'),
+                            otpmail: Yup.string().max(5).required('OTP is requried*'),
+                            gcode: securityData?.gSecurity?.enabled === '1' && Yup.string().max(6).required('G-Code is requried*')
+                          })
                           : Yup.object().shape({ mobilenumber: Yup.string().max(10).required("Don't leave a empty") })
                       }
                       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
@@ -668,7 +698,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                                       variant="body1"
                                       sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                                     >
-                                      OTP will be send to {securityData?.pSecurity?.authKey || values.mobilenumber}
+                                      OTP will be send to <Mobilenumber number={securityData?.pSecurity?.authKey || values.mobilenumber} />
                                     </Typography>
                                     <OutlinedInput
                                       id="otpmbl-login"
@@ -709,7 +739,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                                       variant="body1"
                                       sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                                     >
-                                      OTP will be send to {securityData?.mSecurity?.authKey}
+                                      OTP will be send to <Email email={securityData?.mSecurity?.authKey} />
                                     </Typography>
                                     <OutlinedInput
                                       id="otpmail-login"
@@ -862,7 +892,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
               <Typography pt={1} variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                 Email Authentication
               </Typography>
-              {securityData?.mSecurity && <Email email={securityData?.mSecurity?.authKey} />}
+              {securityData?.mSecurity && <EmailUpdate email={securityData?.mSecurity?.authKey} />}
 
               <Stack direction="row" spacing={4}>
                 <FormControlLabel disabled control={<IOSSwitch defaultChecked />} />

@@ -19,6 +19,36 @@ import { setAdminUserStateAction } from '../../../appRedux/actions/adminUser';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
+const Email = ({ email }) => {
+  const theme = useTheme();
+  const firstTwo = email.slice(0, 4);
+  const lastTwo = email.slice(-10);
+  const middle = '*******';
+
+  const maskedEmail = `${firstTwo}${middle}${lastTwo}`;
+
+  return (
+    <>
+      {maskedEmail}
+    </>
+  );
+};
+
+const Mobilenumber = ({ number }) => {
+  const theme = useTheme();
+  const firstTwo = number.slice(0, 2);
+  const lastTwo = number.slice(-2);
+  const middle = '******';
+
+  const Mobilenumber = `${firstTwo}${middle}${lastTwo}`;
+
+  return (
+    <>
+      {Mobilenumber}
+    </>
+  );
+};
+
 const GravitusAuthLoginVerify = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -217,7 +247,7 @@ const GravitusAuthLoginVerify = () => {
                   {verifyMethod === 'email' && (
                     <Stack spacing={1}>
                       <InputLabel htmlFor="email-login" variant="body2">
-                        OTP will be sent to {data?.result?.mSecurity?.authKey}
+                        OTP will be sent to <Email email={data?.result?.mSecurity?.authKey} />
                       </InputLabel>
                       <OutlinedInput
                         id="email-login"
@@ -255,7 +285,7 @@ const GravitusAuthLoginVerify = () => {
                   {verifyMethod === 'phone' && (
                     <Stack spacing={1}>
                       <InputLabel htmlFor="otpmbl-login" variant="subtitle3">
-                        OTP will be sent to {data.result.pSecurity.authKey}
+                        OTP will be sent to <Mobilenumber number={data.result.pSecurity.authKey} />
                       </InputLabel>
                       <OutlinedInput
                         id="otpmbl-login"
