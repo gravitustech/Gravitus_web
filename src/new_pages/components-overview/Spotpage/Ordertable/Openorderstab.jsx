@@ -79,6 +79,12 @@ const headCells = [
     label: 'Date'
   },
   {
+    id: 'Status',
+    align: 'left',
+    disablePadding: false,
+    label: 'Status'
+  },
+  {
     id: 'Action',
     align: 'right',
     disablePadding: false,
@@ -131,11 +137,11 @@ export default function OpenordersTab({ isAuthorised, orderTableData, priceData,
     setOpenDialog(false);
   };
   const handleclick = (order) => {
-    var postData = { "id": order.id, "platformId": order.platformId };
+    var postData = { id: order.id, platformId: order.platformId };
 
     postDataSPOT(Spot_CancelOrder_URL(), postData).then(function (res) {
       // console.log(res);
-
+      handleCloseDialog();
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User
@@ -237,13 +243,16 @@ export default function OpenordersTab({ isAuthorised, orderTableData, priceData,
                           scope="row"
                           align="left"
                         >
-                          <Stack direction="row" alignItems="center" spacing={1}>
+                          <Stack direction="row" alignItems="center" spacing={0.5}>
                             <Typography variant="subtitle1" sx={{ color: row.side === 'BUY' ? 'text.buy' : 'text.sell' }}>
                               {row.side}
-                              {/* {priceData.tradePair} */}
+                            </Typography>
+                            <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                              / {row.orderType}
                             </Typography>
                           </Stack>
                         </TableCell>
+
                         <TableCell sx={{ border: 'none', paddingBottom: '7px', paddingTop: '0px' }} align="left">
                           <Typography
                             variant="subtitle1"
@@ -258,7 +267,7 @@ export default function OpenordersTab({ isAuthorised, orderTableData, priceData,
                             variant="subtitle1"
                             sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                           >
-                            {row.sPrice}
+                            {row.sPrice === 0 ? '--' : row.sPrice}
                           </Typography>
                         </TableCell>
 
@@ -298,6 +307,15 @@ export default function OpenordersTab({ isAuthorised, orderTableData, priceData,
                           </Typography>
                         </TableCell>
 
+                        <TableCell sx={{ border: 'none', paddingBottom: '7px', paddingTop: '0px' }} align="left">
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                          >
+                            {row.status}
+                          </Typography>
+                        </TableCell>
+
                         <TableCell sx={{ border: 'none', paddingBottom: '7px', paddingTop: '0px', cursor: 'pointer' }} align="right">
                           <Link
                             variant="subtitle1"
@@ -305,7 +323,7 @@ export default function OpenordersTab({ isAuthorised, orderTableData, priceData,
                             color="text.sell"
                             onClick={() => handleOpenDialog(row)}
                           >
-                            cancel
+                            Cancel
                           </Link>
                         </TableCell>
                       </TableRow>

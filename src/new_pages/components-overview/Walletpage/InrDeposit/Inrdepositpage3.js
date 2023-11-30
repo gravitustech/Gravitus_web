@@ -1,23 +1,37 @@
 import React, { useState } from 'react';
 
-import { Field, Formik } from 'formik';
-import * as Yup from 'yup';
-
-import { Grid, Typography, Stack, OutlinedInput, FormHelperText, Button,
-  TextField, useTheme, Box, Card, IconButton, styled, Tooltip
+import {
+  Grid, Typography, Stack, OutlinedInput, FormHelperText, Button,
+  TextField, useTheme, Box, Card, IconButton, styled, Tooltip, Dialog, Autocomplete, Modal
 } from '@mui/material';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import AnimateButton from '../../../../components/@extended/AnimateButton';
-import Autocomplete from '@mui/material/Autocomplete';
-import Dialog from '@mui/material/Dialog';
-import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
+
 import { DeleteForever } from '@mui/icons-material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 
 import CardInr from '../InrWithdraw/Card';
 import GravitusBankdeatils from './GravitusBankdeatils';
 import warninggif from '../../../../assets/images/gravitusimage/warninggif.svg';
+import AnimateButton from '../../../../components/@extended/AnimateButton';
+
+import * as Yup from 'yup';
+import { Field, Formik } from 'formik';
 
 import { postINRDepositData } from '../../../../api/wallet';
+import ImageCropper from 'src/components/_cropper';
+
+
+// Modal View Style - Appeal
+const modalStyle = {
+  position: 'absolute',
+  top: '50%', left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 1024, height: 'auto',
+  bgcolor: 'background.paper',
+  border: '1px solid #808080 !important',
+  boxShadow: 24, p: 4,
+  textAlign: 'center'
+};
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -37,11 +51,39 @@ const InrDepositpage3 = ({ depositFrom, depositTo, setStep, setFormikValues, for
 
   let formData = new FormData();
 
-  const [open, setOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState();
-  const [selectedFileURL, setSelectedFileURL] = useState();
-  // const [dialogOpen, setDialogOpen] = useState(false);
+  const [imageToCrop, setImageToCrop] = React.useState(undefined);
+  const [croppedImage, setCroppedImage] = React.useState(undefined);
 
+  const [modalOpen, setModalOpen] = React.useState(false); // Show modal
+
+  const handleModalOpen = () => {
+    document.getElementById('superFile')?.click();
+    setTimeout(function () {
+      setModalOpen(true);
+    }, 1000);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false)
+    setCroppedImage(undefined)
+  };
+  const handleModalUpolad = () => {
+    setModalOpen(false)
+  };
+  const onUploadFile = (event) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+
+      reader.addEventListener('load', () => {
+        setImageToCrop(reader.result)
+      });
+
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+
+  const [open, setOpen] = useState(false); //Dialogbox open
+ 
   const Accounts = [{
     Beneficiary: depositFrom?.accountName,
     BankName: depositFrom?.bankName,
@@ -49,23 +91,7 @@ const InrDepositpage3 = ({ depositFrom, depositTo, setStep, setFormikValues, for
     IFSCCode: depositFrom?.IFSCCode,
     payMode: depositFrom?.payMode,
   }];
-
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    console.log({ file });
-    setSelectedFile(file);
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      setSelectedFileURL(reader.result);
-    };
-
-    reader.readAsDataURL(file);
-  };
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
+ 
 
   const handlePrev = () => {
     setStep(2);
@@ -89,9 +115,9 @@ const InrDepositpage3 = ({ depositFrom, depositTo, setStep, setFormikValues, for
         receiptNo: formikValues.utrId
       })
     );
-    
-    formData.append('fileName', selectedFile.name);
-    formData.append('fileI', selectedFileURL);
+
+    formData.append('fileName', croppedImage.name);
+    formData.append('fileI', croppedImage);
     try {
       const { data } = await postINRDepositData(formData);
       if (Object.keys(data.result).length) {
@@ -250,80 +276,126 @@ const InrDepositpage3 = ({ depositFrom, depositTo, setStep, setFormikValues, for
                           Upload the payment Screenshot
                         </Typography>
                       </Stack>
+
                       <Stack pt={1}>
-                        <Field name="file">
-                          {({ field }) => {
-                            const { value, name } = field;
-                            const touched = values.file !== null;
-                            return (
-                              <Card
+                        <Card
+                          sx={{
+                            width: '100%',
+                            height: '100%',
+                            boxShadow: 'none',
+                            borderRadius: '5px',
+                            border: '2px solid',
+                            borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
+                            backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
+                          }}
+                        >
+                          <Stack
+                            pt={5}
+                            sx={{
+                              alignItems: 'center',
+                              textAlign: 'center'
+                            }}
+                          >
+                            {croppedImage ? (
+                              <Box>
+                                <img src={croppedImage} alt="wew" width="100%" height='auto' />
+                                <Tooltip title="click to clear the image" placement="top" arrow>
+                                  <DeleteForever
+                                    onClick={() => setCroppedImage(null)}
+                                    sx={{
+                                      cursor: 'pointer',
+                                      color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
+                                    }}
+                                  />
+                                </Tooltip>
+                              </Box>
+                            ) : (
+                              <IconButton
+                                disableRipple
+                                onClick={handleModalOpen}
                                 sx={{
-                                  // width: ' 330.98px',
-                                  height: '100%',
-                                  boxShadow: 'none',
-                                  borderRadius: '5px',
-                                  border: '2px solid',
-                                  borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
-                                  backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
+                                  paddingBottom: '46px',
                                 }}
                               >
-                                <Stack alignItems="center" textAlign="center">
-                                  {selectedFileURL ? (
-                                    <Box>
-                                      <img src={selectedFileURL} alt="wew" width="90%" height="100%" />
-                                      <Tooltip title="click to clear the image" placement="top" arrow>
-                                        <DeleteForever
-                                          onClick={() => setSelectedFileURL(null)}
-                                          sx={{
-                                            cursor: 'pointer',
-                                            color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
-                                          }}
-                                        />
-                                      </Tooltip>
-                                    </Box>
-                                  ) : (
-                                    <IconButton
-                                      disableRipple
-                                      component="label"
-                                      sx={{
-                                        p: 12,
-                                        alignItems: 'center',
-                                        textAlign: 'center'
-                                      }}
+                                <AddCircleOutlinedIcon
+                                  sx={{
+                                    width: '46px',
+                                    height: '46px',
+                                    color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary'
+                                  }}
+                                />
+                                <input id="superFile" type="file" accept="image/*" onChange={onUploadFile} style={{ display: 'none' }} />
+                              </IconButton>
+                            )}
+                          </Stack>
+                          <Modal
+                            open={modalOpen}
+                            onClose={handleModalClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description">
+                            <Box sx={modalStyle}>
+                              <Grid container spacing={0}>
+                                {/* <Stack direction='row' spacing={1}> */}
+                                <Grid xs={12} md={6}>
+                                  <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Selected Image</Typography>
+                                  <Box >
+                                    <ImageCropper
+                                      imageToCrop={imageToCrop}
+                                      onImageCropped={(croppedImage) => setCroppedImage(croppedImage)}
                                     >
-                                      <Tooltip disableFocusListener disableTouchListener title="click to upload payment screenhot" placement="top" arrow>
-                                        <AddCircleOutlinedIcon
-                                          sx={{
-                                            width: '46px',
-                                            height: '46px',
-                                            color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary'
-                                          }}
-                                        />
-                                      </Tooltip>
-
-                                      <VisuallyHiddenInput type="file" accept="image/*" onChange={handleFileUpload} />
-                                    </IconButton>
-                                  )}
-                                </Stack>
-                              </Card>
-                            );
-                          }}
-                        </Field>
+                                    </ImageCropper>
+                                  </Box>
+                                </Grid>
+                                <Grid xs={12} md={6}>
+                                  <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Cropped Image</Typography>
+                                  {
+                                    croppedImage &&
+                                    <Box
+                                      display="flex"
+                                      justifyContent="center"
+                                      alignItems="center"
+                                      maxHeight="auto"
+                                      maxWidth="auto"
+                                    >
+                                      <img
+                                        style={{
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                          minHeight: 'auto',
+                                          maxHeight: 'auto',
+                                          maxWidth: "auto"
+                                        }}
+                                        alt="Cropped Img"
+                                        src={croppedImage}
+                                      />
+                                    </Box>
+                                  }
+                                </Grid>
+                                {/* </Stack> */}
+                              </Grid>
+                              <Stack pt={1} direction="row" spacing={2} justifyContent="space-around">
+                                <Button variant="contained5" onClick={handleModalClose}>
+                                  Cancel
+                                </Button>
+                                <Button variant="contained4"
+                                  onClick={handleModalUpolad}
+                                >
+                                  Upload
+                                </Button>
+                              </Stack>
+                            </Box>
+                          </Modal>
+                        </Card>
                       </Stack>
-                      {touched.file && errors.file && (
+                      {/* {touched.file && errors.file && (
                         <FormHelperText error id="standard-weight-helper-text-file">
                           {errors.file}
                         </FormHelperText>
-                      )}
+                      )} */}
                     </Grid>
                   </Grid>
-                  {/* <Typography
-                    pt={2}
-                    variant="body1"
-                    sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                  >
-                    Upload the payment Screenshot
-                  </Typography> */}
+                  
                   <Grid item xs={12} pt={3}>
                     <AnimateButton>
                       <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">

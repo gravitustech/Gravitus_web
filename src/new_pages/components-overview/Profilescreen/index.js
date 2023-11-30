@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Grid, Stack, Typography, MenuItem, MenuList, Divider } from '@mui/material';
+import { Button, Grid, Stack, Typography, MenuItem, MenuList, Divider, Dialog } from '@mui/material';
 import { TabContext } from '@mui/lab';
 import { useTheme } from '@emotion/react';
 import Dashboard from './Dashboard/Dashboard';
@@ -11,6 +11,8 @@ import Faq from './Faq';
 import Support from './Support';
 import TabPanel from '@mui/lab/TabPanel';
 import { useLocation, useNavigate } from 'react-router';
+
+import warninggif from '../../../assets/images/gravitusimage/warninggif.svg';
 
 //icons
 import dashboard from '../../../assets/images/gravitusimage/dashboard.svg';
@@ -52,6 +54,16 @@ function ProfileScreen() {
 
   const page = useLocation().pathname.split('/')[2];
   const navigate = useNavigate();
+
+  const [openDialog, setOpenDialog] = useState(false); //logout dialog
+
+  const handleOpenDialog = (row) => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
@@ -217,8 +229,8 @@ function ProfileScreen() {
                           ? 'text.white'
                           : 'text.secondary'
                         : theme.palette.mode === 'dark'
-                        ? 'text.primary'
-                        : 'text.primary'
+                          ? 'text.primary'
+                          : 'text.primary'
                   }}
                 >
                   {tab.label}
@@ -231,13 +243,34 @@ function ProfileScreen() {
             sx={{ width: '220px', height: '51px', display: 'flex', alignItems: 'start', paddingLeft: '36px' }}
           >
             <Button disableRipple>
-              <Stack direction="row" spacing={1.4} onClick={handleLogout}>
+              <Stack direction="row" spacing={1.4} onClick={handleOpenDialog}>
                 <img src={logout} alt="logout" width={24} />
                 <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary' }}>
                   Logout
                 </Typography>
               </Stack>
             </Button>
+            <Dialog open={openDialog} onClose={handleCloseDialog} >
+              <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <img src={warninggif} alt='warninggif' />
+                <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                  Confirm ?
+                </Typography>
+                <Typography textAlign='center' variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                  Are you sure you did like to logout your account?
+                </Typography>
+
+                <Stack pt={3} direction="row" spacing={2} justifyContent="space-between">
+                  <Button variant="contained5" onClick={handleCloseDialog}>
+                    No
+                  </Button>
+                  <Button variant='contained4' onClick={handleLogout}>
+                    Yes
+                  </Button>
+                </Stack>
+
+              </Stack>
+            </Dialog>
           </MenuItem>
         </MenuList>
         <Grid item pt={1} display={{ xs: 'none', md: 'none', lg: 'block' }}>

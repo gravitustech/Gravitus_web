@@ -19,7 +19,6 @@ const Chat_Appeal_Tab = ({ resultdata, counterPart, appealMessage }) => {
   const [value, setValue] = React.useState('0'); // Chat or Appeal Tab
   const orderDetails = resultdata?.orderDetails;
 
-  console.log('orderDetails', orderDetails)
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -123,7 +122,8 @@ const Chat_Appeal_Tab = ({ resultdata, counterPart, appealMessage }) => {
         <TabPanel value="1" sx={{ padding: '0', paddingTop: '12px' }}>
           <AppealChatscreen
             messages={appealMessage}
-            orderDetails={data?.result?.orderDetails}
+            // messages={Appealdata?.result?.appealMessage}
+            orderDetails={Appealdata?.result?.orderDetails}
             counterPart={counterPart}
             mutate={mutate}
             setSnackbarOpen={setSnackbarOpen}

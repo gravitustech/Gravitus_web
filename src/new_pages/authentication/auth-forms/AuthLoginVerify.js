@@ -4,25 +4,25 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // material-ui
 import { Button, FormHelperText, Grid, OutlinedInput, Stack, InputLabel, InputAdornment, Link, useTheme, Typography } from '@mui/material';
 
-// third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-// project import
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import AnimateButton from '../../../components/@extended/AnimateButton';
-import useSWR from 'swr';
-import { fetcher, getSecurityURL, sendOtpSecurity, signinSecurity } from '../../../api/profile';
+
 import CustomSnackBar from '../../../components/snackbar';
+import AnimateButton from '../../../components/@extended/AnimateButton';
+
+import useSWR from 'swr';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAdminUserStateAction } from '../../../appRedux/actions/adminUser';
+import { fetcher, getSecurityURL, sendOtpSecurity, signinSecurity } from '../../../api/profile';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const Email = ({ email }) => {
   const theme = useTheme();
-  const firstTwo = email.slice(0, 4);
-  const lastTwo = email.slice(-10);
+  const firstTwo = email?.slice(0, 4);
+  const lastTwo = email?.slice(-10);
   const middle = '*******';
 
   const maskedEmail = `${firstTwo}${middle}${lastTwo}`;
@@ -36,8 +36,8 @@ const Email = ({ email }) => {
 
 const Mobilenumber = ({ number }) => {
   const theme = useTheme();
-  const firstTwo = number.slice(0, 2);
-  const lastTwo = number.slice(-2);
+  const firstTwo = number?.slice(0, 2);
+  const lastTwo = number?.slice(-2);
   const middle = '******';
 
   const Mobilenumber = `${firstTwo}${middle}${lastTwo}`;

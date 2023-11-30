@@ -1,5 +1,6 @@
 import warninggif from '../../../../../../assets/images/gravitusimage/warninggif.svg';
 import ordersuccessgif from '../../../../../../assets/images/gravitusimage/ordersuccesgif.svg';
+import Timeoutgif from '../../../../../../assets/images/gravitusimage/Timeoutgif.svg';
 
 import {
   Typography, Stack, Avatar, useTheme, Grid, Card, TextField, FormHelperText,
@@ -910,7 +911,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
               {resultdata?.actionCaption === "Order Completed" ? (
                 <img src={ordersuccessgif} alt='ordersuccessgif' />
               ) : (
-                <img src={warninggif} alt='warninggif' />
+                <img src={Timeoutgif} alt='Timeoutgif' />
               )}
               <Typography pt={3} variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} >
                 {resultdata?.actionCaption}

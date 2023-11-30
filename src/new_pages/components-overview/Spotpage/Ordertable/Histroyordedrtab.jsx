@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Link as RouterLink } from 'react-router-dom';
- 
+
 // material-ui
 import {
   Box,
@@ -113,6 +113,7 @@ OrderTableHead.propTypes = {
 
 export default function HistroyordersTab({ isAuthorised, orderTableData, priceData }) {
   const theme = useTheme();
+  // console.log(orderTableData)
   return (
     <>
       {isAuthorised ? (
@@ -160,10 +161,12 @@ export default function HistroyordersTab({ isAuthorised, orderTableData, priceDa
                           scope="row"
                           align="left"
                         >
-                          <Stack direction="row" alignItems="center" spacing={1}>
+                          <Stack direction="row" alignItems="center" spacing={0.5}>
                             <Typography variant="subtitle1" sx={{ color: row.side === 'BUY' ? 'text.buy' : 'text.sell' }}>
                               {row.side}
-                              {/* {priceData.tradePair} */}
+                            </Typography>
+                            <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                              / {row.orderType}
                             </Typography>
                           </Stack>
                         </TableCell>
@@ -181,7 +184,7 @@ export default function HistroyordersTab({ isAuthorised, orderTableData, priceDa
                             variant="subtitle1"
                             sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                           >
-                            {row.sPrice}
+                            {row.sPrice === 0 ? '--' : row.sPrice}
                           </Typography>
                         </TableCell>
 
@@ -224,9 +227,9 @@ export default function HistroyordersTab({ isAuthorised, orderTableData, priceDa
                         <TableCell sx={{ border: 'none', paddingBottom: '7px', paddingTop: '0px' }} align="right">
                           <Typography
                             variant="subtitle1"
-                            sx={{  color: row.status === '2' ? 'text.buy' : 'text.sell'  }}
+                            sx={{ color: row.status === 'Cancelled' ? 'text.sell' : 'text.buy' }}
                           >
-                          {row.status === '2' ? 'Completed' : 'Cancelled'}
+                            {row.status}
                           </Typography>
                         </TableCell>
                       </TableRow>

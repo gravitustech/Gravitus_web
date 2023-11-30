@@ -233,7 +233,7 @@ function stableSort(array, comparator) {
 export default function USDTTable({ marketData }) {
   const [orderBy, setOrderBy] = useState('defaultProperty'); // Replace 'defaultProperty' with the default sorting property
   const [order, setOrder] = useState('asc');
-  console.log({ marketData });
+  // console.log({ marketData });
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');

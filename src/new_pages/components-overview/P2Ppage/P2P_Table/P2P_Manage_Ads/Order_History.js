@@ -19,7 +19,7 @@ const headCells = [
     id: 'Amount / Quantity',
     align: 'left',
     disablePadding: false,
-    label: 'Amount'
+    label: 'Amount  / Quantity'
   },
   // {
   //   id: 'Quantity',
@@ -40,10 +40,10 @@ const headCells = [
     label: 'TDS'
   },
   {
-    id: 'Date / Status',
+    id: 'Status / Date',
     align: 'right',
     disablePadding: false,
-    label: 'Date'
+    label: 'Status / Date'
   },
   // {
   //   id: 'Status',

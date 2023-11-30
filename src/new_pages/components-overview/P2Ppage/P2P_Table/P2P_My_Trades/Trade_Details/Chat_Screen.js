@@ -440,11 +440,11 @@ const Message = ({ message }) => {
             variant="body1"
             sx={{
               p: 2,
-              ml: isBot ? 1 : 0,
-              mr: isBot ? 0 : 1,
-              backgroundColor: isBot ? 'text.buy' : theme.palette.mode === "dark" ? '#F5F5F5' : "#F5F5F5",
-              borderRadius: isBot ? '15px 15px 15px 0px' : '15px 15px 0px 15px',
-              color: isBot ? 'text.white' : 'text.black',
+              ml: isBot ? 1 : 10,
+              mr: isBot ? 10 : 1,
+              backgroundColor: isBot ? 'text.buy' : theme.palette.mode === "dark" ? '#232323' : "#F5F5F5",
+              borderRadius: isBot ? '20px 20px 20px 0px' : '20px 20px 0px 20px',
+              color: isBot ? 'text.white' : theme.palette.mode === "dark" ? 'text.white' : 'text.black',
             }}
           >
             {message?.messageContent}
@@ -485,12 +485,12 @@ const Message = ({ message }) => {
                 style={{ width: "75%", maxWidth: "700px", borderRadius: "5px" }} />
               <Stack pt={3}>
                 <Tooltip title="click to download the image" placement="top" arrow>
-                  <IconButton onClick={handleDownload} justifyContent='flex-end' >
+                  <Button onClick={handleDownload} justifyContent='flex-end' >
                     <DownloadIcon sx={{ color: theme.palette.mode === 'dark' ? 'text.black' : 'text.black', }} />
                     <Typography pl={1} sx={{ color: theme.palette.mode === 'dark' ? 'text.secondary' : 'text.secondary', }}>
                       Download
                     </Typography>
-                  </IconButton>
+                  </Button>
                 </Tooltip>
               </Stack>
             </ModalContent>

@@ -17,7 +17,7 @@ import ImageCropper from "src/components/_cropper";
 import { Formik } from "formik";
 
 const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMessage, setSnackbarOpen }) => {
-  const reversedMessages = messages && [...messages].reverse();
+  const reversedMessages = messages && messages;
   const [input, setInput] = React.useState(""); // Message in Use Sate
 
   const theme = useTheme();
@@ -49,7 +49,7 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
       fileName: 'noscreenshot',
       fileI: '',
     };
-   
+
     // console.log(postData, 'Post Message');
     formDataP2P(P2P_UpdateAppeal_URL(), postData).then(function (res) {
       console.log(res);
@@ -62,12 +62,12 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
         }
         else {
           if (res.error.name != undefined) {
-            console.log('res.error',res.error.name)
+            console.log('res.error', res.error.name)
             setSnackbarMessage({ msg: res.error.name, success: false });
             setSnackbarOpen(true);
           }
           else {
-            console.log('res.error',res.error)
+            console.log('res.error', res.error)
             setSnackbarMessage({ msg: res.error, success: false });
             setSnackbarOpen(true);
           }
@@ -437,7 +437,7 @@ const Message = ({ message }) => {
 
   // Align message based on response
   const isBot = message.align === 'left';
-
+  console.log('message', message)
   const MessageComponent = () => {
     if (message?.messageType === 'text') {
       return (
@@ -446,14 +446,20 @@ const Message = ({ message }) => {
             variant="body1"
             sx={{
               p: 2,
-              ml: isBot ? 1 : 0,
-              mr: isBot ? 0 : 1,
-              backgroundColor: isBot ? 'text.buy' : theme.palette.mode === "dark" ? '#F5F5F5' : "#F5F5F5",
-              borderRadius: isBot ? '15px 15px 15px 0px' : '15px 15px 0px 15px',
-              color: isBot ? 'text.white' : 'text.black',
+              ml: isBot ? 1 : 10,
+              mr: isBot ? 10 : 1,
+              backgroundColor: isBot ? message?.messageFrom === "Admin" ? theme.palette.mode === "dark" ? '#4A4A4A' : "#E3FFFD" : 'text.buy' : message?.messageFrom === "Admin" ? theme.palette.mode === "dark" ? '#4A4A4A' : "#E3FFFD" : theme.palette.mode === "dark" ? '#232323' : "#F5F5F5",
+              borderRadius: isBot ? '20px 20px 20px 0px' : '20px 20px 0px 20px',
+              color: isBot ? message?.messageFrom === "Admin" ?
+                theme.palette.mode === "dark" ? 'text.white' : "text.black" : 'text.white' :
+                message?.messageFrom === "Admin" ?
+                  theme.palette.mode === "dark" ? 'text.white' : "text.black" : theme.palette.mode === "dark" ? 'text.white' : "text.black",
             }}
           >
             {message?.messageContent}
+            {message?.messageFrom === "Admin" ? <br /> : ''}
+            {message?.messageFrom === "Admin" ? <br /> : ''}
+            {message?.messageFrom === "Admin" ? '- Admin' : ''}
           </Typography>
         </Stack>
       );
@@ -491,12 +497,12 @@ const Message = ({ message }) => {
                 style={{ width: "75%", maxWidth: "700px", borderRadius: "5px" }} />
               <Stack pt={3}>
                 <Tooltip title="click to download the image" placement="top" arrow>
-                  <IconButton onClick={handleDownload} justifyContent='flex-end' >
+                  <Button onClick={handleDownload} justifyContent='flex-end' >
                     <DownloadIcon sx={{ color: theme.palette.mode === 'dark' ? 'text.black' : 'text.black', }} />
                     <Typography pl={1} sx={{ color: theme.palette.mode === 'dark' ? 'text.secondary' : 'text.secondary', }}>
                       Download
                     </Typography>
-                  </IconButton>
+                  </Button>
                 </Tooltip>
               </Stack>
             </ModalContent>

@@ -1,6 +1,7 @@
 import ordersuccessgif from '../../../../../../assets/images/gravitusimage/ordersuccesgif.svg';
 import warninggif from '../../../../../../assets/images/gravitusimage/warninggif.svg';
 import Copyicon from '../../../../../../assets/images/gravitusimage/copyicon.svg';
+import Timeoutgif from '../../../../../../assets/images/gravitusimage/Timeoutgif.svg';
 
 import {
   Typography, Stack, Avatar, useTheme, Grid, Card, OutlinedInput,
@@ -925,11 +926,20 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                     initialValues={{
                       reason: null,
                       message: '',
+                      file: null,
                       submit: null
                     }}
                     validationSchema={Yup.object().shape({
                       reason: Yup.string().max(255).nullable().required('Select the type of reason'),
-                      message: Yup.string().max(255).required('Don\'t leave empty')
+                      message: Yup.string().max(255).required('Don\'t leave empty'),
+                      // file: Yup.mixed()
+                      //   .required('Upload payment screenshot*')
+                      //   .test('fileType', 'Unsupported file type', (value) => {
+                      //     if (value) {
+                      //       return ['image/jpeg', 'image/png'].includes(value.type);
+                      //     }
+                      //     return true;
+                      //   }),
                     })}
                     onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                       try {
@@ -1132,12 +1142,18 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                               </Stack>
                             </Box>
                           </Modal>
-                          <Stack direction="row" spacing={3} pt={3}>
-                            <Button variant="p2pcancelbutton" onClick={handleButtonClick}>Cancel</Button>
-                            <Button type="submit" variant="p2pnextbutton" onClick={() => handleAppeal(values)}>
-                              {isLoading ? <CircularProgress color="inherit" size={30} /> : 'File a Appeal'}
-                            </Button>
-                          </Stack>
+                          {/* {touched.file && errors.file && (
+                            <FormHelperText error id="standard-weight-helper-text-file">
+                              {errors.file}
+                            </FormHelperText>
+                          )} */}
+                          
+                            <Stack direction="row" spacing={3} pt={3}>
+                              <Button variant="p2pcancelbutton" onClick={handleButtonClick}>Cancel</Button>
+                              <Button type="submit" variant="p2pnextbutton" onClick={() => handleAppeal(values)}>
+                                {isLoading ? <CircularProgress color="inherit" size={30} /> : 'File a Appeal'}
+                              </Button>
+                            </Stack>
                         </form>
                       </>
                     )}
@@ -1154,7 +1170,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
               {resultdata?.actionCaption === "Order Completed" ? (
                 <img src={ordersuccessgif} alt='ordersuccessgif' />
               ) : (
-                <img src={warninggif} alt='warninggif' />
+                <img src={Timeoutgif} alt='Timeoutgif' />
               )}
               <Typography pt={3} variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} >
                 {resultdata?.actionCaption}
