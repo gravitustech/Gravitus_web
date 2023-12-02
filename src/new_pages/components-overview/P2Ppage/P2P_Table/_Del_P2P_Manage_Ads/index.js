@@ -8,7 +8,7 @@ import { P2P_SuperOrders_URL, fetcherP2P } from '../../../../../api_ng/peer2peer
 import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../../../utils_ng/localStorage_ng';
 
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { useTheme, Stack, Typography, Grid, Tab, Link } from '@mui/material';
+import { useTheme, Stack, Typography, Grid, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 
 import P2P_Post_Buy from './P2P_Post_Buy';
@@ -97,16 +97,15 @@ const P2P_Manage_Ads = () => {
       }
     }
 
-    // Will be implemented in next version
-    // let P2POrderEvent = '/P2POrder_'+ getConfig_sp().userId +'/POST';
-    // socket.on(P2POrderEvent, function(res) {
-    //   console.log(res, 'Update from Sock Data');
-    //   mutate(P2P_SuperOrders_URL);
-    // });
+    // P2P Order Events
+    let P2POrderEvent = '/P2POrder_'+ getConfig_sp().userId +'/POST';
+    socket.on(P2POrderEvent, function(res) {
+      mutate(P2P_SuperOrders_URL);
+    });
 
-    // return () => {
-    //   socket.off(P2POrderEvent);
-    // };
+    return () => {
+      socket.off(P2POrderEvent);
+    };
 
   }, [PostRc]);
 

@@ -12,10 +12,9 @@ import Footer from '../Homepage/Footer/Footer';
 import { fetcher, getMarketURL } from '../../../api/spot';
 import { useSelector } from 'react-redux';
 import { socket } from '../../../socket';
-import useSWR from 'swr';
+import useSWR, {mutate} from 'swr';
 
-import { MarketOverview_URL } from 'src/api_ng/market_ng';
-import { fetcherSPOT } from 'src/api_ng/spotTrade_ng';
+import { MarketOverview_URL, fetcherSystem } from 'src/api_ng/system_ng';
 import { getConfig_ng } from 'src/utils_ng/localStorage_ng';
 
 const Marketpage = () => {
@@ -25,16 +24,10 @@ const Marketpage = () => {
   const [socketData, setSocketData] = useState();
   const theme = useTheme();
 
-  // const { data, error, isLoading } = useSWR(
-  //   getMarketURL(),
-  //   (url) => fetcher(url, { accountType: 'GRAVITUS', postData: { callfrom: 'markets' } })
-  //   // { suspense: true }
-  // );
-
   function useMarketOverview() {
     var postData = { "callfrom": 'markets' };
 
-    const { data, error, isLoading } = useSWR([MarketOverview_URL(), postData], fetcherSPOT, {
+    const { data, error, isLoading } = useSWR([MarketOverview_URL(), postData], fetcherSystem, {
       revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
     });
 
@@ -42,17 +35,20 @@ const Marketpage = () => {
   }
 
   const { data, error, isLoading } = useMarketOverview();
+  console.log(data, 'From Market Overview');
 
   useEffect(() => {
-    function onMARKETUpdate(res) {
-      console.log({ res });
-      setSocketData(res);
-    }
+    var marketOverviewEvt = '/MARKETUpdate/POST';
+    socket.on(marketOverviewEvt, function(res){
+      console.log(res, 'From Sock Market Overview');
+      mutate(MarketOverview_URL);
+    });
 
-    socket.on('/MARKETUpdate/POST', onMARKETUpdate);
+    return () => {
+      socket.off(marketOverviewEvt);
+    };
   }, []);
 
-  console.log('res', data, error, isLoading);
   return (
     <>
       {data ? (

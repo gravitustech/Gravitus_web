@@ -7,13 +7,13 @@ import WithdrawPage from '../new_pages/components-overview/Walletpage/Withdraw/i
 import HistoryPage from '../new_pages/components-overview/Walletpage/History/index';
 
 import InrWithdraw from '../new_pages/components-overview/Walletpage/InrWithdraw/InrWithdraw';
-import InrWithdrawpage1 from '../new_pages/components-overview/Walletpage/InrWithdraw/InrWithdrawpage1';
-import InrWithdrawpage2 from '../new_pages/components-overview/Walletpage/InrWithdraw/InrWithdrawpage2';
+import InrWithdrawpage1 from '../new_pages/components-overview/Walletpage/InrWithdraw/InrWithdraw_EXT';
+import InrWithdrawpage2 from '../new_pages/components-overview/Walletpage/InrWithdraw/InrWithdraw_SP';
 
 import InrDeposit from '../new_pages/components-overview/Walletpage/InrDeposit/InrDeposit';
-import InrDepositpage1 from '../new_pages/components-overview/Walletpage/InrDeposit/Inrdepositpage1';
-import InrDepositpage2 from '../new_pages/components-overview/Walletpage/InrDeposit/Inrdepositpage2';
-import InrDepositpage3 from '../new_pages/components-overview/Walletpage/InrDeposit/Inrdepositpage3';
+import InrDepositpage1 from '../new_pages/components-overview/Walletpage/InrDeposit/InrDeposit_STEP1';
+import InrDepositpage2 from '../new_pages/components-overview/Walletpage/InrDeposit/InrDeposit_STEP2';
+import InrDepositpage3 from '../new_pages/components-overview/Walletpage/InrDeposit/InrDeposit_STEP3';
 
 import Buyer_Trade_Dts from '../new_pages/components-overview/P2Ppage/P2P_Table/P2P_My_Trades/Trade_Details/Trade_Buyer_pr';
 import Seller_Trade_Dts from 'src/new_pages/components-overview/P2Ppage/P2P_Table/P2P_My_Trades/Trade_Details/Trade_Seller_pr';

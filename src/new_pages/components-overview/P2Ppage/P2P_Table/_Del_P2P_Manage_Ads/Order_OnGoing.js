@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import useSWR, { mutate } from 'swr';
 
 // material-ui
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, useTheme } from '@mui/material';
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, Link, useTheme } from '@mui/material';
 
 import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/Norecordfoundcomponents';
+import { P2P_CancelOrder_URL, P2P_SuperOrders_URL, postDataP2P } from 'src/api_ng/peer2peer_ng';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
@@ -16,10 +18,10 @@ const headCells = [
     label: 'Type'
   },
   {
-    id: 'Amount / Quantity',
+    id: 'Amount',
     align: 'left',
     disablePadding: false,
-    label: 'Amount  / Quantity'
+    label: 'Amount / Quantity'
   },
   // {
   //   id: 'Quantity',
@@ -28,29 +30,35 @@ const headCells = [
   //   label: 'Quantity'
   // },
   {
-    id: 'Total Amount',
-    align: 'left',
-    disablePadding: false,
-    label: 'Total Amount'
-  },
-  {
     id: 'TDS',
     align: 'left',
     disablePadding: false,
     label: 'TDS'
   },
   {
-    id: 'Status / Date',
-    align: 'right',
+    id: 'Total Amount',
+    align: 'left',
+    disablePadding: false,
+    label: 'Total Amount'
+  },
+  {
+    id: 'Date',
+    align: 'left',
     disablePadding: false,
     label: 'Status / Date'
   },
   // {
   //   id: 'Status',
-  //   align: 'right',
+  //   align: 'left',
   //   disablePadding: false,
   //   label: 'Status'
   // },
+  {
+    id: 'Action',
+    align: 'right',
+    disablePadding: false,
+    label: 'Action'
+  },
 ];
 
 // ==============================|| ORDER TABLE - HEADER ||============================== //
@@ -84,8 +92,42 @@ OrderTableHead.propTypes = {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function HistroyTab({ orders, pairInfo }) {
+export default function OngoingTab({ orders, pairInfo, setSnackbarOpen, setSnackbarMessage }) {
   const theme = useTheme();
+
+  const handleclick = (order) => {
+    var postData = { "id" : order.id, "platformId" : pairInfo?.id };
+
+    postDataP2P(P2P_CancelOrder_URL(), postData).then(function (res) {
+      console.log(res);
+
+      if (res.error !== 'ok') {
+        if(res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if(res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        mutate(P2P_SuperOrders_URL);
+        setSnackbarMessage({ msg: 'Order cancelled successfully', success: false });
+        setSnackbarOpen(true);
+      }
+    }, function (err) {
+      console.log(err);
+      // Logout User
+    });
+  }
 
   return (
     <Box>
@@ -111,10 +153,12 @@ export default function HistroyTab({ orders, pairInfo }) {
           },
         }}
       >
-        <Table aria-labelledby="tableTitle" >
+        <Table
+          aria-labelledby="tableTitle"
+        >
           <OrderTableHead />
           <TableBody>
-            {orders?.history?.length === 0 ? (
+            {orders?.ongoing?.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
                   <Norecordfoundcomponents
@@ -122,35 +166,37 @@ export default function HistroyTab({ orders, pairInfo }) {
                 </TableCell>
               </TableRow>
             ) : (
-              orders?.history?.map((row, index) => {
+              orders?.ongoing?.map((row, index) => {
                 // const isItemSelected = isSelected(row.Name);
                 const labelId = `enhanced-table-checkbox-${index}`;
+
                 return (
                   <TableRow
-                    //  hover
+                    // hover
                     role="checkbox"
                     sx={{ '&:last-child td, &:last-child th': { border: 0 }, height: '64px', }}
                     tabIndex={-1}
                     key={row.side}>
                     <TableCell sx={{ border: 'none', paddingTop: '0' }} component="th" id={labelId} scope="row" align="left">
-                      <Stack direction="row" alignItems="center" spacing={1}>
-                        <Typography variant='body1' sx={{ color: row.side === 'BUY' ? 'text.buy' : 'text.sell' }}>
-                          {row.side}
-                        </Typography>
-                      </Stack>
+                      <Typography variant='body1' sx={{ color: row.side === 'BUY' ? 'text.buy' : 'text.sell' }}>
+                        {row.side}
+                      </Typography>
                     </TableCell>
 
                     <TableCell sx={{ border: 'none' }} align="left">
-                      <Stack spacing={.5}>
-                        <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                          {row.price} {pairInfo.sellPair}
-                        </Typography>
-                        <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                          {row.quantity} {pairInfo.buyPair}
-                        </Typography>
-                      </Stack>
+                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        {row.price} {pairInfo.sellPair}
+                      </Typography>
+                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        {row.quantity} {pairInfo.buyPair}
+                      </Typography>
                     </TableCell>
 
+                    <TableCell sx={{ border: 'none', paddingTop: '0' }} align="left">
+                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        {row.tds.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 3 })}
+                      </Typography>
+                    </TableCell>
 
                     <TableCell sx={{ border: 'none', paddingTop: '0' }} align="left">
                       <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
@@ -158,19 +204,8 @@ export default function HistroyTab({ orders, pairInfo }) {
                       </Typography>
                     </TableCell>
 
-                    <TableCell sx={{ border: 'none', paddingTop: '0', paddingRight: '0px' }} align="left">
-                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {row.tds.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 3 })}
-                      </Typography>
-                    </TableCell>
-
-                    <TableCell sx={{ border: 'none', paddingLeft: '0px' }} align="right">
-                      <Stack spacing={.5} >
-                        <Typography variant='body1' sx={{
-                          color: row.status === 'Matched' ?
-                            theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' :
-                            theme.palette.mode === 'dark' ? 'text.sell' : 'text.sell'
-                        }} >
+                    <TableCell align="left" sx={{ border: 'none'}}>
+                        <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} >
                           {row.status}
                         </Typography>
                         <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
@@ -184,9 +219,18 @@ export default function HistroyTab({ orders, pairInfo }) {
                             hour12: true
                           })}
                         </Typography>
-                      </Stack>
                     </TableCell>
 
+                    <TableCell sx={{ border: 'none', paddingTop: '0' }} align="right">
+                      <Link
+                        variant='body1'
+                        sx={{ textDecorationColor: 'text.sell', cursor: 'pointer' }}
+                        color="text.sell"
+                        onClick={() => handleclick(row)}
+                      >
+                        Cancel
+                      </Link>
+                    </TableCell>
                   </TableRow>
                 );
               })

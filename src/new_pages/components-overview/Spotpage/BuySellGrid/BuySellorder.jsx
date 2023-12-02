@@ -6,24 +6,20 @@ import {
   Tooltip, InputAdornment, Slider, Dialog,
 } from '@mui/material';
 
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
+
+import Dialogboxvalue from './Dialogboxvalue';
 import { styled } from '@mui/material/styles';
 
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useNavigate } from 'react-router';
 
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-
-import Dialogboxvalue from './Dialogboxvalue';
-
 import { postOrder } from '../../../../api/spot';
-import { Spot_PostOrder_URL, postDataSPOT } from 'src/api_ng/spotTrade_ng';
+import { Spot_PreTrade_URL, Spot_PostOrder_URL, postDataSPOT } from 'src/api_ng/spotTrade_ng';
 
-//
-import { Spot_PreTrade_URL, fetcherSPOT } from 'src/api_ng/spotTrade_ng';
-
-import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../../utils_ng/localStorage_ng';
+import { getConfig_ng, getConfig_sp } from '../../../../utils_ng/localStorage_ng';
 import { socket } from '../../../../socket';
 import useSWR, { mutate } from 'swr';
 
@@ -39,26 +35,12 @@ const CustomSlider = styled(Slider)(({ theme, flag }) => ({
   }
 }));
 
-const BuySelloder = ({
-  isAuthorised,
-  priceData,
-  pairData,
-  selectedOrder,
-  setSelectedOrder,
-  flag,
-  setSnackbarOpen,
-  setSnackbarMessage,
-  walletData,
-  orderBookData,
-  flag1
-}) => {
-  // console.log(walletData, priceData);
+const BuySelloder = ({isAuthorised, platformId, priceData, pairData, selectedOrder, setSelectedOrder,
+  orderBookData, walletData, flag, orderType, setSnackbarOpen, setSnackbarMessage }) => {
+  
   const theme = useTheme();
-
   const navigate = useNavigate();
-
-  //orderbook value
-  const [value, setValue] = useState('0');
+  const [value, setValue] = useState('0'); //orderbook value
 
   const formikRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
@@ -68,10 +50,10 @@ const BuySelloder = ({
   //   setValue(newValue);
   // };
 
-  //slider
+  // Slider
   const valuetext = (value) => `${value}`;
 
-  //dialogbox
+  // Dialog box
   const [open, setOpen] = React.useState(false);
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -114,28 +96,30 @@ const BuySelloder = ({
     }
 
     if (e.target.name === 'price') {
-      // console.log('added', parseFloat(numericValue), values);
       const parts = numericValue.split('.');
       if (parts[1] && parts[1].length > pairData?.priceFloat) {
         parts[1] = parts[1].substring(0, pairData?.priceFloat);
         numericValue = parts.join('.');
       }
+
       const firstValue = parseFloat(numericValue);
       const secondValue = isNaN(firstValue) ? '' : (firstValue * (values?.quantity)).toFixed(pairData?.priceFloat).replace(/(\.0*|0+)$/, ''); //.replace(/(\.0*|0+)$/, '')
+      
       setFieldValue('price', numericValue);
       setFieldValue('totalamount', secondValue);
     }
 
     // Handle 'quantity' and 'totalamount'
     if (e.target.name === 'quantity') {
-      // console.log('added', parseFloat(numericValue), values);
       const parts = numericValue.split('.');
       if (parts[1] && parts[1].length > pairData?.quantityFloat) {
         parts[1] = parts[1].substring(0, pairData?.quantityFloat);
         numericValue = parts.join('.');
       }
+      
       const firstValue = parseFloat(numericValue);
       const secondValue = isNaN(firstValue) ? '' : (firstValue * parseFloat(values?.price)).toFixed(pairData?.amountFloat).replace(/(\.0*|0+)$/, ''); //.replace(/(\.0*|0+)$/, '')
+      
       setFieldValue('quantity', numericValue);
       setFieldValue('totalamount', secondValue);
     }
@@ -146,8 +130,10 @@ const BuySelloder = ({
         parts[1] = parts[1].substring(0, pairData?.amountFloat);
         numericValue = parts.join('.');
       }
+
       const firstValue = parseFloat(numericValue);
       const secondValue = isNaN(firstValue) ? '' : (firstValue / parseFloat(values?.price)).toFixed(pairData?.quantityFloat).replace(/(\.0*|0+)$/, ''); //.replace(/(\.0*|0+)$/, '')
+      
       setFieldValue('totalamount', numericValue);
       setFieldValue('quantity', secondValue);
     }
@@ -163,9 +149,11 @@ const BuySelloder = ({
       quantity: inputs.quantity,
       amount: inputs.totalamount
     };
+
     if (inputs.stoplimitprice) {
       postData = { ...postData, sPrice: inputs.stoplimitprice, orderType: 'stop' };
     }
+    
     postDataSPOT(Spot_PostOrder_URL(), postData).then(function (res) {
       handleCloseDialog();
       if (res.error !== 'ok') {
@@ -195,26 +183,9 @@ const BuySelloder = ({
         // Logic moved to sock update
       }
     }, function (err) {
-      setSnackbarMessage({ msg: err, success: false });
-      setSnackbarOpen(true);
+      console.log(err);
       // Logout User
     });
-
-    //   if (res.error === 'ok') {
-    //     setIsLoading(false);
-    //     setSnackbarMessage({ msg: 'Order placed successfully', success: false });
-    //     setSnackbarOpen(true);
-    //   } else {
-    //     setIsLoading(false);
-    //     setSnackbarMessage({ msg: res.error, success: false });
-    //     setSnackbarOpen(true);
-    //   }
-    // }, function (err) {
-    //   setIsLoading(false);
-    //   setSnackbarMessage({ msg: e, success: false });
-    //   setSnackbarOpen(true);
-    //   console.log(e);
-    // });
   };
 
   useEffect(() => {
@@ -222,22 +193,21 @@ const BuySelloder = ({
     socket.on(SPOTOrderEvt, function (res) {
 
       setIsLoading(false);
-      // console.log(res, 'Response from Sock');
+      console.log(res, 'Response from Sock Post');
 
-      if (parseInt(res.platformId) === parseInt(priceData?.platformId)) {
+      if (parseInt(res.platformId) === parseInt(platformId)) {
         if ((res.action == 'postSuccess' || res.action == 'matchSuccess' || res.action == 'stopOrder') && res.userId == getConfig_sp().userId) {
           handleCloseDialog();
           setSelectedOrder(undefined); // Reset Selected Order
           setInputs({ price: 0, quantity: 0, totalamount: 0, stoplimitprice: 0 });
 
-          // Unused logic - For reference
-          // formikRef.current.resetForm({values : {
-          //   price: priceData?.lastPrice,
-          //   stoplimitprice: '',
-          //   quantity: '',
-          //   totalamount: '',
-          //   submit: null
-          // }});
+          formikRef.current.resetForm({values : {
+            price: priceData?.lastPrice,
+            stoplimitprice: '',
+            quantity: '',
+            totalamount: '',
+            submit: null
+          }});
 
           mutate(Spot_PreTrade_URL);
           setSnackbarMessage({ msg: res.message, success: false });
@@ -248,22 +218,17 @@ const BuySelloder = ({
           setSnackbarMessage({ msg: res.message, success: false });
           setSnackbarOpen(true);
         }
-        // else if(res.action == 'cancelSuccess' && res.userId == getConfig_sp().userId) {
-        //   mutate(Spot_PreTrade_URL);
-        //   setSnackbarMessage({ msg: res.message, success: false });
-        //   setSnackbarOpen(true);
-        // }
       }
     });
 
     return () => {
+      let SPOTOrderEvt = '/SPOTOrder_' + getConfig_sp().userId + '/POST';
       socket.off(SPOTOrderEvt);
     };
 
-  }, []);
+  }, [platformId]);
 
   const BuyTds = (parseFloat(inputs.totalamount) + (parseFloat(inputs.totalamount) * 0.012)).toFixed(pairData?.amountFloat);
-
   const SellTds = (parseFloat(inputs.totalamount) - (parseFloat(inputs.totalamount) * 0.012)).toFixed(pairData?.amountFloat);
 
   return (
@@ -272,7 +237,7 @@ const BuySelloder = ({
         innerRef={formikRef}
         initialValues={formikInit}
         validationSchema={Yup.object().shape({
-          ...(flag1 === 'STOPLIMIT' && {
+          ...(orderType === 'STOPLIMIT' && {
             stoplimitprice: Yup.number().positive("Enter a positive number").required("Don't leave empty*"),
           }),
           price: Yup.number().typeError("Enter a valid number").positive("Enter a positive number").required("Don't leave empty*"),
@@ -301,7 +266,6 @@ const BuySelloder = ({
             )
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          console.log({ values });
           handleOpenDialog();
           try {
             setInputs(values);
@@ -318,7 +282,7 @@ const BuySelloder = ({
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container spacing={1.5}>
-              {flag1 === 'STOPLIMIT' &&
+              {orderType === 'STOPLIMIT' &&
                 <Grid item xs={12} pb={0}>
                   <Stack spacing={1} pt={0} pb={0}>
                     <OutlinedInput

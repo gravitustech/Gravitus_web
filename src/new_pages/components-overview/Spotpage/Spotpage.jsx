@@ -1,27 +1,24 @@
-import React, { useEffect, useState, useRef, useReducer } from 'react';
-import { Spot_PreTrade_URL, fetcherSPOT} from 'src/api_ng/spotTrade_ng';
-import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../utils_ng/localStorage_ng';
-
 import { Grid, useTheme, Card, CircularProgress } from '@mui/material';
-import { TVChartContainer } from './_TVChartContainer';
-
-import Lodergif from '../../../components/Gravitusloader';
-import CustomSnackBar from 'src/components/snackbar';
-
-import { useLocation } from 'react-router';
-import { useSelector } from 'react-redux';
-
-import { socket } from '../../../socket';
-import useSWR, { mutate } from 'swr';
-
-// Import components part of SPOT Trade 
 import SpotorderHead from './Spothead/SpotorderHead';
 import BuySellGrid from './BuySellGrid/BuySellGrid';
 
 import Ordertable from './Ordertable/Ordertable';
 import Orderbook from './Orderbook/Orderbook';
 import FundsGrid from './FundsGrid/FundsGrid';
-import { fetcherMARKET } from 'src/api_ng/market_ng';
+
+import Lodergif from '../../../components/Gravitusloader';
+import CustomSnackBar from 'src/components/snackbar';
+
+import { TVChartContainer } from './_TVChartContainer';
+import { useLocation } from 'react-router';
+import { useSelector } from 'react-redux';
+
+import { socket } from '../../../socket';
+import useSWR, { mutate } from 'swr';
+
+import React, { useEffect, useState, useRef, useReducer } from 'react';
+import { Spot_PreTrade_URL, fetcherSPOT} from 'src/api_ng/spotTrade_ng';
+import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../utils_ng/localStorage_ng';
 
 const Spotpage = () => {
   const theme = useTheme();
@@ -43,15 +40,16 @@ const Spotpage = () => {
 
   function updateData(state, action) {
     if (action.type === 'getUPDATE') {
-      state = action.data;
-      return state;
+      return action.data;
     }
     else if (action.type === 'sockUPDATE') {
-      state.pairInfo = action.data.pairInfo;
-      state.priceInfo = action.data.priceInfo;
-      state.orderBook = action.data.orderBook;
-      state.marketTrades = action.data.marketTrades;
-      return state;
+      var superState = JSON.parse(JSON.stringify(state));
+      superState.pairInfo = action.data.pairInfo;
+      superState.priceInfo = action.data.priceInfo;
+
+      superState.orderBook = action.data.orderBook;
+      superState.marketTrades = action.data.marketTrades;
+      return superState;
     }
 
     throw Error('Unknown action.');
@@ -96,8 +94,9 @@ const Spotpage = () => {
         }
       }
       else {
-        setSPOTData({ type: 'getUPDATE', data: spotRc.result });
+        // console.log(spotRc.result, 'Refresh SPOT Data');
         setConfig_ng('spotPair', {platformId : spotRc.result.pairInfo.id});
+        setSPOTData({ type: 'getUPDATE', data: spotRc.result });
         setPlatformId(spotRc.result.pairInfo.id);
       }
     }
@@ -105,8 +104,10 @@ const Spotpage = () => {
     // SPOT Pre Trade Events
     let SPOTPreTradeEvent = '/SPOTPreTrade/POST';
     socket.on(SPOTPreTradeEvent, function(res) {
+
+      // console.log(res, 'Refresh SPOT Data SOCK');
       if(parseInt(res.pairInfo.id) === parseInt(platformId)) {
-        setSPOTData({ type: 'sockUPDATE', data: res }); 
+        setSPOTData({ type: 'sockUPDATE', data: res });
       }
     });
 
@@ -146,9 +147,9 @@ const Spotpage = () => {
             <Grid item lg={12} md={12} pt={0.5}>
               <Card variant="outlined" sx={{ padding: '4px', paddingTop: '2px', paddingBottom: '1px' }}>
                 <Ordertable 
-                  isAuthorised={isAuthorised} 
+                  isAuthorised={isAuthorised}
+                  platformId={platformId} 
                   orderTableData={SPOTData?.myOrders} 
-                  priceData={SPOTData?.priceInfo} 
                   setSnackbarOpen={setSnackbarOpen} 
                   setSnackbarMessage={setSnackbarMessage}
                   />
@@ -160,7 +161,7 @@ const Spotpage = () => {
             <Card variant="outlined" sx={{ padding: '14px' }}>
               <BuySellGrid
                 isAuthorised={isAuthorised}
-                updateData={updateData}
+                platformId={platformId}
                 pairData={SPOTData?.pairInfo}
                 priceData={SPOTData?.priceInfo}
                 walletData={SPOTData?.walletInfo}

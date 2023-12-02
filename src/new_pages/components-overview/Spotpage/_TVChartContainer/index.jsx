@@ -1,18 +1,20 @@
 
 import React, { useEffect, useRef, useReducer, useState } from 'react';
 import { Spot_ChartData_URL, fetcherCHART} from 'src/api_ng/spotTrade_ng';
+import { getConfig_ng, setConfig_ng } from '../../../../utils_ng/localStorage_ng';
 
 import { widget } from '../_charting_library';
 import { socket } from '../../../../socket';
 
 import './index.css';
+// getConfig_ng('excType')
 
 export const TVChartContainer = ({ pairData, exchangeType }) => {
   const chartContainerRef = useRef();
   const lastBarsCache = new Map();
 
   const configurationData = {
-    supported_resolutions: ['1', '15', '30', '60', '1D', '1W', '1M', '12M', '24M', '48M'],
+    supported_resolutions: ['1', '15', '30', '60', '120', '240', '360', '480', '720', '1D', '1M'], // '1W', '12M', '24M', '48M'
     exchanges: [{ value: 'Gravitus', name: 'Gravitus', desc: 'Gravitus' }],
     symbols_types: [{ name: 'crypto', value: 'crypto' }]
   };
@@ -102,10 +104,10 @@ export const TVChartContainer = ({ pairData, exchangeType }) => {
     },
 
     subscribeBars: (symbolInfo, resolution, onRealtimeCallback, subscriberUID, onResetCacheNeededCallback) => {
-      // console.log('[subscribeBars]: Method call with subscriberUID:', subscriberUID, symbolInfo, lastBarsCache);
+      console.log('[subscribeBars]: Method call with subscriberUID:', subscriberUID, symbolInfo, lastBarsCache);
       
       socket.on('/TICKSUpdate/POST', function(res) {
-        if(pairData?.id == res.platformId && resolution == res.data.interval && 'cmc' == res.from) {
+        if(pairData?.id == res.platformId && resolution == res.data.interval && getConfig_ng('excType') == res.from) {
           onRealtimeCallback({
             "time"  : res.data.time,
             "open"  : res.data.open,
@@ -120,10 +122,7 @@ export const TVChartContainer = ({ pairData, exchangeType }) => {
 
     unsubscribeBars: (subscriberUID) => {
       // console.log('[unsubscribeBars]: Method call with subscriberUID:', subscriberUID);
-
-      socket.off('/TICKSUpdate/POST', function(){
-        // Do something here
-      });
+      socket.off('/TICKSUpdate/POST');
     }
   };
 

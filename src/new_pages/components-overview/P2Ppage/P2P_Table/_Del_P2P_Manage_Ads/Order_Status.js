@@ -1,15 +1,18 @@
-import { useTheme, Stack, Tab, Link } from '@mui/material';
+import React from 'react';
+
+import { useTheme, Stack, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 import CustomSnackBar from 'src/components/snackbar';
 import HistoryTab from './Order_History';
 import OngoingTab from './Order_OnGoing';
 
-import React from 'react';
-
 const Order_Status = ({ orders, pairInfo, setSnackbarOpen, setSnackbarMessage }) => {
   const [value, setValue] = React.useState("0");
   const theme = useTheme();
+
+  const myArray = ['apple', 'banana', 'orange'];
+  // const myList = myArray.map((item) => <p>{item}</p>)
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -75,9 +78,11 @@ const Order_Status = ({ orders, pairInfo, setSnackbarOpen, setSnackbarMessage })
 
         <TabPanel value="0" sx={{ pt: 0, pl: 0, pr: 0 }}>
           <OngoingTab orders={orders} pairInfo={pairInfo} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
+          
         </TabPanel>
         <TabPanel value="1" sx={{ pt: 0, pl: 0, pr: 0 }}>
           <HistoryTab orders={orders} pairInfo={pairInfo} />
+          
         </TabPanel>
       </TabContext>
     </>

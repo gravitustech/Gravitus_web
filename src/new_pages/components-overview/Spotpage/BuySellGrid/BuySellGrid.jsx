@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
 import { useTheme, Stack, Button } from '@mui/material';
 import { TabContext } from '@mui/lab';
 
 import BuyLimitSellLimit from './BuyLimitSellLimit';
+import React, { useState, useEffect } from 'react';
 
-const BuySellGrid = ({ isAuthorised, pairData, priceData, selectedOrder,
+const BuySellGrid = ({ isAuthorised, platformId, pairData, priceData, selectedOrder,
   setSelectedOrder, walletData, setSnackbarOpen, setSnackbarMessage }) => {
 
   const theme = useTheme();
@@ -102,6 +102,7 @@ const BuySellGrid = ({ isAuthorised, pairData, priceData, selectedOrder,
       {value === '0' && (
         <BuyLimitSellLimit
           isAuthorised={isAuthorised}
+          platformId={platformId}
           priceData={priceData}
           walletData={walletData}
           pairData={pairData}

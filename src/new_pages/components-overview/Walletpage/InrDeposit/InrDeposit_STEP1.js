@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { Link as RouterLink ,useNavigate} from 'react-router-dom';
+import { Grid, Typography, Stack, OutlinedInput, FormHelperText, Button, TextField, 
+  useTheme, IconButton, Box, Dialog } from '@mui/material';
+
+import AnimateButton from '../../../../components/@extended/AnimateButton';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import Autocomplete from '@mui/material/Autocomplete';
+
+import doticon from '../../../../assets/images/gravitusimage/doticon.svg';
+import { NumericFormatCustom } from '../NumericFormatCustom';
+import CardInr from '../InrWithdraw/Card';
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { Grid, Typography, Stack, OutlinedInput, FormHelperText, Button, 
-  TextField, useTheme, IconButton, Box, Dialog } from '@mui/material';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import AnimateButton from '../../../../components/@extended/AnimateButton';
-import Autocomplete from '@mui/material/Autocomplete';
-
-import CardInr from '../InrWithdraw/Card';
-import doticon from '../../../../assets/images/gravitusimage/doticon.svg';
-import { NumericFormatCustom } from '../NumericFormatCustom';
+import React, { useState, useEffect } from 'react';
+import { Link as RouterLink ,useNavigate} from 'react-router-dom';
 
 import useSWR from 'swr';
 import { fetcher, getWalletURLINRDeposit } from '../../../../api/wallet';
 
-const InrDepositpage1 = ({ depositFrom, depositTo, setStep, setFormikValues, formikValues, handleOpen, handleClose, open }) => {
+const InrDeposit_STEP1 = ({ depositFrom, depositTo, setStep, setFormikValues, formikValues, handleOpen, handleClose, open }) => {
   
   const theme = useTheme();
   const navigate = useNavigate();
-
   const Deposit = [{ DepositMode: 'IMPS' }, { DepositMode: 'NEFT' }, { DepositMode: 'RTGS' }];
 
   // const {
@@ -82,6 +82,7 @@ const InrDepositpage1 = ({ depositFrom, depositTo, setStep, setFormikValues, for
               </Typography>
             </Stack>
           </Stack>
+
           <Stack pt={2} direction="row" spacing={6.5} sx={{ justfyContent: 'space-between' }}>
             <Typography variant="body1" color="text.buy">
               Limit: ₹ {depositTo.minAmount} to ₹ {depositTo.maxAmount}
@@ -208,6 +209,7 @@ const InrDepositpage1 = ({ depositFrom, depositTo, setStep, setFormikValues, for
               )}
             </Formik>
           </Stack>
+
           <Dialog open={open}>
             <Stack p={4} spacing={2.5}>
               <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.white' : 'text.secondary' }}>
@@ -251,4 +253,4 @@ const InrDepositpage1 = ({ depositFrom, depositTo, setStep, setFormikValues, for
   );
 };
 
-export default InrDepositpage1;
+export default InrDeposit_STEP1;

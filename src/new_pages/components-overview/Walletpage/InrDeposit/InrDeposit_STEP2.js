@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
+import doticon from '../../../../assets/images/gravitusimage/doticon.svg';
+import CardInr from '../InrWithdraw/Card';
 
 import { Grid, Typography, Stack, Button, useTheme, Box } from '@mui/material';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import AnimateButton from '../../../../components/@extended/AnimateButton';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
-import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 
-import CardInr from '../InrWithdraw/Card';
-import doticon from '../../../../assets/images/gravitusimage/doticon.svg';
+import React, { useState } from 'react';
 
-const InrDepositpage2 = ({ depositFrom, depositTo, setStep, setFormikValues, formikValues, setSnackbarMessage, setSnackbarOpen }) => {
-
-  console.log('formikvalues', formikValues)
+const InrDeposit_STEP2 = ({ depositFrom, depositTo, setStep, setFormikValues, formikValues, setSnackbarMessage, setSnackbarOpen }) => {
   const theme = useTheme();
   const [termsError, setTermsError] = useState(false);
+  console.log('formikvalues', formikValues);
 
   const handleSubmit = () => {
     const allTermsChecked = formikValues.term1 && formikValues.term2 && formikValues.term3 && formikValues.term4;
@@ -29,9 +28,11 @@ const InrDepositpage2 = ({ depositFrom, depositTo, setStep, setFormikValues, for
       // setSnackbarOpen(true);
     }
   };
+
   const handlePrev = () => {
     setStep(1);
   };
+
   return (
     <>
       <CardInr>
@@ -173,4 +174,4 @@ const InrDepositpage2 = ({ depositFrom, depositTo, setStep, setFormikValues, for
   );
 };
 
-export default InrDepositpage2;
+export default InrDeposit_STEP2;

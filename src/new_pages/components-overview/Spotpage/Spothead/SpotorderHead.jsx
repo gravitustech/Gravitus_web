@@ -22,8 +22,7 @@ import INRTable from './Inrpairtab';
 
 import Transitions from '../../../../components/@extended/Transitions';
 import MarketTable from './MarketTable';
-import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../../utils_ng/localStorage_ng';
-
+import { getConfig_ng, setConfig_ng } from '../../../../utils_ng/localStorage_ng';
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 1, 5),
@@ -98,13 +97,14 @@ const SpotorderHead = ({ pairData, priceData, setPlatformId, excType, changeExcT
     textColor = 'red';    // Change color to red for negative values
   }
 
-  //
+  // For setting up GRA or CMC exchange type 
   const [selectedButton, setSelectedButton] = useState(getConfig_ng('excType'));
 
   function changeExcTypeButton(exchangeType) {
     setConfig_ng('excType', exchangeType);
     setSelectedButton(exchangeType);
   }
+
   return (
     <Stack direction="row" spacing={5}>
       <Stack direction="row" spacing={1}>

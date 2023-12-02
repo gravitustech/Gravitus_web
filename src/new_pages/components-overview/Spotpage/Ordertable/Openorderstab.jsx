@@ -123,7 +123,7 @@ OrderTableHead.propTypes = {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function OpenordersTab({ isAuthorised, orderTableData, priceData, setSnackbarOpen, setSnackbarMessage }) {
+export default function OpenordersTab({ isAuthorised, platformId, orderTableData, setSnackbarOpen, setSnackbarMessage }) {
   const theme = useTheme();
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -177,8 +177,8 @@ export default function OpenordersTab({ isAuthorised, orderTableData, priceData,
     let SPOTOrderEvt = '/SPOTOrder_' + getConfig_sp().userId + '/POST';
     socket.on(SPOTOrderEvt, function (res) {
 
-      // console.log(res, 'Response from Sock');
-      if (parseInt(res.platformId) === parseInt(priceData?.platformId)) {
+      console.log(res, 'Response from Sock Cancel');
+      if (parseInt(res.platformId) === parseInt(platformId)) {
 
         if (res.action == 'cancelSuccess' && res.userId == getConfig_sp().userId) {
           mutate(Spot_PreTrade_URL);
@@ -194,10 +194,11 @@ export default function OpenordersTab({ isAuthorised, orderTableData, priceData,
     });
 
     return () => {
+      let SPOTOrderEvt = '/SPOTOrder_' + getConfig_sp().userId + '/POST';
       socket.off(SPOTOrderEvt);
     };
 
-  }, []);
+  }, [platformId]);
 
   return (
     <>

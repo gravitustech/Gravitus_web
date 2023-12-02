@@ -2,6 +2,23 @@
 import { getConfig_sp} from '../utils_ng/localStorage_ng';
 import { axiosSystemInstance } from './config_ng.js';
 
+export async function fetcherSystem([url, postData]) {
+  const axiosClient = axiosSystemInstance();  // AXIOS Instance Created
+  
+  var superData = {
+    "accountType" : "GRAVITUS",
+    "postData"    : postData
+  };
+
+  try {
+    const res = await axiosClient.post(url, superData);
+    return res.data;
+  }
+  catch (err) {
+    return err;
+  }
+}
+
 export function postDataSystem(url, postData) {
   return new Promise(function (resolve, reject) {
     const axiosClient = axiosSystemInstance();
@@ -68,6 +85,10 @@ export async function formDataSystem(url, postData) {
 // Two Factor Authentication (Sign, Reset Security, Withdrawal - INR & Crypto)
 export const Send_OTP = () => {
   return 'api/activity/security/sendOTP';
+};
+
+export const MarketOverview_URL = () => {
+  return 'api/generic/dashboard/markets';
 };
 
 // Identity

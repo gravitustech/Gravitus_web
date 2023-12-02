@@ -20,7 +20,6 @@ import { Field, Formik } from 'formik';
 import { postINRDepositData } from '../../../../api/wallet';
 import ImageCropper from 'src/components/_cropper';
 
-
 // Modal View Style - Appeal
 const modalStyle = {
   position: 'absolute',
@@ -45,16 +44,17 @@ const VisuallyHiddenInput = styled('input')({
   width: 1
 });
 
-const InrDepositpage3 = ({ depositFrom, depositTo, setStep, setFormikValues, formikValues, setSnackbarOpen, setSnackbarMessage, walletId }) => {
-
+const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, formikValues, setSnackbarOpen, setSnackbarMessage, walletId }) => {
   const theme = useTheme();
-
-  let formData = new FormData();
 
   const [imageToCrop, setImageToCrop] = React.useState(undefined);
   const [croppedImage, setCroppedImage] = React.useState(undefined);
 
   const [modalOpen, setModalOpen] = React.useState(false); // Show modal
+  const [open, setOpen] = useState(false); //Dialogbox open
+
+  // To be delete later
+  let formData = new FormData();
 
   const handleModalOpen = () => {
     document.getElementById('superFile')?.click();
@@ -67,9 +67,11 @@ const InrDepositpage3 = ({ depositFrom, depositTo, setStep, setFormikValues, for
     setModalOpen(false)
     setCroppedImage(undefined)
   };
+
   const handleModalUpolad = () => {
     setModalOpen(false)
   };
+
   const onUploadFile = (event) => {
     if (event.target.files && event.target.files.length > 0) {
       const reader = new FileReader();
@@ -81,8 +83,6 @@ const InrDepositpage3 = ({ depositFrom, depositTo, setStep, setFormikValues, for
       reader.readAsDataURL(event.target.files[0]);
     }
   };
-
-  const [open, setOpen] = useState(false); //Dialogbox open
  
   const Accounts = [{
     Beneficiary: depositFrom?.accountName,
@@ -439,4 +439,4 @@ const InrDepositpage3 = ({ depositFrom, depositTo, setStep, setFormikValues, for
   );
 };
 
-export default InrDepositpage3;
+export default InrDeposit_STEP3;

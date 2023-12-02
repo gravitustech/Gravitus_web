@@ -25,12 +25,10 @@ import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 import useSWR, { mutate } from 'swr';
-import { fetcher, getMarketURL, getSpotURL } from '../../../../api/spot';
 import { setConfig_ng } from '../../../../utils_ng/localStorage_ng';
 
 import Norecordfoundcomponents from '../../Walletpage/Norecordfoundcomponents';
-import { MarketOverview_URL } from 'src/api_ng/market_ng';
-import { fetcherSPOT } from 'src/api_ng/spotTrade_ng';
+import { MarketOverview_URL, fetcherSystem } from 'src/api_ng/system_ng';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 const keyframes = `
@@ -300,7 +298,7 @@ export default function MarketTable({ flag, setPlatformId, handleClose, searchQu
   function useMarketOverview() {
     var postData = { "callfrom": 'markets' };
   
-    const {data, error, isLoading} = useSWR([MarketOverview_URL(), postData], fetcherSPOT, {
+    const {data, error, isLoading} = useSWR([MarketOverview_URL(), postData], fetcherSystem, {
       revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
     });
 

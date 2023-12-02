@@ -1,25 +1,27 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Grid, Typography, Stack, OutlinedInput, FormHelperText, Button, 
+  TextField, useTheme, InputAdornment, Box, IconButton } from '@mui/material';
 
-import { Grid, Typography, Stack, OutlinedInput, FormHelperText, Button, TextField, 
-  useTheme, InputAdornment, Box, IconButton 
-} from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Autocomplete from '@mui/material/Autocomplete';
-
-import { Formik } from 'formik';
-import * as Yup from 'yup';
 
 import CardInr from './Card';
 import UserBankdeatils from './UserBankdeatils';
 import { NumericFormatCustom } from '../NumericFormatCustom';
 import AnimateButton from '../../../../components/@extended/AnimateButton';
 
-import useSWR from 'swr';
-import { fetcher, getWalletURLINRWidthdraw, postWidthdrawData } from '../../../../api/wallet';
-import { sendOtpSecurity } from '../../../../api/profile';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const InrWithdrawpage1 = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen, setFormikValues, formikValues, setStep, step, securityData }) => {
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+
+import { sendOtpSecurity } from '../../../../api/profile';
+import { Pre_Rs_Deposit, Post_Rs_Deposit, fetcherWallet } from '../../../../api_ng/wallet_ng';
+
+// import useSWR from 'swr';
+// import { fetcher, getWalletURLINRWidthdraw, postWidthdrawData } from '../../../../api/wallet';
+
+const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen, setFormikValues, formikValues, setStep, step, securityData }) => {
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -27,6 +29,7 @@ const InrWithdrawpage1 = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen
   const [color, setColor] = useState('');
   const [displayText1, setDisplayText1] = useState('SEND OTP');
   const [displayText2, setDisplayText2] = useState('SEND OTP');
+  
   const [isResendMOTP, setIsResendMOTP] = useState(false);
   const [isResendPOTP, setIsResendPOTP] = useState(false);
 
@@ -415,4 +418,4 @@ const InrWithdrawpage1 = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen
   );
 };
 
-export default InrWithdrawpage1;
+export default InrWithdraw_EXT;

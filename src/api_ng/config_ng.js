@@ -1,6 +1,7 @@
 import { getConfig_sp } from '../utils_ng/localStorage_ng';
 import axios from 'axios';
 
+// To be deleted latera
 export const axiosMARKETInstance = () => {
   const axiosClient = axios.create({
     baseURL: process.env.REACT_APP_SYSTEM_API_URL,
@@ -12,6 +13,57 @@ export const axiosMARKETInstance = () => {
 
   const superCredits = getConfig_ng('credits');
   if (superCredits != 'none' && superCredits.token != undefined) {
+    axiosClient.defaults.headers.Authorization = `${superCredits.token}`;
+  }
+
+  return axiosClient;
+}
+
+export const axiosSystemInstance = () => {
+  const axiosClient = axios.create({
+    baseURL: process.env.REACT_APP_SYSTEM_API_URL,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const superCredits = getConfig_sp();
+  if (superCredits.token != 'none') {
+    axiosClient.defaults.headers.Authorization = `${superCredits.token}`;
+  }
+
+  return axiosClient;
+}
+
+export const axiosChartInstance = () => {
+  const axiosClient = axios.create({
+    baseURL: process.env.REACT_APP_SYSTEM_API_URL,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const superCredits = getConfig_sp();
+  if (superCredits.token != 'none') {
+    axiosClient.defaults.headers.Authorization = `${superCredits.token}`;
+  }
+
+  return axiosClient;
+}
+
+export const axiosSPOTInstance = () => {
+  const axiosClient = axios.create({
+    baseURL: process.env.REACT_APP_TRADE_API_URL,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+
+  const superCredits = getConfig_sp();
+  if (superCredits.token != 'none') {
     axiosClient.defaults.headers.Authorization = `${superCredits.token}`;
   }
 
@@ -50,60 +102,9 @@ export const axiosP2PInstance = () => {
   return axiosClient;
 }
 
-export const axiosSPOTInstance = () => {
-  const axiosClient = axios.create({
-    baseURL: process.env.REACT_APP_TRADE_API_URL,
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
-  });
-
-  const superCredits = getConfig_sp();
-  if (superCredits.token != 'none') {
-    axiosClient.defaults.headers.Authorization = `${superCredits.token}`;
-  }
-
-  return axiosClient;
-}
-
-export const axiosChartInstance = () => {
-  const axiosClient = axios.create({
-    baseURL: process.env.REACT_APP_SYSTEM_API_URL,
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
-  });
-
-  const superCredits = getConfig_sp();
-  if (superCredits.token != 'none') {
-    axiosClient.defaults.headers.Authorization = `${superCredits.token}`;
-  }
-
-  return axiosClient;
-}
-
 export const axiosWalletInstance = () => {
   const axiosClient = axios.create({
     baseURL: process.env.REACT_APP_TRADE_API_URL,
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
-  });
-
-  const superCredits = getConfig_sp();
-  if (superCredits.token != 'none') {
-    axiosClient.defaults.headers.Authorization = `${superCredits.token}`;
-  }
-
-  return axiosClient;
-}
-
-export const axiosSystemInstance = () => {
-  const axiosClient = axios.create({
-    baseURL: process.env.REACT_APP_SYSTEM_API_URL,
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'

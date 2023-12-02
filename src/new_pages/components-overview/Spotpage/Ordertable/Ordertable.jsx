@@ -1,17 +1,17 @@
-import React from 'react';
+import { Grid, useTheme } from '@mui/material';
+import TabPanel from '@mui/lab/TabPanel';
+import Tabs from '@mui/material/Tabs';
 
-import Tab from '@mui/material/Tab';
 import TabList from '@mui/lab/TabList';
 import { TabContext } from '@mui/lab';
+import Tab from '@mui/material/Tab';
 
-import Tabs from '@mui/material/Tabs';
-import TabPanel from '@mui/lab/TabPanel';
-import { Grid, useTheme } from '@mui/material';
-
-import OpenordersTab from './Openorderstab';
 import HistroyordersTab from './Histroyordedrtab';
+import OpenordersTab from './Openorderstab';
 
-const Ordertable = ({ isAuthorised, orderTableData, priceData, setSnackbarOpen, setSnackbarMessage }) => {
+import React from 'react';
+
+const Ordertable = ({ isAuthorised, platformId, orderTableData, setSnackbarOpen, setSnackbarMessage }) => {
   const [value, setValue] = React.useState('0');
   const theme = useTheme();
 
@@ -22,12 +22,12 @@ const Ordertable = ({ isAuthorised, orderTableData, priceData, setSnackbarOpen, 
   const tabData = [{
     value: '0',
     label: 'Open Orders',
-    screen: <OpenordersTab isAuthorised={isAuthorised} orderTableData={orderTableData} priceData={priceData} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage}/>
+    screen: <OpenordersTab isAuthorised={isAuthorised} orderTableData={orderTableData} platformId={platformId} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage}/>
   },
   {
     value: '1',
     label: 'Order History',
-    screen: <HistroyordersTab isAuthorised={isAuthorised} orderTableData={orderTableData} priceData={priceData} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage}/>
+    screen: <HistroyordersTab isAuthorised={isAuthorised} orderTableData={orderTableData} platformId={platformId} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage}/>
   }];
 
   return (

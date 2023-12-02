@@ -1,19 +1,17 @@
-import React from 'react';
-
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-
-import { Grid, Typography, Stack, OutlinedInput, FormHelperText, Button, TextField, useTheme } from '@mui/material';
-import CardInr from './Card';
 import Autocomplete from "@mui/material/Autocomplete";
-
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import AnimateButton from '../../../../components/@extended/AnimateButton';
+
+import CardInr from './Card';
 import GravitusBankdeatils from './UserBankdeatils';
 import { NumericFormatCustom } from '../NumericFormatCustom';
 
-const InrWithdrawpage2 = () => {
+import React from 'react';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { Grid, Typography, Stack, OutlinedInput, FormHelperText, Button, TextField, useTheme } from '@mui/material';
 
+const InrWithdraw_SP = () => {
   const theme = useTheme();
 
   const Coins = [
@@ -182,4 +180,4 @@ const InrWithdrawpage2 = () => {
   )
 }
 
-export default InrWithdrawpage2;
+export default InrWithdraw_SP;

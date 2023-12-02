@@ -71,11 +71,15 @@ const Walletpage = () => {
       }
     }
 
-    let SPOTOrderEvt = '/WALLETUpdate_'+ getConfig_sp().userId +'/POST';
-    socket.on(SPOTOrderEvt, function (res) {
+    let WALLETUpdateEvt = '/WALLETUpdate_'+ getConfig_sp().userId +'/POST';
+    socket.on(WALLETUpdateEvt, function (res) {
       // Show Loader if necessary
       setWALLETData({ type: 'UPDATE', data: res });
     });
+
+    return () => {
+      socket.off(WALLETUpdateEvt);
+    };
 
   }, [walletRc]);
 

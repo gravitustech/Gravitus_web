@@ -97,19 +97,27 @@ export const Wallet_Statement = () => {
   return 'api/activity/wallet/statement';
 };
 
+// Estimate Crypto & INR 
 export const Estimate_Withdrawal = () => {
   return 'api/activity/wallet/eWithdrawal';
 };
 
+// Sign Crypto & INR 
 export const Sign_Withdrawal = () => {
   return 'api/activity/security/wSecurity';
 };
 
-// Deposit INR
-// Pre Deposit
-// Post Deposit
+// Pre Deposit INR
+export const Pre_Rs_Deposit = () => {
+  return 'api/activity/wallet/preRsDeposit';
+};
 
-// Withdrawal INR
-// Pre Withdrawal
-// Estimate withdraw
-// Sign withdraw
+// Post Deposit INR
+export const Post_Rs_Deposit = () => {
+  return 'api/activity/wallet/postRsDeposit';
+};
+
+// Pre Withdrawal INR
+export const Pre_Rs_Withdraw = () => {
+  return 'api/activity/wallet/preRsWithdraw';
+};

@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { useTheme, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { useTheme, Tab } from '@mui/material';
 
 import BuySelloder from './BuySellorder';
+import React, { useState } from 'react';
 
-
-const BuyLimitSellLimit = ({ isAuthorised, priceData, pairData, selectedOrder, 
-  flag, walletData,  orderBookData, setSelectedOrder, setSnackbarOpen, setSnackbarMessage }) => {
+const BuyLimitSellLimit = ({ isAuthorised, platformId, priceData, pairData, selectedOrder, flag, 
+  walletData, orderBookData, setSelectedOrder, setSnackbarOpen, setSnackbarMessage }) => {
+  
+  const [value, setValue] = useState('0');
   const theme = useTheme();
 
-  const [value, setValue] = useState('0');
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -102,6 +102,7 @@ const BuyLimitSellLimit = ({ isAuthorised, priceData, pairData, selectedOrder,
       <TabPanel value="0" sx={{ padding: '0px' }}>
         <BuySelloder
           isAuthorised={isAuthorised}
+          platformId={platformId}
           priceData={priceData}
           walletData={walletData}
           pairData={pairData}
@@ -111,13 +112,14 @@ const BuyLimitSellLimit = ({ isAuthorised, priceData, pairData, selectedOrder,
           setSnackbarMessage={setSnackbarMessage}
           setSelectedOrder={setSelectedOrder}
           flag={flag}
-          flag1="LIMIT"
+          orderType="LIMIT"
         />
       </TabPanel>
 
       <TabPanel value="1" sx={{ padding: '0px' }}>
         <BuySelloder
           isAuthorised={isAuthorised}
+          platformId={platformId}
           priceData={priceData}
           walletData={walletData}
           pairData={pairData}
@@ -127,7 +129,7 @@ const BuyLimitSellLimit = ({ isAuthorised, priceData, pairData, selectedOrder,
           setSnackbarMessage={setSnackbarMessage}
           setSelectedOrder={setSelectedOrder}
           flag={flag}
-          flag1="STOPLIMIT"
+          orderType="STOPLIMIT"
         />
       </TabPanel>
     </TabContext>

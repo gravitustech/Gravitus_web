@@ -1,8 +1,8 @@
 import React, { useState,useEffect } from 'react';
 
-import InrDepositpage2 from './Inrdepositpage2';
-import InrDepositpage3 from './Inrdepositpage3';
-import InrDepositpage1 from './Inrdepositpage1';
+import InrDeposit_STEP1 from './InrDeposit_STEP1';
+import InrDeposit_STEP2 from './InrDeposit_STEP2';
+import InrDeposit_STEP3 from './InrDeposit_STEP3';
 import CustomSnackBar from 'src/components/snackbar';
 
 import useSWR from 'swr';
@@ -40,7 +40,7 @@ const InrDeposit = () => {
   return (
     <>
       {step === 1 && data && (
-        <InrDepositpage1
+        <InrDeposit_STEP1
           depositFrom={data.result.depositFrom}
           depositTo={data.result.depositTo}
           setStep={setStep}
@@ -52,7 +52,7 @@ const InrDeposit = () => {
         />
       )}
       {step === 2 && data && (
-        <InrDepositpage2
+        <InrDeposit_STEP2
           depositFrom={data.result.depositFrom}
           depositTo={data.result.depositTo}
           setStep={setStep}
@@ -63,7 +63,7 @@ const InrDeposit = () => {
         />
       )}
       {step === 3 && data && (
-        <InrDepositpage3
+        <InrDeposit_STEP3
           depositFrom={data.result.depositFrom}
           depositTo={data.result.depositTo}
           setStep={setStep}
