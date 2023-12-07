@@ -7,11 +7,14 @@ import { widget } from '../_charting_library';
 import { socket } from '../../../../socket';
 
 import './index.css';
-// getConfig_ng('excType')
+import { useTheme } from '@mui/material';
 
 export const TVChartContainer = ({ pairData, exchangeType }) => {
   const chartContainerRef = useRef();
   const lastBarsCache = new Map();
+  
+  const theme = useTheme();
+  // console.log(theme, 'theme');
 
   const configurationData = {
     supported_resolutions: ['1', '15', '30', '60', '120', '240', '360', '480', '720', '1D', '1M'], // '1W', '12M', '24M', '48M'
@@ -53,8 +56,11 @@ export const TVChartContainer = ({ pairData, exchangeType }) => {
 
     getBars: async (symbolInfo, resolution, periodParams, onHistoryCallback, onErrorCallback) => {
       const { from, to, countBack, firstDataRequest } = periodParams;
-      // console.log('[getBars]: Method call', symbolInfo, resolution, from, to, countBack);
 
+      // console.log('[getBars]: Method call', symbolInfo, resolution, from, to, countBack);
+      // periodParams.countBack = 50; // For testing countback restrictions
+      
+      setConfig_ng('excTvRes', resolution);
       fetcherCHART(Spot_ChartData_URL(pairData?.id, resolution, exchangeType)).then(function(res) {
         if(res.error != 'ok') {
           onErrorCallback(res.error);
@@ -62,10 +68,11 @@ export const TVChartContainer = ({ pairData, exchangeType }) => {
         else {
           if(res.result.length > 0) {
             var superData = res.result;
-            // console.log(res.result);
+            // console.log(res.result.length);
 
+            // For Live
+            let bars = [];
             if(superData.length >= 305) {
-              let bars = [];
               superData.forEach(bar => {
                 // From Trades OHLC
                 bars = [...bars, {
@@ -78,13 +85,16 @@ export const TVChartContainer = ({ pairData, exchangeType }) => {
                   volume: bar.volume
                 }];
               });
+  
+              // For Testing
+              // bars = superData;
               
               if(firstDataRequest) {
                 lastBarsCache.set(symbolInfo.ticker, {
                   ...bars[bars.length - 1],
                 });
               }
-
+  
               onHistoryCallback(bars, {noData: false});
               return;
             }
@@ -104,7 +114,7 @@ export const TVChartContainer = ({ pairData, exchangeType }) => {
     },
 
     subscribeBars: (symbolInfo, resolution, onRealtimeCallback, subscriberUID, onResetCacheNeededCallback) => {
-      console.log('[subscribeBars]: Method call with subscriberUID:', subscriberUID, symbolInfo, lastBarsCache);
+      // console.log('[subscribeBars]: Method call with subscriberUID:', subscriberUID, symbolInfo, lastBarsCache);
       
       socket.on('/TICKSUpdate/POST', function(res) {
         if(pairData?.id == res.platformId && resolution == res.data.interval && getConfig_ng('excType') == res.from) {
@@ -128,7 +138,8 @@ export const TVChartContainer = ({ pairData, exchangeType }) => {
 
   useEffect(() => {
     const widgetOptions = {
-      interval    : '1',
+      theme       : 'light', // "light" | "dark"
+      interval    : getConfig_ng('excTvRes'),
       symbol      : 'Gravitus: BNB/USDT',
       width       : '100%',
   

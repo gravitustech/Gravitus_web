@@ -122,74 +122,71 @@ export default function HistroyTab({ orders, pairInfo }) {
                 </TableCell>
               </TableRow>
             ) : (
-              orders?.history?.map((row, index) => {
-                // const isItemSelected = isSelected(row.Name);
-                const labelId = `enhanced-table-checkbox-${index}`;
-                return (
-                  <TableRow
-                    //  hover
-                    role="checkbox"
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 }, height: '64px', }}
-                    tabIndex={-1}
-                    key={row.side}>
-                    <TableCell sx={{ border: 'none', paddingTop: '0' }} component="th" id={labelId} scope="row" align="left">
-                      <Stack direction="row" alignItems="center" spacing={1}>
-                        <Typography variant='body1' sx={{ color: row.side === 'BUY' ? 'text.buy' : 'text.sell' }}>
-                          {row.side}
-                        </Typography>
-                      </Stack>
-                    </TableCell>
-
-                    <TableCell sx={{ border: 'none' }} align="left">
-                      <Stack spacing={.5}>
-                        <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                          {row.price} {pairInfo.sellPair}
-                        </Typography>
-                        <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                          {row.quantity} {pairInfo.buyPair}
-                        </Typography>
-                      </Stack>
-                    </TableCell>
-
-
-                    <TableCell sx={{ border: 'none', paddingTop: '0' }} align="left">
-                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {row.amount} {pairInfo.sellPair}
+              orders?.history?.map((item, index) => (
+                <TableRow
+                  //  hover
+                  role="checkbox"
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 }, height: '64px', }}
+                  tabIndex={-1}
+                  key={item.side}>
+                  <TableCell sx={{ border: 'none', paddingTop: '0' }} component="th" scope="row" align="left">
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <Typography variant='body1' sx={{ color: item.side === 'BUY' ? 'text.buy' : 'text.sell' }}>
+                        {item.side}
                       </Typography>
-                    </TableCell>
+                    </Stack>
+                  </TableCell>
 
-                    <TableCell sx={{ border: 'none', paddingTop: '0', paddingRight: '0px' }} align="left">
+                  <TableCell sx={{ border: 'none' }} align="left">
+                    <Stack spacing={.5}>
                       <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {row.tds.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 3 })}
+                        {item.price} {pairInfo.sellPair}
                       </Typography>
-                    </TableCell>
+                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        {item.quantity} {pairInfo.buyPair}
+                      </Typography>
+                    </Stack>
+                  </TableCell>
 
-                    <TableCell sx={{ border: 'none', paddingLeft: '0px' }} align="right">
-                      <Stack spacing={.5} >
-                        <Typography variant='body1' sx={{
-                          color: row.status === 'Matched' ?
-                            theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' :
-                            theme.palette.mode === 'dark' ? 'text.sell' : 'text.sell'
-                        }} >
-                          {row.status}
-                        </Typography>
-                        <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                          {/* {new Date(Number(row.time)).toLocaleString()} */}
-                          {new Date(Number(row.time)).toLocaleString('en-US', {
-                            timeZone: 'Asia/Kolkata',
-                            day: 'numeric',
-                            month: 'short',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: true
-                          })}
-                        </Typography>
-                      </Stack>
-                    </TableCell>
 
-                  </TableRow>
-                );
-              })
+                  <TableCell sx={{ border: 'none', paddingTop: '0' }} align="left">
+                    <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                      {item.amount} {pairInfo.sellPair}
+                    </Typography>
+                  </TableCell>
+
+                  <TableCell sx={{ border: 'none', paddingTop: '0', paddingRight: '0px' }} align="left">
+                    <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                      {item.tds.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 3 })}
+                    </Typography>
+                  </TableCell>
+
+                  <TableCell sx={{ border: 'none', paddingLeft: '0px' }} align="right">
+                    <Stack spacing={.5} >
+                      <Typography variant='body1' sx={{
+                        color: item.status === 'Matched' ?
+                          theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' :
+                          theme.palette.mode === 'dark' ? 'text.sell' : 'text.sell'
+                      }} >
+                        {item.status}
+                      </Typography>
+                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                        {/* {new Date(Number(item.time)).toLocaleString()} */}
+                        {new Date(Number(item.time)).toLocaleString('en-US', {
+                          timeZone: 'Asia/Kolkata',
+                          day: 'numeric',
+                          month: 'short',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: true
+                        })}
+                      </Typography>
+                    </Stack>
+                  </TableCell>
+
+                </TableRow>
+              )
+              )
             )}
           </TableBody>
         </Table>

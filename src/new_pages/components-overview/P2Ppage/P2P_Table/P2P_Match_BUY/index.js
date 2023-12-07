@@ -41,7 +41,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 import HIW_Buy from '../_HIW_Buy';
-import Dialogboxvalue from 'src/new_pages/components-overview/Spotpage/BuySellGrid/Dialogboxvalue';
+import Dialogboxvalue from 'src/new_pages/components-overview/Spotpage/BuySellGrid/Dialog_Box_Val';
 import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/Norecordfoundcomponents';
 import Importantnotescomponents from '../../../Walletpage/Deposit/DepositeHeads/Depositehead1/Importantnotescomponents';
 

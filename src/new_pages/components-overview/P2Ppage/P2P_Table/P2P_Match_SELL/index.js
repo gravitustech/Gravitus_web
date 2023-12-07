@@ -42,7 +42,7 @@ import {
 } from '@mui/material';
 
 import HIW_Sell from '../_HIW_Sell';
-import Dialogboxvalue from 'src/new_pages/components-overview/Spotpage/BuySellGrid/Dialogboxvalue';
+import Dialogboxvalue from 'src/new_pages/components-overview/Spotpage/BuySellGrid/Dialog_Box_Val';
 import Importantnotescomponents from '../../../Walletpage/Deposit/DepositeHeads/Depositehead1/Importantnotescomponents';
 import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/Norecordfoundcomponents';
 

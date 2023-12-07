@@ -19,6 +19,8 @@ export const initLocalStorage_ng = () => {
 			appConfig.notify = [];
 
 			appConfig.excType = "GRA";
+			appConfig.excTvRes = "1";
+
 			appConfig.spotType = 0;
 			appConfig.P2PType = 0;
 			

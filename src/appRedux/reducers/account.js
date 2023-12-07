@@ -7,7 +7,6 @@ const INIT_STATE = {
 };
 
 const SocketReducer = (state = INIT_STATE, action) => {
-  // console.log({ state }, { action });
   switch (action.type) {
     case SET_SOCKET_STATE:
       return {

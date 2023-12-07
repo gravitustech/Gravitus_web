@@ -6,20 +6,21 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Provider as ReduxProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
-// scroll bar
 import 'simplebar/src/simplebar.css';
-
-// apex-chart
 import './assets/third-party/apex-chart.css';
 
-// project import
 import App from './App';
 import { store, persistor } from './appRedux/store';
+
+// Check unused import
 // import { store } from 'store';
+
 // ==============================|| MAIN - REACT DOM RENDER  ||============================== //
 
 const container = document.getElementById('root');
-const root = createRoot(container); // createRoot(container!) if you use TypeScript
+// createRoot(container!) if you use TypeScript
+const root = createRoot(container); 
+
 root.render(
   <ReduxProvider store={store}>
     <HelmetProvider>

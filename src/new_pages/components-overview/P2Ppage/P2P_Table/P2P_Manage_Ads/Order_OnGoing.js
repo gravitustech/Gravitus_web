@@ -85,7 +85,7 @@ function OrderTableHead() {
   );
 }
 
-OrderTableHead.propTypes = {  
+OrderTableHead.propTypes = {
   order: PropTypes.string,
   orderBy: PropTypes.string
 };
@@ -96,20 +96,20 @@ export default function OngoingTab({ orders, pairInfo, setSnackbarOpen, setSnack
   const theme = useTheme();
 
   const deleteOrder = (order) => {
-    var postData = { "id" : order.id, "platformId" : pairInfo?.id };
+    var postData = { "id": order.id, "platformId": pairInfo?.id };
 
     postDataP2P(P2P_CancelOrder_URL(), postData).then(function (res) {
       console.log(res);
 
       if (res.error !== 'ok') {
-        if(res.error.name == "Missing Authorization") {
+        if (res.error.name == "Missing Authorization") {
           // Logout User
         }
         else if (res.error.name == "Invalid Authorization") {
           // Logout User
         }
         else {
-          if(res.error.name != undefined) {
+          if (res.error.name != undefined) {
             setSnackbarMessage({ msg: res.error.name, success: false });
             setSnackbarOpen(true);
           }
@@ -158,7 +158,7 @@ export default function OngoingTab({ orders, pairInfo, setSnackbarOpen, setSnack
         >
           <OrderTableHead />
           <TableBody>
-            {orders?.ongoing?.length === 0 ? (
+            {/* {orders?.ongoing?.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
                   <Norecordfoundcomponents
@@ -172,86 +172,88 @@ export default function OngoingTab({ orders, pairInfo, setSnackbarOpen, setSnack
                   {item.price}
                   {item.amount}
                   {item.price}
-    
+
                   <Link
-                      variant='body1'
-                      sx={{ textDecorationColor: 'text.sell', cursor: 'pointer' }}
-                      color="text.sell"
-                      onClick={() => deleteOrder(item)}
-                    >
-                      Cancel
-                    </Link>
+                    variant='body1'
+                    sx={{ textDecorationColor: 'text.sell', cursor: 'pointer' }}
+                    color="text.sell"
+                    onClick={() => deleteOrder(item)}
+                  >
+                    Cancel
+                  </Link>
                 </li>
+              )))} */}
+            {orders?.ongoing?.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
+                  <Norecordfoundcomponents
+                    description='No Record Found' />
+                </TableCell>
+              </TableRow>
+            ) : (
+              orders?.ongoing?.map((item, index) => (
+                <>
+                  <TableRow
+                    role="checkbox"
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 }, height: '64px', }}
+                    key={item.side}>
+                    <TableCell sx={{ border: 'none', paddingTop: '0' }} component="th" scope="row" align="left">
+                      <Typography variant='body1' sx={{ color: item.side === 'BUY' ? 'text.buy' : 'text.sell' }}>
+                        {item.side}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell sx={{ border: 'none' }} align="left">
+                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        {item.price} {pairInfo.sellPair}
+                      </Typography>
+                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        {item.quantity} {pairInfo.buyPair}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell sx={{ border: 'none', paddingTop: '0' }} align="left">
+                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        {item.tds.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 3 })}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell sx={{ border: 'none', paddingTop: '0' }} align="left">
+                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        {item.amount} {pairInfo.sellPair}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell align="left" sx={{ border: 'none' }}>
+                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        {item.status}
+                      </Typography>
+                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                        {/* {new Date(Number(item.time)).toLocaleString()} */}
+                        {new Date(Number(item.time)).toLocaleString('en-US', {
+                          timeZone: 'Asia/Kolkata',
+                          day: 'numeric',
+                          month: 'short',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: true
+                        })}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell sx={{ border: 'none', paddingTop: '0' }} align="right">
+                      <Link
+                        variant='body1'
+                        sx={{ textDecorationColor: 'text.sell', cursor: 'pointer' }}
+                        color="text.sell"
+                        onClick={() => deleteOrder(item)}
+                      >
+                        Cancel
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                </>
               ))
-              
-              // orders?.ongoing?.map((row, index) => {
-              //   // const isItemSelected = isSelected(row.Name);
-              //   const labelId = `enhanced-table-checkbox-${index}`;
-
-              //   return (
-              //     <TableRow
-              //       // hover
-              //       role="checkbox"
-              //       sx={{ '&:last-child td, &:last-child th': { border: 0 }, height: '64px', }}
-              //       tabIndex={-1}
-              //       key={row.side}>
-              //       <TableCell sx={{ border: 'none', paddingTop: '0' }} component="th" id={labelId} scope="row" align="left">
-              //         <Typography variant='body1' sx={{ color: row.side === 'BUY' ? 'text.buy' : 'text.sell' }}>
-              //           {row.side}
-              //         </Typography>
-              //       </TableCell>
-
-              //       <TableCell sx={{ border: 'none' }} align="left">
-              //         <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-              //           {row.price} {pairInfo.sellPair}
-              //         </Typography>
-              //         <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-              //           {row.quantity} {pairInfo.buyPair}
-              //         </Typography>
-              //       </TableCell>
-
-              //       <TableCell sx={{ border: 'none', paddingTop: '0' }} align="left">
-              //         <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-              //           {row.tds.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 3 })}
-              //         </Typography>
-              //       </TableCell>
-
-              //       <TableCell sx={{ border: 'none', paddingTop: '0' }} align="left">
-              //         <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-              //           {row.amount} {pairInfo.sellPair}
-              //         </Typography>
-              //       </TableCell>
-
-              //       <TableCell align="left" sx={{ border: 'none'}}>
-              //           <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} >
-              //             {row.status}
-              //           </Typography>
-              //           <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-              //             {/* {new Date(Number(row.time)).toLocaleString()} */}
-              //             {new Date(Number(row.time)).toLocaleString('en-US', {
-              //               timeZone: 'Asia/Kolkata',
-              //               day: 'numeric',
-              //               month: 'short',
-              //               hour: '2-digit',
-              //               minute: '2-digit',
-              //               hour12: true
-              //             })}
-              //           </Typography>
-              //       </TableCell>
-
-              //       <TableCell sx={{ border: 'none', paddingTop: '0' }} align="right">
-              //         <Link
-              //           variant='body1'
-              //           sx={{ textDecorationColor: 'text.sell', cursor: 'pointer' }}
-              //           color="text.sell"
-              //           onClick={() => deleteOrder(row)}
-              //         >
-              //           Cancel
-              //         </Link>
-              //       </TableCell>
-              //     </TableRow>
-              //   );
-              // })
             )}
           </TableBody>
         </Table>

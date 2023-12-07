@@ -1,9 +1,10 @@
 import { Grid, useTheme, Card, CircularProgress } from '@mui/material';
-import SpotorderHead from './Spothead/SpotorderHead';
-import BuySellGrid from './BuySellGrid/BuySellGrid';
 
-import Ordertable from './Ordertable/Ordertable';
-import Orderbook from './Orderbook/Orderbook';
+import MarketDrawer from    './SpotHead/SpotHead';
+import BuySellGrid from './BuySellGrid/Buy_Sell_Grid';
+
+import OrderAndMarket from './OrderBook/OrdersAndMarket';
+import MyOrders from './OrderTable/MyOrders';
 import FundsGrid from './FundsGrid/FundsGrid';
 
 import Lodergif from '../../../components/Gravitusloader';
@@ -21,7 +22,7 @@ import { Spot_PreTrade_URL, fetcherSPOT} from 'src/api_ng/spotTrade_ng';
 import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../utils_ng/localStorage_ng';
 
 const Spotpage = () => {
-  const theme = useTheme();
+  // const theme = useTheme();
   const isAuthorised = useSelector((state) => state.user.isAuthenticated);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -122,7 +123,7 @@ const Spotpage = () => {
       {SPOTData ? (
         <Grid container p={1}>
           <Grid item xs={12} p={1} lg={12}>
-            <SpotorderHead priceData={SPOTData?.priceInfo} pairData={SPOTData?.pairInfo} setPlatformId={setPlatformId} excType={excType} changeExcType={changeExcType}/>
+            <MarketDrawer priceData={SPOTData?.priceInfo} pairData={SPOTData?.pairInfo} setPlatformId={setPlatformId} excType={excType} changeExcType={changeExcType}/>
           </Grid>
 
           <Grid container item xs={12} lg={9.5} p={0.5}>
@@ -134,7 +135,7 @@ const Spotpage = () => {
 
             <Grid item md={3} pl={0.5} lg={3}>
               <Card variant="outlined" sx={{ padding: '14px', paddingTop: '2px' }}>
-                <Orderbook
+                <OrderAndMarket
                   isAuthorised={isAuthorised}
                   priceData={SPOTData?.priceInfo}
                   orderBookData={SPOTData?.orderBook}
@@ -146,7 +147,7 @@ const Spotpage = () => {
 
             <Grid item lg={12} md={12} pt={0.5}>
               <Card variant="outlined" sx={{ padding: '4px', paddingTop: '2px', paddingBottom: '1px' }}>
-                <Ordertable 
+                <MyOrders 
                   isAuthorised={isAuthorised}
                   platformId={platformId} 
                   orderTableData={SPOTData?.myOrders} 

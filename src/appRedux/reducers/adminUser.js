@@ -1,5 +1,4 @@
 import { LOGOUT_USER, SET_ADMIN_USER_STATE } from '../constants/action-type';
-
 import { getUserEssentials } from '../../utils/storage';
 
 const checkToken = () => {

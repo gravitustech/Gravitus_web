@@ -49,6 +49,7 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 // import Brightness4Icon from '@mui/icons-material/Brightness4';
 // import Brightness7Icon from '@mui/icons-material/Brightness7';
+
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import GravitusNavigationRegister from './Header/Navgroupregister/NavigationRegister';
@@ -59,16 +60,12 @@ const ThemePaletteModeContext = React.createContext({
 });
 
 const GravitusMainLayout = () => {
-  //theme
   const theme = useTheme();
-
   const themePaletteModeContext = React.useContext(ThemePaletteModeContext);
 
   const isMatch = useMediaQuery(theme.breakpoints.down('md'));
   const isAuthorised = useSelector((state) => state.user.isAuthenticated);
-  // console.log({ isAuthorised });
-  //Drawer
-  const [openDrawer, setopenDrawer] = useState(false);
+  const [openDrawer, setopenDrawer] = useState(false); // Drawer
 
   const toggleDrawer = () => {
     setopenDrawer(!openDrawer);
@@ -211,6 +208,7 @@ const GravitusMainLayout = () => {
     </Box>
   );
 };
+
 GravitusMainLayout.propTypes = {
   open: PropTypes.bool,
   handleDrawerToggle: PropTypes.func
@@ -218,7 +216,6 @@ GravitusMainLayout.propTypes = {
 
 export default function App() {
   const isSystemDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-
   const [themePaletteMode, setThemePaletteMode] = React.useState(isSystemDarkMode ? 'dark' : 'light');
 
   const themePaletteModeContextProvider = React.useMemo(
@@ -231,9 +228,7 @@ export default function App() {
   );
 
   const theme = useTheme();
-
   const themeTypography = Typography('montserrat ');
-
   const themeCustomShadows = useMemo(() => CustomShadows(theme), [theme]);
 
   const themeProvider = React.useMemo(
@@ -275,6 +270,7 @@ export default function App() {
             buy: '#00BBAB',
             sell: '#FF4E4E',
             cardbackground: '#FFFFFF',
+            
             //darkmode
             primarydark: '#D9D9D9',
             secondarydark: '#FFFFFF',
@@ -287,7 +283,6 @@ export default function App() {
   );
 
   const themes = createTheme(themeProvider);
-
   themes.components = ComponentsOverrides(themes);
 
   return (
