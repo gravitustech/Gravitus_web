@@ -1,13 +1,15 @@
 import React from 'react';
 import { Typography, Stack, useTheme } from '@mui/material';
 
-function BuildPortfoliocomponents({ img, title, description }) {
+function BuildPortfoliocomponents({ number, title, description }) {
   const theme = useTheme();
   return (
-    <Stack direction="row" spacing={5}>
-      <img src={img} alt="gif" />
+    <Stack direction="row" spacing={3}>
+      <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+        {number}
+      </Typography>
       <Stack spacing={2}>
-        <Typography variant="head2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+        <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
           {' '}
           {title}
         </Typography>

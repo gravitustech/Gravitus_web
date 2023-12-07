@@ -1,26 +1,31 @@
 import React from 'react';
-import Popularcurrency from './Popularcurrency/Popularcurrency';
-import Features from './Features/Features';
-import BuildPortfolio from './BuildPortfolio/BuildPortfolio';
+
 import Footer from './Footer/Footer';
-import Featuresn from './Features/Featuresn';
-import HomepageHeadnewuser from './Homehead/HomepageHeadnewuser';
-import { useSelector } from 'react-redux';
+import Features from './Features/Features';
 import HomepageHead from './Homehead/HomepageHead';
-import { fetcher, getMarketURL } from 'src/api/spot';
-import useSWR from 'swr';
 import Lodergif from 'src/components/Gravitusloader';
+import BuildPortfolio from './BuildPortfolio/BuildPortfolio';
+import Popularcurrency from './Popularcurrency/Popularcurrency';
+import HomepageHeadnewuser from './Homehead/HomepageHeadnewuser';
+
+import useSWR from 'swr';
+import { useSelector } from 'react-redux';
+import { MarketOverview_URL, fetcherSystem } from 'src/api_ng/system_ng';
 
 const GravitusHomePage = () => {
   const isAuthorised = useSelector((state) => state.user.isAuthenticated);
 
-  const { data, error, isLoading } = useSWR(
-    getMarketURL(),
-    (url) => fetcher(url, { accountType: 'GRAVITUS', postData: { callfrom: 'markets' } })
-    // { suspense: true }
-  );
-  console.log('res', data, error, isLoading);
+  function useMarketOverview() {
+    var postData = { "callfrom": 'markets' };
 
+    const { data, error, isLoading } = useSWR([MarketOverview_URL(), postData], fetcherSystem, {
+      revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
+    });
+
+    return { data, error, isLoading };
+  }
+
+  const { data, error, isLoading } = useMarketOverview();
   return (
     <>
       {data ? (

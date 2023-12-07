@@ -51,7 +51,7 @@ function ComponentsCardLoss({ title, marketData }) {
                     role="checkbox"
                     sx={{ border: 0, padding: '0', height: '42px' }}
                     tabIndex={-1}
-                    key={row.platformId}
+                    key={index}
                   >
                     <TableCell sx={{ border: 'none', padding: '0' }} component="th" scope="row" align="left">
                       <Stack direction="row" alignItems="center" spacing={0.5}>

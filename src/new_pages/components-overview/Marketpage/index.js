@@ -35,12 +35,10 @@ const Marketpage = () => {
   }
 
   const { data, error, isLoading } = useMarketOverview();
-  console.log(data, 'From Market Overview');
 
   useEffect(() => {
     var marketOverviewEvt = '/MARKETUpdate/POST';
     socket.on(marketOverviewEvt, function(res){
-      console.log(res, 'From Sock Market Overview');
       mutate(MarketOverview_URL);
     });
 

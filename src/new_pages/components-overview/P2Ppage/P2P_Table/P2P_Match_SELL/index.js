@@ -42,12 +42,12 @@ import {
 } from '@mui/material';
 
 import HIW_Sell from '../_HIW_Sell';
-import Dialogboxvalue from 'src/new_pages/components-overview/Spotpage/BuySellGrid/Dialog_Box_Val';
 import Importantnotescomponents from '../../../Walletpage/Deposit/DepositeHeads/Depositehead1/Importantnotescomponents';
 import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/Norecordfoundcomponents';
 
 import { P2P_MatchTrade_URL, postDataP2P } from 'src/api_ng/peer2peer_ng';
 import { socket } from '../../../../../socket';
+import DialogBoxValue from 'src/new_pages/components-overview/Spotpage/BuySellGrid/Dialog_Box_Val';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
@@ -586,23 +586,23 @@ function OrderTableBody(props) {
                                     </Stack>
                                     <Divider>
                                     </Divider>
-                                    <Dialogboxvalue
+                                    <DialogBoxValue
                                       title='Price'
                                       value={row.price}
                                       pair={pairInfo.sellPair}
                                     />
-                                    <Dialogboxvalue
+                                    <DialogBoxValue
                                       title='Quantity'
                                       value={inputs.quantity}
                                       pair={pairInfo.buyPair}
                                     />
-                                    <Dialogboxvalue
+                                    <DialogBoxValue
                                       title='After TDS 1%'
                                       value={SellTds}
                                       pair={pairInfo.buyPair}
                                     />
                                     <Divider></Divider>
-                                    <Dialogboxvalue
+                                    <DialogBoxValue
                                       title='Total Amount'
                                       value={inputs.totalamount}
                                       pair={pairInfo.sellPair}
@@ -706,6 +706,7 @@ export default function P2psellordertab({ isAuthorised, pairInfo, orderBook, wal
     );
   });
 
+  console.log(orderBooksell)
   return (
     <Box>
       <TableContainer variant="tablecontainer">
@@ -748,12 +749,12 @@ export default function P2psellordertab({ isAuthorised, pairInfo, orderBook, wal
                     description='No Record Found' />
                 </TableCell>
               </TableRow>
-            ) : filteredOrderbook && filteredOrderbook.map((row) => {
-              return <OrderTableBody
+            ) : filteredOrderbook && filteredOrderbook.map((item, index) => (
+              <OrderTableBody
                 isAuthorised={isAuthorised}
                 orderBookData={orderBooksell}
-                row={row}
-                key={row.amount}
+                row={item}
+                key={index}
                 pairInfo={pairInfo}
                 walletInfo={walletInfo}
                 pfStatus={pfStatus}
@@ -761,8 +762,8 @@ export default function P2psellordertab({ isAuthorised, pairInfo, orderBook, wal
                 onCollapseToggle={handleCollapseToggle}
                 setSnackbarOpen={setSnackbarOpen}
                 setSnackbarMessage={setSnackbarMessage}
-              />;
-            })}
+              />
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -772,7 +773,7 @@ export default function P2psellordertab({ isAuthorised, pairInfo, orderBook, wal
           </>
         ) : (
           <Pagination
-            count={Math.ceil(orderBooksell && filteredOrderbook?.length / rowsPerPage)}
+            count={Math.ceil(orderBooksell?.length / rowsPerPage)}
             page={page + 1}
             onChange={handleChangePage}
             shape="rounded"

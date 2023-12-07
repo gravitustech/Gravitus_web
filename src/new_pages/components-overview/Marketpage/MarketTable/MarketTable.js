@@ -6,10 +6,6 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // material-ui
 import { Box, Stack, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useTheme, Button, ButtonBase } from '@mui/material';
 
-// third-party
-import NumberFormat from 'react-number-format';
-// import TableSortLabel from '@mui/material/TableSortLabel';
-
 // Icon import
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
@@ -44,34 +40,34 @@ function MyComponent({ id }) {
 
 const headCells = [
   {
-    id: 'Name',
+    id: 'tradePair',
     align: 'left',
     disablePadding: true,
     label: 'Name'
   },
   {
-    id: 'MarketPrice',
+    id: 'lastPrice',
     align: 'left',
     disablePadding: true,
     label: 'Market Price'
   },
   {
-    id: 'Changes',
+    id: '24hChg',
     align: 'left',
     disablePadding: true,
     label: '24h change'
   },
   {
-    id: 'Volume',
+    id: '24hBuyVol',
     align: 'left',
     disablePadding: false,
-    label: '24h Volume'
+    label: 'Buy Volume'
   },
   {
-    id: 'MarketCap',
+    id: '24hSellVol',
     align: 'left',
     disablePadding: false,
-    label: 'Market Cap'
+    label: 'Sell Volume'
   },
   {
     id: 'Actions',
@@ -114,10 +110,10 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
   return (
     <TableHead>
       <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#000' : '#fff' }}>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, index) => (
           <TableCell
-            sx={{ border: 'none', padding: '0px', paddingBottom: '7px', paddingTop: '4px' }}
-            key={headCell.id}
+            sx={{ border: 'none', padding: '0px', paddingBottom: '7px', paddingTop: '4px', }}
+            key={index}
             align={headCell.align}
             // padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
@@ -135,49 +131,96 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
               </Typography>
             ) : (
               <>
-                <Stack direction="row">
-                  <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                    {headCell.label}
-                  </Typography>
-                  <Stack direction="column" spacing={-2.4}>
-                    <ArrowDropUpIcon
-                      // active={orderBy === headCell.id}
-                      direction={orderBy === headCell.id ? order : 'desc'}
-                      onClick={createSortHandler(headCell.id)}
-                      sx={{
-                        width: '18px',
-                        paddingBottom: '6px',
-                        cursor: 'pointer',
-                        color:
-                          order === 'asc' && orderBy === headCell.id
-                            ? theme.palette.mode === 'dark'
-                              ? 'text.secondarydark'
-                              : 'text.secondary'
-                            : theme.palette.mode === 'dark'
-                              ? 'text.primarydark'
-                              : 'text.primary'
-                      }}
-                    />
-                    <ArrowDropDownIcon
-                      // active={orderBy === headCell.id}
-                      direction={orderBy === headCell.id ? order : 'desc'}
-                      onClick={createSortHandler(headCell.id)}
-                      sx={{
-                        width: '18px',
-                        paddingBottom: '6px',
-                        cursor: 'pointer',
-                        color:
-                          order === 'desc' && orderBy === headCell.id
-                            ? theme.palette.mode === 'dark'
-                              ? 'text.secondarydark'
-                              : 'text.secondary'
-                            : theme.palette.mode === 'dark'
-                              ? 'text.primarydark'
-                              : 'text.primary'
-                      }}
-                    />
-                  </Stack>
-                </Stack>
+                {
+                  headCell.id === 'tradePair' ? (
+                    <Stack direction="row">
+                      <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                        {headCell.label}
+                      </Typography>
+                      <Stack direction="column" spacing={-2.4}>
+                        <ArrowDropUpIcon
+                          active={orderBy === headCell.id}
+                          direction={orderBy === headCell.id ? order : 'desc'}
+                          onClick={createSortHandler(headCell.id)}
+                          sx={{
+                            width: '18px',
+                            paddingBottom: '6px',
+                            cursor: 'pointer',
+                            color:
+                              order === 'asc' && orderBy === headCell.id
+                                ? theme.palette.mode === 'dark'
+                                  ? 'text.secondarydark'
+                                  : 'text.secondary'
+                                : theme.palette.mode === 'dark'
+                                  ? 'text.primarydark'
+                                  : 'text.primary'
+                          }}
+                        />
+                        <ArrowDropDownIcon
+                          active={orderBy === headCell.id}
+                          direction={orderBy === headCell.id ? order : 'desc'}
+                          onClick={createSortHandler(headCell.id)}
+                          sx={{
+                            width: '18px',
+                            paddingBottom: '6px',
+                            cursor: 'pointer',
+                            color:
+                              order === 'desc' && orderBy === headCell.id
+                                ? theme.palette.mode === 'dark'
+                                  ? 'text.secondarydark'
+                                  : 'text.secondary'
+                                : theme.palette.mode === 'dark'
+                                  ? 'text.primarydark'
+                                  : 'text.primary'
+                          }}
+                        />
+                      </Stack>
+                    </Stack>
+                  ) : (
+                    <Stack direction="row" sx={{paddingLeft: '60px'}}>
+                      <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                        {headCell.label}
+                      </Typography>
+                      <Stack direction="column" spacing={-2.4}>
+                        <ArrowDropUpIcon
+                          active={orderBy === headCell.id}
+                          direction={orderBy === headCell.id ? order : 'desc'}
+                          onClick={createSortHandler(headCell.id)}
+                          sx={{
+                            width: '18px',
+                            paddingBottom: '6px',
+                            cursor: 'pointer',
+                            color:
+                              order === 'asc' && orderBy === headCell.id
+                                ? theme.palette.mode === 'dark'
+                                  ? 'text.secondarydark'
+                                  : 'text.secondary'
+                                : theme.palette.mode === 'dark'
+                                  ? 'text.primarydark'
+                                  : 'text.primary'
+                          }}
+                        />
+                        <ArrowDropDownIcon
+                          active={orderBy === headCell.id}
+                          direction={orderBy === headCell.id ? order : 'desc'}
+                          onClick={createSortHandler(headCell.id)}
+                          sx={{
+                            width: '18px',
+                            paddingBottom: '6px',
+                            cursor: 'pointer',
+                            color:
+                              order === 'desc' && orderBy === headCell.id
+                                ? theme.palette.mode === 'dark'
+                                  ? 'text.secondarydark'
+                                  : 'text.secondary'
+                                : theme.palette.mode === 'dark'
+                                  ? 'text.primarydark'
+                                  : 'text.primary'
+                          }}
+                        />
+                      </Stack>
+                    </Stack>
+                  )}
               </>
             )}
           </TableCell>
@@ -193,10 +236,22 @@ OrderTableHead.propTypes = {
 };
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
+  if (orderBy === 'tradePair') {
+    const aValue = typeof a[orderBy] === 'string' ? a[orderBy].toLowerCase() : a[orderBy];
+    const bValue = typeof b[orderBy] === 'string' ? b[orderBy].toLowerCase() : b[orderBy];
+
+    // Use localeCompare for string comparison
+    return aValue.localeCompare(bValue);
+  }
+
+  // Numeric comparison for other columns
+  const aValue = typeof a[orderBy] === 'string' ? parseFloat(a[orderBy]) : a[orderBy];
+  const bValue = typeof b[orderBy] === 'string' ? parseFloat(b[orderBy]) : b[orderBy];
+
+  if (bValue < aValue) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (bValue > aValue) {
     return 1;
   }
   return 0;
@@ -204,7 +259,9 @@ function descendingComparator(a, b, orderBy) {
 
 // Function to get the comparator based on the sorting order and property
 function getComparator(order, orderBy) {
-  return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 // Function to perform stable sorting with the comparator
@@ -291,12 +348,12 @@ export default function MarketTable({ marketData, flag, searchQuery, listings, s
                 {filteredlist.map((row, index) => {
                   return (
                     <TableRow
-                      hover
+                      // hover
                       role="checkbox"
                       sx={{ border: 0, padding: '0', height: '64px' }}
                       // aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.platformId}
+                      key={index}
                     // selected={isItemSelected}
                     >
                       <TableCell sx={{ border: 'none', padding: '0' }} component="th" scope="row" align="left">
@@ -314,27 +371,27 @@ export default function MarketTable({ marketData, flag, searchQuery, listings, s
                         </Stack>
                       </TableCell>
 
-                      <TableCell sx={{ border: 'none', padding: '0' }} align="left">
+                      <TableCell sx={{ border: 'none', paddingLeft: '60px' }} align="left">
                         <Typography variant="body1" sx={{ color: getColor(row[`24hChg`], theme) }}>
                           {row.lastPrice}
                         </Typography>
                       </TableCell>
 
-                      <TableCell sx={{ border: 'none', padding: '0' }} align="left">
+                      <TableCell sx={{ border: 'none', paddingLeft: '60px' }} align="left">
                         <Typography variant="body1" sx={{ color: getColor(row[`24hChg`], theme) }}>
                           {row[`24hChg`]}%
                         </Typography>
                       </TableCell>
 
-                      <TableCell sx={{ border: 'none', padding: '0' }} align="left">
+                      <TableCell sx={{ border: 'none', paddingLeft: '60px' }} align="left">
                         <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                          {row[`24hVolume`]}
+                          {row[`24hBuyVol`]}
                         </Typography>
                       </TableCell>
 
-                      <TableCell sx={{ border: 'none', padding: '0' }} align="left">
+                      <TableCell sx={{ border: 'none', paddingLeft: '60px' }} align="left">
                         <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                          {row[`24hVolume`]}
+                          {row[`24hSellVol`]}
                         </Typography>
                       </TableCell>
 

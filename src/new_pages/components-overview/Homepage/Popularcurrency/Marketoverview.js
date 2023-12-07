@@ -1,12 +1,9 @@
 import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { Stack, Typography, useTheme } from '@mui/material';
+import {
+  Stack, Typography, useTheme, Table, TableBody,
+  TableCell, TableContainer, TableHead, TableRow
+}
+  from '@mui/material';
 
 function getColor(value, theme) {
   if (value > 0) {
@@ -29,17 +26,17 @@ export default function Marketoverview({ marketData }) {
         <TableHead >
           <TableRow >
             <TableCell variant='subtitle2' sx={{ border: 'none', paddingBottom: '4px', color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>Name</TableCell>
-            <TableCell variant='subtitle2' sx={{ border: 'none', paddingBottom: '4px', color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }} align="left">Market Price</TableCell>
-            <TableCell variant='subtitle2' sx={{ border: 'none', paddingBottom: '4px', color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }} align="left">24h change </TableCell>
-            <TableCell variant='subtitle2' sx={{ border: 'none', paddingBottom: '4px', color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }} align="left">24h Volume</TableCell>
-            <TableCell variant='subtitle2' sx={{ border: 'none', paddingBottom: '4px', color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }} align="right">Market Cap</TableCell>
+            <TableCell variant='subtitle2' sx={{ border: 'none', paddingBottom: '4px', paddingLeft: '110px', color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }} align="left">Market Price</TableCell>
+            <TableCell variant='subtitle2' sx={{ border: 'none', paddingBottom: '4px', paddingLeft: '110px', color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }} align="left">24h change </TableCell>
+            <TableCell variant='subtitle2' sx={{ border: 'none', paddingBottom: '4px', paddingLeft: '110px', color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }} align="left">Buy Volume</TableCell>
+            <TableCell variant='subtitle2' sx={{ border: 'none', paddingBottom: '4px', color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }} align="right">Sell Volume</TableCell>
           </TableRow>
         </TableHead>
         {filteredlist && filteredlist.length > 0 ? (
           <TableBody>
-            {filteredlist.slice(0,7).map((row) => (
+            {filteredlist.slice(1, 8).map((row, index) => (
               <TableRow
-                key={row.tradePair}
+                key={index}
                 sx={{ height: '56px' }}
               >
                 <TableCell sx={{ border: 'none' }} component="th" scope="row" align="left">
@@ -53,27 +50,27 @@ export default function Marketoverview({ marketData }) {
                   </Stack>
                 </TableCell>
 
-                <TableCell sx={{ border: 'none' }} align="left">
+                <TableCell sx={{ border: 'none', paddingLeft: '110px' }} align="left">
                   <Typography variant="body1" sx={{ color: getColor(row[`24hChg`], theme) }}>
                     {row.lastPrice}
                   </Typography>
                 </TableCell>
 
-                <TableCell sx={{ border: 'none', }} align="left">
+                <TableCell sx={{ border: 'none', paddingLeft: '110px' }} align="left">
                   <Typography variant="body1" sx={{ color: getColor(row[`24hChg`], theme) }}>
                     {row[`24hChg`]}%
                   </Typography>
                 </TableCell>
 
-                <TableCell sx={{ border: 'none' }} align="left" >
+                <TableCell sx={{ border: 'none', paddingLeft: '110px' }} align="left" >
                   <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                    {row[`24hVolume`]}
+                    {row[`24hBuyVol`]}
                   </Typography>
                 </TableCell>
 
                 <TableCell sx={{ border: 'none' }} align="right">
                   <Typography paddingRight='6px' variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                    {row[`24hVolume`]}
+                    {row[`24hSellVol`]}
                   </Typography>
                 </TableCell>
               </TableRow>

@@ -1,9 +1,13 @@
-import { Grid, Stack, Typography, useTheme } from '@mui/material';
 import React from 'react';
-import lineimg from '../../../../assets/images/gravitusimage/lineimg.svg';
-import features1img from '../../../../assets/images/gravitusimage/features1img.svg';
-import longline from '../../../../assets/images/gravitusimage/longline.svg';
-import lineimg1 from '../../../../assets/images/gravitusimage/lineimg1.svg';
+
+import { Card, Divider, Grid, Stack, Typography, useTheme } from '@mui/material';
+
+import blog1img from '../../../../assets/images/gravitusimage/blog1img.svg';
+import supporticon from '../../../../assets/images/gravitusimage/supporticon.svg';
+import support1img from '../../../../assets/images/gravitusimage/support1img.svg';
+import affiliate1img from '../../../../assets/images/gravitusimage/affiliate1img.svg';
+import trainning1img from '../../../../assets/images/gravitusimage/trainning1img.svg';
+import raiseticketicon from '../../../../assets/images/gravitusimage/raiseticketicon.svg';
 
 const Features = () => {
   const theme = useTheme();
@@ -11,108 +15,124 @@ const Features = () => {
   return (
     <Grid
       container
-      pt={12}
-      pb={12}
+      pt={20}
+      pb={20}
       sx={{
-        background:
-          theme.palette.mode === 'dark'
-            ? 'radial-gradient(circle,rgba(69, 69, 69, 1),rgba(2, 2, 2, 1))'
-            : 'radial-gradient(circle,rgba(255, 255, 255, 1),rgba(173, 231, 226, 1))',
-        height: 'auto'
+        background: theme.palette.mode === 'dark' ? '#181818' : 'text.white'
       }}
     >
       <Grid item md={12} lg={12} pl={{ md: 6, sm: 8, xs: 6, lg: 15 }} pr={{ md: 6, sm: 8, xs: 6, lg: 15 }}>
-        <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+        <Typography variant="mainhead" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
           Our Features
         </Typography>
       </Grid>
       <Grid
         item
-        pt={6}
+        pt={16}
         pl={{ md: 2, sm: 8, xs: 6, lg: 15 }}
         pr={{ md: 2, sm: 8, xs: 6, lg: 15 }}
+        lg={12}
         style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
       >
-        <Grid item md={3} lg={3} pt={25}>
-          <Stack spacing={1.5}>
-            <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
-              <img src={features1img} alt="features1img" width={40} />
-            </Stack>
+        <Grid item lg={9} xs={12} sm={12} md={6}  >
+          <Stack direction='row' spacing={2}>
+            <Card
+              sx={{
+                minWidth: 256,
+                background:
+                  'transparent',
+                boxShadow: 0
+              }}>
+              <Stack spacing={1.5} pt={4} pr={4} pl={4} pb={4}>
+                <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
+                  <img src={affiliate1img} alt="affiliate1img" width={80} />
+                </Stack>
 
-            <Typography
-              variant="title1"
-              sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary', textAlign: 'center' }}
-            >
-              AFFILIATE PROGRAM
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.priary', textAlign: 'center' }}
-            >
-              Get instant rewards in crypto-currencies for promoting our exchange. Reach us to know more.
-            </Typography>
+                <Typography
+                  variant="title1"
+                  sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary', textAlign: 'center' }}
+                >
+                  AFFILIATE PROGRAM
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.priary', textAlign: 'center' }}
+                >
+                  Get instant rewards in crypto-currencies for promoting our exchange. Reach us to know more.
+                </Typography>
 
-            <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
-              <img src={lineimg} alt="lineimg" />
-            </Stack>
+              </Stack>
+            </Card>
+            <Card
+              sx={{
+                minWidth: 256,
+                background:
+                  theme.palette.mode === 'dark'
+                    ? 'radial-gradient(circle,rgba(69, 69, 69, 1),rgba(2, 2, 2, 1))'
+                    : 'radial-gradient(circle,rgba(255, 255, 255, 1),rgba(173, 231, 226, 1))',
+                borderRadius: "6px",
+                boxShadow: "0px 1.503px 3.005px 0px rgba(0, 0, 0, 0.06), 0px 7px 11px 0px rgba(0, 0, 0, 0.09)"
+              }}>
+              <Stack spacing={1.5} pt={4} pr={4} pl={4} pb={4}>
+
+                <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
+                  <img src={trainning1img} alt="trainning1img" width={80} />
+                </Stack>
+
+                <Typography
+                  variant="title1"
+                  sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary', textAlign: 'center' }}
+                >
+                  TRAINING ON TRADING
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.priary', textAlign: 'center' }}
+                >
+                  Learn trading from our experts and get trading tips during training sessions.
+                </Typography>
+              </Stack>
+            </Card>
+
+            <Card
+              sx={{
+                minWidth: 256,
+                background:
+                  'transparent',
+                borderRadius: "6px",
+                boxShadow: 0,
+              }}>
+              <Stack spacing={1.5} pt={4} pr={4} pl={4} pb={4}>
+                <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
+                  <img src={blog1img} alt="blog1img" width={80} />
+                </Stack>
+
+                <Typography
+                  variant="title1"
+                  sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary', textAlign: 'center' }}
+                >
+                  CRYPTO BLOG
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.priary', textAlign: 'center' }}
+                >
+                  Receive regular updates on crypto and market news via social media platforms.
+                </Typography>
+
+              </Stack>
+            </Card>
           </Stack>
         </Grid>
 
-        <Grid item md={1} lg={1}></Grid>
-        <Grid item md={3} lg={3} pt={17}>
-          <Stack spacing={1.5}>
-            <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
-              <img src={features1img} alt="features1img" width={40} />
-            </Stack>
-
-            <Typography
-              variant="title1"
-              sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary', textAlign: 'center' }}
-            >
-              TRAINING ON TRADING
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.priary', textAlign: 'center' }}
-            >
-              Learn trading from our experts and get trading tips during training sessions.
-            </Typography>
-
-            <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
-              <img src={lineimg} alt="lineimg" />
-            </Stack>
-          </Stack>
+        <Grid item lg={1} pr={4} display={{ xs: 'none', md: 'none', lg: 'block' }}>
+          <Divider orientation="vertical" />
         </Grid>
-        <Grid item md={1} lg={1}></Grid>
-        <Grid item md={3} lg={3} pt={8}>
-          <Stack spacing={1.5}>
-            <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
-              <img src={features1img} alt="features1img" width={40} />
-            </Stack>
 
-            <Typography
-              variant="title1"
-              sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary', textAlign: 'center' }}
-            >
-              CRYPTO BLOG
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.priary', textAlign: 'center' }}
-            >
-              Receive regular updates on crypto and market news via social media platforms.
-            </Typography>
-
+        <Grid item md={12} lg={4} sm={12} >
+          <Stack spacing={1.5} pt={4} sx={{ alignItems: 'center', justifyContent: 'center' }}>
             <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
-              <img src={lineimg} alt="lineimg" />
-            </Stack>
-          </Stack>
-        </Grid>
-        <Grid item md={1} lg={1}></Grid>
-        <Grid item md={3} lg={3} pt={-12}>
-          <Stack spacing={1.5}>
-            <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
-              <img src={features1img} alt="features1img" width={40} />
+              <img src={support1img} alt="support1img" width={80} />
             </Stack>
 
             <Typography
@@ -121,21 +141,26 @@ const Features = () => {
             >
               CUSTOMER SUPPORT
             </Typography>
-            <Typography
-              variant="body1"
-              sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.priary', textAlign: 'center' }}
-            >
-              Get help in your preferred language. Our team can assist you in your native language.
-            </Typography>
-            <Stack sx={{ alignItems: 'center', justifyContent: 'center' }}>
-              <img src={lineimg} alt="lineimg" />
+
+            <Stack spacing={4} pt={2}>
+              <Stack direction="row" spacing={2} style={{ alignItems: 'center' }}>
+                <img src={supporticon} alt="supporticon" width={30} />
+                <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                  Native language Support.
+                </Typography>
+              </Stack>
+              <Stack direction="row" spacing={3} style={{ alignItems: 'center' }}>
+                <img src={raiseticketicon} alt="raiseticketicon" width={26} />
+                <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                  Raise a ticket (24/7).
+                </Typography>
+              </Stack>
             </Stack>
+
           </Stack>
         </Grid>
       </Grid>
-
-      <Grid>{/* <img src={longline} alt='longline' style={{ width: '100%', height: '100%' }} /> */}</Grid>
-    </Grid>
+    </Grid >
   );
 };
 

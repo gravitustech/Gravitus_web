@@ -1,5 +1,7 @@
-import { useTheme, Grid, Box, Stack, Table, TableBody, TableCell, TableContainer, 
-  TableHead, TableRow, Typography, Button } from '@mui/material';
+import {
+  useTheme, Grid, Box, Stack, Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Typography, Button
+} from '@mui/material';
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
@@ -85,13 +87,13 @@ function MyComponent({ id }) {
 
 const headCells = [
   {
-    id: 'Name',
+    id: 'tradePair',
     align: 'left',
     disablePadding: true,
     label: 'Pair'
   },
   {
-    id: 'MarketPrice',
+    id: 'lastPrice',
     align: 'left',
     disablePadding: true,
     label: 'Price'
@@ -194,15 +196,15 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
             </Typography>
             <Stack direction="column" spacing={-2.4}>
               <ArrowDropUpIcon
-                active={orderBy === '24hChanges'}
-                direction={orderBy === '24hChanges' ? order : 'desc'}
-                onClick={createSortHandler('24hChanges')}
+                active={orderBy === '24hChg'}
+                direction={orderBy === '24hChg' ? order : 'desc'}
+                onClick={createSortHandler('24hChg')}
                 sx={{
                   width: '18px',
                   paddingBottom: '6px',
                   cursor: 'pointer',
                   color:
-                    order === 'asc' && orderBy === '24hChanges'
+                    order === 'asc' && orderBy === '24hChg'
                       ? theme.palette.mode === 'dark'
                         ? 'text.secondarydark'
                         : 'text.secondary'
@@ -212,15 +214,15 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                 }}
               />
               <ArrowDropDownIcon
-                active={orderBy === '24hChanges'}
-                direction={orderBy === '24hChanges' ? order : 'desc'}
-                onClick={createSortHandler('24hChanges')}
+                active={orderBy === '24hChg'}
+                direction={orderBy === '24hChg' ? order : 'desc'}
+                onClick={createSortHandler('24hChg')}
                 sx={{
                   width: '18px',
                   paddingBottom: '6px',
                   cursor: 'pointer',
                   color:
-                    order === 'desc' && orderBy === '24hChanges'
+                    order === 'desc' && orderBy === '24hChg'
                       ? theme.palette.mode === 'dark'
                         ? 'text.secondarydark'
                         : 'text.secondary'
@@ -244,10 +246,22 @@ OrderTableHead.propTypes = {
 };
 
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
+  if (orderBy === 'tradePair') {
+    const aValue = typeof a[orderBy] === 'string' ? a[orderBy].toLowerCase() : a[orderBy];
+    const bValue = typeof b[orderBy] === 'string' ? b[orderBy].toLowerCase() : b[orderBy];
+
+    // Use localeCompare for string comparison
+    return aValue.localeCompare(bValue);
+  }
+
+  // Numeric comparison for other columns
+  const aValue = typeof a[orderBy] === 'string' ? parseFloat(a[orderBy]) : a[orderBy];
+  const bValue = typeof b[orderBy] === 'string' ? parseFloat(b[orderBy]) : b[orderBy];
+
+  if (bValue < aValue) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (bValue > aValue) {
     return 1;
   }
   return 0;
@@ -255,9 +269,10 @@ function descendingComparator(a, b, orderBy) {
 
 // Function to get the comparator based on the sorting order and property
 function getComparator(order, orderBy) {
-  return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
 }
-
 // Function to perform stable sorting with the comparator
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -279,19 +294,19 @@ export default function MarketTable({ flag, setPlatformId, handleClose, searchQu
 
   const [order, setOrder] = useState('asc');
   const [selected] = useState([]);
-  
+
   const isSelected = (Name) => {
     selected.indexOf(Name) !== -1
   };
 
   function useMarketOverview() {
     var postData = { "callfrom": 'markets' };
-  
-    const {data, error, isLoading} = useSWR([MarketOverview_URL(), postData], fetcherSystem, {
+
+    const { data, error, isLoading } = useSWR([MarketOverview_URL(), postData], fetcherSystem, {
       revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
     });
 
-    return {data, error, isLoading};
+    return { data, error, isLoading };
   }
 
   const { data, error } = useMarketOverview();
@@ -305,7 +320,7 @@ export default function MarketTable({ flag, setPlatformId, handleClose, searchQu
   const handleSelect = (id) => {
     handleClose();
     setPlatformId(id);
-    setConfig_ng('spotPair', {platformId : id});
+    setConfig_ng('spotPair', { platformId: id });
   };
 
   const filteredListings = (data && data.result && data.result.listings || [])
@@ -351,8 +366,8 @@ export default function MarketTable({ flag, setPlatformId, handleClose, searchQu
         <OrderTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
         {data ? (
           <TableBody>
-            {filteredListings.length === 0 ? (
-             <TableRow>
+            {filteredListings?.length === 0 ? (
+              <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
                   <Norecordfoundcomponents
                     description='No Results Found' />
@@ -370,7 +385,7 @@ export default function MarketTable({ flag, setPlatformId, handleClose, searchQu
                     sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer' }}
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.platformId}
+                    key={index}
                     selected={isItemSelected}
                     onClick={() => handleSelect(row.platformId)}
                   >

@@ -20,9 +20,10 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import {
   useTheme, Typography, Box, Stack, Link, Table, TableBody, TableCell,
-  TableContainer, TableHead, TableRow, Drawer, List, IconButton
+  TableContainer, TableHead, TableRow, Drawer, List, IconButton, TableSortLabel
 } from '@mui/material';
 
+import { Wallet_Fetch_ById, postDataWallet } from 'src/api_ng/wallet_ng';
 // ==============================|| MARKET TABLE - HEADER CELL ||============================== //
 
 const headCells = [
@@ -39,16 +40,10 @@ const headCells = [
     label: 'Available'
   },
   {
-    id: 'USDTvalue',
+    id: 'totalInUsd',
     align: 'left',
     disablePadding: true,
     label: 'USDT Value'
-  },
-  {
-    id: 'InOrder',
-    align: 'left',
-    disablePadding: false,
-    label: 'In Order'
   },
   {
     id: 'Actions',
@@ -61,32 +56,19 @@ const headCells = [
 // ==============================|| ACS/DCS TABLE - HEADER CELL ||============================== //
 
 function OrderTableHead({ order, orderBy, onRequestSort }) {
-  const [clickCounts, setClickCounts] = useState({});
   const theme = useTheme();
-  
-  const createSortHandler = (property) => () => {
-    const currentClickCount = clickCounts[property] || 0;
-    const nextClickCount = currentClickCount + 1;
 
-    if (nextClickCount === 3) {
-      // Reset order and color
-      onRequestSort(null, null);
-      setClickCounts({ [property]: 0 });
-    } else {
-      const isAsc = orderBy === property && order === 'asc';
-      const nextOrder = isAsc ? 'desc' : 'asc';
-      onRequestSort(property, nextOrder);
-      setClickCounts({ ...clickCounts, [property]: nextClickCount });
-    }
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
   };
 
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, index) => (
           <TableCell
             sx={{ border: 'none', paddingBottom: '0' }}
-            key={headCell.id}
+            key={index}
             align={headCell.align}
             // padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
@@ -106,10 +88,10 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                     {headCell.label}
                   </Typography>
 
-                  <Stack direction="column" spacing={-2.4}>
+                  {/* <Stack direction="column" spacing={-2.4}>
                     <ArrowDropUpIcon
-                      // active={orderBy === headCell.id}
-                      direction={orderBy === headCell.id ? order : 'desc'}
+                      active={orderBy === headCell.id}
+                      direction={orderBy === headCell.id ? order : 'asc'}
                       onClick={createSortHandler(headCell.id)}
                       sx={{
                         width: '18px',
@@ -126,8 +108,8 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                       }}
                     />
                     <ArrowDropDownIcon
-                      // active={orderBy === headCell.id}
-                      direction={orderBy === headCell.id ? order : 'desc'}
+                      active={orderBy === headCell.id}
+                      direction={orderBy === headCell.id ? order : 'asc'}
                       onClick={createSortHandler(headCell.id)}
                       sx={{
                         width: '18px',
@@ -143,7 +125,7 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                               : 'text.primary'
                       }}
                     />
-                  </Stack>
+                  </Stack> */}
                 </Stack>
               </>
             )}
@@ -158,12 +140,15 @@ OrderTableHead.propTypes = {
   order: PropTypes.string,
   orderBy: PropTypes.string
 };
-
 function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
+  // Numeric comparison for other columns
+  const aValue = typeof a[orderBy] === 'string' ? parseFloat(a[orderBy]) : a[orderBy];
+  const bValue = typeof b[orderBy] === 'string' ? parseFloat(b[orderBy]) : b[orderBy];
+
+  if (bValue < aValue) {
     return -1;
   }
-  if (b[orderBy] > a[orderBy]) {
+  if (bValue > aValue) {
     return 1;
   }
   return 0;
@@ -171,20 +156,22 @@ function descendingComparator(a, b, orderBy) {
 
 // Function to get the comparator based on the sorting order and property
 function getComparator(order, orderBy) {
-  return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 // Function to perform stable sorting with the comparator
 function stableSort(array, comparator) {
-  const stabilizedThis = array?.map((el, index) => [el, index]);
-  stabilizedThis?.sort((a, b) => {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) {
       return order;
     }
     return a[1] - b[1];
   });
-  return stabilizedThis?.map((el) => el[0]);
+  return stabilizedThis.map((el) => el[0]);
 }
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -201,15 +188,20 @@ export default function WalletTableContent({ walletList, setWalletId }) {
 
   const theme = useTheme();
   const navigate = useNavigate();
+  const [order, setOrder] = React.useState('desc');
+  const [orderBy, setOrderBy] = React.useState('totalInUsd');
 
-  const [orderBy, setOrderBy] = useState('defaultProperty'); // Replace 'defaultProperty' with the default sorting property
-  const [order, setOrder] = useState('asc');
-  
   const [searchQuery, setSearchQuery] = useState('');
   const [openDrawer, setopenDrawer] = useState(false);
   const [selected] = useState([]);
 
   const isSelected = (Coin) => selected.indexOf(Coin) !== -1;
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
 
   const filteredWalletList = stableSort(walletList, getComparator(order, orderBy))?.filter((row) =>
     row.listing.crypto.toLowerCase().includes(searchQuery.toLowerCase())
@@ -219,26 +211,48 @@ export default function WalletTableContent({ walletList, setWalletId }) {
     setSearchQuery('');
   };
 
-  const handleRequestSort = (property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+  const [selectedCoinInfo, setSelectedCoinInfo] = useState(null);
 
-  const toggleDrawer = () => {
+  const [statementData, setStatementdata] = useState(null);
+
+  const toggleDrawer = (coinInfo) => {
+    var postData = {
+      "walletId": coinInfo?.superWallet?.walletId
+    };
+
+    postDataWallet(Wallet_Fetch_ById(), postData).then(function (res) {
+      // console.log("res", res);
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            // console.log(res.error.name)
+          }
+          else {
+            // console.log('error')
+          }
+        }
+      } else {
+        // console.log('No error')
+        setStatementdata(res)
+      }
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
+    setStatementdata(coinInfo)
+    setSelectedCoinInfo(coinInfo);
     setopenDrawer(!openDrawer);
   };
 
   const handleCloseDrawer = () => {
     setopenDrawer(false);
   };
-
-  // const handleClick = (id) => {
-  //   setWalletId(id);
-  //   navigate('/history');
-  // };
-
-  console.log('Wallet List', walletList);
 
   return (
     <Box>
@@ -360,7 +374,6 @@ export default function WalletTableContent({ walletList, setWalletId }) {
 
                     <TableCell sx={{ border: 'none' }} align="left">
                       <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {/* <NumberFormat value={superWallet.mAvailable} displayType="text" thousandSeparator suffix={  listing.ticker}/> */}
                         {superWallet.mAvailable} {listing.ticker}
                       </Typography>
                     </TableCell>
@@ -371,17 +384,8 @@ export default function WalletTableContent({ walletList, setWalletId }) {
                       </Typography>
                     </TableCell>
 
-                    <TableCell sx={{ border: 'none' }} align="left">
-                      <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {superWallet.sOrders}
-                      </Typography>
-                    </TableCell>
-
                     <TableCell sx={{ border: 'none' }} align="right" spacing={3}>
                       <Stack direction="row" justifyContent="space-between">
-                        {/* <Link variant="body1" color="text.buy" component={RouterLink} to="/spot">
-                             Spot
-                          </Link> */}
                         <Link
                           variant="body1"
                           color="text.buy"
@@ -407,7 +411,7 @@ export default function WalletTableContent({ walletList, setWalletId }) {
                           variant="body1"
                           color="text.buy"
                           sx={{ cursor: 'pointer' }}
-                          onClick={toggleDrawer}
+                          onClick={() => toggleDrawer(row)}
                           state={{ walletId: listing.id }}
                         >
                           More
@@ -429,7 +433,7 @@ export default function WalletTableContent({ walletList, setWalletId }) {
             <CloseIcon />
           </IconButton>
           <List>
-            <MoreDrawerContent />
+            <MoreDrawerContent selectedCoinInfo={selectedCoinInfo} statementData={statementData} />
           </List>
         </Box>
       </Drawer>

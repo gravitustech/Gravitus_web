@@ -37,7 +37,6 @@ const headCells = [
     label: 'Date'
   }
 ];
-
 // ==============================|| ORDER TABLE - HEADER ||============================== //
 
 function OrderTableHead() {
@@ -69,7 +68,7 @@ OrderTableHead.propTypes = {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function InternalTab({ internalData }) {
+export default function ScheduleTab({ scheduleData }) {
   const theme = useTheme();
   return (
     <Box
@@ -102,7 +101,7 @@ export default function InternalTab({ internalData }) {
         >
           <OrderTableHead />
           <TableBody>
-            {internalData?.length === 0 ? (
+            {scheduleData?.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
                   <Norecordfoundcomponents
@@ -110,7 +109,7 @@ export default function InternalTab({ internalData }) {
                 </TableCell>
               </TableRow>
             ) : (
-              internalData?.map((row, index) => {
+              scheduleData?.map((row, index) => {
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <TableRow
@@ -157,7 +156,6 @@ export default function InternalTab({ internalData }) {
                 );
               })
             )}
-
           </TableBody>
         </Table>
 

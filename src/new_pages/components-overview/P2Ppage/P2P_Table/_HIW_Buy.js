@@ -27,18 +27,18 @@ const HIW_Buy = () => {
           <Stack pt={11} direction="column" alignItems="flex-start" spacing={8} pr={2}>
 
             <HowItWorks_Comp
-              img={getcrypto}
+              number='01.'
               title='Place an Order'
               description='Once you place a P2P order, the crypto asset will be escrowed by Gravitus P2P.'
             />
             <HowItWorks_Comp
-              img={sellergif}
+              number='02.'
               title='Pay the Seller'
               description='Send money to the seller via the suggested payment methods. Complete the fiat transaction and click "Transferred, notify seller" on Gravitus P2P.'
             />
 
             <HowItWorks_Comp
-              img={getcrypto}
+              number='03.'
               title='Get the Crypto'
               description='Once the seller confirms receipt of the money, the escrowed crypto will be released to you.'
             />

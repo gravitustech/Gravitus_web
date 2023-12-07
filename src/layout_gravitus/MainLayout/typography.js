@@ -91,7 +91,7 @@ const Typography = (fontFamily) => ({
   },
   head3: {
     fontSize: pxToRem(42),
-    ...responsiveFontSizes({xs:14, sm: 36, md: 36, lg: 42 }),
+    ...responsiveFontSizes({ xs: 14, sm: 36, md: 36, lg: 42 }),
     // fontSize: 42,
     fontWeight: 700
   },
@@ -218,7 +218,10 @@ const Typography = (fontFamily) => ({
     fontSize: '16px',
     fontWeight: 600,
   },
-
+  mainhead: {
+    fontSize: '32px',
+    fontWeight: 700
+  }
 });
 
 export default Typography;

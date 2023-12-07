@@ -36,11 +36,11 @@ const MarketTrades = ({ marketTradesData }) => {
                 }
               }}
             >
-              {headCells.map((headCell) => (
+              {headCells.map((headCell, index) => (
                 <TableCell
                   padding='none'
                   sx={{ border: 'none', padding: '2px', paddingBottom: '4px', paddingTop: '0' }}
-                  key={headCell.id}
+                  key={index}
                   align={headCell.align}
                 >
                   <Typography variant="subtitle3" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
@@ -50,7 +50,7 @@ const MarketTrades = ({ marketTradesData }) => {
               ))}
             </TableRow>
           </TableHead>
-          {marketTradesData.slice(0, 17).map((row) => {
+          {marketTradesData.slice(0, 17).map((row, index) => {
             return (
               <TableRow
                 sx={{
@@ -59,7 +59,7 @@ const MarketTrades = ({ marketTradesData }) => {
                   height: '8px'
                 }}
                 tabIndex={-1}
-                key={row.timeStamp}
+                key={index}
               >
                 <TableCell sx={{ border: 'none', padding: '2px', paddingBottom: '3px' }} align="left">
                   <Typography variant="subtitle3" sx={{ color: row.signal === "--" ? theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' : (row.signal === "HIGH" ? 'text.buy' : 'text.sell') }}
