@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 import {
   Grid, Typography, Stack, OutlinedInput, FormHelperText, Button,
-  TextField, useTheme, Box, Card, IconButton, styled, Tooltip, Dialog, Autocomplete, Modal
+  TextField, useTheme, Box, Card, IconButton, styled, Tooltip, Dialog, Autocomplete, Modal, CircularProgress
 } from '@mui/material';
 
 import { DeleteForever } from '@mui/icons-material';
@@ -19,6 +19,7 @@ import { Field, Formik } from 'formik';
 
 import { postINRDepositData } from '../../../../api/wallet';
 import ImageCropper from 'src/components/_cropper';
+import { Post_Rs_Deposit, formDataWallet } from 'src/api_ng/wallet_ng';
 
 // Modal View Style - Appeal
 const modalStyle = {
@@ -53,6 +54,9 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
   const [modalOpen, setModalOpen] = React.useState(false); // Show modal
   const [open, setOpen] = useState(false); //Dialogbox open
 
+  const [isLoading, setIsLoading] = useState(false); // Show Loader
+
+  const formikMP = useRef();
   // To be delete later
   let formData = new FormData();
 
@@ -83,7 +87,7 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
       reader.readAsDataURL(event.target.files[0]);
     }
   };
- 
+
   const Accounts = [{
     Beneficiary: depositFrom?.accountName,
     BankName: depositFrom?.bankName,
@@ -91,7 +95,7 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
     IFSCCode: depositFrom?.IFSCCode,
     payMode: depositFrom?.payMode,
   }];
- 
+
 
   const handlePrev = () => {
     setStep(2);
@@ -100,48 +104,114 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
   const handleClose = () => {
     setOpen(false);
   };
+  const [depositReq, setDepositReq] = useState({
+    utrId: '',
+    bankAccount: null,
+    submit: null,
+  });
 
-  const handleConfirm = async () => {
-    console.log({ formikValues });
-
-    formData.append(
-      'updateInfo',
-      JSON.stringify({
-        walletId: walletId,
-        toAddress: depositTo.accountNo,
-        amount: formikValues.amount,
-        mode: formikValues.payMode,
-        fromAccount: depositFrom.accountNo,
-        receiptNo: formikValues.utrId
-      })
-    );
-
-    formData.append('fileName', croppedImage.name);
-    formData.append('fileI', croppedImage);
-    try {
-      const { data } = await postINRDepositData(formData);
-      if (Object.keys(data.result).length) {
-        console.log({ data });
-        setOtpState(true);
-      } else {
-        setSnackbarMessage({ msg: 'Deposit Request failed', success: false });
-        setSnackbarOpen(true);
-      }
-    } catch (e) {
-      setSnackbarMessage({ msg: e.message, success: false });
-      setSnackbarOpen(true);
-      console.log(e.message);
-    }
+  const depositRequest = () => {
     setOpen(false);
+    if (croppedImage != undefined) {
+      var postData = {
+        updateInfo: {
+          mode: formikValues.payMode,
+          amount: formikValues.depositAmount,
+          fromAccount: depositFrom.accountNo,
+          toAddress: depositTo.accountNo,
+          receiptNo: depositReq.utrId,
+          walletId: walletId,
+        },
+        fileName: 'dScreenshot',
+        fileI: croppedImage
+      };
+      console.log('postData', postData)
+      setIsLoading(true);
+      formDataWallet(Post_Rs_Deposit(), postData).then(function (res) {
+        setIsLoading(false);
+
+        if (res.error !== 'ok') {
+          if (res.error.name == "Missing Authorization") {
+            // Logout User
+          }
+          else if (res.error.name == "Invalid Authorization") {
+            // Logout User
+          }
+          else {
+            if (res.error.name != undefined) {
+              setSnackbarMessage({ msg: res.error.name, success: false });
+              setSnackbarOpen(true);
+            }
+            else {
+              setSnackbarMessage({ msg: res.error, success: false });
+              setSnackbarOpen(true);
+              console.log('res.error', res.error)
+            }
+          }
+        } else {
+          setSnackbarMessage({ msg: 'Deposit request sent', success: false });
+          setSnackbarOpen(true);
+
+          setDepositReq(undefined);
+          setImageToCrop(undefined);
+          setCroppedImage(undefined);
+
+          // mutate(P2P_OrderDetails_URL);
+          formikMP.current.resetForm({
+            values: {
+              utrId: '',
+              bankAccount: null,
+              submit: null
+            }
+          });
+
+        }
+      }, function (err) {
+        console.log(err);
+        // Logout User
+      });
+    }
+    else {
+      setSnackbarMessage({ msg: 'Upload Screenshot', success: false });
+      setSnackbarOpen(true);
+    }
   };
+
+  // const handleConfirm = async () => {
+  //   console.log({ formikValues });
+
+  //   formData.append(
+  //     'updateInfo',
+  //     JSON.stringify({
+  //       walletId: walletId,
+  //       toAddress: depositTo.accountNo,
+  //       amount: formikValues.amount,
+  //       mode: formikValues.payMode,
+  //       fromAccount: depositFrom.accountNo,
+  //       receiptNo: formikValues.utrId
+  //     })
+  //   );
+
+  //   formData.append('fileName', croppedImage.name);
+  //   formData.append('fileI', croppedImage);
+  //   try {
+  //     const { data } = await postINRDepositData(formData);
+  //     if (Object.keys(data.result).length) {
+  //       console.log({ data });
+  //     } else {
+  //       setSnackbarMessage({ msg: 'Deposit Request failed', success: false });
+  //       setSnackbarOpen(true);
+  //     }
+  //   } catch (e) {
+  //     setSnackbarMessage({ msg: e.message, success: false });
+  //     setSnackbarOpen(true);
+  //     console.log(e.message);
+  //   }
+  //   setOpen(false);
+  // };
 
   return (
     <>
-      {/* <Grid pl={15} pt={2}>
-        <Stack direction='row'>
-          <ArrowBackIosNewIcon pt={10} sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} />
-        </Stack>
-      </Grid> */}
       <CardInr>
         <Box display="flex" alignItems="center">
           <ArrowBackIosNewIcon
@@ -165,29 +235,28 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
         </Typography>
         <Stack pt={2}>
           <Formik
+            innerRef={formikMP}
             initialValues={{
               utrId: '',
               bankAccount: null,
-              file: null,
               submit: null
             }}
             validationSchema={Yup.object().shape({
               bankAccount: Yup.object().nullable().required('Please select your Bank Account*'),
               utrId: Yup.string().max(255).required('UTR Number is required*'),
-              file: Yup.mixed()
-                .required('Upload payment screenshot*')
-                .test('fileType', 'Unsupported file type', (value) => {
-                  if (value) {
-                    return ['image/jpeg', 'image/png'].includes(value.type);
-                  }
-                  return true;
-                }),
+              // file: Yup.mixed()
+              //   .required('Upload payment screenshot*')
+              //   .test('fileType', 'Unsupported file type', (value) => {
+              //     if (value) {
+              //       return ['image/jpeg', 'image/png'].includes(value.type);
+              //     }
+              //     return true;
+              //   }),
             })}
             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-              // setFormikValues()
-              setOpen(true);
-              setFormikValues({ ...formikValues, utrId: values.utrId, fileI: values.file, });
               try {
+                setDepositReq(values);
+                setOpen(true);
                 setStatus({ success: false });
                 setSubmitting(false);
               } catch (err) {
@@ -395,7 +464,7 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
                       )} */}
                     </Grid>
                   </Grid>
-                  
+
                   <Grid item xs={12} pt={3}>
                     <AnimateButton>
                       <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
@@ -412,7 +481,7 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
                     <Typography
                       variant="h1"
                       sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                      onClick={handleConfirm}
+
                     >
                       Confirm ?
                     </Typography>
@@ -424,8 +493,8 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
                       <Button variant="contained5" onClick={handleClose}>
                         Cancel
                       </Button>
-                      <Button variant="contained4" onClick={handleConfirm}>
-                        Confirm
+                      <Button variant="contained4" onClick={depositRequest}>
+                        {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Confirm'}
                       </Button>
                     </Stack>
                   </Stack>

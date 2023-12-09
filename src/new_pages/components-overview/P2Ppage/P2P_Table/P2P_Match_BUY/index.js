@@ -92,7 +92,7 @@ const headCells = [
 // ==============================|| ORDER TABLE - HEADER ||============================== //
 
 function OrderTableBody(props) {
-  const { isAuthorised, row, pairInfo, setSnackbarOpen, setSnackbarMessage } = props;
+  const { isAuthorised, row, pairInfo, setSnackbarOpen, setSnackbarMessage, index } = props;
   const [openDialog, setOpenDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -252,7 +252,7 @@ function OrderTableBody(props) {
       {!open && (
         <TableRow
           // hover 
-          sx={{ '&:last-child td, &:last-child th': { border: 0 } }} tabIndex={-1} key={row.Advertiser}>
+          sx={{ '&:last-child td, &:last-child th': { border: 0 } }} tabIndex={-1} key={index}>
           <TableCell sx={{ border: 'none' }} component="th" scope="row" align="left">
             <Stack
               direction="row"
@@ -645,20 +645,23 @@ export default function P2pbuyordertab({ isAuthorised, pairInfo, orderBook, pric
   const [openCollapse, setOpenCollapse] = React.useState(false);
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(8);
 
   const orderBookbuy = orderBook?.BUY
-  const orderbookpagenation = rowsPerPage > 0
-    ? orderBookbuy && orderBookbuy.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    : orderBookbuy;
 
-  const filteredOrderbook = orderbookpagenation?.filter((row) => {
+  const p2pBuyFilter = orderBookbuy?.filter((row) => {
     return (
       (!priceSearchQuery || row.price.toString().includes(priceSearchQuery)) &&
       (!quantitySearchQuery || row.quantity.toString().includes(quantitySearchQuery)) &&
       (!useridSearchQuery || row.userId.toString().includes(useridSearchQuery))
     );
   });
+
+  const orderbookpagenation = rowsPerPage > 0
+    ? p2pBuyFilter && p2pBuyFilter.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    : p2pBuyFilter;
+
+  const filteredOrderbook = orderbookpagenation;
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 1));
@@ -714,10 +717,10 @@ export default function P2pbuyordertab({ isAuthorised, pairInfo, orderBook, pric
         >
           <TableHead>
             <TableRow>
-              {headCells.map((headCell) => (
+              {headCells.map((headCell, index) => (
                 <TableCell
                   sx={{ border: 'none' }}
-                  key={headCell.id}
+                  key={index}
                   align={headCell.align}
                   padding={headCell.disablePadding ? 'none' : 'default'}
                 >
@@ -758,7 +761,7 @@ export default function P2pbuyordertab({ isAuthorised, pairInfo, orderBook, pric
           </>
         ) : (
           <Pagination
-            count={Math.ceil(orderBookbuy?.length / rowsPerPage)}
+            count={Math.ceil(p2pBuyFilter?.length / rowsPerPage)}
             page={page + 1}
             onChange={handleChangePage}
             shape="rounded"

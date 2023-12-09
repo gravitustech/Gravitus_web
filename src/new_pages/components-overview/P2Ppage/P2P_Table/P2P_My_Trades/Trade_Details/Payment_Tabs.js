@@ -34,10 +34,10 @@ const UpiImpsTabs = ({ orderDetails }) => {
     <TabContext value={value}>
       <Stack direction='column' >
         <TabList onChange={handleChange} indicatorColor="none" textColor='inherit'>
-          {tabData.map((tab) => (
+          {tabData.map((tab, index) => (
             <Tab
               disableRipple
-              key={tab.value}
+              key={index}
               sx={{
                 fontSize: value === tab.value ? '16px' : '16px',
                 fontWeight: value === tab.value ? '700' : '400',
@@ -67,8 +67,8 @@ const UpiImpsTabs = ({ orderDetails }) => {
             />
           ))}
         </TabList>
-        {tabData.map((tab) => (
-          <TabPanel key={tab.value} value={tab.value} sx={{ width: '100%', pt: 0, pl: 4 }}>
+        {tabData.map((tab, index) => (
+          <TabPanel key={index} value={tab.value} sx={{ width: '100%', pt: 0, pl: 4 }}>
             {tab.screen}
           </TabPanel>
         ))}

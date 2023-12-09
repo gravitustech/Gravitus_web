@@ -16,10 +16,10 @@ const BuySellGrid = ({ isAuthorised, platformId, pairData, priceData, selectedOr
 
   useEffect(() => {
     if(selectedOrder != undefined) {
-      if(selectedOrder.side == '1') {
+      if(selectedOrder.side == '2') {
         setOrderSide('1');
       }
-      else if(selectedOrder.side == '2') {
+      else if(selectedOrder.side == '1') {
         setOrderSide('2');
       }
     }

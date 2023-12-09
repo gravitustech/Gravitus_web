@@ -60,10 +60,10 @@ function OrderTableHead() {
   return (
     <TableHead>
       <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#000' : '#fff' }}>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell,index) => (
           <TableCell
             sx={{ border: 'none' }}
-            key={headCell.id}
+            key={index}
             align={headCell.align}
             padding={headCell.disablePadding ? 'none' : 'default'}
           >
@@ -124,11 +124,9 @@ export default function HistroyTab({ orders, pairInfo }) {
             ) : (
               orders?.history?.map((item, index) => (
                 <TableRow
-                  //  hover
-                  role="checkbox"
                   sx={{ '&:last-child td, &:last-child th': { border: 0 }, height: '64px', }}
                   tabIndex={-1}
-                  key={item.side}>
+                  key={index}>
                   <TableCell sx={{ border: 'none', paddingTop: '0' }} component="th" scope="row" align="left">
                     <Stack direction="row" alignItems="center" spacing={1}>
                       <Typography variant='body1' sx={{ color: item.side === 'BUY' ? 'text.buy' : 'text.sell' }}>
@@ -157,7 +155,7 @@ export default function HistroyTab({ orders, pairInfo }) {
 
                   <TableCell sx={{ border: 'none', paddingTop: '0', paddingRight: '0px' }} align="left">
                     <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                      {item.tds.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 3 })}
+                      {item.tds === 0 ? '--' : item.tds.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 3 })}
                     </Typography>
                   </TableCell>
 
@@ -172,10 +170,11 @@ export default function HistroyTab({ orders, pairInfo }) {
                       </Typography>
                       <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                         {/* {new Date(Number(item.time)).toLocaleString()} */}
-                        {new Date(Number(item.time)).toLocaleString('en-US', {
+                        {new Date(Number(item.time)).toLocaleString('en-IN', {
                           timeZone: 'Asia/Kolkata',
-                          day: 'numeric',
-                          month: 'short',
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
                           hour: '2-digit',
                           minute: '2-digit',
                           hour12: true

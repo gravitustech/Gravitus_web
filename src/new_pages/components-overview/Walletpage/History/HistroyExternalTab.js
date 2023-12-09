@@ -84,10 +84,10 @@ function OrderTableHead() {
   return (
     <TableHead>
       <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#000' : '#fff' }}>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, index) => (
           <TableCell
             sx={{ border: 'none' }}
-            key={headCell.id}
+            key={index}
             align={headCell.align}
             padding={headCell.disablePadding ? 'none' : 'default'}
           >
@@ -179,10 +179,9 @@ export default function HistroyExternalTab({ tableData }) {
                 return (
                   <TableRow
                     hover
-                    role="checkbox"
                     sx={{ '&:last-child td, &:last-child th': { border: 0 }, height: '64px' }}
                     tabIndex={-1}
-                    key={row.Amount}>
+                    key={index}>
                     <TableCell sx={{ border: 'none' }} component="th" id={labelId} scope="row" align="left">
                       <Stack direction="row" alignItems="center" spacing={1}>
                         <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
@@ -226,7 +225,15 @@ export default function HistroyExternalTab({ tableData }) {
 
                     <TableCell sx={{ border: 'none', }} align="right">
                       <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {new Date(Number(timeStamp)).toLocaleString()}
+                        {new Date(Number(timeStamp)).toLocaleString('en-IN', {
+                          timeZone: 'Asia/Kolkata',
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: true
+                        })}
                       </Typography>
                     </TableCell>
                   </TableRow>

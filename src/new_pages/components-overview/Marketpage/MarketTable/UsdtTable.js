@@ -126,10 +126,10 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, index) => (
           <TableCell
             sx={{ border: 'none', padding: '0px', paddingBottom: '7px', paddingTop: '4px' }}
-            key={headCell.id}
+            key={index}
             align={headCell.align}
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
@@ -162,8 +162,8 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                               ? 'text.secondarydark'
                               : 'text.secondary'
                             : theme.palette.mode === 'dark'
-                            ? 'text.primarydark'
-                            : 'text.primary'
+                              ? 'text.primarydark'
+                              : 'text.primary'
                       }}
                     />
                     <ArrowDropDownIcon
@@ -180,8 +180,8 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                               ? 'text.secondarydark'
                               : 'text.secondary'
                             : theme.palette.mode === 'dark'
-                            ? 'text.primarydark'
-                            : 'text.primary'
+                              ? 'text.primarydark'
+                              : 'text.primary'
                       }}
                     />
                   </Stack>
@@ -262,13 +262,10 @@ export default function USDTTable({ marketData }) {
             {stableSort(rows, getComparator(order, orderBy)).map((row, index) => {
               return (
                 <TableRow
-                  // hover
                   role="checkbox"
                   sx={{ border: 0, padding: '0', height: '54px' }}
-                  // aria-checked={isItemSelected}
                   tabIndex={-1}
-                  key={row.Name}
-                  // selected={isItemSelected}
+                  key={index}
                 >
                   <TableCell sx={{ border: 'none', padding: '0' }} component="th" scope="row" align="left">
                     <Stack direction="row" alignItems="center" spacing={0.5}>

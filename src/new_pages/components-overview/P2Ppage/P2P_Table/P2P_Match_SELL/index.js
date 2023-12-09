@@ -87,7 +87,7 @@ const headCells = [
 // ==============================|| ORDER TABLE - HEADER ||============================== //
 
 function OrderTableBody(props) {
-  const { isAuthorised, row, pairInfo, walletInfo, pfStatus, setSnackbarOpen, setSnackbarMessage } = props;
+  const { isAuthorised, row, pairInfo, walletInfo, pfStatus, setSnackbarOpen, setSnackbarMessage, index } = props;
   const [openDialog, setOpenDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -252,7 +252,7 @@ function OrderTableBody(props) {
       {!open && (
         <TableRow
           // hover 
-          sx={{ '&:last-child td, &:last-child th': { border: 0 } }} tabIndex={-1} key={row.Advertiser}>
+          sx={{ '&:last-child td, &:last-child th': { border: 0 } }} tabIndex={-1} key={index}>
           <TableCell sx={{ border: 'none' }} component="th" scope="row" align="left">
             <Stack
               direction="row"
@@ -660,7 +660,7 @@ export default function P2psellordertab({ isAuthorised, pairInfo, orderBook, wal
   const [openCollapse, setOpenCollapse] = React.useState(false);
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(8);
 
   const handleCollapseToggle = (isOpen) => {
     setOpenCollapse(isOpen);
@@ -694,11 +694,8 @@ export default function P2psellordertab({ isAuthorised, pairInfo, orderBook, wal
   };
 
   const orderBooksell = orderBook?.SELL
-  const orderbookpagenation = rowsPerPage > 0
-    ? orderBooksell && orderBooksell.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    : orderBooksell;
 
-  const filteredOrderbook = orderbookpagenation.filter((row) => {
+  const p2pSellFilter = orderBooksell?.filter((row) => {
     return (
       (!priceSearchQuery || row.price.toString().includes(priceSearchQuery)) &&
       (!quantitySearchQuery || row.quantity.toString().includes(quantitySearchQuery)) &&
@@ -706,7 +703,12 @@ export default function P2psellordertab({ isAuthorised, pairInfo, orderBook, wal
     );
   });
 
-  console.log(orderBooksell)
+  const orderbookpagenation = rowsPerPage > 0
+    ? p2pSellFilter && p2pSellFilter.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    : p2pSellFilter;
+
+  const filteredOrderbook = orderbookpagenation;
+
   return (
     <Box>
       <TableContainer variant="tablecontainer">
@@ -727,10 +729,10 @@ export default function P2psellordertab({ isAuthorised, pairInfo, orderBook, wal
         >
           <TableHead>
             <TableRow>
-              {headCells.map((headCell) => (
+              {headCells.map((headCell, index) => (
                 <TableCell
                   sx={{ border: 'none' }}
-                  key={headCell.id}
+                  key={index}
                   align={headCell.align}
                   padding={headCell.disablePadding ? 'none' : 'default'}
                 >
@@ -773,7 +775,7 @@ export default function P2psellordertab({ isAuthorised, pairInfo, orderBook, wal
           </>
         ) : (
           <Pagination
-            count={Math.ceil(orderBooksell?.length / rowsPerPage)}
+            count={Math.ceil(p2pSellFilter?.length / rowsPerPage)}
             page={page + 1}
             onChange={handleChangePage}
             shape="rounded"

@@ -114,10 +114,10 @@ function OrderTableHead({ order, orderBy, onRequestSort, }) {
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, index) => (
           <TableCell
             sx={{ border: 'none', paddingTop: '0', paddingBottom: '0' }}
-            key={headCell.id}
+            key={index}
             align={headCell.align}
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
@@ -198,13 +198,13 @@ function stableSort(array, comparator) {
 
 export default function INRTable() {
   const theme = useTheme();
-  
+
   const [orderBy, setOrderBy] = useState('defaultProperty');
   const [order, setOrder] = useState('asc');
 
   const isSelected = (Name) => selected.indexOf(Name) !== -1;
   const [selected] = useState([]);
-  
+
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -246,11 +246,10 @@ export default function INRTable() {
               <TableRow
                 padding='0'
                 hover
-                role="checkbox"
                 sx={{ cursor: 'pointer' }}
                 aria-checked={isItemSelected}
                 tabIndex={-1}
-                key={row.Name}
+                key={index}
                 selected={isItemSelected}
               >
                 <TableCell sx={{ border: 'none' }} component="th" id={labelId} scope="row" align="left">

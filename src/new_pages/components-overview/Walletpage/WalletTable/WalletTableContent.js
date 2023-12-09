@@ -20,7 +20,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import {
   useTheme, Typography, Box, Stack, Link, Table, TableBody, TableCell,
-  TableContainer, TableHead, TableRow, Drawer, List, IconButton, TableSortLabel
+  TableContainer, TableHead, TableRow, Drawer, List, IconButton, TableSortLabel, ButtonBase
 } from '@mui/material';
 
 import { Wallet_Fetch_ById, postDataWallet } from 'src/api_ng/wallet_ng';
@@ -254,6 +254,15 @@ export default function WalletTableContent({ walletList, setWalletId }) {
     setopenDrawer(false);
   };
 
+  const [refreshCoin, setRefreshCoin] = useState('');
+
+  const handleRefreshClick = (row) => {
+    // Add your refresh logic here
+    setRefreshCoin('Refresh clicked!');
+    console.log('Refresh clicked!');
+    console.log("row", row)
+  };
+
   return (
     <Box>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -343,7 +352,7 @@ export default function WalletTableContent({ walletList, setWalletId }) {
 
                 return (
                   <TableRow
-                    hover
+                    // hover
                     role="checkbox"
                     sx={{ border: 0, padding: '0', height: '64px' }}
                     // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -416,7 +425,17 @@ export default function WalletTableContent({ walletList, setWalletId }) {
                         >
                           More
                         </Link>
-                        <img src={Refresh} alt="Refresh" width={15} />
+                        <ButtonBase
+                          disableRipple
+                          onClick={() => handleRefreshClick(row)}
+                        >
+                          <img
+                            src={Refresh}
+                            alt="Refresh"
+                            width={15}
+                            style={{ cursor: 'pointer' }}
+                          />
+                        </ButtonBase>
                       </Stack>
                     </TableCell>
                   </TableRow>
@@ -428,8 +447,8 @@ export default function WalletTableContent({ walletList, setWalletId }) {
       </TableContainer>
 
       <Drawer open={openDrawer} onClose={handleCloseDrawer} anchor="right">
-        <Box sx={{ width: 480 }}>
-          <IconButton sx={{ marginLeft: '420px' }} onClick={handleCloseDrawer}>
+        <Box sx={{ width: 520 }}>
+          <IconButton sx={{ marginLeft: '450px' }} onClick={handleCloseDrawer}>
             <CloseIcon />
           </IconButton>
           <List>

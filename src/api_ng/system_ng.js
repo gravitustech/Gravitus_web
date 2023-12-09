@@ -1,13 +1,13 @@
 
-import { getConfig_sp} from '../utils_ng/localStorage_ng';
+import { getConfig_sp } from '../utils_ng/localStorage_ng';
 import { axiosSystemInstance } from './config_ng.js';
 
 export async function fetcherSystem([url, postData]) {
   const axiosClient = axiosSystemInstance();  // AXIOS Instance Created
-  
+
   var superData = {
-    "accountType" : "GRAVITUS",
-    "postData"    : postData
+    "accountType": "GRAVITUS",
+    "postData": postData
   };
 
   try {
@@ -45,18 +45,18 @@ export async function formDataSystem(url, postData) {
     const axiosClient = axiosSystemInstance();
 
     var superCredits = getConfig_sp();
-    if(superCredits.token != 'none') {
-      
-      axiosClient.defaults.headers = { 
-        'Accept'       : 'application/json', 
-        'Content-Type' : 'multipart/form-data',
+    if (superCredits.token != 'none') {
+
+      axiosClient.defaults.headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
         'Authorization': superCredits.token
       };
     }
     else {
-      axiosClient.defaults.headers = { 
-        'Accept'       : 'application/json', 
-        'Content-Type' : 'multipart/form-data'
+      axiosClient.defaults.headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'multipart/form-data'
       };
     }
 
@@ -91,6 +91,9 @@ export const MarketOverview_URL = () => {
   return 'api/generic/dashboard/markets';
 };
 
+export const Security_URL = () => {
+  return 'api/activity/security/secFeatures'
+}
 // Identity
 
 // Paymethods

@@ -23,22 +23,18 @@ const OrderBookTab = ({ orderBookData, setSelectedOrder, priceData, isAuthorised
               <TableCell
                 padding='none'
                 sx={{ border: 'none', padding: '2px', paddingBottom: '7px', paddingTop: '0px' }}
-                key='Price'
                 align='left'
               >
                 <Typography variant="subtitle3" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                  {/* Quantity(USDT) */}
                   Price({priceData?.sellPair})
                 </Typography>
               </TableCell>
               <TableCell
                 padding='none'
                 sx={{ border: 'none', padding: '2px', paddingBottom: '7px', paddingTop: '0px' }}
-                key='Quantity'
                 align='right'
               >
                 <Typography variant="subtitle3" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                  {/* Quantity(EPX) */}
                   Quantity({priceData?.buyPair})
                 </Typography>
               </TableCell>

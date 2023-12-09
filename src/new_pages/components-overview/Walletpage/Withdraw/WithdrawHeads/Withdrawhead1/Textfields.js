@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import {
   Grid, OutlinedInput, Stack, Typography, useTheme, FormHelperText,
@@ -99,12 +99,18 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
         setSnackbarOpen(true);
 
         if (!isResendMOTP && action === 'sendMOTP') {
-          setIsResendMOTP(true);
-          setResendMOTP('RESEND OTP');
+          if (!isResendMOTP) {
+            setIsResendMOTP(true);
+            setResendMOTP('RESEND OTP');
+          }
+          setColor('grey');
         }
         if (!isResendPOTP && action === 'sendPOTP') {
-          setIsResendPOTP(true);
-          setResendPOTP('RESEND OTP');
+          if (!isResendPOTP) {
+            setIsResendPOTP(true);
+            setResendPOTP('RESEND OTP');
+          }
+          setColor('grey');
         }
       } else {
         setSnackbarMessage({ msg: 'OTP Request failed', success: false });
@@ -115,6 +121,32 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
       setSnackbarOpen(true);
     }
   };
+
+  useEffect(() => {
+    let timeoutId;
+    if (isResendMOTP) {
+      timeoutId = setTimeout(() => {
+        setResendMOTP('RESEND OTP');
+        setColor('');
+        // setIsResendMOTP('RESEND OTP');
+        setIsResendMOTP(false);
+      }, 30000); // 1 minute = 60000 milliseconds
+    }
+    return () => clearTimeout(timeoutId);
+  }, [isResendMOTP]);
+
+  useEffect(() => {
+    let timeoutId;
+    if (isResendPOTP) {
+      timeoutId = setTimeout(() => {
+        setResendPOTP('RESEND OTP');
+        setColor('');
+        // setIsResendPOTP('RESEND OTP');
+        setIsResendPOTP(false);
+      }, 30000); // 1 minute = 60000 milliseconds
+    }
+    return () => clearTimeout(timeoutId);
+  }, [isResendPOTP]);
 
   function signWithdrawal(postData) {
     postDataWallet(Sign_Withdrawal(), postData).then(function (res) {
@@ -481,7 +513,7 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
                                     variant="body1"
                                     sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                                   >
-                                    OTP will be send to  <Mobilenumber number={securityData?.pSecurity?.authKey} /> 
+                                    OTP will be send to  <Mobilenumber number={securityData?.pSecurity?.authKey} />
                                   </Typography>
                                   <OutlinedInput
                                     id="otpmbl-login"
@@ -496,11 +528,13 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
                                     endAdornment={
                                       <InputAdornment>
                                         <Button
+                                          disableRipple
                                           style={{
                                             color: color || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                                             fontSize: '12px'
                                           }}
                                           onClick={() => reqSendOTP('sendPOTP')}
+                                          disabled={isResendPOTP}
                                         >
                                           {resendPOTP}
                                         </Button>
@@ -518,7 +552,7 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
                                 variant="body1"
                                 sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                               >
-                                OTP will be send to <Email email={securityData?.mSecurity?.authKey}/>
+                                OTP will be send to <Email email={securityData?.mSecurity?.authKey} />
                               </Typography>
                               <OutlinedInput
                                 id="otpmail-login"
@@ -533,11 +567,13 @@ const Textfields = ({ walletId, walletData, securityData, walletList, setWalletI
                                 endAdornment={
                                   <InputAdornment>
                                     <Button
+                                      disableRipple
                                       style={{
                                         color: color || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                                         fontSize: '12px'
                                       }}
                                       onClick={() => reqSendOTP('sendMOTP')}
+                                      disabled={isResendMOTP}
                                     >
                                       {resendMOTP}
                                     </Button>

@@ -10,7 +10,7 @@ import MarketTrades from './MarketTrades';
 import OrderBook from './OrderBookDts';
 import React from 'react';
 
-const OrdersAndMarket = ({ priceData, orderBookData, marketTradesData, setSelectedOrder, isAuthorised}) => {
+const OrdersAndMarket = ({ priceData, orderBookData, marketTradesData, setSelectedOrder, isAuthorised }) => {
   const theme = useTheme();
 
   //orderbook value
@@ -32,11 +32,11 @@ const OrdersAndMarket = ({ priceData, orderBookData, marketTradesData, setSelect
         aria-label="lab API tabs example"
         indicatorColor="none"
         textColor='inherit'
-        >
-        {tabData.map((tab) => (
+      >
+        {tabData.map((tab, index) => (
           <Tab
-          disableRipple
-            key={tab.value}
+            disableRipple
+            key={index}
             sx={{
               paddingBottom: '0px',
               paddingLeft: '0px',
@@ -52,9 +52,9 @@ const OrdersAndMarket = ({ priceData, orderBookData, marketTradesData, setSelect
                   : theme.palette.mode === 'dark'
                     ? 'text.primarydark'
                     : 'text.primary',
-                     '&:hover': {
-                      color: value === tab.value ? theme.palette.mode === 'dark' ? 'text.white' : 'text.black' : theme.palette.mode === 'dark' ? 'text.white' : 'text.black',
-                    },
+              '&:hover': {
+                color: value === tab.value ? theme.palette.mode === 'dark' ? 'text.white' : 'text.black' : theme.palette.mode === 'dark' ? 'text.white' : 'text.black',
+              },
             }}
             label={
               <div
@@ -72,7 +72,7 @@ const OrdersAndMarket = ({ priceData, orderBookData, marketTradesData, setSelect
       </TabList>
 
       <TabPanel value="0" sx={{ padding: '0' }}>
-        <OrderBook priceData={priceData} orderBookData={orderBookData} setSelectedOrder={setSelectedOrder} isAuthorised={isAuthorised}/>
+        <OrderBook priceData={priceData} orderBookData={orderBookData} setSelectedOrder={setSelectedOrder} isAuthorised={isAuthorised} />
       </TabPanel>
 
       <TabPanel value="1" sx={{ padding: '0' }}>
