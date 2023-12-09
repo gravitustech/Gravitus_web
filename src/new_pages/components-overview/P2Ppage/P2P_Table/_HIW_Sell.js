@@ -1,25 +1,26 @@
 import React from 'react'
 import { Grid, Typography, Stack, useTheme, } from '@mui/material';
+
 import HowItWorks_Comp from './_HIW_Comp';
 
-import ordergif from '../../../../../src/assets/images/gravitusimage/ordergif.svg';
-import sellergif from '../../../../../src/assets/images/gravitusimage/sellergif.svg';
-import getcrypto from '../../../../../src/assets/images/gravitusimage/getcrypto.svg';
-import p2pmobile from '../../../../../src/assets/images/gravitusimage/p2pmobile.svg';
+import p2pdarkimg from '../../../../../src/assets/images/gravitusimage/p2pdarkimg.svg';
+import p2plightimg from '../../../../../src/assets/images/gravitusimage/p2plightimg.svg';
 
 const HIW_Sell = () => {
   const theme = useTheme();
   return (
-    <><Stack pt={8}>
+    <><Stack pt={16}>
       <Typography variant='title' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} ar>
         How P2P Works
       </Typography>
     </Stack>
-
-      <Grid container spacing={2} sx={{ pt: 2 }}>
+      <Grid container spacing={2} sx={{ pt: 6, pb: 6 }}>
         <Grid item xs={12} sm={6} className="text-center">
-          <Stack pt={5} alignItems="center"  >
-            <img src={p2pmobile} alt='p2pmobile' />
+          <Stack pt={10} alignItems="center"  >
+            {theme.palette.mode === 'dark' ?
+              <img src={p2pdarkimg} alt='p2pdarkimg' width={550} />
+              : <img src={p2plightimg} alt='p2plightimg' width={550} />
+            }
           </Stack>
         </Grid>
         <Grid item xs={12} sm={6} lg={6}>

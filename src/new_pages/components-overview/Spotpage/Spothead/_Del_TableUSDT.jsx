@@ -116,10 +116,10 @@ function OrderTableHead({ order, orderBy, onRequestSort, }) {
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell,index) => (
           <TableCell
             sx={{ border: 'none', paddingTop: '0',paddingBottom:'0' }}
-            key={headCell.id}
+            key={index}
             align={headCell.align}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
@@ -246,11 +246,10 @@ export default function USDTTable() {
               <TableRow
                 padding='0'
                 hover
-                role="checkbox"
                 sx={{ cursor: 'pointer' }}
                 aria-checked={isItemSelected}
                 tabIndex={-1}
-                key={row.Name}
+                key={index}
                 selected={isItemSelected}
               >
                 <TableCell sx={{ border: 'none' }} component="th" id={labelId} scope="row" align="left">

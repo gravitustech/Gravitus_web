@@ -204,17 +204,18 @@ export default function HistroyTradesTab({ trades, pairInfo }) {
 
                     <TableCell sx={{ border: 'none' }} align="left">
                       <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {row.tds.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 3 })}
+                        {row.tds === 0 ? '--' : row.tds.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 3 })}
                       </Typography>
                     </TableCell>
 
                     <TableCell sx={{ border: 'none' }} align="left">
                       <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                         {/* {new Date(Number(row.time)).toLocaleString()} */}
-                        {new Date(Number(row.time)).toLocaleString('en-US', {
+                        {new Date(Number(row.time)).toLocaleString('en-IN', {
                           timeZone: 'Asia/Kolkata',
-                          day: 'numeric',
-                          month: 'short',
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
                           hour: '2-digit',
                           minute: '2-digit',
                           hour12: true

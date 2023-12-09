@@ -1,5 +1,7 @@
-import { Grid, Typography, Stack, OutlinedInput, FormHelperText, Button, TextField, 
-  useTheme, IconButton, Box, Dialog } from '@mui/material';
+import {
+  Grid, Typography, Stack, OutlinedInput, FormHelperText, Button, TextField,
+  useTheme, IconButton, Box, Dialog
+} from '@mui/material';
 
 import AnimateButton from '../../../../components/@extended/AnimateButton';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -13,13 +15,13 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink ,useNavigate} from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import useSWR from 'swr';
 import { fetcher, getWalletURLINRDeposit } from '../../../../api/wallet';
 
 const InrDeposit_STEP1 = ({ depositFrom, depositTo, setStep, setFormikValues, formikValues, handleOpen, handleClose, open }) => {
-  
+
   const theme = useTheme();
   const navigate = useNavigate();
   const Deposit = [{ DepositMode: 'IMPS' }, { DepositMode: 'NEFT' }, { DepositMode: 'RTGS' }];
@@ -40,7 +42,7 @@ const InrDeposit_STEP1 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
   const goBack = () => {
     navigate(-1);
   }
-  
+
   return (
     <>
       {depositFrom && depositTo && (
@@ -63,7 +65,7 @@ const InrDeposit_STEP1 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
 
           <Stack pt={2} spacing={3}>
             <Stack direction="row" spacing={1} style={{ alignItems: 'flex-start' }}>
-              <img src={doticon} alt="doticon"  style={{ paddingTop: '8px' }}/>
+              <img src={doticon} alt="doticon" style={{ paddingTop: '8px' }} />
               <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                 Deposit via bank transfer using deposit partners
               </Typography>
@@ -101,7 +103,16 @@ const InrDeposit_STEP1 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
               }}
               validationSchema={Yup.object().shape({
                 paymode: Yup.string().nullable().required('Please Select the mode of transfer*'),
-                depositamount: Yup.number().positive().required("Don't leave empty*"),
+                depositamount: Yup.number().positive().required("Don't leave empty*")
+                  .test(
+                    'minimum-amount',
+                    'Deposit amount must be at least ₹ 1,000',
+                    (value) => parseFloat(value) >= 1000
+                  ).test(
+                    'minimum-amount',
+                    'Deposit amount should not exceeds ₹ 1,00,000',
+                    (value) => parseFloat(value) <= 100000
+                  ),
               })}
               onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                 console.log({ values });

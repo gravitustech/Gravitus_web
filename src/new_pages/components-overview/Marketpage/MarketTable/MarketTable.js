@@ -348,13 +348,9 @@ export default function MarketTable({ marketData, flag, searchQuery, listings, s
                 {filteredlist.map((row, index) => {
                   return (
                     <TableRow
-                      // hover
-                      role="checkbox"
                       sx={{ border: 0, padding: '0', height: '64px' }}
-                      // aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={index}
-                    // selected={isItemSelected}
                     >
                       <TableCell sx={{ border: 'none', padding: '0' }} component="th" scope="row" align="left">
                         <Stack direction="row" alignItems="center" spacing={0.5}>

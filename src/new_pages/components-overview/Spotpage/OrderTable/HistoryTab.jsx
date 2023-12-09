@@ -16,7 +16,9 @@ import {
   Link,
   useTheme,
   Divider,
-  Grid
+  Grid,
+  Checkbox,
+  FormControlLabel
 } from '@mui/material';
 
 import Norecordfoundcomponents from '../../Walletpage/Norecordfoundcomponents';
@@ -90,12 +92,11 @@ function OrderTableHead() {
   return (
     <TableHead>
       <TableRow style={{ position: 'sticky', top: 0, background: theme.palette.mode === 'dark' ? '#121212' : '#fff' }}>
-        {headCells.map((headCell) => (
-
+        {headCells.map((headCell, index) => (
           <TableCell
             padding='none'
             sx={{ border: 'none', padding: '12px', paddingBottom: '7px', paddingTop: '0px' }}
-            key={headCell.id}
+            key={index}
             align={headCell.align}
           >
             <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
@@ -115,9 +116,10 @@ OrderTableHead.propTypes = {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function HistoryTab({ isAuthorised, orderTableData, priceData }) {
+export default function HistoryTab({ isAuthorised, orderTableData, priceData, cancelhandleChange, hideCancelled }) {
   const theme = useTheme();
   // console.log(orderTableData)
+
   return (
     <>
       {isAuthorised ? (
@@ -142,6 +144,7 @@ export default function HistoryTab({ isAuthorised, orderTableData, priceData }) 
                 },
               }}
             >
+
               <Table aria-label="sticky table">
                 <OrderTableHead />
 
@@ -149,14 +152,12 @@ export default function HistoryTab({ isAuthorised, orderTableData, priceData }) 
                   {orderTableData.history.map((row, index) => {
                     // const isItemSelected = isSelected(row.Name);
                     const labelId = `enhanced-table-checkbox-${index}`;
+                    const shouldRenderRow = !hideCancelled || (hideCancelled && row.status !== 'Cancelled');
 
-                    return (
+                    return shouldRenderRow && (
                       <TableRow
-                        // hover
-                        role="checkbox"
                         sx={{ '&:last-child td, &:last-child th': { border: 0 }, height: '52px' }}
                         tabIndex={-1}
-                        // key={row.id}
                         key={index}
                       >
                         <TableCell
@@ -225,7 +226,16 @@ export default function HistoryTab({ isAuthorised, orderTableData, priceData }) 
                             variant="subtitle1"
                             sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                           >
-                            {new Date(Number(row.time)).toLocaleString()}
+                            {/* {new Date(Number(row.time)).toLocaleString()} */}
+                            {new Date(Number(row.time)).toLocaleString('en-IN', {
+                              timeZone: 'Asia/Kolkata',
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              hour12: true
+                            })}
                           </Typography>
                         </TableCell>
 

@@ -79,16 +79,16 @@ function OrderTableHead({ order, orderBy, onRequestSort, }) {
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, index) => (
           <TableCell
             sx={{ border: 'none', paddingLeft: '0px', paddingBottom: '7px', paddingRight: '0px' }}
-            key={headCell.id}
+            key={index}
             align={headCell.align}
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             {headCell.id === 'Actions' ? (
-              <Typography variant='subtitle1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary',paddingBottom:'4px'  }}>
+              <Typography variant='subtitle1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary', paddingBottom: '4px' }}>
                 {headCell.label}
               </Typography>
             ) : (

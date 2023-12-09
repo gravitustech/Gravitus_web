@@ -256,8 +256,8 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
             }}
           >
             <Box sx={{ flexGrow: 1, p: 1, pt: 2, }}>
-              {reversedMessages && reversedMessages.map((message) => (
-                <Message key={message.id} message={message} />
+              {reversedMessages && reversedMessages.map((message,index) => (
+                <Message key={index} message={message} />
               ))}
             </Box>
           </Box>

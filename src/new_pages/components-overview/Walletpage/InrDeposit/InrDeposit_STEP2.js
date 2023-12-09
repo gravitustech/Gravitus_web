@@ -14,7 +14,7 @@ import React, { useState } from 'react';
 const InrDeposit_STEP2 = ({ depositFrom, depositTo, setStep, setFormikValues, formikValues, setSnackbarMessage, setSnackbarOpen }) => {
   const theme = useTheme();
   const [termsError, setTermsError] = useState(false);
-  console.log('formikvalues', formikValues);
+  // console.log('formikvalues', formikValues);
 
   const handleSubmit = () => {
     const allTermsChecked = formikValues.term1 && formikValues.term2 && formikValues.term3 && formikValues.term4;

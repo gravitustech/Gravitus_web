@@ -74,10 +74,10 @@ function OrderTableHead() {
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, index) => (
           <TableCell
             sx={{ border: 'none' }}
-            key={headCell.id}
+            key={index}
             align={headCell.align}
             padding={headCell.disablePadding ? 'none' : 'default'}
           >
@@ -124,14 +124,13 @@ export default function HistroyTable({ tableData }) {
               tableData.map((row, index) => {
                 // const isItemSelected = isSelected(row.Name);
                 const labelId = `enhanced-table-checkbox-${index}`;
-                const { id, transType, amount,transAmount, status, timeStamp } = row;
+                const { id, transType, amount, transAmount, status, timeStamp } = row;
                 return (
                   <TableRow
                     hover
-                    role="checkbox"
                     sx={{ '&:last-child td, &:last-child th': { border: 0 }, height: '64px' }}
                     tabIndex={-1}
-                    key={id}
+                    key={index}
                   >
                     <TableCell sx={{ border: 'none' }} component="th" id={labelId} scope="row" align="left">
                       <Stack direction="row" alignItems="center" spacing={1}>

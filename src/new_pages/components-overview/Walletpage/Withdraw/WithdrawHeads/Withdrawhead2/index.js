@@ -31,7 +31,7 @@ const Withdrawhead2 = () => {
           please reach out to our support team for assistance before proceeding with your withdrawal.
         </Typography>
       </Stack>
-      <Grid pt={5}>
+      {/* <Grid pt={5}>
         <Card
           width={100}
           sx={{
@@ -55,7 +55,7 @@ const Withdrawhead2 = () => {
             </Stack>
           </Stack>
         </Card>
-      </Grid>
+      </Grid> */}
       <Grid pt={5}>
         {/* <Importantnotes /> */}
       </Grid>

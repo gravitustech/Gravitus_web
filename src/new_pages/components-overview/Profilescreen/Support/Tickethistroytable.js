@@ -143,7 +143,15 @@ export default function Tickethistroytab({ historyData }) {
 
                     <TableCell sx={{ border: 'none',paddingRight:'0' }} align="right">
                       <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {new Date(Number(row.timeStamp)).toLocaleString()}
+                        {new Date(Number(row.timeStamp)).toLocaleString('en-IN', {
+                          timeZone: 'Asia/Kolkata',
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: true
+                        })}
                       </Typography>
                     </TableCell>
                   </TableRow>

@@ -131,10 +131,10 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
   return (
     <TableHead>
       <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#000' : '#fff' }}>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell,index) => (
           <TableCell
             sx={{ border: 'none', paddingTop: '0', paddingBottom: '0' }}
-            key={headCell.id}
+            key={index}
             align={headCell.align}
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
@@ -187,7 +187,6 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
         <TableCell
           padding='none'
           sx={{ border: 'none', paddingTop: '0', paddingBottom: '0' }}
-          key='changes'
           align='right'
         >
           <Stack direction='row' textAlign='end' justifyContent='end'>
@@ -381,7 +380,6 @@ export default function MarketTable({ flag, setPlatformId, handleClose, searchQu
                   <TableRow
                     padding="0"
                     hover
-                    role="checkbox"
                     sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer' }}
                     aria-checked={isItemSelected}
                     tabIndex={-1}
