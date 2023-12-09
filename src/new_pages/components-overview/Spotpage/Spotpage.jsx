@@ -1,6 +1,6 @@
 import { Grid, useTheme, Card, CircularProgress } from '@mui/material';
 
-import MarketDrawer from  './Spothead/SpotHead';
+import MarketDrawer from  './SpotHead/SpotHead';
 import BuySellGrid from './BuySellGrid/Buy_Sell_Grid';
 
 import OrderAndMarket from './OrderBook/OrdersAndMarket';
