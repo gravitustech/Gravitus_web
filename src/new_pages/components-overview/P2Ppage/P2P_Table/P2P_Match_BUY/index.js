@@ -100,7 +100,7 @@ function OrderTableBody(props) {
   const navigate = useNavigate();
 
   const theme = useTheme();
-  const formikRef = useRef();
+  const formikMatchBuy = useRef();
 
   const handleCancelClick = () => {
     setOpen(false);
@@ -213,24 +213,23 @@ function OrderTableBody(props) {
       setIsLoading(false);
       handleCloseDialog();
 
-      console.log(res);
+      // console.log(res);
       if (res.error != 'ok') {
         setSnackbarMessage({ msg: res.error, success: false });
         setSnackbarOpen(true);
       }
       else {
-        // Store res.result in localStorage
         setConfig_ng('P2POrderDts', res.result.orderId);
         setSnackbarMessage({ msg: 'Order matched successfully', success: false });
         setSnackbarOpen(true);
 
         setInputs({ quantity: '', totalamount: '', paymentoption: [] });
-        // mutate listing page if necessary;
+        // Mutate listing page if necessary
 
-        // formikRef.current.resetForm({values : { 
-        //   quantity: '', 
-        //   totalamount: ''
-        // }});
+        formikMatchBuy.current.resetForm({values : { 
+          quantity: '', 
+          totalamount: ''
+        }});
 
         // Move to Buy or Sell OrderDetails
         if (res.result.buyerId === getConfig_sp().userId) {
@@ -416,7 +415,7 @@ function OrderTableBody(props) {
                 <Grid item xs={12} sm={6} lg={6}>
                   <Stack pl={2} pr={2}>
                     <Formik
-                      innerRef={formikRef}
+                      innerRef={formikMatchBuy}
                       initialValues={{
                         totalamount: '',
                         quantity: '',

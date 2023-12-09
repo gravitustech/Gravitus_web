@@ -14,7 +14,7 @@ const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarO
   const [openDialog, setOpenDialog] = useState(false);
   
   const theme = useTheme();
-  const formikRef = useRef();
+  const formikPostSell = useRef();
 
   var formikInit = {
     price: priceInfo?.lastPrice,
@@ -131,7 +131,7 @@ const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarO
         setInputs({ price: '', quantity: '', totalamount: '', paymentoption: [] });
         mutate(P2P_SuperOrders_URL);
 
-        formikRef.current.resetForm({values : { 
+        formikPostSell.current.resetForm({values : { 
           price: '', 
           quantity: '', 
           totalamount: '',
@@ -150,7 +150,7 @@ const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarO
   return (
     <Stack>
       <Formik
-        innerRef={formikRef}
+        innerRef={formikPostSell}
         initialValues={ formikInit }
         validationSchema={Yup.object().shape({
           price: Yup.number().positive('Enter a positive number').required("Don't leave empty"),

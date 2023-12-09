@@ -3,7 +3,7 @@ import p2pimg2 from '../../../assets/images/gravitusimage/p2pimage2.svg';
 
 import React, { useState, useEffect, useReducer } from 'react';
 import { fetcherP2P, P2P_PreTrade_URL } from '../../../api_ng/peer2peer_ng';
-import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../utils_ng/localStorage_ng';
+import { getConfig_ng, setConfig_ng } from '../../../utils_ng/localStorage_ng';
 
 import { Grid, Stack, Typography, useTheme } from "@mui/material";
 
@@ -72,16 +72,15 @@ const P2Ppage = () => {
           // LogOut User;
         }
         else if(P2PRc.error.name != 'Invalid Authorization') {
-          console.log(P2PRc.error);
-          // Show 'P2PRc.error' snack bar
+          setSnackbarMessage({ msg: P2PRc.error.name, success: false });
+          setSnackbarOpen(true);
         }
         else {
-          console.log(P2PRc.error);
-          // Show 'P2PRc.error' snack bar
+          setSnackbarMessage({ msg: P2PRc.error, success: false });
+          setSnackbarOpen(true);
         }
       }
       else {
-        // console.log(P2PRc.result, 'P2PData');
         setP2PData({ type: 'getUPDATE', data: P2PRc.result });
         setConfig_ng('P2PPair', {platformId : P2PRc.result.pairInfo.id});
         setPlatformId(P2PRc.result.pairInfo.id);
@@ -93,7 +92,6 @@ const P2Ppage = () => {
     socket.on(P2PPreTradeEvent, function(res) {
       if(parseInt(res.pairInfo.id) === parseInt(platformId)) {
         setP2PData({ type: 'sockUPDATE', data: res }); 
-        // console.log(P2PData, 'P2PData');
       }
     });
 
@@ -103,8 +101,6 @@ const P2Ppage = () => {
 
   }, [P2PRc]);
 
-  {/* <div style={{marginTop : '10px'}}>TEST</div> */}
-  
   return (
     <>
       {P2PData ? (
