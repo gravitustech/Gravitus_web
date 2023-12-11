@@ -677,7 +677,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                                 <img src={croppedImage} alt="wew" width="100%" height='auto' />
                                 <Tooltip title="click to clear the image" placement="top" arrow>
                                   <DeleteForever
-                                    onClick={() => setCroppedImage(null)}
+                                    onClick={() => { setCroppedImage(undefined); document.getElementById('superFile').value= null; }}
                                     sx={{
                                       cursor: 'pointer',
                                       color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
@@ -706,6 +706,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                           </Stack>
                         </Card>
                       </Stack>
+                      
                       <Modal
                         open={modalOpen}
                         onClose={handleModalClose}

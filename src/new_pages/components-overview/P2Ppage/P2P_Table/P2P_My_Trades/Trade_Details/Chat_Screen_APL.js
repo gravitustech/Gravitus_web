@@ -130,7 +130,7 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
 
   const handleModalClose = () => {
     setCroppedImage(undefined);
-    setImageToCrop(undefined);
+    // setImageToCrop(undefined);
     setModalOpen(false);
   };
 

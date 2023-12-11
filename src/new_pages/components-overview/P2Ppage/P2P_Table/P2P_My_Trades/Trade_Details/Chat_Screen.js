@@ -124,7 +124,7 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
 
   const handleModalClose = () => {
     setCroppedImage(undefined);
-    setImageToCrop(undefined);
+    // setImageToCrop(undefined);
     setModalOpen(false);
   };
 
