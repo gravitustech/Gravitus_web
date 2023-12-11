@@ -69,10 +69,6 @@ const P2P_Manage_Ads = () => {
     // Call Logout User
   }
 
-  if(P2POrders) {
-    console.log(P2POrders.orders, 'P2POrders.orders');
-  }
-
   useEffect(() => {
     if(PostRc != undefined) {
       if(PostRc.error != 'ok') {
@@ -83,16 +79,16 @@ const P2P_Manage_Ads = () => {
           // LogOut User;
         }
         else if(PostRc.error.name != 'Invalid Authorization') {
-          console.log(PostRc.error);
-          // Show 'PostRc.error' snack bar
+          setSnackbarMessage({ msg: PostRc.error.name, success: false });
+          setSnackbarOpen(true);
         }
         else {
-          console.log(PostRc.error);
-          // Show 'PostRc.error' snack bar
+          setSnackbarMessage({ msg: PostRc.error, success: false });
+          setSnackbarOpen(true);
         }
       }
       else {
-        console.log(PostRc.result, 'Update from Use Effect');
+        // console.log(PostRc.result, 'Update from Use Effect');
         setP2POrders({ type: 'getUPDATE', data: PostRc.result });
       }
     }

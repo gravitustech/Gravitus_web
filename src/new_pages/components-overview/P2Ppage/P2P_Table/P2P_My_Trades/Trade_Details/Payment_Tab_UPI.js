@@ -1,3 +1,7 @@
+import CopyIcon from '../../../../../../assets/images/gravitusimage/copyicon.svg';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import DoneIcon from '@mui/icons-material/Done';
+
 import React, { useState } from 'react';
 
 import {
@@ -8,12 +12,6 @@ import {
   IconButton
 } from '@mui/material';
 
-import CopyIcon from '../../../../../../assets/images/gravitusimage/copyicon.svg';
-
-import DoneIcon from '@mui/icons-material/Done';
-
-import CopyToClipboard from 'react-copy-to-clipboard';
-
 const Upi = ({ orderDetails }) => {
   const theme = useTheme();
 
@@ -21,14 +19,9 @@ const Upi = ({ orderDetails }) => {
     ?.filter(paymentMode => paymentMode.mode === 'UPI')
     ?.map((paymentMode, index) => paymentMode.details) || [];
 
-  console.log('orderdetailspaymode', paymethods)
-
-
   const paymentDetails = paymethods.map((paymethods) => JSON.parse(paymethods));
-
   const upiPayment = paymentDetails[0];
 
-  //
   const [activeId, setActiveId] = useState(null);
   const [copied, setCopied] = useState(false);
 

@@ -28,15 +28,15 @@ const P2Ppage = () => {
 
   function updateData(state, action) {
     if (action.type === 'getUPDATE') {
-      state = action.data;
-      return state;
+      return action.data;
     }
     else if (action.type === 'sockUPDATE') {
-      state.pairInfo = action.data.pairInfo;
-      state.priceInfo = action.data.priceInfo;
-      state.orderBook = action.data.orderBook;
-      state.marketTrades = action.data.marketTrades;
-      return state;
+      var superState = JSON.parse(JSON.stringify(state));
+      superState.pairInfo = action.data.pairInfo;
+
+      superState.priceInfo = action.data.priceInfo;
+      superState.orderBook = action.data.orderBook;
+      return superState;
     }
 
     throw Error('Unknown action.');
@@ -88,10 +88,10 @@ const P2Ppage = () => {
     }
 
     // P2P Pre Trade Events
-    let P2PPreTradeEvent = '/SPOTPreTrade/POST';
+    let P2PPreTradeEvent = '/P2PPreTrade/POST';
     socket.on(P2PPreTradeEvent, function(res) {
       if(parseInt(res.pairInfo.id) === parseInt(platformId)) {
-        setP2PData({ type: 'sockUPDATE', data: res }); 
+        setP2PData({ type: 'sockUPDATE', data: res });
       }
     });
 

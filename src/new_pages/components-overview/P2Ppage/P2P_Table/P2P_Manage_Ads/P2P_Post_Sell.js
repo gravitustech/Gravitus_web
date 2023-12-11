@@ -22,7 +22,7 @@ const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarO
     totalamount: '',
     paymentoption: [],
     submit: null
-  }
+  };
 
   const handleClickOpenDialog = () => {
     setOpenDialog(true);
@@ -89,8 +89,6 @@ const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarO
     paymentoption: [],
   });
 
-  // console.log(inputs, 'Set Inputs');
-
   const handleConfirm = () => {
     setIsLoading(true);
     var postData = {
@@ -133,7 +131,7 @@ const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarO
 
         formikPostSell.current.resetForm({values : { 
           price: '', 
-          quantity: '', 
+          quantity: '',
           totalamount: '',
           paymentoption: []
         }});

@@ -168,15 +168,15 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
   );
 
   const [skipped, setSkipped] = React.useState(new Set());
-
   const [open, setOpen] = useState(false); // Confirm Dialog
+
   const [isLoading, setIsLoading] = useState(false); // Show loader
   const [appealInputs, setAppealInputs] = useState({ reason: '', message: '', submit: null });
 
   const [imageToCrop, setImageToCrop] = React.useState(undefined);
   const [croppedImage, setCroppedImage] = React.useState(undefined);
 
-  //
+  // Go Back
   const goBack = () => {
     navigate(-1);
   }
@@ -252,7 +252,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
     postDataP2P(P2P_OrderClosure_URL(), postData).then(function (res) {
 
       setIsLoading(false);
-      console.log(res, 'Released Crypto');
+      // console.log(res, 'Release Crypto');
 
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
@@ -324,7 +324,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
       formDataP2P(P2P_AppealToEscrow_URL(), postData).then(function (res) {
 
         setIsLoading(false);
-        console.log(res);
+        // console.log(res, 'Raise Appeal');
 
         if (res.error !== 'ok') {
           if (res.error.name == "Missing Authorization") {
@@ -350,8 +350,10 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
           setAppealInputs({ reason: '', message: '', submit: null });
           setImageToCrop(undefined);
           setCroppedImage(undefined);
+          
           handleButtonClick()
           mutate(P2P_OrderDetails_URL);
+          
           formikAPL.current.resetForm({
             values: {
               reason: '', message: '', submit: null
@@ -369,7 +371,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
     }
   }
 
-  //
+  // Cancel Appeal
   const AppealCancel = (orderDetails) => {
     var postData = {
       platformId: orderDetails?.platformId,
@@ -377,7 +379,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
     };
 
     postDataP2P(P2P_Appeal_Cancel(), postData).then(function (res) {
-      console.log("res", res);
+      // console.log(res, 'Cancel Appeal');
 
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
@@ -401,15 +403,14 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
           }
         }
       } else {
-        // Set timeout for future usecase
-        // setSnackbarMessage({ msg: 'Refresh Now', success: false });
-        // setSnackbarOpen(true);
-
-        // Logic moved to sock update
+        setSnackbarMessage({ msg: 'Cancelled Appeal', success: false });
+        setSnackbarOpen(true);
+        
+        // Get Order details
+        mutate(P2P_OrderDetails_URL);
       }
     }, function (err) {
-      setSnackbarMessage({ msg: err, success: false });
-      setSnackbarOpen(true);
+      console.log(err);
       // Logout User
     });
   }

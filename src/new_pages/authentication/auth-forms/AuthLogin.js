@@ -42,16 +42,20 @@ const GravitusAuthLogin = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [checked, setChecked] = useState(localStorage.checkbox === 'true');
   const [inputs, setInputs] = useState({ accountType: 'GRAVITUS' });
+  
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
 
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
   const rememberMe = (email, password) => {
     // console.log(inputs, isChecked)
     if (checked) {
@@ -89,22 +93,12 @@ const GravitusAuthLogin = () => {
             const { data } = await loginUser({ ...inputs, postData: { emailId: values.email, password: values.password } });
             if (Object.keys(data.result).length) {
               setIsLoading(false);
-              console.log(data.result);
+              // console.log(data.result);
 
               const userStateData = {
                 id: data.result.userId,
                 emailId: values.email,
                 password: values.password
-                // firstName: data.result.firstName,
-                // lastName: data.result.lastName,
-                // employeeNameEn:data.result.employeeNameEn,
-                // email: data.result.email,
-                // position: data.result.position,
-                // permissions: data.result.permissions,
-                // permissions_enabled: data.result.permissions_enabled,
-                // status: data.result.status,
-                // newUser: data.result.newUser,
-                // types: result,
               };
 
               setUserEssentials(userStateData);
@@ -126,9 +120,7 @@ const GravitusAuthLogin = () => {
             }
           } catch (err) {
             console.log(err);
-            setStatus({ success: false });
-            setErrors({ submit: err.message });
-            setSubmitting(false);
+            // Logout User
           }
         }}
       >

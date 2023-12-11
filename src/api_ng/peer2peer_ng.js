@@ -149,7 +149,7 @@ export const P2P_AppealToEscrow_URL = () => {
 
 // Form Data
 export const P2P_UpdateAppeal_URL = () => {
-  return 'api/activity/nuevoP2P/v2/updateAppeal';
+  return 'api/activity/nuevoP2P/v2/updateToAppeal';
 };
 
 // Post Data

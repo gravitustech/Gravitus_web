@@ -13,6 +13,7 @@ import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import useSWR, { mutate } from 'swr';
 import { P2P_TradeMessages_URL, P2P_SendMessage_URL, P2P_SendPicture_URL, formDataP2P, postDataP2P, P2P_UpdateAppeal_URL } from "src/api_ng/peer2peer_ng";
 import { getConfig_ng, setConfig_ng } from '../../../../../../utils_ng/localStorage_ng';
+
 import ImageCropper from "src/components/_cropper";
 import { Formik } from "formik";
 
@@ -43,14 +44,13 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
       updateInfo: {
         platformId: getConfig_ng('P2PPair').platformId,
         orderId: orderDetails?.orderId,
-        argsType: orderDetails?.text,
+        argsType: 'message',
         argsContent: input,
       },
       fileName: 'noscreenshot',
       fileI: '',
     };
 
-    // console.log(postData, 'Post Message');
     formDataP2P(P2P_UpdateAppeal_URL(), postData).then(function (res) {
       console.log(res);
       if (res.error !== 'ok') {
@@ -129,9 +129,9 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
   };
 
   const handleModalClose = () => {
-    setModalOpen(false)
-    // setImageToCrop(undefined)
-    // setCroppedImage(undefined)
+    setCroppedImage(undefined);
+    setImageToCrop(undefined);
+    setModalOpen(false);
   };
 
   const onUploadFile = (event) => {
@@ -152,12 +152,12 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
         updateInfo: {
           platformId: getConfig_ng('P2PPair').platformId,
           orderId: orderDetails?.orderId,
-          argsType: croppedImage,
+          argsType: 'picture',
         },
         fileName: 'chatMessage',
         fileI: croppedImage,
       };
-      // console.log('postData Buy', postData);
+      
       formDataP2P(P2P_UpdateAppeal_URL(), postData).then(function (res) {
 
         handleModalClose();
@@ -437,7 +437,8 @@ const Message = ({ message }) => {
 
   // Align message based on response
   const isBot = message.align === 'left';
-  console.log('message', message)
+  // console.log('message', message)
+  
   const MessageComponent = () => {
     if (message?.messageType === 'text') {
       return (

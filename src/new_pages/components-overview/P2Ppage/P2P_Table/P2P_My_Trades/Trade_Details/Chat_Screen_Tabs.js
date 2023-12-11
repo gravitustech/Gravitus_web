@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 
 import { Stack, useTheme, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
@@ -8,16 +7,19 @@ import AppealChatscreen from './Chat_Screen_APL';
 import CustomSnackBar from 'src/components/snackbar';
 
 import useSWR, { mutate } from 'swr';
-import { P2P_AppealMessages_URL, P2P_TradeMessages_URL, fetcherP2P } from 'src/api_ng/peer2peer_ng';
-import { getConfig_ng, setConfig_ng } from '../../../../../../utils_ng/localStorage_ng';
+import React, { useState, useEffect } from 'react';
+import { socket } from '../../../../../../socket';
 
-const Chat_Appeal_Tab = ({ resultdata, counterPart, appealMessage }) => {
+import { P2P_OrderDetails_URL, P2P_AppealMessages_URL, P2P_TradeMessages_URL, fetcherP2P } from 'src/api_ng/peer2peer_ng';
+import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../../../../utils_ng/localStorage_ng';
+
+const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
   const theme = useTheme();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
 
   const [value, setValue] = React.useState('0'); // Chat or Appeal Tab
-  const orderDetails = resultdata?.orderDetails;
+  const orderDetails = orderData?.orderDetails;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -36,7 +38,10 @@ const Chat_Appeal_Tab = ({ resultdata, counterPart, appealMessage }) => {
     return { data, error, isLoading }
   }
 
-  const { data, error } = useTradeMessages();
+  const {
+    data: chatData, 
+    error: chatError
+  } = useTradeMessages();
 
   function useAppealMessages() {
     var postData = {
@@ -51,9 +56,31 @@ const Chat_Appeal_Tab = ({ resultdata, counterPart, appealMessage }) => {
     return { data, error, isLoading }
   }
 
-  const { data: Appealdata, error: Appealerror } = useAppealMessages();
+  const { 
+    data: Appealdata, 
+    error: Appealerror 
+  } = useAppealMessages();
 
-  console.log('AppealData', Appealdata);
+  useEffect(() => {
+
+    let P2POrderEvent = '/P2POrder_'+ getConfig_sp().userId +'/POST';
+    socket.on(P2POrderEvent, function(res) {
+      
+      console.log(res, 'Super Res');
+      if(orderDetails.orderId == res.orderId && res.notifyType == 'notifyMessage') {
+        mutate(P2P_TradeMessages_URL); // Temp solution need to update chat array
+      }
+      else if(orderDetails.orderId == res.orderId && res.notifyType == 'updateAppeal') {
+        mutate(P2P_AppealMessages_URL); // Temp solution need to update appeal array
+      }
+
+    });
+
+    return () => {
+      socket.off(P2POrderEvent);
+    };
+
+  }, []);
 
   return (
     <>
@@ -111,8 +138,8 @@ const Chat_Appeal_Tab = ({ resultdata, counterPart, appealMessage }) => {
 
         <TabPanel value="0" sx={{ padding: '0', paddingTop: '12px' }} >
           < Chatscreen
-            messages={data?.result?.messages}
-            orderDetails={data?.result?.orderDetails}
+            messages={chatData?.result?.messages}
+            orderDetails={chatData?.result?.orderDetails}
             counterPart={counterPart}
             mutate={mutate}
             setSnackbarOpen={setSnackbarOpen}

@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { setSocketStateAction } from './appRedux/actions/account';
-import { initLocalStorage_ng } from './utils_ng/localStorage_ng';
+import { initLocalStorage_ng, getConfig_sp } from './utils_ng/localStorage_ng';
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
@@ -19,13 +19,17 @@ const App = () => {
   useEffect(() => {
     socket.on('connect', () => {
       if (socket.connected) {
-        console.log('socket connected');
-        const authenticate = { userId: '8203038', Token: 'Set Token' };
-        
-        socket.emit('authentication', authenticate, (resp) => {
-          console.log('socket authenticated', { resp });
+        console.log('Socket Connected');
+
+        var authenticate = {"userId" : "none"};
+        if(getConfig_sp().userId != 'guestUser' && getConfig_sp().token != 'none') {
+          authenticate = getConfig_sp();
+        }
+
+        socket.emit('authentication', authenticate, (res) => {
+          console.log('Socket Authenticated', { res });
         });
-        
+
         dispatch(
           setSocketStateAction({
             isSocketConnected: true
@@ -34,10 +38,14 @@ const App = () => {
       }
     });
 
-    socket.on('/NOTIFYUpdate/POST', (notify) => {
+    socket.on('authenticated', (res) => {
+      console.log('User is authenticated - ' + res);
+    });
+
+    socket.on('/NOTIFYUpdate/POST', (res) => {
       dispatch(
         setSocketStateAction({
-          notifications: notify
+          notifications: res
         })
       );
     });

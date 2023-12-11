@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import { useTheme, Grid, Stack, Typography } from '@mui/material';
-
-import useSWR from 'swr';
-import { useLocation, useNavigate } from 'react-router-dom';
-
-import { P2P_OrderDetails_URL, fetcherP2P } from 'src/api_ng/peer2peer_ng'
-import { getConfig_ng, setConfig_ng } from '../../../../../../utils_ng/localStorage_ng';
-
-import Chat_Appeal_Tab from './Chat_Screen_Tabs';
-import Trade_Seller_Dts_Ext from './Trade_Seller_sp';
-
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Lodergif from '../../../../../../components/Gravitusloader';
 import CustomSnackBar from 'src/components/snackbar';
+
+import Trade_Seller_Dts_Ext from './Trade_Seller_sp';
+import Chat_Appeal_Tab from './Chat_Screen_Tabs';
+
+import { useTheme, Grid, Stack, Typography } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import useSWR, { mutate } from 'swr';
+import React, { useState, useEffect } from 'react';
+import { socket } from '../../../../../../socket';
+
+import { P2P_OrderDetails_URL, fetcherP2P } from 'src/api_ng/peer2peer_ng'
+import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../../../../utils_ng/localStorage_ng';
 
 const Trade_Seller_Dts = (route) => {
   const theme = useTheme();
@@ -21,6 +22,11 @@ const Trade_Seller_Dts = (route) => {
 
   const location = useLocation();
   const tradeDetails = location.state;
+
+  const navigate = useNavigate();
+  const goBack = () => {
+    navigate(-1);
+  }
 
   function useTradeDetails() {
     var postData = { "platformId": getConfig_ng('P2PPair').platformId, "orderId": tradeDetails.orderId };
@@ -33,21 +39,34 @@ const Trade_Seller_Dts = (route) => {
   }
 
   const { data, error } = useTradeDetails();
-  const resultdata = data?.result; // Overall Data
+  const orderData = data?.result; // Overall Data
   const counterPart = data?.result?.counterPart;
 
   if (data != undefined && data.error != 'ok') {
     console.log(data.error, 'Error in Response');
   }
-  else {
-    console.log(data, 'Order Details');
-  }
+  // else {
+  //   console.log(orderData, 'Order Details');
+  // }
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    let P2POrderEvent = '/P2POrder_'+ getConfig_sp().userId +'/POST';
 
-  const goBack = () => {
-    navigate(-1);
-  }
+    if(orderData != undefined) {
+      socket.on(P2POrderEvent, function(res) {
+
+        if(orderData.orderDetails.orderId == res.orderId && res.notifyType == 'orderUpdate') {
+          mutate(P2P_OrderDetails_URL);
+        }
+      });
+    }
+
+    return () => {
+      socket.off(P2POrderEvent);
+    };
+
+  }, [orderData]);
+
   return (
     <>
       <Grid container pl={15} pr={15} pt={3}  >
@@ -63,7 +82,7 @@ const Trade_Seller_Dts = (route) => {
           <Trade_Seller_Dts_Ext data={data} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
 
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Chat_Appeal_Tab resultdata={resultdata} counterPart={counterPart} appealMessage={data?.result?.appealMessage} />
+            <Chat_Appeal_Tab orderData={orderData} counterPart={counterPart} appealMessage={orderData?.appealMessage} />
           </Grid>
         </Grid>
       ) : (

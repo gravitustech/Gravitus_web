@@ -70,11 +70,11 @@ const GravitusAuthLoginVerify = () => {
     // { suspense: true }
   );
 
-  console.log('res', data, error, isLoading);
   const handleVerifyMethod = (str) => {
     setVerifyMethod(str);
     setVerifyMethodState(false);
   };
+  
   const handleOTP = async (action) => {
     try {
       const { data } = await sendOtpSecurity({
@@ -84,8 +84,8 @@ const GravitusAuthLoginVerify = () => {
           action
         }
       });
+
       if (Object.keys(data.result).length) {
-        console.log({ data });
         setSnackbarMessage({ msg: isResend ? 'OTP Resent successfully' : 'OTP Sent successfully', success: true });
         setSnackbarOpen(true);
         if (!isResend) {
@@ -101,13 +101,6 @@ const GravitusAuthLoginVerify = () => {
       setSnackbarMessage({ msg: err.message, success: false });
       setSnackbarOpen(true);
     }
-    // setColor('grey');
-    // if (isResend) {
-    //   setDisplayText('RESEND OTP');
-    // } else {
-    //   setDisplayText('SEND OTP');
-    // }
-    // setIsResend(true);
   };
 
   useEffect(() => {
@@ -122,6 +115,7 @@ const GravitusAuthLoginVerify = () => {
     }
     return () => clearTimeout(timeoutId);
   }, [isResend]);
+
   return (
     <>
       {data && verifyMethodState ? (
@@ -191,9 +185,9 @@ const GravitusAuthLoginVerify = () => {
             authcode: ''
           }}
           validationSchema={Yup.object().shape({
-            otpmail: verifyMethod === 'email' && Yup.number().positive().required('OTP is required*'),
-            otpmbl: verifyMethod === 'phone' && Yup.number().positive().required('OTP is required*'),
-            authcode: verifyMethod === 'google' && Yup.number().positive().required('G-Code is required*')
+            otpmail  : verifyMethod === 'email' && Yup.number().positive().required('OTP is required*'),
+            otpmbl   : verifyMethod === 'phone' && Yup.number().positive().required('OTP is required*'),
+            authcode : verifyMethod === 'google' && Yup.number().positive().required('G-Code is required*')
           })}
           // validationSchema={
           //   (verifyMethod === 'email' && Yup.object().shape({ otpmail: Yup.string().max(5).required('OTP is required') }),

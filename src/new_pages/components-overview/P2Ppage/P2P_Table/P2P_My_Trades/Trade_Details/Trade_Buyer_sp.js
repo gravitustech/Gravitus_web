@@ -158,9 +158,9 @@ function ColorlibStepIcon(props) {
 
 const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
   const theme = useTheme();
-  const navigate = useNavigate();
   const formikMP = useRef();
   const formikAPL = useRef();
+  const navigate = useNavigate();
 
   const resultdata = data?.result;
   const counterPart = data?.result?.counterPart;
@@ -171,20 +171,19 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
       resultdata?.superStatus === 3 ? 3
         : (resultdata?.superStatus === 0 ? 0 : 2)
   );
+
   const [skipped, setSkipped] = useState(new Set());
-
   const [open, setOpen] = useState(false); // Confirm Dialog
+  
   const [isLoading, setIsLoading] = useState(false); // Show Loader
-
   const [releaseReq, setReleaseReq] = useState({ receiptNo: '', submit: null });
   const [appealInputs, setAppealInputs] = useState({ reason: '', message: '', submit: null });
 
   const [imageToCrop, setImageToCrop] = React.useState(undefined);
   const [croppedImage, setCroppedImage] = React.useState(undefined);
-
   const [copied, setCopied] = useState(false);
 
-  //
+  // Handle Copy
   const handleCopy = () => {
     setCopied(true);
 
@@ -193,7 +192,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
     }, 2000);
   };
 
-  //
+  // Go Back
   const goBack = () => {
     navigate(-1);
   }
@@ -264,50 +263,6 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
     }
   };
 
-  const AppealCancel = (orderDetails) => {
-    var postData = {
-      platformId: orderDetails?.platformId,
-      orderId: orderDetails?.orderId,
-    };
-
-    postDataP2P(P2P_Appeal_Cancel(), postData).then(function (res) {
-      console.log("res", res);
-
-      if (res.error !== 'ok') {
-        if (res.error.name == "Missing Authorization") {
-          // Logout User
-        }
-        else if (res.error.name == "Invalid Authorization") {
-          // Logout User
-        }
-        else {
-          if (res.error.name != undefined) {
-            console.log('res', res.error.name)
-            setSnackbarMessage({ msg: 'Appeal cancelled', success: false });
-            setSnackbarOpen(true);
-            handleButtonClick()
-            mutate(P2P_OrderDetails_URL);
-          }
-          else {
-            console.log('res.error', res.error)
-            setSnackbarMessage({ msg: res.error, success: false });
-            setSnackbarOpen(true);
-          }
-        }
-      } else {
-        // Set timeout for future usecase
-        // setSnackbarMessage({ msg: 'Refresh Now', success: false });
-        // setSnackbarOpen(true);
-
-        // Logic moved to sock update
-      }
-    }, function (err) {
-      setSnackbarMessage({ msg: err, success: false });
-      setSnackbarOpen(true);
-      // Logout User
-    });
-  }
-
   const releaseRequest = () => {
     if (croppedImage != undefined) {
       var postData = {
@@ -324,7 +279,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
       formDataP2P(P2P_ReleaseRequest_URL(), postData).then(function (res) {
 
         setIsLoading(false);
-        console.log(res, 'After Make Payment');
+        // console.log(res, 'Make Payment');
 
         if (res.error !== 'ok') {
           if (res.error.name == "Missing Authorization") {
@@ -407,13 +362,11 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
         fileI: croppedImage,
       }
 
-      console.log('PostData Appeal', postData);
-
       setIsLoading(true);
       formDataP2P(P2P_AppealToEscrow_URL(), postData).then(function (res) {
 
         setIsLoading(false);
-        console.log(res);
+        // console.log(res, 'Raise Appeal');
 
         if (res.error !== 'ok') {
           if (res.error.name == "Missing Authorization") {
@@ -439,8 +392,10 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
           setAppealInputs({ reason: '', message: '', submit: null });
           setImageToCrop(undefined);
           setCroppedImage(undefined);
+          
           handleButtonClick();
           mutate(P2P_OrderDetails_URL);
+          
           formikAPL.current.resetForm({
             values: {
               reason: '', message: '', submit: null
@@ -456,6 +411,50 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
       setSnackbarMessage({ msg: 'Upload Screenshot', success: false });
       setSnackbarOpen(true);
     }
+  }
+
+  // Cancel Appeal
+  const AppealCancel = (orderDetails) => {
+    var postData = {
+      platformId: orderDetails?.platformId,
+      orderId: orderDetails?.orderId,
+    };
+
+    postDataP2P(P2P_Appeal_Cancel(), postData).then(function (res) {
+      // console.log(res, 'Cancel Appeal');
+
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            console.log('res', res.error.name)
+            setSnackbarMessage({ msg: 'Appeal cancelled', success: false });
+            setSnackbarOpen(true);
+            handleButtonClick()
+            mutate(P2P_OrderDetails_URL);
+          }
+          else {
+            console.log('res.error', res.error)
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        setSnackbarMessage({ msg: 'Cancelled Appeal', success: false });
+        setSnackbarOpen(true);
+        
+        // Get Order details
+        mutate(P2P_OrderDetails_URL);
+      }
+    }, function (err) {
+      console.log(err);
+      // Logout User
+    });
   }
 
   const getStepContent = (step) => {

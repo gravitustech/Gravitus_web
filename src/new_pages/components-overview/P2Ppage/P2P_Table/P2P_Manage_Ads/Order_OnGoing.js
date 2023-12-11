@@ -158,31 +158,6 @@ export default function OngoingTab({ orders, pairInfo, setSnackbarOpen, setSnack
         >
           <OrderTableHead />
           <TableBody>
-            {/* {orders?.ongoing?.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
-                  <Norecordfoundcomponents
-                    description='No Record Found' />
-                </TableCell>
-              </TableRow>
-            ) : (
-              orders.ongoing.map((item, index) => (
-                <li key={index}>
-                  {item.side}
-                  {item.price}
-                  {item.amount}
-                  {item.price}
-
-                  <Link
-                    variant='body1'
-                    sx={{ textDecorationColor: 'text.sell', cursor: 'pointer' }}
-                    color="text.sell"
-                    onClick={() => deleteOrder(item)}
-                  >
-                    Cancel
-                  </Link>
-                </li>
-              )))} */}
             {orders?.ongoing?.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>

@@ -13,6 +13,7 @@ import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import useSWR, { mutate } from 'swr';
 import { P2P_TradeMessages_URL, P2P_SendMessage_URL, P2P_SendPicture_URL, formDataP2P, postDataP2P } from "src/api_ng/peer2peer_ng";
 import { getConfig_ng, setConfig_ng } from '../../../../../../utils_ng/localStorage_ng';
+
 import ImageCropper from "src/components/_cropper";
 import { Formik } from "formik";
 
@@ -44,9 +45,8 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
       platformId: getConfig_ng('P2PPair').platformId,
       orderId: orderDetails?.orderId,
       message: input,
-    }
+    };
 
-    // console.log(postData, 'Post Message');
     postDataP2P(P2P_SendMessage_URL(), postData).then(function (res) {
       console.log(res);
       if (res.error !== 'ok') {
@@ -123,9 +123,9 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
   };
 
   const handleModalClose = () => {
-    setModalOpen(false)
-    // setImageToCrop(undefined)
-    // setCroppedImage(undefined)
+    setCroppedImage(undefined);
+    setImageToCrop(undefined);
+    setModalOpen(false);
   };
 
   const onUploadFile = (event) => {
@@ -151,7 +151,6 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
         fileI: croppedImage,
       };
 
-      // console.log('postData Buy', postData);
       formDataP2P(P2P_SendPicture_URL(), postData).then(function (res) {
 
         handleModalClose();
