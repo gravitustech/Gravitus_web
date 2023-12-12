@@ -32,5 +32,4 @@ export const DELETE_ADMIN_USER = 'deleteAdminUser';
 
 // Account
 export const SET_SOCKET_STATE = 'setAccountState';
-
 export const LOGOUT_USER = 'logoutUser';

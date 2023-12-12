@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
 
-//Router
+// Router
 import { Link as RouterLink } from 'react-router-dom';
 import { Link, Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -12,7 +12,8 @@ import '@fontsource/montserrat/300.css';
 import '@fontsource/montserrat/400.css';
 import '@fontsource/montserrat/500.css';
 import '@fontsource/montserrat/700.css';
-//styles
+
+// Styles
 import {
   Grid,
   AppBar,
@@ -30,7 +31,7 @@ import {
 } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 
-//file imports
+// File Imports
 import Notification from './Header/HeaderContent/Notification';
 import GravitusNavigationlogin from './Header/Navgrouplogin/Navigationlogin';
 import Profile from './Header/HeaderContent/Profile/index';
@@ -40,11 +41,10 @@ import CustomShadows from './shadows';
 // import Palette from './palette';
 import ComponentsOverrides from './overrides';
 
-//logo imports
+// Logo Imports
 import Logo from '../../components/Logo/Logo';
 import Logo1 from '../../components/Logo/Logo1';
 
-//icons
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 // import Brightness4Icon from '@mui/icons-material/Brightness4';
@@ -73,6 +73,10 @@ const GravitusMainLayout = () => {
 
   const handleCloseDrawer = () => {
     setopenDrawer(false);
+  };
+
+  const toggleSuperTheme = () => {
+    // Toggle Material Ui Theme
   };
 
   return (
@@ -127,6 +131,8 @@ const GravitusMainLayout = () => {
                     <ListItem sx={{ pl: 9 }}>
                       <Button
                         disableRipple
+                        // onClick={toggleSuperTheme}
+                        // onClick={()=> toggleSuperTheme()}
                         onClick={themePaletteModeContext.toggleThemePaletteMode}
                         color="inherit"
                         sx={{ height: '32px' }}

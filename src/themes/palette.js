@@ -24,11 +24,11 @@ const Palette = (mode) => {
     '#141414',
     '#000000'
   ];
+
   const greyAscent = ['#fafafa', '#bfbfbf', '#434343', '#1f1f1f'];
   const greyConstant = ['#fafafb', '#e6ebf1'];
 
   colors.grey = [...greyPrimary, ...greyAscent, ...greyConstant];
-
   const paletteColor = ThemeOption(colors);
 
   return createTheme({

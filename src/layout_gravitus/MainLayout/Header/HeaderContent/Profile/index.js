@@ -1,34 +1,22 @@
 import PropTypes from 'prop-types';
-import { useRef, useState } from 'react';
-// material-ui
-import { useTheme } from '@mui/material/styles';
-import {
-  Avatar,
-  Box,
-  ButtonBase,
-  CardContent,
-  ClickAwayListener,
-  Divider,
-  Grid,
-  IconButton,
-  Paper,
-  Popper,
-  Stack,
-  Tab,
-  Tabs,
-  Typography
-} from '@mui/material';
-import MainCard from '../../../../../components/MainCard';
-import Transitions from '../../../../../components/@extended/Transitions';
-import ProfileTab from './ProfileTab';
-import { logoutUserWithToken } from '../../../../../api/auth';
-import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser } from '../../../../../appRedux/actions/adminUser';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { getProfileURL, fetcher } from '../../../../../api/profile';
-import useSWR from 'swr';
 
-// tab panel wrapper
+import { useTheme } from '@mui/material/styles';
+import { Avatar, Box, ButtonBase, CardContent, ClickAwayListener, Divider,
+  Grid, IconButton, Paper, Popper, Stack, Tab, Tabs, Typography } from '@mui/material';
+
+import Transitions from '../../../../../components/@extended/Transitions';
+import MainCard from '../../../../../components/MainCard';
+import ProfileTab from './ProfileTab';
+
+import { logoutUser } from '../../../../../appRedux/actions/adminUser';
+import { getProfileURL, fetcher } from '../../../../../api/profile';
+import { logoutUserWithToken } from '../../../../../api/auth';
+
+import useSWR from 'swr';
+import { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+
 function TabPanel({ children, value, index, ...other }) {
   return (
     <div role="tabpanel" hidden={value !== index} id={`profile-tabpanel-${index}`} aria-labelledby={`profile-tab-${index}`} {...other}>
@@ -51,12 +39,13 @@ function a11yProps(index) {
 }
 
 // ==============================|| HEADER CONTENT - PROFILE ||============================== //
+
 const Email = ({ email }) => {
   const theme = useTheme();
   const firstTwo = email.slice(0, 4);
   const lastTwo = email.slice(-10);
-  const middle = '***';
 
+  const middle = '***';
   const maskedEmail = `${firstTwo}${middle}${lastTwo}`;
 
   return (
@@ -69,10 +58,11 @@ const Email = ({ email }) => {
 const Profile = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const { token, user } = useSelector((state) => state.user);
+  
   const handleLogout = async () => {
-    
     try {
       await logoutUserWithToken(token);
       dispatch(logoutUser());
@@ -84,6 +74,7 @@ const Profile = () => {
 
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
+
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -96,13 +87,11 @@ const Profile = () => {
   };
 
   const [value, setValue] = useState(0);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const { data, error, isLoading } = useSWR(
-    getProfileURL(),
+  const { data, error, isLoading } = useSWR( getProfileURL(),
     (url) => fetcher(url, { accountType: 'GRAVITUS' })
     // { suspense: true }
   );

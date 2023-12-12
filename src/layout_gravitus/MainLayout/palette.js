@@ -29,7 +29,6 @@ const Palette = (paletteMode, themeVariant) => {
   const greyConstant = ['#fafafb', '#e6ebf1'];
 
   colors.grey = [...greyPrimary, ...greyAscent, ...greyConstant];
-
   const paletteColor = Theme(colors);
 
   return createTheme({

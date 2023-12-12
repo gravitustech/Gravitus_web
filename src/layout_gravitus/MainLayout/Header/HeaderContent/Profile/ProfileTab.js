@@ -1,19 +1,20 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import { List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 
-//
-import dashboard from '../../../../../assets/images/gravitusimage/dashboard.svg';
-import Payment from '../../../../../assets/images/gravitusimage/Paymenticon.svg';
 import useridentity from '../../../../../assets/images/gravitusimage/useridentity.svg';
 import security from '../../../../../assets/images/gravitusimage/security.svg';
+import logout from '../../../../../assets/images/gravitusimage/logout.svg';
+
 import supportlight from '../../../../../assets/images/gravitusimage/supportlight.svg';
 import about from '../../../../../assets/images/gravitusimage/about.svg';
 import faq from '../../../../../assets/images/gravitusimage/faq.svg';
-import logout from '../../../../../assets/images/gravitusimage/logout.svg';
+
+import dashboard from '../../../../../assets/images/gravitusimage/dashboard.svg';
+import Payment from '../../../../../assets/images/gravitusimage/Paymenticon.svg';
+
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 // ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
@@ -22,11 +23,13 @@ const ProfileTab = ({ handleLogout, setOpen }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [selectedIndex, setSelectedIndex] = useState('');
+
   const handleListItemClick = (event, index) => {
     navigate(`/profile/${tabNameToIndex[index]}`);
     setSelectedIndex(index);
     setOpen(false);
   };
+
   const tabNameToIndex = {
     0: 'dashboard',
     1: 'payment',
@@ -36,6 +39,7 @@ const ProfileTab = ({ handleLogout, setOpen }) => {
     // 5: 'about',
     6: 'faq'
   };
+
   const menuItems = [
     { index: 0, icon: dashboard, label: 'Dashboard' },
     { index: 1, icon: Payment, label: 'Payment' },
@@ -46,6 +50,7 @@ const ProfileTab = ({ handleLogout, setOpen }) => {
     { index: 6, icon: faq, label: 'FAQ' },
     { index: 7, icon: logout, label: 'Logout' }
   ];
+
   return (
     <List component="nav" sx={{ p: 0, '& .MuiListItemIcon-root': { minWidth: 32, color: theme.palette.grey[500] } }}>
       {menuItems.map((item) => (
