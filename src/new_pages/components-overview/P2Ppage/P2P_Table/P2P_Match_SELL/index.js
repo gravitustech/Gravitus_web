@@ -225,7 +225,7 @@ function OrderTableBody(props) {
         setInputs({ quantity: '', totalamount: '', paymentoption: [] });
         // Mutate listing page if necessary
 
-        formikMatchSell.current.resetForm({values : { 
+        formikMatchSell?.current?.resetForm({values : { 
           quantity: '', 
           totalamount: '',
           paymentoption: []

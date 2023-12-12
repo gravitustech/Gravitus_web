@@ -10,6 +10,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import SpotTabs from './SpotTabs';
 import MarketTable from './MarketTable';
+import FavouriteTab from './FavouriteTabs';
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
@@ -176,8 +177,8 @@ const MarketpageTable = ({ marketData, listings,setPlatformId }) => {
             />
           </Stack>
           <TabPanel value="0" sx={{ padding: '0px' }}>
-            <MarketTable flag="INR" marketData={marketData} searchQuery={searchQuery} listings={listings} setPlatformId={setPlatformId}/>
-            {/* <FavouriteTab /> */}
+            {/* <MarketTable flag="INR" marketData={marketData} searchQuery={searchQuery} listings={listings} setPlatformId={setPlatformId}/> */}
+            <FavouriteTab marketData={marketData} searchQuery={searchQuery} listings={listings} setPlatformId={setPlatformId}/>
           </TabPanel>
           <TabPanel value="1" sx={{ padding: '0px' }}>
             <SpotTabs marketData={marketData} searchQuery={searchQuery} listings={listings} setPlatformId={setPlatformId}/>

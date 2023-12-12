@@ -13,24 +13,55 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import Norecordfoundcomponents from '../../Walletpage/Norecordfoundcomponents';
 import { setConfig_ng } from 'src/utils_ng/localStorage_ng';
+import { FavouritesCrypto_URL, postDataSystem } from 'src/api_ng/system_ng';
 
-function MyComponent({ id }) {
+function MyComponent({ id, row }) {
   const [clicked, setClicked] = useState(localStorage.getItem(`iconClicked-${id}`) === 'true');
 
   useEffect(() => {
     localStorage.setItem(`iconClicked-${id}`, clicked.toString());
   }, [clicked]);
 
-  const handleClick = () => {
-    setClicked(!clicked);
+  const handleClick = (row) => {
+    var postData = {
+      "platformId": row?.platformId
+    };
+
+    // console.log('postData', postData)
+
+    postDataSystem(FavouritesCrypto_URL(), postData).then(function (res) {
+      console.log("res", res);
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            // console.log(res.error.name)
+          }
+          else {
+            // console.log('error')
+          }
+        }
+      } else {
+        // console.log('No error')
+        setClicked(!clicked)
+      }
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
   };
 
   return (
     <>
       {clicked ? (
-        <StarIcon onClick={handleClick} style={{ color: '#F0B90B', cursor: 'pointer' }} />
+        <StarIcon onClick={() => handleClick(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />
       ) : (
-        <StarBorderIcon onClick={handleClick} style={{ cursor: 'pointer' }} />
+        <StarBorderIcon onClick={() => handleClick(row)} style={{ cursor: 'pointer' }} />
       )}
     </>
   );
@@ -177,7 +208,7 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                       </Stack>
                     </Stack>
                   ) : (
-                    <Stack direction="row" sx={{paddingLeft: '60px'}}>
+                    <Stack direction="row" sx={{ paddingLeft: '60px' }}>
                       <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                         {headCell.label}
                       </Typography>
@@ -354,7 +385,7 @@ export default function MarketTable({ marketData, flag, searchQuery, listings, s
                     >
                       <TableCell sx={{ border: 'none', padding: '0' }} component="th" scope="row" align="left">
                         <Stack direction="row" alignItems="center" spacing={0.5}>
-                          {<MyComponent id={row.id} />}
+                          {<MyComponent id={row.platformId} row={row} />}
                           <img src={row.imagePath} alt="ico" width="24" height="24" />
                           <Typography
                             variant="body1"

@@ -1,5 +1,5 @@
 
-import { Stack, useTheme, Tab } from '@mui/material';
+import { Stack, useTheme, Tab, Badge } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 
 import Chatscreen from './Chat_Screen';
@@ -39,7 +39,7 @@ const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
   }
 
   const {
-    data: chatData, 
+    data: chatData,
     error: chatError
   } = useTradeMessages();
 
@@ -56,21 +56,21 @@ const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
     return { data, error, isLoading }
   }
 
-  const { 
-    data: Appealdata, 
-    error: Appealerror 
+  const {
+    data: Appealdata,
+    error: Appealerror
   } = useAppealMessages();
 
   useEffect(() => {
 
-    let P2POrderEvent = '/P2POrder_'+ getConfig_sp().userId +'/POST';
-    socket.on(P2POrderEvent, function(res) {
-      
+    let P2POrderEvent = '/P2POrder_' + getConfig_sp().userId + '/POST';
+    socket.on(P2POrderEvent, function (res) {
+
       console.log(res, 'Super Res');
-      if(orderDetails.orderId == res.orderId && res.notifyType == 'notifyMessage') {
+      if (orderDetails.orderId == res.orderId && res.notifyType == 'notifyMessage') {
         mutate(P2P_TradeMessages_URL); // Temp solution need to update chat array
       }
-      else if(orderDetails.orderId == res.orderId && res.notifyType == 'updateAppeal') {
+      else if (orderDetails.orderId == res.orderId && res.notifyType == 'updateAppeal') {
         mutate(P2P_AppealMessages_URL); // Temp solution need to update appeal array
       }
 
@@ -99,14 +99,11 @@ const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
                   minHeight: '40px',
                 }}
                 label={
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center'
-                    }}
-                  >
-                    Chat
-                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                  <span style={{ marginRight: '16px' }}>Chat</span>
+                  <Badge badgeContent={2} color="primary">
+                  </Badge>
+                </div>
                 }
                 value="0"
               />
@@ -121,14 +118,11 @@ const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
                   minHeight: '40px',
                 }}
                 label={
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center'
-                    }}
-                  >
-                    Appeal History
-                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                  <span style={{ marginRight: '16px' }}>  Appeal History</span>
+                  <Badge badgeContent={2} color="primary">
+                  </Badge>
+                </div>
                 }
                 value="1"
               />
@@ -148,8 +142,8 @@ const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
         </TabPanel>
         <TabPanel value="1" sx={{ padding: '0', paddingTop: '12px' }}>
           <AppealChatscreen
-            messages={appealMessage}
-            // messages={Appealdata?.result?.appealMessage}
+            // messages={appealMessage}
+            messages={Appealdata?.result?.appealMessage}
             orderDetails={Appealdata?.result?.orderDetails}
             counterPart={counterPart}
             mutate={mutate}

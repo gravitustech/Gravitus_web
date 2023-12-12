@@ -129,7 +129,7 @@ const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarO
         setInputs({ price: '', quantity: '', totalamount: '', paymentoption: [] });
         mutate(P2P_SuperOrders_URL);
 
-        formikPostSell.current.resetForm({values : { 
+        formikPostSell?.current?.resetForm({values : { 
           price: '', 
           quantity: '',
           totalamount: '',

@@ -166,15 +166,25 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
   const counterPart = data?.result?.counterPart;
   const orderDetails = data?.result?.orderDetails;
 
+  console.log('resultdata', resultdata);
+
   const [activeStep, setActiveStep] = React.useState(
     resultdata?.actionCaption === "Order Timed Out" ? 3 :
       resultdata?.superStatus === 3 ? 3
         : (resultdata?.superStatus === 0 ? 0 : 2)
   );
 
+  React.useEffect(() => {
+    setActiveStep(
+      resultdata?.actionCaption === "Order Timed Out" ? 3 :
+        resultdata?.superStatus === 3 ? 3
+          : (resultdata?.superStatus === 0 ? 0 : 2)
+    );
+  }, [resultdata]);
+
   const [skipped, setSkipped] = useState(new Set());
   const [open, setOpen] = useState(false); // Confirm Dialog
-  
+
   const [isLoading, setIsLoading] = useState(false); // Show Loader
   const [releaseReq, setReleaseReq] = useState({ receiptNo: '', submit: null });
   const [appealInputs, setAppealInputs] = useState({ reason: '', message: '', submit: null });
@@ -345,8 +355,22 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
   };
 
   const handleModalClose = () => {
-    setModalOpen(false)
+    setModalOpen(false);
+    setCroppedImage(undefined);
+    setImageToCrop(undefined);
   };
+
+  const handleImageCancel = () => {
+    setCroppedImage(undefined);
+    setImageToCrop(undefined);
+    setModalOpen(false);
+  }
+
+  const handleImageUpload = () => {
+    // setCroppedImage(false);
+    setImageToCrop(undefined);
+    setModalOpen(false);
+  }
 
   // Handle Appeal
   function handleAppeal(values) {
@@ -392,10 +416,10 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
           setAppealInputs({ reason: '', message: '', submit: null });
           setImageToCrop(undefined);
           setCroppedImage(undefined);
-          
+
           handleButtonClick();
           mutate(P2P_OrderDetails_URL);
-          
+
           formikAPL.current.resetForm({
             values: {
               reason: '', message: '', submit: null
@@ -415,6 +439,8 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
 
   // Cancel Appeal
   const AppealCancel = (orderDetails) => {
+    mutate(P2P_OrderDetails_URL);
+    setIsLoading(true);
     var postData = {
       platformId: orderDetails?.platformId,
       orderId: orderDetails?.orderId,
@@ -422,7 +448,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
 
     postDataP2P(P2P_Appeal_Cancel(), postData).then(function (res) {
       // console.log(res, 'Cancel Appeal');
-
+      setIsLoading(false);
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User
@@ -437,6 +463,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
             setSnackbarOpen(true);
             handleButtonClick()
             mutate(P2P_OrderDetails_URL);
+            setIsLoading(false);
           }
           else {
             console.log('res.error', res.error)
@@ -447,7 +474,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
       } else {
         setSnackbarMessage({ msg: 'Cancelled Appeal', success: false });
         setSnackbarOpen(true);
-        
+
         // Get Order details
         mutate(P2P_OrderDetails_URL);
       }
@@ -677,7 +704,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                                 <img src={croppedImage} alt="wew" width="100%" height='auto' />
                                 <Tooltip title="click to clear the image" placement="top" arrow>
                                   <DeleteForever
-                                    onClick={() => { setCroppedImage(undefined); document.getElementById('superFile').value= null; }}
+                                    onClick={() => { setCroppedImage(undefined); document.getElementById('superFile').value = null; }}
                                     sx={{
                                       cursor: 'pointer',
                                       color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
@@ -706,7 +733,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                           </Stack>
                         </Card>
                       </Stack>
-                      
+
                       <Modal
                         open={modalOpen}
                         onClose={handleModalClose}
@@ -754,11 +781,11 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                             {/* </Stack> */}
                           </Grid>
                           <Stack pt={1} direction="row" spacing={2} justifyContent="space-around">
-                            <Button variant="contained5" onClick={handleModalClose}>
+                            <Button variant="contained5" onClick={handleImageCancel}>
                               Cancel
                             </Button>
                             <Button variant="contained4"
-                              onClick={handleModalClose}
+                              onClick={handleImageUpload}
                             >
                               Upload
                             </Button>
@@ -1131,11 +1158,11 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                                 {/* </Stack> */}
                               </Grid>
                               <Stack pt={1} direction="row" spacing={2} justifyContent="space-around">
-                                <Button variant="contained5" onClick={handleModalClose}>
+                                <Button variant="contained5" onClick={handleImageCancel}>
                                   Cancel
                                 </Button>
                                 <Button variant="contained4"
-                                  onClick={handleModalClose}
+                                  onClick={handleImageUpload}
                                 >
                                   Upload
                                 </Button>
@@ -1147,13 +1174,13 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                               {errors.file}
                             </FormHelperText>
                           )} */}
-                          
-                            <Stack direction="row" spacing={3} pt={3}>
-                              <Button variant="p2pcancelbutton" onClick={handleButtonClick}>Cancel</Button>
-                              <Button type="submit" variant="p2pnextbutton" onClick={() => handleAppeal(values)}>
-                                {isLoading ? <CircularProgress color="inherit" size={30} /> : 'File a Appeal'}
-                              </Button>
-                            </Stack>
+
+                          <Stack direction="row" spacing={3} pt={3}>
+                            <Button variant="p2pcancelbutton" onClick={handleButtonClick}>Cancel</Button>
+                            <Button type="submit" variant="p2pnextbutton" onClick={() => handleAppeal(values)}>
+                              {isLoading ? <CircularProgress color="inherit" size={30} /> : 'File a Appeal'}
+                            </Button>
+                          </Stack>
                         </form>
                       </>
                     )}

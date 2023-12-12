@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 
 import {
   Box, Typography, OutlinedInput, Card, Stack, useTheme, Avatar,
-  InputAdornment, IconButton, Badge, Tooltip, Modal, Grid, Button
+  InputAdornment, IconButton, Badge, Tooltip, Modal, Grid, Button, CircularProgress
 } from "@mui/material";
 
 import { styled } from "@mui/material/styles";
@@ -123,10 +123,16 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
   };
 
   const handleModalClose = () => {
-    setCroppedImage(undefined);
-    // setImageToCrop(undefined);
     setModalOpen(false);
+    setCroppedImage(undefined);
+    setImageToCrop(undefined);
   };
+
+  const handleImageCancel = () => {
+    setCroppedImage(undefined);
+    setImageToCrop(undefined);
+    setModalOpen(false);
+  }
 
   const onUploadFile = (event) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -141,6 +147,7 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
   };
 
   const handleSendPicture = () => {
+    setIsLoading(true);
     if (croppedImage != undefined) {
       var postData = {
         updateInfo: {
@@ -363,12 +370,12 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
                   </Grid>
 
                   <Stack pt={1} direction="row" spacing={2} justifyContent="space-around">
-                    <Button variant="contained5" onClick={handleModalClose}>
+                    <Button variant="contained5" onClick={handleImageCancel}>
                       Cancel
                     </Button>
                     <Button variant="contained4"
                       onClick={() => handleSendPicture()} >
-                      Upload
+                      {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Upload'}
                     </Button>
                   </Stack>
                 </Box>

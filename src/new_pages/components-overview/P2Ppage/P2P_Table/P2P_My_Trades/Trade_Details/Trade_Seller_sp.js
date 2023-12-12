@@ -161,11 +161,21 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
   const counterPart = data?.result?.counterPart;
   const orderDetails = data?.result?.orderDetails;
 
+  console.log('resultdata', resultdata)
+
   const [activeStep, setActiveStep] = React.useState(
     resultdata?.actionCaption === "Order Timed Out" ? 2 :
-      resultdata?.superStatus === 2 ? 2 :
-        resultdata?.superStatus === 0 ? 0 : 1
+      resultdata?.superStatus === 2 ? 2
+        : resultdata?.superStatus === 0 ? 0 : 1
   );
+
+  React.useEffect(() => {
+    setActiveStep(
+      resultdata?.actionCaption === "Order Timed Out" ? 2 :
+        resultdata?.superStatus === 2 ? 2
+          : resultdata?.superStatus === 0 ? 0 : 1
+    );
+  }, [resultdata]);
 
   const [skipped, setSkipped] = React.useState(new Set());
   const [open, setOpen] = useState(false); // Confirm Dialog
@@ -303,8 +313,22 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
   };
 
   const handleModalClose = () => {
-    setModalOpen(false)
+    setModalOpen(false);
+    setCroppedImage(undefined);
+    setImageToCrop(undefined);
   };
+
+  const handleImageCancel = () => {
+    setCroppedImage(undefined);
+    setImageToCrop(undefined);
+    setModalOpen(false);
+  }
+
+  const handleImageUpload = () => {
+    // setCroppedImage(false);
+    setImageToCrop(undefined);
+    setModalOpen(false);
+  }
 
   // Handle Appeal
   function handleAppeal(values) {
@@ -350,10 +374,10 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
           setAppealInputs({ reason: '', message: '', submit: null });
           setImageToCrop(undefined);
           setCroppedImage(undefined);
-          
+
           handleButtonClick()
           mutate(P2P_OrderDetails_URL);
-          
+
           formikAPL.current.resetForm({
             values: {
               reason: '', message: '', submit: null
@@ -373,6 +397,8 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
 
   // Cancel Appeal
   const AppealCancel = (orderDetails) => {
+    mutate(P2P_OrderDetails_URL);
+    setIsLoading(true);
     var postData = {
       platformId: orderDetails?.platformId,
       orderId: orderDetails?.orderId,
@@ -380,7 +406,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
 
     postDataP2P(P2P_Appeal_Cancel(), postData).then(function (res) {
       // console.log(res, 'Cancel Appeal');
-
+      setIsLoading(false);
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User
@@ -395,6 +421,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
             setSnackbarOpen(true);
             handleButtonClick()
             mutate(P2P_OrderDetails_URL);
+            setIsLoading(false);
           }
           else {
             console.log('res.error', res.error)
@@ -405,7 +432,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
       } else {
         setSnackbarMessage({ msg: 'Cancelled Appeal', success: false });
         setSnackbarOpen(true);
-        
+
         // Get Order details
         mutate(P2P_OrderDetails_URL);
       }
@@ -477,58 +504,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                 <Button disabled type="submit" variant="confirmrecipt">
                   Confirm Receipt
                 </Button>
-                {/* {
-                  resultdata?.action_1 === 'disabled' ? (
-                    <Button variant="sellAppealbutton" disabled >
-                      Appeal
-                    </Button>
-                  ) :
-                    (
-                      <Button variant="sellAppealbutton" onClick={handleButtonClick} >
-                        Appeal
-                      </Button>
-                    )
-                }
-                {
-                  resultdata?.action_1 === 'disabled' ? (
-                    <Button disabled type="submit" variant="confirmrecipt">
-                      Confirm Receipt
-                    </Button>
-                  ) :
-                    (
-                      <Button onClick={openConfirmDlg} type="submit" variant="confirmrecipt">
-                        Confirm Receipt
-                      </Button>
-                    )
-                } */}
-
               </Stack>
-
-              <Dialog
-                onClose={closeConfirmDlg}
-                open={open}
-              >
-                <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <img src={warninggif} alt='warninggif' />
-                  <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                    Confirm ?
-                  </Typography>
-                  <Typography textAlign='center' variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                    I confirm that the payment was received with <br /> the correct amount and sender information.
-                  </Typography>
-                  <Stack pt={1} direction='row' spacing={2} justifyContent='space-between'>
-                    <Button variant="contained5" onClick={closeConfirmDlg}>
-                      Cancel
-                    </Button>
-                    <Button
-                      // onClick={handleNext}
-                      onClick={releaseCrypto}
-                      variant="contained4">
-                      Confirm
-                    </Button>
-                  </Stack>
-                </Stack>
-              </Dialog>
             </Stack>
           </>
         );
@@ -606,9 +582,15 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                   {
                     resultdata?.actionLabel_2 === 'Confirm Receipt' ? (
                       <>
-                        <Button variant="sellAppealbutton" onClick={handleButtonClick} >
-                          Appeal
-                        </Button>
+                        {resultdata?.appealStatus === '1' ? (
+                          <Button variant="sellAppealbutton" onClick={goBack}>
+                            Close
+                          </Button>
+                        ) : (
+                          <Button variant="sellAppealbutton" onClick={handleButtonClick} >
+                            Appeal
+                          </Button>
+                        )}
                         <Button onClick={openConfirmDlg} type="submit" variant="confirmrecipt">
                           Confirm Receipt
                         </Button>
@@ -873,11 +855,11 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                                 {/* </Stack> */}
                               </Grid>
                               <Stack pt={1} direction="row" spacing={2} justifyContent="space-around">
-                                <Button variant="contained5" onClick={handleModalClose}>
+                                <Button variant="contained5" onClick={handleImageCancel}>
                                   Cancel
                                 </Button>
                                 <Button variant="contained4"
-                                  onClick={handleModalClose}
+                                  onClick={handleImageUpload}
                                 >
                                   Upload
                                 </Button>

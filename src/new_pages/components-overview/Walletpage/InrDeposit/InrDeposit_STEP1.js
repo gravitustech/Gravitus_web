@@ -106,8 +106,8 @@ const InrDeposit_STEP1 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
                 depositamount: Yup.number().positive().required("Don't leave empty*")
                   .test(
                     'minimum-amount',
-                    'Deposit amount must be at least ₹ 1,000',
-                    (value) => parseFloat(value) >= 1000
+                    'Deposit amount must be at least ₹ 100',
+                    (value) => parseFloat(value) >= 100
                   ).test(
                     'minimum-amount',
                     'Deposit amount should not exceeds ₹ 1,00,000',

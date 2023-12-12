@@ -42,10 +42,16 @@ const headCells = [
     label: 'Type'
   },
   {
-    id: 'Price',
+    id: 'AtPrice',
     align: 'left',
     disablePadding: false,
-    label: 'Price'
+    label: 'At Price'
+  },
+  {
+    id: 'AvgPrice',
+    align: 'left',
+    disablePadding: false,
+    label: 'Avg Price'
   },
   {
     id: 'StopPrice',
@@ -153,7 +159,7 @@ export default function HistoryTab({ isAuthorised, orderTableData, priceData, ca
                     // const isItemSelected = isSelected(row.Name);
                     const labelId = `enhanced-table-checkbox-${index}`;
                     const shouldRenderRow = !hideCancelled || (hideCancelled && row.status !== 'Cancelled');
-
+                    console.log('row', row)
                     return shouldRenderRow && (
                       <TableRow
                         sx={{ '&:last-child td, &:last-child th': { border: 0 }, height: '52px' }}
@@ -176,12 +182,22 @@ export default function HistoryTab({ isAuthorised, orderTableData, priceData, ca
                             </Typography>
                           </Stack>
                         </TableCell>
+
                         <TableCell sx={{ border: 'none', paddingBottom: '7px', paddingTop: '0px' }} align="left">
                           <Typography
                             variant="subtitle1"
                             sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                           >
                             {row.price}
+                          </Typography>
+                        </TableCell>
+
+                        <TableCell sx={{ border: 'none', paddingBottom: '7px', paddingTop: '0px' }} align="left">
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                          >
+                            {row.aPrice}
                           </Typography>
                         </TableCell>
 

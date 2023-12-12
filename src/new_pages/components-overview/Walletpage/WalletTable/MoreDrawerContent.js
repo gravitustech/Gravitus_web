@@ -53,10 +53,10 @@ const MoreDrawerContent = ({ selectedCoinInfo, statementData }) => {
 
             <Stack direction='column' pr={4} spacing={2} alignItems='end' >
               <Typography variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' }}>
-                {selectedCoinInfo?.superWallet?.mAvailable - selectedCoinInfo?.superWallet?.sOrders - selectedCoinInfo?.superWallet?.pOrders} {selectedCoinInfo?.listing?.ticker}
+                {statementData?.result?.totalCrypto} {selectedCoinInfo?.listing?.ticker}
               </Typography>
               <Typography variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' }}>
-                {selectedCoinInfo?.superWallet?.mAvailable - selectedCoinInfo?.superWallet?.sOrders - selectedCoinInfo?.superWallet?.pOrders} USD
+                {statementData?.result?.totalInUsd} USD
               </Typography>
             </Stack>
           </Stack>

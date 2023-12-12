@@ -91,6 +91,10 @@ export const MarketOverview_URL = () => {
   return 'api/generic/dashboard/markets';
 };
 
+export const FavouritesCrypto_URL = () => {
+  return 'api/activity/dashboard/favourites';
+};
+
 export const Security_URL = () => {
   return 'api/activity/security/secFeatures'
 }

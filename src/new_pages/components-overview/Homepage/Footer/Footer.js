@@ -30,7 +30,7 @@ const Footer = ({ isAuthorised }) => {
             <Typography
               variant="title2"
               component={RouterLink}
-              to="/market"
+              to="/Market"
               sx={{
                 textDecorationLine: 'none',
                 color: theme.palette.mode === 'dark' ? 'text.white' : 'text.white',
@@ -44,7 +44,7 @@ const Footer = ({ isAuthorised }) => {
             <Typography
               variant="title2"
               component={RouterLink}
-              to="/spot"
+              to="/Spotpage"
               sx={{
                 textDecorationLine: 'none',
                 color: theme.palette.mode === 'dark' ? 'text.white' : 'text.white',
@@ -58,7 +58,7 @@ const Footer = ({ isAuthorised }) => {
             <Typography
               variant="title2"
               component={RouterLink}
-              to="/p2p"
+              to="/P2P"
               sx={{
                 textDecorationLine: 'none',
                 color: theme.palette.mode === 'dark' ? 'text.white' : 'text.white',
