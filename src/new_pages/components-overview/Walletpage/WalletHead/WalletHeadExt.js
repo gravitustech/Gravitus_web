@@ -1,17 +1,21 @@
-import React from 'react'
-import { Stack, Grid, useTheme } from '@mui/material';
 import DepositLight from '../../../../assets/images/gravitusimage/DepositLight.svg';
 import DepositDark from '../../../../assets/images/gravitusimage/DepositDark.svg';
+
 import WithdrawLight from '../../../../assets/images/gravitusimage/WithdrawLight.svg';
 import WithdrawDark from '../../../../assets/images/gravitusimage/WithdrawDark.svg';
-import WalletHeadComponents from './Wallethead2Components';
 
-const WalletHead2 = () => {
+import { Stack, Grid, useTheme } from '@mui/material';
+import WalletHeadSup from './WalletHeadSup';
+
+import React from 'react'
+
+const WalletHeadExt = () => {
   const theme = useTheme();
+
   return (
     <Grid pt={5}>
       <Stack spacing={2}>
-        <WalletHeadComponents
+        <WalletHeadSup
           number='01.'
           title='Deposit'
           description='If you own cryptocurrency on another platform or wallet, 
@@ -19,7 +23,7 @@ const WalletHead2 = () => {
                     crypto holdings with our suite of services on Gravitus Earn.'
           img={theme.palette.mode === 'dark' ? DepositDark : DepositLight}
         />
-        <WalletHeadComponents
+        <WalletHeadSup
           number='02.'
           title='Withdraw'
           description='A crypto withdrawal is the process of transferring or moving 
@@ -32,4 +36,4 @@ const WalletHead2 = () => {
   )
 }
 
-export default WalletHead2;
+export default WalletHeadExt;

@@ -1,23 +1,23 @@
 import React from 'react'
 import { Stack,Grid } from '@mui/material';
 import Noteicon from '../../../../../../assets/images/gravitusimage/notesicon.svg';
-import Importantnotescomponents from './Importantnotescomponents';
+import ImportantNotesExt from './_Del_ImportantNotesExt';
 
 const Importantnotes = () => {
     return (
         <Grid>
             <Stack direction='column' spacing={3} pl={5}>
-                <Importantnotescomponents
+                <ImportantNotesExt
                     img={Noteicon}
                     description={'Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper amet tincidunt.'}
                 />
 
-                <Importantnotescomponents
+                <ImportantNotesExt
                     img={Noteicon}
                     description={'Lorem ipsum dolor sit amet consectetur.'}
                 />
 
-                <Importantnotescomponents
+                <ImportantNotesExt
                     img={Noteicon}
                     description={'Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper amet tincidunt.'}
                 />

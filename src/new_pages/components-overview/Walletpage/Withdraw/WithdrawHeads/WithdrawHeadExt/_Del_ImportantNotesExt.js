@@ -1,10 +1,8 @@
-import React from 'react';
-
 import { Stack, Typography, useTheme } from '@mui/material';
 import PropTypes from 'prop-types';
+import React from 'react';
 
-function Importantnotescomponents({ img, description }) {
-
+function ImportantNotesExt({ img, description }) {
   const theme = useTheme();
 
   return (
@@ -16,10 +14,10 @@ function Importantnotescomponents({ img, description }) {
     </Stack>
   );
 }
-Importantnotescomponents.propTypes = {
+ImportantNotesExt.propTypes = {
   img: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
 };
 
 
-export default Importantnotescomponents;
+export default ImportantNotesExt;

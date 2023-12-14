@@ -1,19 +1,19 @@
-
+import WalletHeadExt from './WalletHead/WalletHeadExt';
+import WalletHead from './WalletHead/WalletHead';
 import { Grid, Divider } from '@mui/material';
-import WalletHead1 from './Wallethead/Wallethead1';
-import WalletHead2 from './Wallethead/Wallethead2';
 
-import WalletTable from './WalletTable/index';
-import Footer from '../Homepage/Footer/Footer';
 import Lodergif from 'src/components/Gravitusloader';
+import Footer from '../Homepage/Footer/Footer';
+import WalletTable from './WalletTable/index';
+
+import { useSelector } from 'react-redux';
+import { socket } from '../../../socket';
+
+import useSWR, { mutate } from 'swr';
+import React, { useEffect, useReducer, useState } from 'react';
 
 import { Wallet_Fetch_Info, fetcherWallet } from 'src/api_ng/wallet_ng';
 import { getConfig_sp, setConfig_ng } from '../../../utils_ng/localStorage_ng';
-
-import React, { useEffect, useReducer, useState } from 'react';
-import { socket } from '../../../socket';
-import { useSelector } from 'react-redux';
-import useSWR, { mutate } from 'swr';
 
 const Walletpage = () => {
   const isAuthorised = useSelector((state) => state.user.isAuthenticated);
@@ -45,8 +45,9 @@ const Walletpage = () => {
   if (walletEr) {
     // Call Logout User
   }
+  
+  console.log(walletRc, 'walletRc');
 
-  // For Future Use Case
   useEffect(() => {
     if (walletRc != undefined) {
       if (walletRc.error != 'ok') {
@@ -66,7 +67,7 @@ const Walletpage = () => {
         }
       }
       else {
-        // console.log(walletRc.result, 'Wallet Info Result');
+        console.log(walletRc.result, 'Wallet Info Result');
         setWALLETData({ type: 'UPDATE', data: walletRc.result });
       }
     }
@@ -89,13 +90,13 @@ const Walletpage = () => {
         <>
           <Grid container pl={15} pr={15} pt={3} pb={5}>
             <Grid item xs={12} sm={12} md={6} lg={4}>
-              {WALLETData && <WalletHead1 total={WALLETData?.totalInUsd} />}
+              {WALLETData && <WalletHead total={WALLETData?.totalInUsd} />}
             </Grid>
             <Grid item lg={2} pt={5} pr={6} display={{ xs: 'none', md: 'none', lg: 'block' }}>
               <Divider orientation="vertical" pt={5} sx={{ height: '309px' }} />
             </Grid>
             <Grid item xs={12} md={6} lg={6} display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
-              <WalletHead2 />
+              <WalletHeadExt />
             </Grid>
           </Grid>
 

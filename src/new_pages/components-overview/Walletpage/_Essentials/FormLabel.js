@@ -1,7 +1,7 @@
 import React from 'react'
 import { Stack, useTheme, Typography } from '@mui/material';
 
-function Depositehead1Components({ number, title, }) {
+function FormLabel({ number, title, }) {
   const theme = useTheme();
 
   return (
@@ -17,4 +17,4 @@ function Depositehead1Components({ number, title, }) {
   )
 }
 
-export default Depositehead1Components;
+export default FormLabel;

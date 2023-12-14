@@ -1,10 +1,12 @@
-import React from 'react';
-
+import NoRecordFound from '../../_Essentials/NoRecordFound';
 import PropTypes from 'prop-types';
 
-// material-ui
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, useTheme, Tooltip } from '@mui/material';
-import Norecordfoundcomponents from '../../Norecordfoundcomponents';
+import {
+  Table, TableBody, TableCell, TableContainer, TableHead, 
+  TableRow, Typography, Stack, useTheme, Tooltip 
+} from '@mui/material';
+
+import React from 'react';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
@@ -50,7 +52,6 @@ const headCells = [
 // ==============================|| WITHDRAW TABLE - HEADER ||============================== //
 
 function OrderTableHead() {
-
   const theme = useTheme();
 
   return (
@@ -94,7 +95,7 @@ const TransactionId = ({ transactionid }) => {
 
 function WithdrawTable({ historyData }) {
   const theme = useTheme();
-  // console.log({ historyData });
+
   return (
     <>
       <TableContainer variant="tablecontainer"
@@ -126,7 +127,7 @@ function WithdrawTable({ historyData }) {
               historyData.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
-                    <Norecordfoundcomponents
+                    <NoRecordFound
                       description='No Record Found' />
                   </TableCell>
                 </TableRow>
@@ -135,6 +136,7 @@ function WithdrawTable({ historyData }) {
                   // const isItemSelected = isSelected(row.Name);
                   const labelId = `enhanced-table-checkbox-${index}`;
                   const { userId, crypto, transType, transDesc, highlight, amount, charges, address, txId, href, status, date, timeStamp } = row;
+                  
                   const firstTenCharactersaddress = address.slice(0, 25);
                   const restOfCharactersaddress = address.slice(25);
 
@@ -199,7 +201,7 @@ function WithdrawTable({ historyData }) {
             ) : (
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
-                  <Norecordfoundcomponents
+                  <NoRecordFound
                     description='Select the coin' />
                 </TableCell>
               </TableRow>

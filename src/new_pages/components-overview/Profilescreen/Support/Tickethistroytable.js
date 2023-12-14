@@ -5,7 +5,7 @@ import React from 'react';
 
 // material-ui
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, useTheme } from '@mui/material';
-import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/Norecordfoundcomponents';
+import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
 // import copyicon from '../images/copyicon.svg'
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 function createData(Category, Message, Status, Date) {

@@ -2,18 +2,17 @@
 import { Grid, Typography, Stack, Card, useTheme, Box, IconButton } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
-import Deposithead1 from './DepositeHeads/Depositehead1/index';
-import Depositehead2 from './DepositeHeads/Depositehead2/index';
+import DepositHead from './DepositeHeads/Deposite_Head/index';
+import DepositHeadExt from './DepositeHeads/Deposite_Head_Ext/index';
+
 import DepositeTable from './DepositeTable/index';
 import Lodergif from 'src/components/Gravitusloader';
 
 import React, { useState, useEffect, useReducer } from 'react';
 import { useNavigate} from 'react-router-dom';
-import { socket } from '../../../../socket';
-import useSWR, { mutate } from 'swr';
 
+import useSWR, { mutate } from 'swr';
 import { Wallet_Fetch_Info, fetcherWallet } from 'src/api_ng/wallet_ng';
-import { getConfig_sp, setConfig_ng } from '../../../../utils_ng/localStorage_ng';
 
 const DepositPageNG = () => {
   const theme = useTheme();
@@ -70,16 +69,16 @@ const DepositPageNG = () => {
             <Grid container>
               <Grid pl={5} xs={12} sm={12} md={6} lg={6}>
                 {superData && (
-                  <Deposithead1
+                  <DepositHead
                     walletList={superData?.walletList.filter((item) => item.listing.id !== 17)}
-                    setDepositData={setDepositData}
                     depositData={depositData}
+                    setDepositData={setDepositData}
                     setHistoryData={setHistoryData}
                   />
                 )}
               </Grid>
               <Grid xs={12} md={6} lg={6} display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
-                <Depositehead2 />
+                <DepositHeadExt />
               </Grid>
             </Grid>
           </Grid>

@@ -9,8 +9,8 @@ import React, { useState, useEffect } from 'react';
 // import { getWalletDataById } from '../../../../../../api/wallet';
 import { Wallet_Fetch_ById, postDataWallet } from 'src/api_ng/wallet_ng';
 
-function CoinSelectTextfield({ walletList, walletId, setWalletId, setHistoryData,
-  setWalletData, handleBlur, error, touched, errors, values, setFieldValue, coin, formik}) {
+function CoinSelectTextfield({ walletList, walletId, setWalletId, setWalletData,
+  setHistoryData, handleBlur, error, touched, errors, values, setFieldValue, coin, formik}) {
 
   const theme = useTheme();
   const [selectedItem, setSelectedItem] = useState(walletId && walletList.find((item) => item.listing.id === walletId));

@@ -42,12 +42,11 @@ import {
 } from '@mui/material';
 
 import HIW_Sell from '../_HIW_Sell';
-import Importantnotescomponents from '../../../Walletpage/Deposit/DepositeHeads/Depositehead1/Importantnotescomponents';
-import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/Norecordfoundcomponents';
-
+ 
 import { P2P_MatchTrade_URL, postDataP2P } from 'src/api_ng/peer2peer_ng';
 import { socket } from '../../../../../socket';
 import DialogBoxValue from 'src/new_pages/components-overview/Spotpage/BuySellGrid/Dialog_Box_Val';
+import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/_Essentials/NoRecordFound';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 

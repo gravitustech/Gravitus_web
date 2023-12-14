@@ -2,10 +2,8 @@ import { TextField, Typography, useTheme } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import Stack from '@mui/material/Stack';
 
-import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router';
-
-// import { fetcher, getDepositData, getWalletDataById } from '../../../../../../api/wallet';
+import React, { useState, useEffect } from 'react';
 import { Deposit_Address, Wallet_Fetch_ById, postDataWallet } from 'src/api_ng/wallet_ng';
 
 function CoinSelectTextfield({ walletList, setDepositData, setHistoryData }) {
@@ -101,14 +99,6 @@ function CoinSelectTextfield({ walletList, setDepositData, setHistoryData }) {
       try {
         fetchWalletById(id);
         fetchWalletAddr(id);
-
-        // Govarthan Code
-        // const { data: data1 } = await getDepositData({ accountType: 'GRAVITUS', postData: { walletId: id } });
-        // const { data: data2 } = await getWalletDataById({ accountType: 'GRAVITUS', postData: { walletId: id } });
-
-        // setDepositData(data1.result);
-        // setHistoryData(data2.result.external.filter((item) => item.transType === 'Deposit'));
-
       } catch (e) {
         console.log(e.message);
       }

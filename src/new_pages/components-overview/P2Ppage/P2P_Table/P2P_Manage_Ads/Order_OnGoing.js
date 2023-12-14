@@ -5,8 +5,8 @@ import useSWR, { mutate } from 'swr';
 // material-ui
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, Link, useTheme } from '@mui/material';
 
-import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/Norecordfoundcomponents';
 import { P2P_CancelOrder_URL, P2P_SuperOrders_URL, postDataP2P } from 'src/api_ng/peer2peer_ng';
+import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/_Essentials/NoRecordFound';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 

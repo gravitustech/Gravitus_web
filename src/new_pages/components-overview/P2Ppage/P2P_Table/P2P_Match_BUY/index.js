@@ -41,12 +41,11 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 import HIW_Buy from '../_HIW_Buy';
-import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/Norecordfoundcomponents';
-import Importantnotescomponents from '../../../Walletpage/Deposit/DepositeHeads/Depositehead1/Importantnotescomponents';
-
+ 
 import { P2P_MatchTrade_URL, postDataP2P } from 'src/api_ng/peer2peer_ng';
 import { socket } from '../../../../../socket';
 import DialogBoxValue from 'src/new_pages/components-overview/Spotpage/BuySellGrid/Dialog_Box_Val';
+import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/_Essentials/NoRecordFound';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 

@@ -1,36 +1,34 @@
-import React from 'react';
 import { Grid, Stack } from '@mui/material';
-import Textfields from './Textfields';
+import FormFields from './FormFields';
+import React from 'react';
 
-const Withdrawhead1 = ({
+const WithdrawHead = ({
   walletList,
   walletId,
   walletData,
   setWalletId,
-  setHistoryData,
   setWalletData,
+  setHistoryData,
   setSnackbarMessage,
-  setSnackbarOpen,
-  securityData
+  setSnackbarOpen
 }) => {
 
   return (
     <Grid>
       <Stack spacing={4} direction="column">
-        <Textfields
+        <FormFields
           walletList={walletList}
-          setWalletId={setWalletId}
-          setHistoryData={setHistoryData}
-          setWalletData={setWalletData}
           walletId={walletId}
           walletData={walletData}
+          setWalletId={setWalletId}
+          setWalletData={setWalletData}
+          setHistoryData={setHistoryData}
           setSnackbarMessage={setSnackbarMessage}
           setSnackbarOpen={setSnackbarOpen}
-          securityData={securityData}
         />
       </Stack>
     </Grid>
   );
 };
 
-export default Withdrawhead1;
+export default WithdrawHead;

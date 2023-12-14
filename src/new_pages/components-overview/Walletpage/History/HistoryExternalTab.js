@@ -1,19 +1,25 @@
+import Norecordfoundcomponents from '../_Essentials/NoRecordFound';
 import PropTypes from 'prop-types';
-// import { useState } from 'react';
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 
-// material-ui
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, Link, useTheme } from '@mui/material';
-import Norecordfoundcomponents from '../Norecordfoundcomponents';
-// import copyicon from '../images/copyicon.svg'
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import { styled } from "@mui/material/styles";
+
+import { 
+  Box, Table, TableBody, TableCell, TableContainer, 
+  TableHead, TableRow, Typography, Stack, Link, useTheme, 
+} from '@mui/material';
+
+import React from 'react';
+
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
+
 function createData(Type, Amount, Fees, Address, TransactionId, Status, Date) {
   return { Type, Amount, Fees, Address, TransactionId, Status, Date };
 }
+
 const rows = [
   createData(
-    'Trade',
+    'Deposit',
     '0.012BTC',
     '0.0 BTC',
     '1A1zP1eP5QGefi2DMpPTfTL5SLmv7DivfNa',
@@ -22,7 +28,7 @@ const rows = [
     '26 Dec, 12PM'
   ),
   createData(
-    'Trade',
+    'Withdraw',
     '0.012BTC',
     '0.0 BTC',
     '1A1zP1eP5QGefi2DMpPTfTL5SLmv7DivfNa',
@@ -45,10 +51,22 @@ const headCells = [
     label: 'Amount'
   },
   {
-    id: 'TxRef',
+    id: 'Fees',
     align: 'left',
     disablePadding: true,
-    label: 'Tx Ref'
+    label: 'Fees'
+  },
+  {
+    id: 'Address',
+    align: 'left',
+    disablePadding: true,
+    label: 'Address'
+  },
+  {
+    id: 'Transaction Id',
+    align: 'left',
+    disablePadding: false,
+    label: 'Transaction Id'
   },
   {
     id: 'Status',
@@ -68,6 +86,7 @@ const headCells = [
 
 function OrderTableHead() {
   const theme = useTheme();
+  
   return (
     <TableHead>
       <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#000' : '#fff' }}>
@@ -95,9 +114,35 @@ OrderTableHead.propTypes = {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function HistroyInternalTab({ tableData }) {
-  console.log('tableDataddd', tableData)
+const LightTooltip = styled(({ className, ...props }) => (
+  <Tooltip arrow placement="top" {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: "rgba(0, 0, 0, 0.87)",
+    // boxShadow: theme.shadows[1],
+    fontSize: 11
+  },
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.common.white, // Set the arrow color to white
+  },
+}));
+
+const TransactionId = ({ transactionid }) => {
+  const first = transactionid.slice(0, 18);
+  const end = '.....';
+  const TransactionId = `${first} ${end}`;
+
+  return (
+    <Typography variant='body1' sx={{ textDecoration: 'underline', textDecorationColor: 'text.buy' }} color='text.buy'>
+      {TransactionId}
+    </Typography>
+  );
+};
+
+export default function HistoryExternalTab({ tableData }) {
   const theme = useTheme();
+
   return (
     <Box>
       <TableContainer varaint="tablecontainer"
@@ -122,14 +167,7 @@ export default function HistroyInternalTab({ tableData }) {
           },
         }}
       >
-        <Table
-          aria-labelledby="tableTitle"
-          sx={{
-            '& .MuiTableCell-root:nth-child(2), & .MuiTableCell-root:nth-child(3),& .MuiTableCell-root:nth-child(4), ': {
-              pl: 14
-            },
-          }}
-        >
+        <Table aria-labelledby="tableTitle">
           <OrderTableHead />
           <TableBody>
             {tableData.length === 0 ? (
@@ -143,8 +181,9 @@ export default function HistroyInternalTab({ tableData }) {
               tableData.map((row, index) => {
                 // const isItemSelected = isSelected(row.Name);
                 const labelId = `enhanced-table-checkbox-${index}`;
-                const { userId, crypto, transType, transDesc, highlight, amount, txRef, status, date, timeStamp } = row;
-
+                const { userId, crypto, transType, transDesc, highlight, amount, charges, address, txId, href, status, date, timeStamp } = row;
+                const firstTenCharactersaddress = address.slice(0, 25);
+                const restOfCharactersaddress = address.slice(25);
                 return (
                   <TableRow
                     hover
@@ -166,10 +205,24 @@ export default function HistroyInternalTab({ tableData }) {
                       </Stack>
                     </TableCell>
 
-                    <TableCell sx={{ border: 'none' }} align="left" >
+                    <TableCell sx={{ border: 'none' }} align="left">
                       <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {txRef}
+                        {charges} {crypto}
                       </Typography>
+                    </TableCell>
+
+                    <TableCell sx={{ border: 'none', }} align="left">
+                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        {firstTenCharactersaddress}<br />{restOfCharactersaddress}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell sx={{ border: 'none' }} align="left" >
+                      <Tooltip title='Click to see the status' arrow placement='top' >
+                        <a href={href}>
+                          <TransactionId transactionid={txId} />
+                        </a>
+                      </Tooltip>
                     </TableCell>
 
                     <TableCell sx={{ border: 'none', color: 'text.buy' }} align="left">

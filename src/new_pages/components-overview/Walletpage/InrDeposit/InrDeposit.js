@@ -6,17 +6,16 @@ import InrDeposit_STEP3 from './InrDeposit_STEP3';
 import CustomSnackBar from 'src/components/snackbar';
 
 import useSWR from 'swr';
-import { fetcher, getWalletURLINRDeposit } from '../../../../api/wallet';
 import { Pre_Rs_Deposit, fetcherWallet } from 'src/api_ng/wallet_ng';
 
 const InrDeposit = () => {
-
-  const [step, setStep] = useState(1);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
-  const [formikValues, setFormikValues] = useState({ term1: false, term2: false, term3: false, term4: false });
-  const [open, setOpen] = useState(false);
 
+  const [step, setStep] = useState(1);
+  const [open, setOpen] = useState(false);
+  const [formikValues, setFormikValues] = useState({ term1: false, term2: false, term3: false, term4: false });
+  
   const handleOpen = () => {
     setOpen(true);
   };
@@ -24,12 +23,6 @@ const InrDeposit = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  useEffect(() => {
-    handleOpen()
-  }, [])
-
-  var superData = null;
 
   function useINR_Predeposit() {
     var postData = { walletId: 17 };
@@ -50,9 +43,10 @@ const InrDeposit = () => {
   if (walletINREr) {
     // Call Logout User
   }
-  else {
-    superData = walletINRRc?.result;
-  }
+
+  useEffect(() => {
+    handleOpen();
+  }, [])
 
   return (
     <>

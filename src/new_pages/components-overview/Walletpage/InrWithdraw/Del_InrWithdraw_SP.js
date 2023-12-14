@@ -4,7 +4,7 @@ import AnimateButton from '../../../../components/@extended/AnimateButton';
 
 import CardInr from './Card';
 import GravitusBankdeatils from './UserBankdeatils';
-import { NumericFormatCustom } from '../NumericFormatCustom';
+import { NumericFormatCustom } from '../_Essentials/NumericFormatCustom';
 
 import React from 'react';
 import { Formik } from 'formik';

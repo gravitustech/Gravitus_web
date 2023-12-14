@@ -1,15 +1,18 @@
-import PropTypes from 'prop-types';
-// import { useState } from 'react';
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { 
+  Box, Table, TableBody, TableCell, TableContainer, TableHead, 
+  TableRow, Typography, Stack, Link, useTheme 
+} from '@mui/material';
 
-// material-ui
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, Link, useTheme } from '@mui/material';
-// import copyicon from '../images/copyicon.svg'
+import { Link as RouterLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import React from 'react';
+
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
+
 function createData(Type, Amount, Fees, Address, TransactionId, Status, Date) {
   return { Type, Amount, Fees, Address, TransactionId, Status, Date };
 }
+
 const rows = [
   createData(
     'Trade',
@@ -22,6 +25,7 @@ const rows = [
   ),
   createData('Trade', '0.012BTC', '0.0 BTC', '1A1zP1eP5QGefi2DMpPTfTL5SLmv7DivfNa', '1A1zP1eP5QGefi2DMpPTf...', 'Processed', '26 Dec, 12PM')
 ];
+
 const headCells = [
   {
     id: 'Type',
@@ -99,8 +103,8 @@ OrderTableHead.propTypes = {
 // ==============================|| ORDER TABLE ||============================== //
 
 export default function HistroyTable({ tableData }) {
-  console.log({ tableData });
   const theme = useTheme();
+
   return (
     <Box>
       <TableContainer varaint="tablecontainer">

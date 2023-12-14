@@ -1,32 +1,32 @@
-import React, { useState, useRef, useEffect } from 'react';
-
 import {
-  Grid, Typography, Stack, OutlinedInput, FormHelperText, Button,
-  TextField, useTheme, InputAdornment, Box, IconButton, Dialog, Autocomplete
+  Grid, Typography, Stack, OutlinedInput, FormHelperText, Button, TextField, 
+  useTheme, InputAdornment, Box, IconButton, Dialog, Autocomplete
 } from '@mui/material';
 
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-
-import CardInr from './Card';
-import UserBankdeatils from './UserBankdeatils';
-import { NumericFormatCustom } from '../NumericFormatCustom';
+import { NumericFormatCustom } from '../_Essentials/NumericFormatCustom';
 import AnimateButton from '../../../../components/@extended/AnimateButton';
 
-import { useNavigate } from 'react-router-dom';
+import UserBankdeatils from './UserBankdeatils';
+import CardInr from './Card';
 
-import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { Formik } from 'formik';
 
+import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+
+import { Send_OTP } from '../../../../api_ng/system_ng';
 import { sendOtpSecurity } from '../../../../api/profile';
-import { Sign_Withdrawal, postDataWallet } from '../../../../api_ng/wallet_ng';
+import { Estimate_Withdrawal, Sign_Withdrawal, postDataWallet } from '../../../../api_ng/wallet_ng';
 
 const Email = ({ email }) => {
   const theme = useTheme();
   const firstTwo = email.slice(0, 4);
   const lastTwo = email.slice(-10);
-  const middle = '*******';
 
+  const middle = '*******';
   const maskedEmail = `${firstTwo}${middle}${lastTwo}`;
 
   return (
@@ -40,8 +40,8 @@ const Mobilenumber = ({ number }) => {
   const theme = useTheme();
   const firstTwo = number.slice(0, 2);
   const lastTwo = number.slice(-2);
-  const middle = '******';
 
+  const middle = '******';
   const Mobilenumber = `${firstTwo}${middle}${lastTwo}`;
 
   return (
@@ -51,113 +51,50 @@ const Mobilenumber = ({ number }) => {
   );
 };
 
-const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen, setFormikValues, formikValues, setStep, step, securityData }) => {
-
+const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen, setFormikValues, formikValues, setStep, step }) => {
   const theme = useTheme();
   const navigate = useNavigate();
 
   const [color, setColor] = useState('');
-
   const [resendPOTP, setResendPOTP] = useState('SEND OTP');
   const [resendMOTP, setResendMOTP] = useState('SEND OTP');
 
   const [isResendMOTP, setIsResendMOTP] = useState(false);
   const [isResendPOTP, setIsResendPOTP] = useState(false);
 
+  const [showInitWDL, setShowInitWDL] = useState(false);
+  const [confirmOrInitWDL, setConfirmOrInitWDL] = useState(false);
+  
+  const [withdrawData, setWithdrawData] = useState(null);
+  const [signWithdrawal, setSignWithdrawal] = useState(null);
   const [selectedBankAccount, setSelectedBankAccount] = useState(null);
-  const [checkWithdraw, setCheckWithdraw] = useState(null);
-
-  const [confirmOrSignWDL, setConfirmOrSignWDL] = useState(false);
-  const [showSignWDL, setShowSignWDL] = useState(false);
 
   const formikEW = useRef();
   const formikSW = useRef();
+  var securityData = null;
 
   const goBack = () => {
     navigate(-1);
   }
 
   const Accounts = [{
-    Beneficiary: inrWithdrawData?.pfStatus?.accountName,
-    BankName: inrWithdrawData?.pfStatus?.bankName,
-    AcNumber: inrWithdrawData?.pfStatus?.accountNo,
-    IFSCCode: inrWithdrawData?.pfStatus?.IFSCCode,
-    payMode: inrWithdrawData?.pfStatus?.payMode,
+    Beneficiary : inrWithdrawData?.pfStatus?.accountName,
+    BankName    : inrWithdrawData?.pfStatus?.bankName,
+    AcNumber    : inrWithdrawData?.pfStatus?.accountNo,
+    IFSCCode    : inrWithdrawData?.pfStatus?.IFSCCode,
+    payMode     : inrWithdrawData?.pfStatus?.payMode,
   }];
 
-  function estimateWithdrawal() {
-    // Add Estimate Withdrawal Logic
-    setConfirmOrSignWDL(true);
-  }
-
   const closeConfirmOrSignWDL = () => {
-    setConfirmOrSignWDL(false);
+    setConfirmOrInitWDL(false);
     setIsResendMOTP(false);
     setIsResendPOTP(false);
-    setShowSignWDL(false);
+    setShowInitWDL(false);
   };
 
-  const showSignWithdrawal = async () => {
-    setShowSignWDL(true);
+  const showInitWithdrawal = async () => {
+    setShowInitWDL(true);
   };
-
-  function signWithdrawal(postData) {
-    postDataWallet(Sign_Withdrawal(), postData).then(function (res) {
-      console.log(res);
-
-      if (res.error !== 'ok') {
-        handleCloseDialog();
-        setIsLoading(false);
-
-        if (res.error.name == "Missing Authorization") {
-          // Logout User
-        }
-        else if (res.error.name == "Invalid Authorization") {
-          // Logout User
-        }
-        else {
-          if (res.error.name != undefined) {
-            setSnackbarMessage({ msg: res.error.name, success: false });
-            setSnackbarOpen(true);
-          }
-          else {
-            setSnackbarMessage({ msg: res.error, success: false });
-            setSnackbarOpen(true);
-          }
-        }
-      } else {
-        setShowSignWDL(false);
-        setConfirmOrSignWDL(false);
-
-        setIsResendMOTP(false);
-        setIsResendPOTP(false);
-
-        setSnackbarMessage({ msg: res.result, success: false });
-        setSnackbarOpen(true);
-
-        formikSW.current.resetForm({
-          values: {
-            gcode: '',
-            otpmail: '',
-            otpmbl: ''
-          }
-        });
-
-        formikEW.current.resetForm({
-          values: {
-            address: '',
-            amount: '',
-            totalAmount: '',
-            coin: null,
-            submit: null
-          }
-        });
-      }
-    }, function (err) {
-      console.log(err);
-      // Logout User
-    });
-  }
 
   const reqSendOTP = async (action) => {
     try {
@@ -194,15 +131,106 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
     }
   };
 
+  function InitWithdrawal(postData) {
+    console.log(postData, 'postData');
+    postDataWallet(Sign_Withdrawal(), postData).then(function (res) {
+      console.log(res, 'Sign Withdrawal');
+
+      if (res.error !== 'ok') {
+        handleCloseDialog();
+        setIsLoading(false);
+
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        setShowInitWDL(false);
+        setConfirmOrInitWDL(false);
+
+        setIsResendMOTP(false);
+        setIsResendPOTP(false);
+
+        setSnackbarMessage({ msg: res.result, success: false });
+        setSnackbarOpen(true);
+
+        formikEW.current.resetForm({
+          values: {
+            bankAccount: null,
+            amount: '',
+            // submit: null
+          }
+        });
+
+        formikSW.current.resetForm({
+          values: {
+            gcode: '',
+            otpmail: '',
+            otpmbl: ''
+          }
+        });
+      }
+    }, function (err) {
+      console.log(err);
+      // Logout User
+    });
+  }
+
+  function estimateWithdrawal() {
+    var postData = withdrawData;
+    postData.walletId = 17; // INR Listing
+
+    postDataWallet(Estimate_Withdrawal(), postData).then(function (res) {
+      console.log(res, 'Estimate Withdrawal');
+
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        // console.log(res.result, 'Estimate WDL');
+        setSignWithdrawal(res.result);
+        setConfirmOrInitWDL(true);
+      }
+    }, function (err) {
+      console.log(err);
+      // Logout User
+    });
+  }
+
   useEffect(() => {
     let timeoutId;
     if (isResendMOTP) {
       timeoutId = setTimeout(() => {
         setResendMOTP('RESEND OTP');
-        setColor('');
-        // setIsResendMOTP('RESEND OTP');
         setIsResendMOTP(false);
-      }, 30000); // 1 minute = 60000 milliseconds
+        setColor('');
+      }, 30000);
     }
     return () => clearTimeout(timeoutId);
   }, [isResendMOTP]);
@@ -212,10 +240,9 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
     if (isResendPOTP) {
       timeoutId = setTimeout(() => {
         setResendPOTP('RESEND OTP');
-        setColor('');
-        // setIsResendPOTP('RESEND OTP');
         setIsResendPOTP(false);
-      }, 30000); // 1 minute = 60000 milliseconds
+        setColor('');
+      }, 30000);
     }
     return () => clearTimeout(timeoutId);
   }, [isResendPOTP]);
@@ -254,15 +281,12 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
           <Formik
             innerRef={formikEW}
             initialValues={{
-              bankAccount: null,
-              withdrawamount: '',
-              gcode: '',
-              otpmail: '',
-              otpmbl: ''
+              bankAccount : null,
+              amount      : ''
             }}
             validationSchema={Yup.object().shape({
               bankAccount: Yup.object().nullable().required('Please select your Bank Account*'),
-              withdrawamount: Yup.number().positive().required("Don't leave a empty*")
+              amount: Yup.number().positive().required("Don't leave a empty*")
                 .test(
                   'insufficient-balance',
                   'Insufficient balance',
@@ -278,9 +302,9 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                 ),
             })}
             onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-              console.log({ values });
               try {
-                setCheckWithdraw(values);
+                values.toAddress = values.bankAccount.AcNumber;
+                setWithdrawData(values);
                 estimateWithdrawal(values);
 
                 setStatus({ success: false });
@@ -292,102 +316,104 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
               }
             }}
           >
+
             {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => (
-              <><form noValidate onSubmit={handleSubmit}>
-                <Typography pt={2} variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                  Select your Bank Account
-                </Typography>
+              <>
+                <form noValidate onSubmit={handleSubmit}>
+                  <Typography pt={2} variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                    Select your Bank Account
+                  </Typography>
 
-                <Grid pt={1}>
-                  <Autocomplete
-                    id="country-customized-option-demo"
-                    value={values.bankAccount}
-                    onChange={(e, val) => {
-                      setFieldValue('bankAccount', val);
-                      setSelectedBankAccount(val); // Set the selected bank account
-                    }}
-                    options={Accounts}
-                    getOptionLabel={(option) => `${option.AcNumber} (${option.Beneficiary})`}
-                    renderOption={(props, option) => (
-                      <Stack sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                        {...props} direction="row" spacing={1}>
-                        <Typography>{option.AcNumber}</Typography>
-                        <Typography>({option.Beneficiary})</Typography>
-                      </Stack>
-                    )}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        value={values.bankAccount}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={Boolean(touched.bankAccount && errors.bankAccount)}
-                        placeholder="Select your Bank Account"
-                        sx={{
-                          '& .MuiInputBase-input': {
-                            height: '6px',
-                            borderRadius: '5px',
-                            borderColor: '#959595'
-                          }
-                        }} />
-                    )} />
-                  {touched.bankAccount && errors.bankAccount && (
-                    <FormHelperText error id="standard-weight-helper-text-bankAccount">
-                      {errors.bankAccount}
-                    </FormHelperText>
-                  )}
-                </Grid>
-
-                {selectedBankAccount && (
-                  <UserBankdeatils bankData={inrWithdrawData.pfStatus} />
-                )}
-
-                <Grid item xs={12} sx={{ mt: -1 }} pt={5}>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={4}>
-                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                      Enter the amount to Withdraw
-                    </Typography>
-                    <Typography variant="body1" color="#00BBAB">
-                      Min INR: {inrWithdrawData.withdrawMin}
-                    </Typography>
-                  </Stack>
-                </Grid>
-
-                <Grid container spacing={3} pt={1}>
-                  <Grid item xs={12}>
-                    <Stack spacing={1}>
-                      <TextField
-                        id="withdrawamount"
-                        value={values.withdrawamount}
-                        name="withdrawamount"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        placeholder=""
-                        fullWidth
-                        error={Boolean(touched.withdrawamount && errors.withdrawamount)}
-                        InputProps={{
-                          inputComponent: NumericFormatCustom
-                        }} />
-                      {touched.withdrawamount && errors.withdrawamount && (
-                        <FormHelperText error id="standard-weight-helper-text-email-login">
-                          {errors.withdrawamount}
-                        </FormHelperText>
+                  <Grid pt={1}>
+                    <Autocomplete
+                      id="country-customized-option-demo"
+                      value={values.bankAccount}
+                      onChange={(e, val) => {
+                        setFieldValue('bankAccount', val);
+                        setSelectedBankAccount(val); // Set the selected bank account
+                      }}
+                      options={Accounts}
+                      getOptionLabel={(option) => `${option.AcNumber} (${option.Beneficiary})`}
+                      renderOption={(props, option) => (
+                        <Stack sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                          {...props} direction="row" spacing={1}>
+                          <Typography>{option.AcNumber}</Typography>
+                          <Typography>({option.Beneficiary})</Typography>
+                        </Stack>
                       )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          value={values.bankAccount}
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          error={Boolean(touched.bankAccount && errors.bankAccount)}
+                          placeholder="Select your Bank Account"
+                          sx={{
+                            '& .MuiInputBase-input': {
+                              height: '6px',
+                              borderRadius: '5px',
+                              borderColor: '#959595'
+                            }
+                          }} />
+                      )} />
+                    {touched.bankAccount && errors.bankAccount && (
+                      <FormHelperText error id="standard-weight-helper-text-bankAccount">
+                        {errors.bankAccount}
+                      </FormHelperText>
+                    )}
+                  </Grid>
+
+                  {selectedBankAccount && (
+                    <UserBankdeatils bankData={inrWithdrawData.pfStatus} />
+                  )}
+
+                  <Grid item xs={12} sx={{ mt: -1 }} pt={5}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={4}>
+                      <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        Enter the amount to Withdraw
+                      </Typography>
+                      <Typography variant="body1" color="#00BBAB">
+                        Min INR: {inrWithdrawData.withdrawMin}
+                      </Typography>
                     </Stack>
                   </Grid>
-                </Grid>
 
-                <Grid item xs={12} pt={3}>
-                  <AnimateButton>
-                    <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
-                      SUBMIT
-                    </Button>
-                  </AnimateButton>
-                </Grid>
-              </form>
+                  <Grid container spacing={3} pt={1}>
+                    <Grid item xs={12}>
+                      <Stack spacing={1}>
+                        <TextField
+                          id="amount"
+                          value={values.amount}
+                          name="amount"
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          placeholder=""
+                          fullWidth
+                          error={Boolean(touched.amount && errors.amount)}
+                          InputProps={{
+                            inputComponent: NumericFormatCustom
+                          }} />
+                        {touched.amount && errors.amount && (
+                          <FormHelperText error id="standard-weight-helper-text-email-login">
+                            {errors.amount}
+                          </FormHelperText>
+                        )}
+                      </Stack>
+                    </Grid>
+                  </Grid>
 
-                <Dialog onClose={closeConfirmOrSignWDL} open={confirmOrSignWDL}>
-                  {!showSignWDL ? (
+                  <Grid item xs={12} pt={3}>
+                    <AnimateButton>
+                      <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
+                        SUBMIT
+                      </Button>
+                    </AnimateButton>
+                  </Grid>
+                </form>
+
+                <Dialog onClose={closeConfirmOrSignWDL} open={confirmOrInitWDL}>
+                  {!showInitWDL ? (
                     (
                       <Stack p={4} spacing={2.5}>
                         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
@@ -400,11 +426,10 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                         </Stack>
                         <Stack pt={1} direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                           <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                            {' '}
                             Withdrawal To (A/C Number)
                           </Typography>
                           <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                            {Accounts[0]?.AcNumber}
+                            {signWithdrawal?.toAddress}
                           </Typography>
                         </Stack>
 
@@ -413,7 +438,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                             Amount
                           </Typography>
                           <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                            {checkWithdraw?.withdrawamount} INR
+                            {signWithdrawal?.amount} INR
                           </Typography>
                         </Stack>
 
@@ -422,7 +447,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                             Estimated Fee
                           </Typography>
                           <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                            {inrWithdrawData.estFees} INR
+                            {signWithdrawal?.transFees} INR
                           </Typography>
                         </Stack>
 
@@ -430,7 +455,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                           <Button variant="contained5" onClick={closeConfirmOrSignWDL}>
                             Cancel
                           </Button>
-                          <Button variant="contained4" onClick={showSignWithdrawal}>
+                          <Button variant="contained4" onClick={showInitWithdrawal}>
                             Confirm
                           </Button>
                         </Stack>
@@ -449,26 +474,26 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                           otpmbl: ''
                         }}
                         validationSchema={Yup.object().shape({
-                          otpmbl: securityData?.pSecurity?.enabled === '1' && Yup.number().positive().required("Don't leave a empty"),
+                          otpmbl: signWithdrawal?.pSecurity?.enabled === '1' && Yup.number().positive().required("Don't leave a empty"),
                           otpmail: Yup.number().positive().required("Don't leave a empty"),
-                          gcode: securityData?.gSecurity?.enabled === '1' && Yup.number().positive().required("Don't leave a empty")
+                          gcode: signWithdrawal?.gSecurity?.enabled === '1' && Yup.number().positive().required("Don't leave a empty")
                         })}
                         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                           const phoneOTP = values.otpmbl;
                           const googleOTP = values.gcode;
 
                           const signData = {
-                            walletId: walletId,
-                            toAddress: checkWithdraw.bankAccount,
-                            amount: checkWithdraw.withdrawamount,
+                            walletId  : 17, // INR Wallet Listing
+                            toAddress : signWithdrawal.toAddress,
+                            amount    : signWithdrawal.amount,
                             verifyType: 'wSecurity',
-                            emailOTP: values.otpmail,
-                            ...(securityData?.pSecurity?.enabled === '1' && { phoneOTP }),
-                            ...(securityData?.gSecurity?.enabled === '1' && { googleOTP })
+                            emailOTP  : values.otpmail,
+                            ...(signWithdrawal?.pSecurity?.enabled === '1' && { phoneOTP }),
+                            ...(signWithdrawal?.gSecurity?.enabled === '1' && { googleOTP })
                           };
 
                           try {
-                            signWithdrawal(signData);
+                            InitWithdrawal(signData);
                           } catch (err) {
                             setStatus({ success: false });
                             setErrors({ submit: err.message });
@@ -481,13 +506,13 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                             <form noValidate onSubmit={handleSubmit}>
                               <Grid item spacing={3} pt={1}>
                                 <Stack spacing={1}>
-                                  {securityData?.pSecurity?.enabled === '1' && (
+                                  {signWithdrawal?.pSecurity?.enabled === '1' && (
                                     <>
                                       <Typography
                                         variant="body1"
                                         sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                                       >
-                                        OTP will be send to  <Mobilenumber number={securityData?.pSecurity?.authKey} />
+                                        OTP will be send to  <Mobilenumber number={signWithdrawal?.pSecurity?.authKey} />
                                       </Typography>
                                       <OutlinedInput
                                         id="otpmbl-login"
@@ -522,7 +547,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                                     variant="body1"
                                     sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                                   >
-                                    OTP will be send to <Email email={securityData?.mSecurity?.authKey} />
+                                    OTP will be send to <Email email={signWithdrawal?.mSecurity?.authKey} />
                                   </Typography>
                                   <OutlinedInput
                                     id="otpmail-login"
@@ -552,7 +577,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                                       {errors.otpmail}
                                     </FormHelperText>
                                   )}
-                                  {securityData?.gSecurity?.enabled === '1' && (
+                                  {signWithdrawal?.gSecurity?.enabled === '1' && (
                                     <>
                                       <Typography
                                         variant="body1"

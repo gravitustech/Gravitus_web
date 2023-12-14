@@ -8,7 +8,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Autocomplete from '@mui/material/Autocomplete';
 
 import doticon from '../../../../assets/images/gravitusimage/doticon.svg';
-import { NumericFormatCustom } from '../NumericFormatCustom';
+import { NumericFormatCustom } from '../_Essentials/NumericFormatCustom';
 import CardInr from '../InrWithdraw/Card';
 
 import { Formik } from 'formik';
@@ -17,28 +17,12 @@ import * as Yup from 'yup';
 import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
-import useSWR from 'swr';
-import { fetcher, getWalletURLINRDeposit } from '../../../../api/wallet';
-
 const InrDeposit_STEP1 = ({ depositFrom, depositTo, setStep, setFormikValues, formikValues, handleOpen, handleClose, open }) => {
 
   const theme = useTheme();
   const navigate = useNavigate();
   const Deposit = [{ DepositMode: 'IMPS' }, { DepositMode: 'NEFT' }, { DepositMode: 'RTGS' }];
 
-  // const {
-  //   data: {
-  //     result: { depositFrom, depositTo }
-  //   },
-  //   error,
-  //   isLoading
-  // } = useSWR(
-  //   getWalletURLINRDeposit(),
-  //   (url) => fetcher(url, { accountType: 'GRAVITUS', postData: { walletId: 17 } })
-  //   // { suspense: true }
-  // );
-
-  // console.log('res', depositFrom, depositTo, error, isLoading);
   const goBack = () => {
     navigate(-1);
   }

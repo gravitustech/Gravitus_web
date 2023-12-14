@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { Grid, Typography, Stack, Card, useTheme, Box, IconButton } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
-import Withdrawhead1 from './WithdrawHeads/Withdrawhead1/index';
-import Withdrawhead2 from './WithdrawHeads/Withdrawhead2/index';
+import WithdrawHeadExt from './WithdrawHeads/WithdrawHeadExt/index';
+import WithdrawHead from './WithdrawHeads/WithdrawHead/index';
 import WithdrawTable from './WithdrawTable/index';
 
 import CustomSnackBar from '../../../../components/snackbar';
@@ -12,17 +12,15 @@ import Lodergif from 'src/components/Gravitusloader';
 
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { socket } from '../../../../socket';
-import useSWR, { mutate } from 'swr';
 
-import { getSecurityURL } from '../../../../api/profile';
+import useSWR, { mutate } from 'swr';
 import { Wallet_Fetch_Info, fetcherWallet } from 'src/api_ng/wallet_ng';
-// import { fetcher, getWalletURL, getWalletURLById } from '../../../../api/wallet';
 
 const Withdrawpage = () => {
   const theme = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
-
+  
   const [walletId, setWalletId] = useState(location?.state?.walletId);
   const [historyData, setHistoryData] = useState();
   const [walletData, setWalletData] = useState();
@@ -56,29 +54,6 @@ const Withdrawpage = () => {
     superData = walletRc?.result;
   }
 
-  // ################################## Get Security Features ##################################
-
-  function useSecurityFeatures() {
-    const { data, error, isLoading } = useSWR([getSecurityURL(), {}], fetcherWallet, {
-      revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
-    });
-
-    return { data, error, isLoading };
-  }
-
-  const { 
-    data: securityData, 
-    error: securityError, 
-    isLoading: isSecurityDataLoading 
-  } = useSecurityFeatures();
-
-  if (securityError) {
-    // Call Logout User
-  }
-  else {
-    // console.log(securityData);
-  }
-
   return (
     <>
       <Grid container pl={14} pr={15} pt={3} pb={5}>
@@ -104,21 +79,20 @@ const Withdrawpage = () => {
             <Grid container>
               <Grid pl={5} xs={12} sm={12} md={6} lg={6}>
                 {superData && (
-                  <Withdrawhead1
+                  <WithdrawHead
                     walletList={superData?.walletList.filter((item) => item.listing.id !== 17)}
                     walletId={walletId}
                     walletData={walletData}
                     setWalletId={setWalletId}
-                    setHistoryData={setHistoryData}
                     setWalletData={setWalletData}
+                    setHistoryData={setHistoryData}
                     setSnackbarMessage={setSnackbarMessage}
                     setSnackbarOpen={setSnackbarOpen}
-                    securityData={securityData?.result}
                   />
                 )}
               </Grid>
               <Grid xs={12} md={6} lg={6} display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
-                <Withdrawhead2 />
+                <WithdrawHeadExt />
               </Grid>
             </Grid>
           </Grid>

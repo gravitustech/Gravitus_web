@@ -4,10 +4,9 @@ import PropTypes from 'prop-types';
 import {
   Box, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Typography, Stack, useTheme
-}
-  from '@mui/material';
+} from '@mui/material';
 
-import Norecordfoundcomponents from '../Norecordfoundcomponents';
+import NoRecordFound from '../_Essentials/NoRecordFound';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
@@ -104,7 +103,7 @@ export default function ScheduleTab({ scheduleData }) {
             {scheduleData?.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
-                  <Norecordfoundcomponents
+                  <NoRecordFound
                     description='No Record Found' />
                 </TableCell>
               </TableRow>

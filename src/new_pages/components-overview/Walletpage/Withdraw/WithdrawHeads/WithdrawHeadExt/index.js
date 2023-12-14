@@ -1,11 +1,10 @@
 import React from 'react';
-
 import { Grid, Typography, Stack, Card, useTheme } from '@mui/material';
+
 import Tips from '../../../../../../assets/images/gravitusimage/tips.svg';
-import Importantnotes from './Importantnotes';
+// import ImportantNotes from './_Del_ImportantNotes';
 
-const Withdrawhead2 = () => {
-
+const WithdrawHeadExt = () => {
   const theme = useTheme();
   
   return (
@@ -63,4 +62,4 @@ const Withdrawhead2 = () => {
   );
 };
 
-export default Withdrawhead2;
+export default WithdrawHeadExt;

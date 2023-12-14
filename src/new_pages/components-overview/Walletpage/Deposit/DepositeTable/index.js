@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 // material-ui
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, useTheme, Tooltip } from '@mui/material';
-import Norecordfoundcomponents from '../../Norecordfoundcomponents';
+import NoRecordFound from '../../_Essentials/NoRecordFound';
 
 // ==============================|| DEPOSITE TABLE - HEADER CELL ||============================== //
 
@@ -49,7 +49,6 @@ const headCells = [
 // ==============================|| DEPOSITE TABLE - HEADER ||============================== //
 
 function OrderTableHead() {
-
   const theme = useTheme();
 
   return (
@@ -93,7 +92,7 @@ const TransactionId = ({ transactionid }) => {
 
 function DepositeTable({ historyData }) {
   const theme = useTheme();
-  console.log({ historyData });
+
   return (
     <TableContainer variant="tablecontainer"
       sx={{
@@ -124,7 +123,7 @@ function DepositeTable({ historyData }) {
             historyData.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
-                  <Norecordfoundcomponents
+                  <NoRecordFound
                     description='No Record Found' />
                 </TableCell>
               </TableRow>
@@ -196,7 +195,7 @@ function DepositeTable({ historyData }) {
           ) : (
             <TableRow>
               <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
-                <Norecordfoundcomponents
+                <NoRecordFound
                   description='Select the coin' />
               </TableCell>
             </TableRow>
@@ -206,4 +205,5 @@ function DepositeTable({ historyData }) {
     </TableContainer>
   );
 }
+
 export default DepositeTable;

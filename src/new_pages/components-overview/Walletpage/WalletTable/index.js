@@ -1,6 +1,6 @@
-import React from 'react';
 import { useTheme, Card, Box } from '@mui/material';
-import WalletTableContent from './WalletTableContent';
+import WalletTableExt from './WalletTableExt';
+import React from 'react';
 
 const WalletTable = ({ walletList, walletId }) => {
   const theme = useTheme();
@@ -25,7 +25,7 @@ const WalletTable = ({ walletList, walletId }) => {
           backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
         }}
       >
-        <WalletTableContent walletList={walletList} walletId={walletId} />
+        <WalletTableExt walletList={walletList} walletId={walletId} />
       </Box>
     </Card>
   );

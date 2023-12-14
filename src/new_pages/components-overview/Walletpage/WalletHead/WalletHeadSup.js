@@ -1,7 +1,7 @@
-import React from 'react'
 import { Typography, Stack, useTheme } from '@mui/material';
+import React from 'react'
 
-function WalletHeadComponents({ number, title, description, img }) {
+function WalletHeadSup({ number, title, description, img }) {
   const theme = useTheme();
 
   return (
@@ -28,4 +28,4 @@ function WalletHeadComponents({ number, title, description, img }) {
   )
 }
 
-export default WalletHeadComponents;
+export default WalletHeadSup;

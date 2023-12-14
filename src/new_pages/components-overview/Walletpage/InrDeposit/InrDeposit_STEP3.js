@@ -17,11 +17,9 @@ import AnimateButton from '../../../../components/@extended/AnimateButton';
 import * as Yup from 'yup';
 import { Field, Formik } from 'formik';
 
-import { postINRDepositData } from '../../../../api/wallet';
 import ImageCropper from 'src/components/_cropper';
 import { Post_Rs_Deposit, formDataWallet } from 'src/api_ng/wallet_ng';
 
-// Modal View Style - Appeal
 const modalStyle = {
   position: 'absolute',
   top: '50%', left: '50%',
@@ -47,18 +45,14 @@ const VisuallyHiddenInput = styled('input')({
 
 const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, formikValues, setSnackbarOpen, setSnackbarMessage, walletId }) => {
   const theme = useTheme();
+  const formikMP = useRef();
 
   const [imageToCrop, setImageToCrop] = React.useState(undefined);
   const [croppedImage, setCroppedImage] = React.useState(undefined);
 
-  const [modalOpen, setModalOpen] = React.useState(false); // Show modal
   const [open, setOpen] = useState(false); //Dialogbox open
-
   const [isLoading, setIsLoading] = useState(false); // Show Loader
-
-  const formikMP = useRef();
-  // To be delete later
-  let formData = new FormData();
+  const [modalOpen, setModalOpen] = React.useState(false); // Show modal
 
   const handleModalOpen = () => {
     document.getElementById('superFile')?.click();
@@ -96,7 +90,6 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
     payMode: depositFrom?.payMode,
   }];
 
-
   const handlePrev = () => {
     setStep(2);
   };
@@ -104,6 +97,7 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
   const handleClose = () => {
     setOpen(false);
   };
+
   const [depositReq, setDepositReq] = useState({
     utrId: '',
     bankAccount: null,
@@ -115,21 +109,23 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
     if (croppedImage != undefined) {
       var postData = {
         updateInfo: {
-          mode: formikValues.payMode,
-          amount: formikValues.depositAmount,
-          fromAccount: depositFrom.accountNo,
-          toAddress: depositTo.accountNo,
-          receiptNo: depositReq.utrId,
-          walletId: walletId,
+          mode    : formikValues.payMode,
+          amount  : formikValues.depositAmount,
+          fromAccount : depositFrom.accountNo,
+          toAddress   : depositTo.accountNo,
+          receiptNo   : depositReq.utrId,
+          walletId    : walletId,
         },
         fileName: 'dScreenshot',
         fileI: croppedImage
       };
-      console.log('postData', postData)
+
       setIsLoading(true);
       formDataWallet(Post_Rs_Deposit(), postData).then(function (res) {
+        
         setIsLoading(false);
-
+        console.log(res, 'Post Deposit')
+        
         if (res.error !== 'ok') {
           if (res.error.name == "Missing Authorization") {
             // Logout User
@@ -156,7 +152,6 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
           setImageToCrop(undefined);
           setCroppedImage(undefined);
 
-          // mutate(P2P_OrderDetails_URL);
           formikMP.current.resetForm({
             values: {
               utrId: '',
@@ -165,6 +160,7 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
             }
           });
 
+          setStep(1);
         }
       }, function (err) {
         console.log(err);
@@ -176,39 +172,6 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
       setSnackbarOpen(true);
     }
   };
-
-  // const handleConfirm = async () => {
-  //   console.log({ formikValues });
-
-  //   formData.append(
-  //     'updateInfo',
-  //     JSON.stringify({
-  //       walletId: walletId,
-  //       toAddress: depositTo.accountNo,
-  //       amount: formikValues.amount,
-  //       mode: formikValues.payMode,
-  //       fromAccount: depositFrom.accountNo,
-  //       receiptNo: formikValues.utrId
-  //     })
-  //   );
-
-  //   formData.append('fileName', croppedImage.name);
-  //   formData.append('fileI', croppedImage);
-  //   try {
-  //     const { data } = await postINRDepositData(formData);
-  //     if (Object.keys(data.result).length) {
-  //       console.log({ data });
-  //     } else {
-  //       setSnackbarMessage({ msg: 'Deposit Request failed', success: false });
-  //       setSnackbarOpen(true);
-  //     }
-  //   } catch (e) {
-  //     setSnackbarMessage({ msg: e.message, success: false });
-  //     setSnackbarOpen(true);
-  //     console.log(e.message);
-  //   }
-  //   setOpen(false);
-  // };
 
   return (
     <>

@@ -18,7 +18,7 @@ import useSWR, { mutate } from 'swr';
 import { setConfig_ng } from '../../../../utils_ng/localStorage_ng';
 
 import { MarketOverview_URL, fetcherSystem } from 'src/api_ng/system_ng';
-import Norecordfoundcomponents from '../../Walletpage/Norecordfoundcomponents';
+import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 

@@ -8,7 +8,7 @@ import HistoryPage from '../new_pages/components-overview/Walletpage/History/ind
 
 import InrWithdraw from '../new_pages/components-overview/Walletpage/InrWithdraw/InrWithdraw';
 import InrWithdrawpage1 from '../new_pages/components-overview/Walletpage/InrWithdraw/InrWithdraw_EXT';
-import InrWithdrawpage2 from '../new_pages/components-overview/Walletpage/InrWithdraw/InrWithdraw_SP';
+// import InrWithdrawpage2 from '../new_pages/components-overview/Walletpage/InrWithdraw/Del_InrWithdraw_SP';
 
 import InrDeposit from '../new_pages/components-overview/Walletpage/InrDeposit/InrDeposit';
 import InrDepositpage1 from '../new_pages/components-overview/Walletpage/InrDeposit/InrDeposit_STEP1';
@@ -126,10 +126,10 @@ const MainRoutes = {
       path: 'inrwithdrawbankdeatils',
       element: <InrWithdrawpage1 />
     },
-    {
-      path: 'inrwithdrawotpverify',
-      element: <InrWithdrawpage2 />
-    },
+    // {
+    //   path: 'inrwithdrawotpverify',
+    //   element: <InrWithdrawpage2 />
+    // },
     {
       path: 'inrdeposit',
       element: <InrDeposit />

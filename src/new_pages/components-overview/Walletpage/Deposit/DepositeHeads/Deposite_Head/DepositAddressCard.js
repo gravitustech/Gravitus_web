@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 
 import { Grid, Card, useTheme, Stack, Typography, Divider, InputAdornment, 
   OutlinedInput, Tooltip, IconButton } from '@mui/material';
-import DoneIcon from '@mui/icons-material/Done';
+
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import DoneIcon from '@mui/icons-material/Done';
 
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import QrCode from '../../../../../../assets/images/gravitusimage/qrcode.svg';
 import Copyicon from '../../../../../../assets/images/gravitusimage/copyicon.svg';
 
-const DepositaddressCard = ({ depositData }) => {
+const DepositAddressCard = ({ depositData }) => {
   const [copied, setCopied] = useState(false);
   const theme = useTheme();
 
@@ -114,4 +115,4 @@ const DepositaddressCard = ({ depositData }) => {
   );
 };
 
-export default DepositaddressCard;
+export default DepositAddressCard;

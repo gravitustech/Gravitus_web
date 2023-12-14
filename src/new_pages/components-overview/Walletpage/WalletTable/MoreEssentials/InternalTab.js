@@ -7,7 +7,7 @@ import {
 }
   from '@mui/material';
 
-import Norecordfoundcomponents from '../Norecordfoundcomponents';
+import Norecordfoundcomponents from '../../_Essentials/NoRecordFound';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
@@ -69,7 +69,7 @@ OrderTableHead.propTypes = {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function ExternalTab({ externalData }) {
+export default function InternalTab({ internalData }) {
   const theme = useTheme();
   return (
     <Box
@@ -102,7 +102,7 @@ export default function ExternalTab({ externalData }) {
         >
           <OrderTableHead />
           <TableBody>
-            {externalData?.length === 0 ? (
+            {internalData?.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
                   <Norecordfoundcomponents
@@ -110,7 +110,7 @@ export default function ExternalTab({ externalData }) {
                 </TableCell>
               </TableRow>
             ) : (
-              externalData?.map((row, index) => {
+              internalData?.map((row, index) => {
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <TableRow
@@ -158,6 +158,7 @@ export default function ExternalTab({ externalData }) {
                 );
               })
             )}
+
           </TableBody>
         </Table>
 

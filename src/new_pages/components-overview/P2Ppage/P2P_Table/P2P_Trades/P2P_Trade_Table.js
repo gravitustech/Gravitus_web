@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 // material-ui
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, useTheme } from '@mui/material';
+import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/_Essentials/NoRecordFound';
 
-import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/Norecordfoundcomponents';
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
 const headCells = [

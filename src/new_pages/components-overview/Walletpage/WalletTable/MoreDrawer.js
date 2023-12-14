@@ -3,36 +3,34 @@ import React from 'react';
 import { Typography, Box, Stack, Grid, Divider, useTheme, Tab } from '@mui/material';
 import { TabContext, TabPanel, TabList } from "@mui/lab";
 
-import ExternalTab from './ExternalTab';
-import InternalTab from './InternalTab';
+import ExternalTab from './MoreEssentials/ExternalTab';
+import InternalTab from './MoreEssentials/InternalTab';
 import ScheduleTab from './ScheduleTab';
 
-const MoreDrawerContent = ({ selectedCoinInfo, statementData }) => {
+const MoreDrawer = ({ walletListing, walletData }) => {
   const theme = useTheme();
+  
   const [value, setValue] = React.useState("0");
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const ExternalData = statementData?.result?.external;
-
-  const InternalData = statementData?.result?.internal;
-
-  const ScheduleData = statementData?.result?.schedules;
+  const ExternalData = walletData?.external;
+  const InternalData = walletData?.internal;
+  const ScheduleData = walletData?.schedules;
 
   return (
     <>
       <Grid pl={4} >
         <Stack direction="row" spacing={1} alignItems="center">
-          <img src={selectedCoinInfo?.listing?.additionalI} alt="ico" width="32" height="32" />
+          <img src={walletListing?.additionalI} alt="ico" width="32" height="32" />
 
           <Stack direction='column'>
             <Typography variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} >
-              {selectedCoinInfo?.listing?.crypto} ({selectedCoinInfo?.listing?.ticker})
+              {walletListing?.crypto} ({walletListing?.ticker})
             </Typography>
             <Typography variant='body2' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-              {selectedCoinInfo?.listing?.networkInfo}
+              {walletListing?.networkInfo}
             </Typography>
           </Stack>
         </Stack>
@@ -44,7 +42,7 @@ const MoreDrawerContent = ({ selectedCoinInfo, statementData }) => {
           <Stack direction='row' justifyContent='space-between'>
             <Stack direction='column' spacing={2} >
               <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                In {selectedCoinInfo?.listing?.ticker}
+                In {walletListing?.ticker}
               </Typography>
               <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                 In USD
@@ -53,10 +51,10 @@ const MoreDrawerContent = ({ selectedCoinInfo, statementData }) => {
 
             <Stack direction='column' pr={4} spacing={2} alignItems='end' >
               <Typography variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' }}>
-                {statementData?.result?.totalCrypto} {selectedCoinInfo?.listing?.ticker}
+                {walletData?.totalCrypto} {walletListing?.ticker}
               </Typography>
               <Typography variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' }}>
-                {statementData?.result?.totalInUsd} USD
+                {walletData?.totalInUsd} USD
               </Typography>
             </Stack>
           </Stack>
@@ -64,7 +62,6 @@ const MoreDrawerContent = ({ selectedCoinInfo, statementData }) => {
             <Divider></Divider>
           </Grid>
         </Stack>
-
 
         <Stack pt={2} spacing={2}>
           <Typography variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
@@ -82,15 +79,15 @@ const MoreDrawerContent = ({ selectedCoinInfo, statementData }) => {
 
             <Stack direction='column' pr={4} spacing={2} alignItems='end' >
               <Typography variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' }}>
-                {selectedCoinInfo?.superWallet?.sOrders} {selectedCoinInfo?.listing?.ticker}
+                {walletData?.walletInfo?.sOrders} {walletListing?.ticker}
               </Typography>
               <Typography variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' }}>
-                {selectedCoinInfo?.superWallet?.inVesting} {selectedCoinInfo?.listing?.ticker}
+                {walletData?.walletInfo?.inVesting} {walletListing?.ticker}
               </Typography>
             </Stack>
           </Stack>
 
-          {['Rupees', 'Tether'].includes(selectedCoinInfo?.listing?.crypto) && (
+          {['Rupees', 'Tether'].includes(walletListing?.crypto) && (
             <>
               <Grid pr={4}>
                 <Divider></Divider>
@@ -110,17 +107,15 @@ const MoreDrawerContent = ({ selectedCoinInfo, statementData }) => {
 
                 <Stack direction='column' pr={4} spacing={2} alignItems='end'>
                   <Typography variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' }}>
-                    {selectedCoinInfo?.superWallet?.pOrders} {selectedCoinInfo?.listing?.ticker}
+                    {walletData?.walletInfo?.pOrders} {walletListing?.ticker}
                   </Typography>
                   <Typography variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' }}>
-                    {selectedCoinInfo?.superWallet?.pListing} {selectedCoinInfo?.listing?.ticker}
+                    {walletData?.walletInfo?.pListing} {walletListing?.ticker}
                   </Typography>
                 </Stack>
               </Stack>
             </>
           )}
-
-
         </Stack>
       </Grid>
 
@@ -190,7 +185,7 @@ const MoreDrawerContent = ({ selectedCoinInfo, statementData }) => {
               value="1"
             />
 
-            {selectedCoinInfo?.listing?.crypto === 'Gravitus' && (
+            {walletListing?.crypto === 'Gravitus' && (
               <Tab
                 disableRipple
                 sx={{
@@ -227,7 +222,7 @@ const MoreDrawerContent = ({ selectedCoinInfo, statementData }) => {
             <InternalTab internalData={InternalData} />
           </TabPanel>
 
-          {selectedCoinInfo?.listing?.crypto === 'Gravitus' && (
+          {walletListing?.crypto === 'Gravitus' && (
             <TabPanel value="2" sx={{ pt: 0, pl: 0 }}>
               <ScheduleTab scheduleData={ScheduleData} />
             </TabPanel>
@@ -239,4 +234,4 @@ const MoreDrawerContent = ({ selectedCoinInfo, statementData }) => {
   )
 }
 
-export default MoreDrawerContent;
+export default MoreDrawer;

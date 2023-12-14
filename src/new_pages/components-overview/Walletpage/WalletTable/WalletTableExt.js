@@ -1,6 +1,6 @@
 import Refresh from '../../../../assets/images/gravitusimage/refresh.svg';
-import Inrdepositwithdrawbutton from './Inrdepositwithdrawbutton';
-import Norecordfoundcomponents from '../Norecordfoundcomponents';
+import NoRecordFound from '../_Essentials/NoRecordFound';
+import InrDpWdlBtn from './InrDpWdlBtn';
 
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -12,7 +12,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
 
 import NumberFormat from 'react-number-format';
-import MoreDrawerContent from './MoreDrawerContent';
+import MoreDrawerContent from './MoreDrawer';
 import PropTypes from 'prop-types';
 
 import React, { useState } from 'react';
@@ -23,7 +23,9 @@ import {
   TableContainer, TableHead, TableRow, Drawer, List, IconButton, TableSortLabel, ButtonBase
 } from '@mui/material';
 
-import { Wallet_Fetch_ById, postDataWallet } from 'src/api_ng/wallet_ng';
+import { Wallet_Fetch_Info, Wallet_Fetch_ById, postDataWallet } from 'src/api_ng/wallet_ng';
+import useSWR, { mutate } from 'swr';
+
 // ==============================|| MARKET TABLE - HEADER CELL ||============================== //
 
 const headCells = [
@@ -140,6 +142,7 @@ OrderTableHead.propTypes = {
   order: PropTypes.string,
   orderBy: PropTypes.string
 };
+
 function descendingComparator(a, b, orderBy) {
   // Numeric comparison for other columns
   const aValue = typeof a[orderBy] === 'string' ? parseFloat(a[orderBy]) : a[orderBy];
@@ -154,14 +157,12 @@ function descendingComparator(a, b, orderBy) {
   return 0;
 }
 
-// Function to get the comparator based on the sorting order and property
 function getComparator(order, orderBy) {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// Function to perform stable sorting with the comparator
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -184,19 +185,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 // ==============================|| WALLET TABLE ||============================== //
 
-export default function WalletTableContent({ walletList, setWalletId }) {
+export default function WalletTableExt({ walletList, setWalletId }) {
 
   const theme = useTheme();
   const navigate = useNavigate();
+
   const [order, setOrder] = React.useState('desc');
   const [orderBy, setOrderBy] = React.useState('totalInUsd');
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [openDrawer, setopenDrawer] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(false);
   const [selected] = useState([]);
 
   const isSelected = (Coin) => selected.indexOf(Coin) !== -1;
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -211,17 +212,19 @@ export default function WalletTableContent({ walletList, setWalletId }) {
     setSearchQuery('');
   };
 
-  const [selectedCoinInfo, setSelectedCoinInfo] = useState(null);
+  const [walletListing, setWalletListing] = useState(null);
+  const [walletData, setWalletData] = useState(null);
 
-  const [statementData, setStatementdata] = useState(null);
+  const handleCloseDrawer = () => {
+    setOpenDrawer(false);
+  };
 
-  const toggleDrawer = (coinInfo) => {
-    var postData = {
-      "walletId": coinInfo?.superWallet?.walletId
-    };
-
+  const fetchWalletById = (wallet, actionType) => {
+    var postData = { "walletId" : wallet.id };
+    
     postDataWallet(Wallet_Fetch_ById(), postData).then(function (res) {
-      // console.log("res", res);
+      // console.log(res, "Fetch Wallet By Id");
+      
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User
@@ -238,29 +241,28 @@ export default function WalletTableContent({ walletList, setWalletId }) {
           }
         }
       } else {
-        // console.log('No error')
-        setStatementdata(res)
+        if(actionType == 'moreDrawer') {
+          setWalletData(res.result)
+          setWalletListing(wallet);
+          setOpenDrawer(!openDrawer);
+        }
+        else if(actionType == 'reloadWallet') {
+          console.log('reloadWallet');
+          mutate(Wallet_Fetch_Info);
+        }
       }
     }, function (err) {
-      // console.log(err);
+      console.log(err);
       // Logout User
     });
-    setStatementdata(coinInfo)
-    setSelectedCoinInfo(coinInfo);
-    setopenDrawer(!openDrawer);
+  }
+
+  const moreInfoDrawer = (wallet) => {
+    fetchWalletById(wallet, 'moreDrawer');
   };
 
-  const handleCloseDrawer = () => {
-    setopenDrawer(false);
-  };
-
-  const [refreshCoin, setRefreshCoin] = useState('');
-
-  const handleRefreshClick = (row) => {
-    // Add your refresh logic here
-    setRefreshCoin('Refresh clicked!');
-    console.log('Refresh clicked!');
-    console.log("row", row)
+  const reloadWallet = (wallet) => {
+    fetchWalletById(wallet, 'reloadWallet');
   };
 
   return (
@@ -308,8 +310,8 @@ export default function WalletTableContent({ walletList, setWalletId }) {
           }
         />
 
-        {/* InrDepositeWithdraw */}
-        <Inrdepositwithdrawbutton />
+        {/* Inr Deposite Withdraw */}
+        <InrDpWdlBtn />
       </Stack>
       <br />
       <TableContainer
@@ -341,13 +343,13 @@ export default function WalletTableContent({ walletList, setWalletId }) {
             {filteredWalletList?.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none' }}>
-                  <Norecordfoundcomponents description="No Results Found" />
+                  <NoRecordFound description="No Results Found" />
                 </TableCell>
               </TableRow>
             ) : (
               filteredWalletList?.map((row, index) => {
-                const { listing, superWallet, totalInUsd } = row;
                 const isItemSelected = isSelected(row.Coin);
+                const { listing, superWallet, totalInUsd } = row;
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
@@ -420,14 +422,14 @@ export default function WalletTableContent({ walletList, setWalletId }) {
                           variant="body1"
                           color="text.buy"
                           sx={{ cursor: 'pointer' }}
-                          onClick={() => toggleDrawer(row)}
+                          onClick={() => moreInfoDrawer(row.listing)}
                           state={{ walletId: listing.id }}
                         >
                           More
                         </Link>
                         <ButtonBase
                           disableRipple
-                          onClick={() => handleRefreshClick(row)}
+                          onClick={() => reloadWallet(row.listing)}
                         >
                           <img
                             src={Refresh}
@@ -452,7 +454,7 @@ export default function WalletTableContent({ walletList, setWalletId }) {
             <CloseIcon />
           </IconButton>
           <List>
-            <MoreDrawerContent selectedCoinInfo={selectedCoinInfo} statementData={statementData} />
+            <MoreDrawerContent walletListing={walletListing} walletData={walletData} />
           </List>
         </Box>
       </Drawer>

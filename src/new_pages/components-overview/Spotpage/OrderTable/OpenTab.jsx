@@ -30,8 +30,8 @@ import {
 
 import { Link as RouterLink } from 'react-router-dom';
 
-import Norecordfoundcomponents from '../../Walletpage/Norecordfoundcomponents';
 import { Spot_CancelOrder_URL, postDataSPOT } from 'src/api_ng/spotTrade_ng';
+import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 

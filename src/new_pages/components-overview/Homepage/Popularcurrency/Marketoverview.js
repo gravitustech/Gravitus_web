@@ -4,7 +4,7 @@ import {
   TableCell, TableContainer, TableHead, TableRow
 }
   from '@mui/material';
-import Norecordfoundcomponents from '../../Walletpage/Norecordfoundcomponents';
+import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
 
 function getColor(value, theme) {
   if (value > 0) {

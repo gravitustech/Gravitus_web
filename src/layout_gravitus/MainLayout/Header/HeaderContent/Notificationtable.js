@@ -6,9 +6,9 @@ import NumberFormat from 'react-number-format';
 
 // material-ui
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, Link, useTheme, Grid, List, Divider } from '@mui/material';
-import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/Norecordfoundcomponents';
 import Button from '../../overrides/Button';
 import MainCard from 'src/components/MainCard';
+import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/_Essentials/NoRecordFound';
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 function createData(Heading, Description, Time,) {
   return { Heading, Description, Time, };

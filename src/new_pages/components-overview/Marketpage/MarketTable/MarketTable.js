@@ -11,9 +11,9 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import Norecordfoundcomponents from '../../Walletpage/Norecordfoundcomponents';
 import { setConfig_ng } from 'src/utils_ng/localStorage_ng';
 import { FavouritesCrypto_URL, postDataSystem } from 'src/api_ng/system_ng';
+import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
 
 function MyComponent({ id, row }) {
   const [clicked, setClicked] = useState(localStorage.getItem(`iconClicked-${id}`) === 'true');

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stack, Typography, useTheme } from '@mui/material';
 
-function Importantnotescomponents({ img, description }) {
+function ImportantNotesExt({ img, description }) {
   const theme = useTheme();
   return (
     <Stack direction="row" spacing={2}>
@@ -13,4 +13,4 @@ function Importantnotescomponents({ img, description }) {
   );
 }
 
-export default Importantnotescomponents;
+export default ImportantNotesExt;

@@ -20,8 +20,8 @@ import {
   Checkbox,
   FormControlLabel
 } from '@mui/material';
+import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
 
-import Norecordfoundcomponents from '../../Walletpage/Norecordfoundcomponents';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 

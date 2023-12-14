@@ -1,58 +1,63 @@
-import React, { useReducer,useEffect } from 'react';
-import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+
 import { Grid, Typography, Stack, Box, useTheme, Card, IconButton } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
+
 import TabList from '@mui/lab/TabList';
-import HistroyExternalTab from './HistroyExternalTab';
-import HistroyInternalTab from './HistroyInternalTab';
-import { fetcher, getWalletURLHistory } from '../../../../api/wallet';
-import useSWR from 'swr';
-import { Wallet_Statement, fetcherWallet } from 'src/api_ng/wallet_ng';
-import { socket } from 'src/socket';
+import Tab from '@mui/material/Tab';
+
 import Lodergif from 'src/components/Gravitusloader';
+import HistoryExternalTab from './HistoryExternalTab';
+import HistoryInternalTab from './HistoryInternalTab';
+
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useReducer } from 'react';
+
+import { socket } from 'src/socket';
+import useSWR from 'swr';
+
+import { fetcher, getWalletURLHistory } from '../../../../api/wallet';
+import { Wallet_Statement, fetcherWallet } from 'src/api_ng/wallet_ng';
 
 const HistoryPageNG = () => {
-  const location = useLocation();
-  const { walletId } = location.state;
-  
-  console.log({ walletId });
   const theme = useTheme();
+  const location = useLocation();
 
-  //Gravitus team code
+  const [walletId, setWalletId] = useState(location?.state?.walletId);
+  var STATEMENTData = null; // Store History Data
 
-  const [STATEMENTData, setSTATEMENTData] = useReducer(updateData, null);
+  const [value, setValue] = React.useState('0');
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
-  function updateData(state, action) {
-    if (action.type === 'UPDATE') {
-      return action.data;
-    }
-
-    throw Error('Unknown action.');
+  const navigate = useNavigate();
+  const goBack = () => {
+    navigate(-1);
   }
 
-  function useWallet_StatementData() {
+  function useWalletHistory() {
     var postData = { walletId: walletId };
 
     const { data, error, isLoading } = useSWR([Wallet_Statement(), postData], fetcherWallet, {
       revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
     });
 
-    // console.log(data, 'Inside SPOT SWR');
     return { data, error, isLoading };
   }
 
-  const { data: statementRc, error: statementEr, isLoading: isSTATEMENTDataLoading } = useWallet_StatementData();
+  const { 
+    data: statementRc,
+    error: statementEr, 
+    isLoading: isSTATEMENTDataLoading 
+  } = useWalletHistory();
 
-  console.log("statementRc",statementRc)
   if (statementEr) {
     // Call Logout User
   }
-
-  useEffect(() => {
-    console.log(statementRc);
+  
+  if(statementRc) {
     if (statementRc != undefined) {
       if (statementRc.error != 'ok') {
         if (statementRc?.error?.name === "Missing Authorization") {
@@ -62,7 +67,7 @@ const HistoryPageNG = () => {
           // LogOut User;
         }
         else if (statementRc?.error?.name != 'Invalid Authorization') {
-          console.log(statementRc.error);
+          console.log(statementRc.error.name);
           // Show 'statementRc.error' snack bar
         }
         else {
@@ -71,40 +76,11 @@ const HistoryPageNG = () => {
         }
       }
       else {
-        console.log(statementRc.result, 'statementRc.result');
-        setSTATEMENTData({ type: 'UPDATE', data: statementRc.result });
-        // For testing - 'res': {'color' : 'yellow'}
+        STATEMENTData = statementRc?.result;
       }
     }
-
-    // socket.on('/SPOTPreTrade/POST', function (res) {
-    //   setSTATEMENTData({ type: 'UPDATE', data: res });
-    //   // For testing - 'res': {'color' : 'green'}
-    // });
-
-  }, [statementRc]);
-
-  console.log('STATEMENTData', STATEMENTData);
-
-  //Govardhan code
-  // const { data, error, isLoading } = useSWR(
-  //   getWalletURLHistory(),
-  //   (url) => fetcher(url, { accountType: 'GRAVITUS', postData: { walletId: walletId } })
-  //   // { suspense: true }
-  // );
-
-  // console.log('res', data, error, isLoading, location);
-
-  const [value, setValue] = React.useState('0');
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const navigate = useNavigate();
-  const goBack = () => {
-    navigate(-1);
   }
+  
   return (
     <>
       <Grid container pl={14} pr={15} pt={3} pb={5}>
@@ -117,7 +93,7 @@ const HistoryPageNG = () => {
           </IconButton>
 
           <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-            Wallet Histroy
+            Wallet History
           </Typography>
         </Stack>
       </Grid>
@@ -223,10 +199,10 @@ const HistoryPageNG = () => {
                 </Stack>
 
                 <TabPanel value="0" sx={{ padding: '0px' }}>
-                  <HistroyExternalTab tableData={STATEMENTData?.external} />
+                  <HistoryExternalTab tableData={STATEMENTData?.external} />
                 </TabPanel>
                 <TabPanel value="1" sx={{ padding: '0px' }}>
-                  <HistroyInternalTab tableData={STATEMENTData?.internal} />
+                  <HistoryInternalTab tableData={STATEMENTData?.internal} />
                 </TabPanel>
               </TabContext>
             </Stack>

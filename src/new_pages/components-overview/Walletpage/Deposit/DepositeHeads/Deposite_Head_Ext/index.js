@@ -1,7 +1,7 @@
 import React from 'react'
 import { Grid, Typography, Stack, useTheme } from '@mui/material';
 
-const Depositehead2 = () => {
+const DepositHeadExt = () => {
   const theme = useTheme();
   return (
     <Grid>
@@ -28,4 +28,4 @@ const Depositehead2 = () => {
   )
 }
 
-export default Depositehead2;
+export default DepositHeadExt;

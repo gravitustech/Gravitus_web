@@ -1,7 +1,6 @@
-import React from 'react';
-
 import { Typography, Stack, Button, useTheme, Grid } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import React from 'react';
 
 const WalletIcon = () => (
   <svg width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -16,7 +15,7 @@ const WalletIcon = () => (
   </svg>
 );
 
-const WalletHead1 = ({ total }) => {
+const WalletHead = ({ total }) => {
   const theme = useTheme();
   
   return (
@@ -66,4 +65,4 @@ const WalletHead1 = ({ total }) => {
   );
 };
 
-export default WalletHead1;
+export default WalletHead;

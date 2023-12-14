@@ -1,20 +1,20 @@
+import { 
+  Box, Table, TableBody, TableCell, TableContainer, TableHead, 
+  TableRow, Typography, Stack, useTheme } from '@mui/material';
+import Norecordfoundcomponents from '../_Essentials/NoRecordFound';
+
 import PropTypes from 'prop-types';
-// import { useState } from 'react';
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { styled } from "@mui/material/styles";
-import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
-// material-ui
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, Link, useTheme, } from '@mui/material';
-import Norecordfoundcomponents from '../Norecordfoundcomponents';
-// import copyicon from '../images/copyicon.svg'
+
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
+
 function createData(Type, Amount, Fees, Address, TransactionId, Status, Date) {
   return { Type, Amount, Fees, Address, TransactionId, Status, Date };
 }
+
 const rows = [
   createData(
-    'Deposit',
+    'Trade',
     '0.012BTC',
     '0.0 BTC',
     '1A1zP1eP5QGefi2DMpPTfTL5SLmv7DivfNa',
@@ -23,7 +23,7 @@ const rows = [
     '26 Dec, 12PM'
   ),
   createData(
-    'Withdraw',
+    'Trade',
     '0.012BTC',
     '0.0 BTC',
     '1A1zP1eP5QGefi2DMpPTfTL5SLmv7DivfNa',
@@ -32,6 +32,7 @@ const rows = [
     '26 Dec, 12PM'
   )
 ];
+
 const headCells = [
   {
     id: 'Type',
@@ -46,22 +47,10 @@ const headCells = [
     label: 'Amount'
   },
   {
-    id: 'Fees',
+    id: 'TxRef',
     align: 'left',
     disablePadding: true,
-    label: 'Fees'
-  },
-  {
-    id: 'Address',
-    align: 'left',
-    disablePadding: true,
-    label: 'Address'
-  },
-  {
-    id: 'Transaction Id',
-    align: 'left',
-    disablePadding: false,
-    label: 'Transaction Id'
+    label: 'Tx Ref'
   },
   {
     id: 'Status',
@@ -107,33 +96,9 @@ OrderTableHead.propTypes = {
 };
 
 // ==============================|| ORDER TABLE ||============================== //
-const LightTooltip = styled(({ className, ...props }) => (
-  <Tooltip arrow placement="top" {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: theme.palette.common.white,
-    color: "rgba(0, 0, 0, 0.87)",
-    // boxShadow: theme.shadows[1],
-    fontSize: 11
-  },
-  [`& .${tooltipClasses.arrow}`]: {
-    color: theme.palette.common.white, // Set the arrow color to white
-  },
-}));
-const TransactionId = ({ transactionid }) => {
-  const first = transactionid.slice(0, 18);
-  const end = '.....';
-  const TransactionId = `${first} ${end}`;
 
-  return (
-    <Typography variant='body1' sx={{ textDecoration: 'underline', textDecorationColor: 'text.buy' }} color='text.buy'>
-      {TransactionId}
-    </Typography>
-  );
-};
-export default function HistroyExternalTab({ tableData }) {
-  console.log('histroytableData', tableData);
-
+export default function HistoryInternalTab({ tableData }) {
+  console.log('tableDataddd', tableData)
   const theme = useTheme();
   return (
     <Box>
@@ -159,7 +124,14 @@ export default function HistroyExternalTab({ tableData }) {
           },
         }}
       >
-        <Table aria-labelledby="tableTitle">
+        <Table
+          aria-labelledby="tableTitle"
+          sx={{
+            '& .MuiTableCell-root:nth-child(2), & .MuiTableCell-root:nth-child(3),& .MuiTableCell-root:nth-child(4), ': {
+              pl: 14
+            },
+          }}
+        >
           <OrderTableHead />
           <TableBody>
             {tableData.length === 0 ? (
@@ -173,9 +145,8 @@ export default function HistroyExternalTab({ tableData }) {
               tableData.map((row, index) => {
                 // const isItemSelected = isSelected(row.Name);
                 const labelId = `enhanced-table-checkbox-${index}`;
-                const { userId, crypto, transType, transDesc, highlight, amount, charges, address, txId, href, status, date, timeStamp } = row;
-                const firstTenCharactersaddress = address.slice(0, 25);
-                const restOfCharactersaddress = address.slice(25);
+                const { userId, crypto, transType, transDesc, highlight, amount, txRef, status, date, timeStamp } = row;
+
                 return (
                   <TableRow
                     hover
@@ -197,24 +168,10 @@ export default function HistroyExternalTab({ tableData }) {
                       </Stack>
                     </TableCell>
 
-                    <TableCell sx={{ border: 'none' }} align="left">
-                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {charges} {crypto}
-                      </Typography>
-                    </TableCell>
-
-                    <TableCell sx={{ border: 'none', }} align="left">
-                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {firstTenCharactersaddress}<br />{restOfCharactersaddress}
-                      </Typography>
-                    </TableCell>
-
                     <TableCell sx={{ border: 'none' }} align="left" >
-                      <Tooltip title='Click to see the status' arrow placement='top' >
-                        <a href={href}>
-                          <TransactionId transactionid={txId} />
-                        </a>
-                      </Tooltip>
+                      <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        {txRef}
+                      </Typography>
                     </TableCell>
 
                     <TableCell sx={{ border: 'none', color: 'text.buy' }} align="left">
