@@ -17,7 +17,7 @@ const Footer = ({ isAuthorised }) => {
       pt={8}
       pb={3}
       sx={{
-        background: theme.palette.mode === 'dark' ? '#020202' : '#00413C'
+        background: theme.palette.mode === 'dark' ? '#0F121A' : '#00413C'
       }}
     >
       <Grid item lg={6} xs={12} md={6}>

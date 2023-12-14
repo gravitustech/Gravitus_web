@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
 
@@ -7,11 +7,11 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Link, Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import '@fontsource/montserrat';
-import '@fontsource/montserrat/300.css';
-import '@fontsource/montserrat/400.css';
-import '@fontsource/montserrat/500.css';
-import '@fontsource/montserrat/700.css';
+import '@fontsource/inter';
+import '@fontsource/inter/300.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/700.css';
 
 // Styles
 import {
@@ -54,9 +54,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import GravitusNavigationRegister from './Header/Navgroupregister/NavigationRegister';
 import GravitusNavigationLogo from './Header/Navgrouplogo/NavigationLogo';
+import { getConfig_ng, setConfig_ng } from 'src/utils_ng/localStorage_ng';
 
 const ThemePaletteModeContext = React.createContext({
-  toggleThemePaletteMode: () => {}
+  toggleThemePaletteMode: () => { }
 });
 
 const GravitusMainLayout = () => {
@@ -87,10 +88,9 @@ const GravitusMainLayout = () => {
           color: 'inherit',
           elevation: '0',
           boxShadow: 'none',
-          backgroundColor: theme.palette.mode === 'dark' ? '#0A0A0A' : '#FBFBFB'
         }}
       >
-        <Toolbar sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#0A0A0A' : '#FBFBFB' }}>
+        <Toolbar sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#131722' : 'text.white', height: '0px' }}>
           {isMatch ? (
             <>
               <Grid container>
@@ -207,7 +207,7 @@ const GravitusMainLayout = () => {
           )}
         </Toolbar>
       </AppBar>
-      <Box component="main" sx={{ width: '100%', flexGrow: 1 }}>
+      <Box component="main" sx={{ width: '100%', flexGrow: 1 ,background: theme.palette.mode === 'dark' ? '#0F121A' : '#F7F7F7',}}>
         <Toolbar />
         <Outlet />
       </Box>
@@ -221,8 +221,13 @@ GravitusMainLayout.propTypes = {
 };
 
 export default function App() {
+  const storedThemeMode = getConfig_ng('themePaletteMode');
   const isSystemDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const [themePaletteMode, setThemePaletteMode] = React.useState(isSystemDarkMode ? 'dark' : 'light');
+  const [themePaletteMode, setThemePaletteMode] = useState(storedThemeMode || (isSystemDarkMode ? 'dark' : 'light'));
+
+  useEffect(() => {
+    setConfig_ng('themePaletteMode', themePaletteMode);
+  }, [themePaletteMode]);
 
   const themePaletteModeContextProvider = React.useMemo(
     () => ({
@@ -234,7 +239,7 @@ export default function App() {
   );
 
   const theme = useTheme();
-  const themeTypography = Typography('montserrat ');
+  const themeTypography = Typography('inter');
   const themeCustomShadows = useMemo(() => CustomShadows(theme), [theme]);
 
   const themeProvider = React.useMemo(
@@ -276,12 +281,12 @@ export default function App() {
             buy: '#00BBAB',
             sell: '#FF4E4E',
             cardbackground: '#FFFFFF',
-            
+
             //darkmode
             primarydark: '#D9D9D9',
             secondarydark: '#FFFFFF',
             tertiarydark: '#F0F0F0',
-            cardbackgrounddark: '#000000'
+            cardbackgrounddark: '#131722'
           }
         }
       }),

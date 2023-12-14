@@ -134,7 +134,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
   };
   return (
     <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title">
-      <Stack p={4} spacing={2}>
+      <Stack p={4} spacing={2} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
         <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
           Reset {action === 'greset' ? 'G-Authenticator' : 'SMS'} Security
         </Typography>
@@ -203,6 +203,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
                     endAdornment={
                       <InputAdornment>
                         <Button
+                          disableRipple
                           disabled={isPOtpLoading}
                           style={{
                             color: isPOtpLoading ? "grey" : (theme.palette.mode === 'dark' ? '#fff' : '#000'),
@@ -252,6 +253,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
                   endAdornment={
                     <InputAdornment>
                       <Button
+                        disableRipple
                         disabled={isMOtpLoading}
                         style={{
                           color: isMOtpLoading ? "grey" : (theme.palette.mode === 'dark' ? '#fff' : '#000'),

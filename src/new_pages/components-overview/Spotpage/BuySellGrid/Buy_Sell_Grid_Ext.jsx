@@ -547,8 +547,8 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
           </form>
         )}
       </Formik>
-      <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title">
-        <Stack p={4} spacing={2.5}>
+      <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title" >
+        <Stack p={4} spacing={2.5} sx={{background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground'}}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
             <Typography variant="title1" sx={{ color: superSide === '1' ? 'text.buy' : 'text.sell' }}  >
               {superSide === '1' ? 'Buy' : 'Sell'}  {priceData?.buyPair}

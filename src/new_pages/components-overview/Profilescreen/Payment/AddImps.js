@@ -64,11 +64,13 @@ const AddImps = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, muta
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} pt={4} pb={2} pl={8} pr={8}>
               <Grid item xs={12}>
-                <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                  Add IMPS
-                </Typography>
+                <Stack>
+                  <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                    Add IMPS Payment Method
+                  </Typography>
+                </Stack>
                 <Stack spacing={1} pt={3}>
                   <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                     Account Holder Name
@@ -105,7 +107,8 @@ const AddImps = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, muta
                     // onChange={handleChange}
                     onChange={(e) => {
                       const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
-                      handleChange({ target: { name: "acnumber", value: numericValue } });}}
+                      handleChange({ target: { name: "acnumber", value: numericValue } });
+                    }}
                     placeholder=""
                     fullWidth
                     readOnly={userData?.checked}

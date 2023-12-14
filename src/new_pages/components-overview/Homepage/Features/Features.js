@@ -18,7 +18,7 @@ const Features = () => {
       pt={20}
       pb={20}
       sx={{
-        background: theme.palette.mode === 'dark' ? '#181818' : 'text.white'
+        background: theme.palette.mode === 'dark' ? '#131722' : 'text.white'
       }}
     >
       <Grid item md={12} lg={12} pl={{ md: 6, sm: 8, xs: 6, lg: 15 }} pr={{ md: 6, sm: 8, xs: 6, lg: 15 }}>
@@ -68,10 +68,13 @@ const Features = () => {
                 minWidth: 256,
                 background:
                   theme.palette.mode === 'dark'
-                    ? 'radial-gradient(circle,rgba(69, 69, 69, 1),rgba(2, 2, 2, 1))'
+                    ? 'radial-gradient(34.44% 59.83% at 50% 48.03%, #2B3141 2.77%, #131722 100%)'
                     : 'radial-gradient(circle,rgba(255, 255, 255, 1),rgba(173, 231, 226, 1))',
                 borderRadius: "6px",
-                boxShadow: "0px 1.503px 3.005px 0px rgba(0, 0, 0, 0.06), 0px 7px 11px 0px rgba(0, 0, 0, 0.09)"
+                boxShadow: "0px 1.503px 3.005px 0px rgba(0, 0, 0, 0.06), 0px 7px 11px 0px rgba(0, 0, 0, 0.09)",
+                border: '1px solid',
+                borderBottom: 'none',
+                borderColor: theme.palette.mode === 'dark' ? '#343A4A' : '#60FFF1'
               }}>
               <Stack spacing={1.5} pt={4} pr={4} pl={4} pb={4}>
 

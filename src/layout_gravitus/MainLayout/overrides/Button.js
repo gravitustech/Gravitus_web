@@ -77,13 +77,13 @@ export default function Button(theme) {
         contained5: {
           width: '179px',
           height: '38px',
-          backgroundColor: theme.palette.mode === 'dark' ? '#F4F4F4' : '#F4F4F4',
+          backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F4F4F4',
           borderRadius: '5px',
           fontSize: '14px',
           fontWeight: 500,
-          color: '#8c8c8c',
+          color: theme.palette.mode === 'dark' ? '#cfcfcf' : '#8c8c8c',
           '&:hover': {
-            backgroundColor: '#F4F4F4'
+            backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F4F4F4',
           }
         },
         //
@@ -217,13 +217,13 @@ export default function Button(theme) {
         supportbutton: {
           width: '50%',
           height: '38px',
-          backgroundColor: theme.palette.mode === 'dark' ? '#232323' : '#F0F0F0',
+          backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F0F0F0',
           borderRadius: '5px',
           fontSize: '14px',
           fontWeight: 500,
           color: theme.palette.mode === 'dark' ? '#D9D9D9' : '#8c8c8c',
           '&:hover': {
-            backgroundColor: theme.palette.mode === 'dark' ? '#232323' : '#F0F0F0'
+            backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F0F0F0'
           }
         },
         sellAppealbutton: {
@@ -358,7 +358,8 @@ export default function Button(theme) {
           height: '35px',
           width: '100%',
           borderRadius: '5px',
-          border: '1px solid #E1E1E1',
+          border: '1px solid',
+          borderColor: theme.palette.mode === 'dark' ? '#31384b' : '#E1E1E1',
           background: 'transparent',
           '&:hover': {
             backgroundColor: 'transparent',
@@ -368,12 +369,12 @@ export default function Button(theme) {
         editbutton: {
           width: '94px',
           height: '19px',
-          backgroundColor: theme.palette.mode === 'dark' ? '#232323' : '#F5F5F5',
+          backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F5F5F5',
           borderRadius: '13px',
           fontSize: '12px',
           fontWeight: 500,
           '&:hover': {
-            backgroundColor: theme.palette.mode === 'dark' ? '#232323' : '#F5F5F5',
+            backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F5F5F5',
           }
         },
         //homeregisterbutton
@@ -454,7 +455,7 @@ export default function Button(theme) {
           }
         },
         //404pagebutton
-      pagebutton404: {
+        pagebutton404: {
           maxWidth: '156px',
           '@media (min-width: 480px)': {
             width: '156px',

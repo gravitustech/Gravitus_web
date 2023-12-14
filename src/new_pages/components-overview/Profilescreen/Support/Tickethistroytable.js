@@ -50,7 +50,7 @@ function OrderTableHead() {
   const theme = useTheme();
   return (
     <TableHead>
-      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#000' : '#fff' }}>
+      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#131722' : '#FFFFFF' }}>
         {headCells.map((headCell) => (
           <TableCell
             sx={{ border: 'none', paddingLeft: '0' }}
@@ -88,14 +88,14 @@ export default function Tickethistroytab({ historyData }) {
           scrollbarColor: 'gray lightgray',
 
           '&::-webkit-scrollbar': {
-            width: '4px', // Width of the scrollbar
+            width: '0px', // Width of the scrollbar
             height: '4px',
           },
           '&::-webkit-scrollbar-track': {
-            background: theme.palette.mode === 'dark' ? 'black' : 'text.white' // Track color
+            background: theme.palette.mode === "dark" ? 'transparent' : "transparent",// Track color
           },
           '&::-webkit-scrollbar-thumb': {
-            background: theme.palette.mode === 'dark' ? 'lightgray' : 'lightgray',
+            background: theme.palette.mode === 'dark' ? '#0F121A' : 'lightgray',
             borderRadius: '8px' // Round the corners of the thumb
           }
         }}
@@ -121,7 +121,7 @@ export default function Tickethistroytab({ historyData }) {
                     tabIndex={-1}
                     key={index}
                   >
-                    <TableCell sx={{ border: 'none', paddingLeft: '0',paddingRight:'128px' }} component="th" id={labelId} scope="row" align="left">
+                    <TableCell sx={{ border: 'none', paddingLeft: '0', paddingRight: '128px' }} component="th" id={labelId} scope="row" align="left">
                       <Stack direction="row" alignItems="center" spacing={1}>
                         <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                           {row.category}
@@ -129,19 +129,19 @@ export default function Tickethistroytab({ historyData }) {
                       </Stack>
                     </TableCell>
 
-                    <TableCell sx={{ border: 'none', paddingLeft: '0',paddingRight:'108px'  }} align="left">
+                    <TableCell sx={{ border: 'none', paddingLeft: '0', paddingRight: '108px' }} align="left">
                       <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                         {row.allMessages[0].correspondence}
                       </Typography>
                     </TableCell>
 
-                    <TableCell sx={{ border: 'none', paddingLeft: '0',paddingRight:'128px' }} align="left">
+                    <TableCell sx={{ border: 'none', paddingLeft: '0', paddingRight: '128px' }} align="left">
                       <Typography variant="body1" color="text.buy">
                         {row.status === '0' ? 'opened' : 'closed'}
                       </Typography>
                     </TableCell>
 
-                    <TableCell sx={{ border: 'none',paddingRight:'0' }} align="right">
+                    <TableCell sx={{ border: 'none', paddingRight: '0' }} align="right">
                       <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                         {new Date(Number(row.timeStamp)).toLocaleString('en-IN', {
                           timeZone: 'Asia/Kolkata',

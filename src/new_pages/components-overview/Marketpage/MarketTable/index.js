@@ -148,7 +148,7 @@ const MarketpageTable = ({ marketData, listings,setPlatformId }) => {
                 [theme.breakpoints.up('lg')]: {
                   width: '20%'
                 },
-                borderColor: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary',
+                borderColor: theme.palette.mode === 'dark' ? '#31384b' : 'text.tertiary',
                 borderWidth: '1px',
                 borderStyle: 'solid',
                 backgroundColor: 'transparent',
@@ -176,8 +176,7 @@ const MarketpageTable = ({ marketData, listings,setPlatformId }) => {
               }
             />
           </Stack>
-          <TabPanel value="0" sx={{ padding: '0px' }}>
-            {/* <MarketTable flag="INR" marketData={marketData} searchQuery={searchQuery} listings={listings} setPlatformId={setPlatformId}/> */}
+          <TabPanel value="0" sx={{ padding: '0px',paddingTop:'12px' }}>
             <FavouriteTab marketData={marketData} searchQuery={searchQuery} listings={listings} setPlatformId={setPlatformId}/>
           </TabPanel>
           <TabPanel value="1" sx={{ padding: '0px' }}>

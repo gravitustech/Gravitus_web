@@ -43,8 +43,8 @@ const BuySellGrid = ({ isAuthorised, platformId, pairData, priceData, selectedOr
                     ? 'text.buy'
                     : 'text.buy'
                   : theme.palette.mode === 'dark'
-                  ? '#2B2B2E'
-                  : '#ECECEC',
+                  ? '#262b39'
+                  : '#F1F1F1',
               borderRadius: '5px 0 0 5px',
               minHeight: '32px !important',
               width: '50%',
@@ -56,8 +56,8 @@ const BuySellGrid = ({ isAuthorised, platformId, pairData, priceData, selectedOr
                       ? 'text.buy'
                       : 'text.buy'
                     : theme.palette.mode === 'dark'
-                    ? '#2B2B2E'
-                    : '#ECECEC'
+                    ? '#262b39'
+                    : '#F1F1F1'
               }
             }}
           >
@@ -77,8 +77,8 @@ const BuySellGrid = ({ isAuthorised, platformId, pairData, priceData, selectedOr
                     ? 'text.sell'
                     : 'text.sell'
                   : theme.palette.mode === 'dark'
-                  ? '#2B2B2E'
-                  : '#ECECEC',
+                  ? '#262b39'
+                  : '#F1F1F1',
               borderRadius: '0 5px 5px 0',
               minHeight: '32px !important',
               width: '50%',
@@ -90,8 +90,8 @@ const BuySellGrid = ({ isAuthorised, platformId, pairData, priceData, selectedOr
                       ? 'text.sell'
                       : 'text.sell'
                     : theme.palette.mode === 'dark'
-                    ? '#2B2B2E'
-                    : '#ECECEC'
+                    ? '#262b39'
+                    : '#F1F1F1'
               }
             }}
           >

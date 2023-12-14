@@ -5,6 +5,11 @@ import head2img from '../../../../assets/images/gravitusimage/head2img.svg';
 import head3img from '../../../../assets/images/gravitusimage/head3img.svg';
 import head4img from '../../../../assets/images/gravitusimage/head4img.svg';
 import headmainimg from '../../../../assets/images/gravitusimage/headmainimg.svg';
+import head1imgdark from '../../../../assets/images/gravitusimage/head1imgdark.svg';
+import head2imgdark from '../../../../assets/images/gravitusimage/head2imgdark.svg';
+import head3imgdark from '../../../../assets/images/gravitusimage/head3imgdark.svg';
+import head4imgdark from '../../../../assets/images/gravitusimage/head4imgdark.svg';
+import headmainimgdark from '../../../../assets/images/gravitusimage/headmainimgdark.svg';
 import { Link as RouterLink } from 'react-router-dom';
 
 const HomepageHeadnewuser = () => {
@@ -36,7 +41,7 @@ const HomepageHeadnewuser = () => {
       sx={{
         background:
           theme.palette.mode === 'dark'
-            ? 'radial-gradient(circle,rgba(69, 69, 69, 1),rgba(2, 2, 2, 1))'
+            ? 'radial-gradient(51.97% 51.97% at 50% 48.03%, #5B6172 0%, #131722 100%)'
             : 'radial-gradient(circle,rgba(255, 255, 255, 1),rgba(173, 231, 226, 1))',
         height: 'auto'
       }}
@@ -44,10 +49,18 @@ const HomepageHeadnewuser = () => {
       <Grid item container md={2} lg={2} style={{ flexDirection: 'column' }} display={{ xs: 'none', md: 'block', lg: 'block' }}>
         <Grid pt={10} sx={{ textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
           <style dangerouslySetInnerHTML={{ __html: keyframes }} />
-          <img src={head1img} alt="head1img" width={75} style={imageStyle} />
+          {theme.palette.mode === 'dark' ? (
+            <img src={head1imgdark} alt="head1img" width={75} style={imageStyle} />
+          ) : (
+            <img src={head1img} alt="head1img" width={75} style={imageStyle} />
+          )}
         </Grid>
         <Grid pt={20} sx={{ textAlign: 'end', justifyContent: 'end', alignItems: 'end' }}>
-          <img src={head2img} alt="head2img" width={75} style={imageStyle} />
+          {theme.palette.mode === 'dark' ? (
+            <img src={head2imgdark} alt="head1img" width={75} style={imageStyle} />
+          ) : (
+            <img src={head2img} alt="head1img" width={75} style={imageStyle} />
+          )}
         </Grid>
       </Grid>
 
@@ -82,17 +95,29 @@ const HomepageHeadnewuser = () => {
             </Button>
           </Stack>
           <Stack pt={5} sx={{ alignItems: 'center', justifyContent: 'center' }}>
-            <img src={headmainimg} alt="headmainimg" width={200} style={imageStyle} />
+            {theme.palette.mode === 'dark' ? (
+              <img src={headmainimgdark} alt="head1img" width={200} style={imageStyle} />
+            ) : (
+              <img src={headmainimg} alt="head1img" width={200} style={imageStyle} />
+            )}
           </Stack>
         </Stack>
       </Grid>
 
       <Grid item container md={2} lg={2} style={{ flexDirection: 'column' }} display={{ xs: 'none', md: 'block', lg: 'block' }}>
         <Grid pt={10} sx={{ textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
-          <img src={head3img} alt="head3img" width={75} style={imageStyle} />
+          {theme.palette.mode === 'dark' ? (
+            <img src={head3imgdark} alt="head1img" width={75} style={imageStyle} />
+          ) : (
+            <img src={head3img} alt="head1img" width={75} style={imageStyle} />
+          )}
         </Grid>
         <Grid pt={20} sx={{ textAlign: 'start', justifyContent: 'start', alignItems: 'start' }}>
-          <img src={head4img} alt="head4img" width={75} style={imageStyle} />
+          {theme.palette.mode === 'dark' ? (
+            <img src={head4imgdark} alt="head1img" width={75} style={imageStyle} />
+          ) : (
+            <img src={head4img} alt="head1img" width={75} style={imageStyle} />
+          )}
         </Grid>
       </Grid>
     </Grid>

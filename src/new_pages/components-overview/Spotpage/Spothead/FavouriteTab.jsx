@@ -17,7 +17,7 @@ import { useState, useEffect } from 'react';
 import useSWR, { mutate } from 'swr';
 import { setConfig_ng } from '../../../../utils_ng/localStorage_ng';
 
-import { FavouritesCrypto_URL, MarketOverview_URL, fetcherSystem, postDataSystem } from 'src/api_ng/system_ng';
+import { MarketOverview_URL, fetcherSystem } from 'src/api_ng/system_ng';
 import Norecordfoundcomponents from '../../Walletpage/Norecordfoundcomponents';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
@@ -63,53 +63,23 @@ function getColor(value, theme) {
   }
 }
 
-function MyComponent({ id, row }) {
+function MyComponent({ id }) {
   const [clicked, setClicked] = useState(localStorage.getItem(`iconClicked-${id}`) === 'true');
 
   useEffect(() => {
     localStorage.setItem(`iconClicked-${id}`, clicked.toString());
   }, [clicked]);
 
-  const handleClick = (row) => {
-    var postData = {
-      "platformId": row?.platformId
-    };
-
-    // console.log('postData', postData)
-
-    postDataSystem(FavouritesCrypto_URL(), postData).then(function (res) {
-      console.log("res", res);
-      if (res.error !== 'ok') {
-        if (res.error.name == "Missing Authorization") {
-          // Logout User
-        }
-        else if (res.error.name == "Invalid Authorization") {
-          // Logout User
-        }
-        else {
-          if (res.error.name != undefined) {
-            // console.log(res.error.name)
-          }
-          else {
-            // console.log('error')
-          }
-        }
-      } else {
-        // console.log('No error')
-        setClicked(!clicked)
-      }
-    }, function (err) {
-      // console.log(err);
-      // Logout User
-    });
+  const handleClick = () => {
+    setClicked(!clicked);
   };
 
   return (
     <>
       {clicked ? (
-        <StarIcon onClick={() => handleClick(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />
+        <StarIcon onClick={handleClick} style={{ color: '#F0B90B', cursor: 'pointer', fontSize: '24px' }} />
       ) : (
-        <StarBorderIcon onClick={() => handleClick(row)} style={{ cursor: 'pointer' }} />
+        <StarBorderIcon onClick={handleClick} style={{ cursor: 'pointer', fontSize: '24px' }} />
       )}
     </>
   );
@@ -317,7 +287,7 @@ function stableSort(array, comparator) {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function MarketTable({ flag, setPlatformId, handleClose, searchQuery }) {
+export default function FavouriteTab({ flag, setPlatformId, handleClose, searchQuery }) {
   const theme = useTheme();
   const [orderBy, setOrderBy] = useState('defaultProperty'); // Replace 'defaultProperty' with the default sorting property
 
@@ -352,7 +322,7 @@ export default function MarketTable({ flag, setPlatformId, handleClose, searchQu
     setConfig_ng('spotPair', { platformId: id });
   };
 
-  const filteredListings = (data && data.result && data.result.listings || [])
+  const filteredListings = (data && data.result && data.result.favourites || [])
     .filter((item) =>
       flag === 'USDT'
         ? item.sellPair === 'USDT' && item.platform === 'SPOT'
@@ -419,7 +389,7 @@ export default function MarketTable({ flag, setPlatformId, handleClose, searchQu
                   >
                     <TableCell sx={{ border: 'none' }} component="th" id={labelId} scope="row" align="left" >
                       <Stack direction="row" alignItems="center" spacing={1}>
-                        <Stack onClick={(e) => e.stopPropagation()}><MyComponent id={row.platformId} row={row} /></Stack>
+                        <Stack onClick={(e) => e.stopPropagation()}><MyComponent id={row.id} /></Stack>
                         <img src={row.imagePath} alt="ico" width="24" height="24" />
                         <Typography
                           variant="subtitle1"

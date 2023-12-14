@@ -15,7 +15,7 @@ const Accordioncomponents = ({ title, description, description2, description3 })
   };
   return (
     <Accordion
-      sx={{ boxShadow: 'none' }}
+      sx={{ boxShadow: 'none',  backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'}}
       expanded={expanded === "panel4"}
       onChange={handleChange("panel4")}
     >

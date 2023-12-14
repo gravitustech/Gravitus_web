@@ -35,14 +35,30 @@ const WaveContainer = styled(Box)({
 
 const Lodergif = () => {
   return (
-    <Grid pt={40} justifyContent='center' textAlign='center'>
-      <style dangerouslySetInnerHTML={{ __html: keyframes }} />
-      <WaveContainer>
-        {[...Array(5)].map((_, index) => (
-          <Wave key={index} style={{ animationDelay: `${index * 0.1}s` }} />
-        ))}
-      </WaveContainer>
-    </Grid>
+    <Box sx={{ minHeight: '100vh' }}>
+      <Grid item xs={12}>
+        <Grid
+          item
+          xs={12}
+          container
+          justifyContent='center'
+          alignItems='center'
+          sx={{ minHeight: { xs: 'calc(100vh - 134px)', md: 'calc(100vh - 112px)' } }}
+        >
+          <Grid item>
+            <Grid >
+              <style dangerouslySetInnerHTML={{ __html: keyframes }} />
+              <WaveContainer>
+                {[...Array(5)].map((_, index) => (
+                  <Wave key={index} style={{ animationDelay: `${index * 0.1}s` }} />
+                ))}
+              </WaveContainer>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Box>
+
   );
 };
 

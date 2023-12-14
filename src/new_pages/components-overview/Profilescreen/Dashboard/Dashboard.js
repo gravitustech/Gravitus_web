@@ -61,13 +61,12 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
   };
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container pl={4} pr={6} spacing={4}>
+      <Grid container pl={0} pr={2} spacing={2}>
         <Grid item xs={12} sm={6} md={12}>
           <Card
-            p={0}
             variant="outlined"
             sx={{
-              border: 'none',
+              borderColor: theme.palette.mode === 'dark' ? '#232730' : '#ececec',
               backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
             }}
           >
@@ -79,8 +78,7 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
           <Card
             variant="outlined"
             sx={{
-              boxShadow: 'none',
-              border: 'none',
+              borderColor: theme.palette.mode === 'dark' ? '#232730' : '#ececec',
               backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
             }}
           >
@@ -92,10 +90,12 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
               sx={{
                 background:
                   theme.palette.mode === 'dark'
-                    ? 'linear-gradient(360deg, rgba(0, 116, 96, 0.43) 0%, #3A3A3A 100%)'
+                    ? ' linear-gradient(0deg, #000 0%, #444E68 100%)'
                     : 'linear-gradient(360deg, rgba(39, 222, 191, 0.43) 0%, rgba(222, 255, 250, 0.00) 100%)',
-                boxshadow: '0px 0.25043103098869324px 4.257327556610107px 0px rgba(0, 0, 0, 0.01), 0px 2px 34px 0px rgba(0, 0, 0, 0.03)1x',
-                borderRadius: '10PX'
+                boxshadow: theme.palette.mode === 'dark' ?
+                  ' 0px 0.25px 4.257px 0px rgba(0, 0, 0, 0.01), 0px 2px 34px 0px rgba(0, 0, 0, 0.03)' :
+                  '0px 0.25043103098869324px 4.257327556610107px 0px rgba(0, 0, 0, 0.01), 0px 2px 34px 0px rgba(0, 0, 0, 0.03)1x',
+                borderRadius: '10px'
               }}
               style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
             >
@@ -110,7 +110,7 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
 
                   <Card
                     sx={{
-                      backgroundColor: theme.palette.mode === 'dark' ? 'rgba(245, 245, 245, 0.25)' : 'rgba(245, 245, 245, 0.51)',
+                      backgroundColor: theme.palette.mode === 'dark' ? '#262b39' : 'rgba(245, 245, 245, 0.51)',
                       borderRadius: '5px',
                       boxShadow: 'none'
                     }}
@@ -147,7 +147,7 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
 
                   <Card
                     sx={{
-                      backgroundColor: theme.palette.mode === 'dark' ? 'rgba(245, 245, 245, 0.25)' : 'rgba(245, 245, 245, 0.51)',
+                      backgroundColor: theme.palette.mode === 'dark' ? '#262b39' : 'rgba(245, 245, 245, 0.51)',
                       borderRadius: '5px',
                       boxShadow: 'none'
                     }}
@@ -195,7 +195,7 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
           <Card
             variant="outlined"
             sx={{
-              border: 'none',
+              borderColor: theme.palette.mode === 'dark' ? '#232730' : '#ececec',
               backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
             }}
           >

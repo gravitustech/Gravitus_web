@@ -97,11 +97,11 @@ function OrderTableHead() {
   const theme = useTheme();
   return (
     <TableHead>
-      <TableRow style={{ position: 'sticky', top: 0, background: theme.palette.mode === 'dark' ? '#121212' : '#fff' }}>
+      <TableRow style={{ position: 'sticky', top: 0, background: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
         {headCells.map((headCell, index) => (
           <TableCell
             padding='none'
-            sx={{ border: 'none', padding: '12px', paddingBottom: '7px', paddingTop: '0px' }}
+            sx={{ border: 'none', padding: '12px', paddingBottom: '7px', paddingTop: '8px' }}
             key={index}
             align={headCell.align}
           >
@@ -145,7 +145,7 @@ export default function HistoryTab({ isAuthorised, orderTableData, priceData, ca
                   background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
                 },
                 '&::-webkit-scrollbar-thumb': {
-                  background: theme.palette.mode === "dark" ? 'gray' : "lightgray",
+                  background: theme.palette.mode === "dark" ? '#0F121A' : "lightgray",
                   borderRadius: '8px', // Round the corners of the thumb
                 },
               }}

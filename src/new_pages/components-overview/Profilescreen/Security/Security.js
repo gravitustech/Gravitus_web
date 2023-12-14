@@ -316,7 +316,8 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
             sx={{
               borderRadius: '10px',
               boxShadow: 'none',
-              color: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
+              borderColor: theme.palette.mode === 'dark' ? '#232730' : '#ececec',
+              backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
             }}
           >
             <Grid pl={5} pr={5} pt={3} pb={3} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -336,7 +337,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                 {/* G-AUTH Enable dialog box */}
                 <FormControlLabel onClick={handleClickOpenDialog} control={<IOSSwitch checked={securityData?.gShow === 'true'} />} />
                 <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title" >
-                  <Stack p={4} spacing={2.5}width={540}>
+                  <Stack p={4} spacing={2.5} width={540} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
                     <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                       G-Authenticator Security
                     </Typography>
@@ -422,6 +423,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                                           endAdornment={
                                             <InputAdornment>
                                               <Button
+                                                disableRipple
                                                 disabled={isPOtpLoading}
                                                 style={{
                                                   color: isPOtpLoading ? 'grey' : theme.palette.mode === 'dark' ? '#fff' : '#000',
@@ -464,6 +466,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                                       endAdornment={
                                         <InputAdornment>
                                           <Button
+                                            disableRipple
                                             disabled={isMOtpLoading}
                                             style={{
                                               color: isMOtpLoading ? 'grey' : theme.palette.mode === 'dark' ? '#fff' : '#000',
@@ -606,7 +609,8 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
             sx={{
               borderRadius: '10px',
               boxShadow: 'none',
-              color: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
+              borderColor: theme.palette.mode === 'dark' ? '#232730' : '#ececec',
+              backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
             }}
           >
             <Grid pl={5} pr={5} pt={3} pb={3} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -626,7 +630,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                 {/* SMS Enable dialog box */}
                 <FormControlLabel onClick={smshandleClickOpenDialog} control={<IOSSwitch checked={securityData?.pShow === 'true'} />} />
                 <Dialog open={smsopenDialog} onClose={smshandleCloseDialog} aria-labelledby="dialog-title">
-                  <Stack p={4} spacing={2} width={520}>
+                  <Stack p={4} spacing={2} width={520} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
                     <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                       SMS Security
                     </Typography>
@@ -885,7 +889,8 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
             sx={{
               borderRadius: '10px',
               boxShadow: 'none',
-              color: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
+              borderColor: theme.palette.mode === 'dark' ? '#232730' : '#ececec',
+              backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
             }}
           >
             <Grid pl={5} pr={5} pt={3} pb={3} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>

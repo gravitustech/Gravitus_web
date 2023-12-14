@@ -19,7 +19,7 @@ const Security = ({ setSnackbarMessage, setSnackbarOpen }) => {
 
   return data ? (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container pl={6} pr={6}>
+      <Grid container pl={0} pr={2}>
         <Grid item xs={12} md={12}>
           <img
             src={theme.palette.mode === 'dark' ? securitypageimagedark : securitypageimagelight}

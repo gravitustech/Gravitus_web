@@ -61,11 +61,13 @@ const AddUpi = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, mutat
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                  Add UPI
-                </Typography>
+            <Grid container spacing={3} pt={4} pb={2} pl={8} pr={8}>
+              <Grid item xs={12} >
+                <Stack>
+                  <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                    Add UPI Payment Method
+                  </Typography>
+                </Stack>
                 <Stack spacing={1} pt={3}>
                   <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                     Name

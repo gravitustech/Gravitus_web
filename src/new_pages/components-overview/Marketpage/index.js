@@ -51,14 +51,14 @@ const Marketpage = () => {
     <>
       {data ? (
         <>
-          <Grid pl={15} pr={15} pt={5}>
+          <Grid pl={15} pr={15} pt={3}>
             <Grid item xs={12} lg={12} md={12}>
               <Typography sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} variant="h1">
                 Market Overview
               </Typography>
             </Grid>
 
-            <Grid container spacing={8} pt={5} pb={5}>
+            <Grid container spacing={2} pt={3} pb={3}>
               <Grid item xs={12} sm={6} md={6} lg={4}>
                 <ComponentsCardTop title="Top Currencies" marketData={data.result} />
               </Grid>

@@ -11,7 +11,7 @@ export default function OutlinedInput(theme) {
           padding: '10.5px 14px 10.5px 12px'
         },
         notchedOutline: {
-          borderColor: theme.palette.mode === 'dark' ? '#2c2c2c' : 'grey[300]'
+          borderColor: theme.palette.mode === 'dark' ? '#31384b' : 'grey[300]'
         },
         root: {
           '&:hover .MuiOutlinedInput-notchedOutline': {

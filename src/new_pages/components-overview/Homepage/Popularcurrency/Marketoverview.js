@@ -4,6 +4,7 @@ import {
   TableCell, TableContainer, TableHead, TableRow
 }
   from '@mui/material';
+import Norecordfoundcomponents from '../../Walletpage/Norecordfoundcomponents';
 
 function getColor(value, theme) {
   if (value > 0) {
@@ -77,7 +78,12 @@ export default function Marketoverview({ marketData }) {
             ))}
           </TableBody>
         ) : (
-          <p>No data to display</p>
+          <TableRow>
+          <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
+            <Norecordfoundcomponents
+              description='No data to display' />
+          </TableCell>
+        </TableRow>
         )}
 
       </Table>

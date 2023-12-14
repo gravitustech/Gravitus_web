@@ -98,11 +98,11 @@ function OrderTableHead() {
   const theme = useTheme();
   return (
     <TableHead>
-      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#121212' : '#fff' }}>
+      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
         {headCells.map((headCell, index) => (
           <TableCell
             padding='none'
-            sx={{ border: 'none', padding: '12px', paddingBottom: '7px', paddingTop: '0px' }}
+            sx={{ border: 'none', padding: '12px', paddingBottom: '8px', paddingTop: '8px' }}
             key={index}
             align={headCell.align}
           >
@@ -219,7 +219,7 @@ export default function OpenTab({ isAuthorised, platformId, orderTableData, setS
                   background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
                 },
                 '&::-webkit-scrollbar-thumb': {
-                  background: theme.palette.mode === "dark" ? 'gray' : "lightgray",
+                  background: theme.palette.mode === "dark" ? '#0F121A' : "lightgray",
                   borderRadius: '8px', // Round the corners of the thumb
                 },
               }}>
@@ -341,7 +341,7 @@ export default function OpenTab({ isAuthorised, platformId, orderTableData, setS
                 </TableBody>
 
                 <Dialog open={openDialog} onClose={handleCloseDialog} >
-                  <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <Stack p={3} spacing={1} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
                     <img src={warninggif} alt='warninggif' />
                     <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                       Confirm ?

@@ -51,11 +51,11 @@ const SupportScreen = ({ setSnackbarMessage, setSnackbarOpen, mutate }) => {
     if (val) {
       setFieldValue('category', val.Category);
     }
-
   };
+
   return (
-    <Grid>
-      <Stack pt={3}>
+    <Grid pt={4} pb={4} pl={4} pr={4}>
+      <Stack>
         <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
           Create Ticket
         </Typography>
@@ -102,8 +102,8 @@ const SupportScreen = ({ setSnackbarMessage, setSnackbarOpen, mutate }) => {
                   onChange={(e, val) => setFieldValue('category', val)}
                   // onChange={(e, val) => handleCustomChange(e, val, setFieldValue)}
                   renderOption={(props, option) => (
-                    <Stack {...props} direction="row" spacing={1}>
-                      <Typography>{option}</Typography>
+                    <Stack {...props} direction="row" spacing={1} backgroundColor={theme.palette.mode === 'dark' ? '#0F121A' : '#FFFFFF'}>
+                      <Typography sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>{option}</Typography>
                     </Stack>
                   )}
                   // selectOnFocus

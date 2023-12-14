@@ -7,14 +7,14 @@ const Faq = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container pl={6} pr={6} pt={4}>
+        <Grid container pl={0} pr={2} spacing={2}>
         <Grid item xs={12} md={12}>
           <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
             Frequently Asked Questions
           </Typography>
         </Grid>
 
-        <Grid item xs={12} md={5.5} pt={3}>
+        <Grid item xs={12} md={6} pt={3}>
           <Stack pt={3}  >
             <Accordioncomponents
               title='What is Gravitus?'
@@ -51,10 +51,7 @@ const Faq = () => {
           </Stack>
         </Grid>
 
-        <Grid md={1}>
-        </Grid>
-
-        <Grid item xs={12} md={5.5} pt={3}>
+        <Grid item xs={12} md={6} pt={3}>
           <Stack pt={3}  >
             <Accordioncomponents
               title='Why should I choose Gravitus CryptoExchange?'

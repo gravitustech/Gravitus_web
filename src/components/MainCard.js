@@ -46,7 +46,7 @@ const MainCard = forwardRef(
         sx={{
           border: border ? '1px solid' : 'none',
           borderRadius: 2,
-          background: theme.palette.mode === 'dark' ? '#181818' : '',
+          background: theme.palette.mode === 'dark' ? '#131722' : '#fff',
           borderColor: theme.palette.mode === 'dark' ? theme.palette.divider : theme.palette.grey.A800,
           boxShadow: boxShadow && (!border || theme.palette.mode === 'dark') ? shadow || theme.customShadows.z1 : 'inherit',
           ':hover': {

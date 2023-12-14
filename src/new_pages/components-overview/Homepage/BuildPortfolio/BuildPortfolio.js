@@ -12,7 +12,7 @@ const BuildPortfolio = () => {
     <Grid container pl={{ md: 6, sm: 8, xs: 6, lg: 15 }} pr={{ md: 6, sm: 8, xs: 6, lg: 15 }}
       pt={20} pb={20}
       sx={{
-        background: theme.palette.mode === 'dark' ? 'radial-gradient(circle,rgba(69, 69, 69, 1),rgba(2, 2, 2, 1))' : 'radial-gradient(circle,rgba(255, 255, 255, 1),rgba(173, 231, 226, 1))',
+        background: theme.palette.mode === 'dark' ? 'radial-gradient(51.97% 51.97% at 50% 48.03%, #5B6172 0%, #131722 100%)' : 'radial-gradient(circle,rgba(255, 255, 255, 1),rgba(173, 231, 226, 1))',
       }}>
       <Grid item md={12} lg={12} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', }} >
         <Typography variant='mainhead' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>

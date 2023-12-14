@@ -16,7 +16,7 @@ const Popularcurrency = ({ marketData }) => {
       pt={20}
       pb={20}
       sx={{
-        background: theme.palette.mode === 'dark' ? '#181818' : 'text.white'
+        background: theme.palette.mode === 'dark' ? '#131722' : 'text.white'
       }}
     >
       <Grid item md={12} lg={12} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -52,14 +52,14 @@ const Popularcurrency = ({ marketData }) => {
             paddingBottom: '14px',
             background:
               theme.palette.mode === 'dark'
-                ? 'radial-gradient(circle,rgba(38, 38, 38, 1),rgba(21, 21, 21, 0.43))'
+                ? 'radial-gradient(34.44% 59.83% at 50% 48.03%, #2B3141 2.77%, #131722 100%)'
                 : 'text.white',
             width: '100%',
             borderRadius: '10px',
             boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)',
             border: '1px solid',
             borderBottom: 'none',
-            borderColor: theme.palette.mode === 'dark' ? '#4C4C4C' : '#60FFF1'
+            borderColor: theme.palette.mode === 'dark' ? '#343A4A' : '#60FFF1'
           }}
         >
           <Marketoverview marketData={marketData} />

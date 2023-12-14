@@ -393,7 +393,7 @@ const Profiledeatils = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                   </Dialog>
 
                   <Dialog open={resetopenDialog} onClose={resethandleCloseDialog} aria-labelledby="dialog-title">
-                    <Stack p={4} spacing={1}>
+                    <Stack p={4} spacing={1} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
                       <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                         Reset Mobile Number
                       </Typography>

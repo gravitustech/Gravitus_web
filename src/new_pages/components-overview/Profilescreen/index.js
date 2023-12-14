@@ -194,7 +194,7 @@ function ProfileScreen() {
   };
 
   return (
-    <Grid lg={12} pt={3} sx={{ backgroundColor: theme.palette.mode === 'dark' ? 'text.black' : 'text.white' }}>
+    <Grid lg={12} pt={0} sx={{ minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' }, backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : '#F7F7F7' }}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <MenuList anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
           {tabData.map((tab) => (
@@ -203,7 +203,7 @@ function ProfileScreen() {
               onClick={() => handleMenuItemClick(tab.value)}
               sx={{
                 backgroundColor:
-                  value === tab.value ? (theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF') : theme.palette.mode === 'dark' ? '' : '',
+                  value === tab.value ? (theme.palette.mode === 'dark' ? '#262B39' : '#EFEFEF') : theme.palette.mode === 'dark' ? '' : '',
                 width: '220px',
                 height: '51px',
                 display: 'flex',
@@ -213,7 +213,7 @@ function ProfileScreen() {
                 marginBottom: '8px',
                 '&:hover': {
                   backgroundColor:
-                    value === tab.value ? (theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF') : theme.palette.mode === 'dark' ? '' : ''
+                    value === tab.value ? (theme.palette.mode === 'dark' ? '#262B39' : '#EFEFEF') : theme.palette.mode === 'dark' ? '' : ''
                 }
               }}
             >
@@ -251,7 +251,7 @@ function ProfileScreen() {
               </Stack>
             </Button>
             <Dialog open={openDialog} onClose={handleCloseDialog} >
-              <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
                 <img src={warninggif} alt='warninggif' />
                 <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                   Confirm ?

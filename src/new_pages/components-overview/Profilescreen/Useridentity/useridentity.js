@@ -36,12 +36,16 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
   };
 
   const handleModalClose = () => {
-    setModalOpen(false)
-    setCroppedImage(undefined)
+    setModalOpen(false);
+    setCroppedImage(undefined);
+    setImageToCrop(undefined);
   };
+  
   const handleModalUpolad = () => {
+    setImageToCrop(undefined);
     setModalOpen(false)
   };
+  
   const onUploadFile = (event) => {
     if (event.target.files && event.target.files.length > 0) {
       const reader = new FileReader();
@@ -122,7 +126,7 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} pt={4} pb={4} pl={4} pr={4}>
               <Grid item xs={12}>
                 <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                   Update Identity
@@ -181,13 +185,14 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
                     id="country-customized-option-demo"
                     options={Identity.map((item) => item.Identity)}
                     // disableCloseOnSelect
+                    backgroundColor='#000'
                     value={values.docType}
                     readOnly={userData.status === '0' ? false : true}
                     onChange={(e, val) => setFieldValue('docType', val)}
                     // getOptionLabel={(option) => `${option.Identity}`}
                     renderOption={(props, option) => (
-                      <Stack {...props} direction="row" spacing={1}>
-                        <Typography>{option}</Typography>
+                      <Stack {...props} direction="row" spacing={1} backgroundColor={theme.palette.mode === 'dark' ? '#0F121A' : '#FFFFFF'}>
+                        <Typography sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>{option}</Typography>
                       </Stack>
                     )}
                     renderInput={(params) => (
@@ -229,7 +234,7 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
                       boxShadow: 'none',
                       borderRadius: '5px',
                       border: '2px solid',
-                      borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
+                      borderColor: theme.palette.mode === 'dark' ? '#31384b' : '#EFEFEF',
                       backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
                     }}
                   >

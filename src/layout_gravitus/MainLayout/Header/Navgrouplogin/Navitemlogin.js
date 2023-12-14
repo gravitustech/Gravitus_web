@@ -41,7 +41,7 @@ const GravitusNavItemlogin = ({ item }) => {
   const theme = useTheme();
   // console.log(theme);
 
-  const textColor = '#8C8C8C';
+  const textColor = theme.palette.mode === 'dark' ? '#cfcfcf' : '#8C8C8C'; 
   const iconSelectedColor = theme.palette.mode === 'dark' ? '#FAFAFA' : '#000';
 
   const isMatch = useMediaQuery(theme.breakpoints.down('md'));
@@ -59,7 +59,7 @@ const GravitusNavItemlogin = ({ item }) => {
               width: 'auto',
               height: '32px',
               bottom: '8px',
-              bgcolor: theme.palette.mode === 'dark' ? '#232323' : '#F6F6F6',
+              bgcolor: theme.palette.mode === 'dark' ? '#262B39' : '#F6F6F6',
               textAlign: 'center',
               color: isSelected ? iconSelectedColor : textColor,
               '&:hover': {
@@ -90,7 +90,7 @@ const GravitusNavItemlogin = ({ item }) => {
               width: '132px',
               height: '32px',
               bottom: '8px',
-              bgcolor: theme.palette.mode === 'dark' ? '#232323' : '#F6F6F6',
+              bgcolor: theme.palette.mode === 'dark' ? '#262B39' : '#F6F6F6',
               textAlign: 'center',
               color: isSelected ? iconSelectedColor : textColor,
               '&:hover': {

@@ -24,6 +24,7 @@ import MarketTable from './MarketTable';
 
 import React, { useState } from 'react';
 import { getConfig_ng, setConfig_ng } from '../../../../utils_ng/localStorage_ng';
+import FavouriteTab from './FavouriteTab';
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 1, 5),
@@ -107,7 +108,7 @@ const SpotHead = ({ pairData, priceData, setPlatformId, excType, changeExcType }
   }
 
   return (
-    <Stack direction="row" spacing={5}>
+    <Stack direction="row" >
       <Stack direction="row" spacing={1}>
         <Stack spacing={1} direction="row" alignItems="center">
           <img src={priceData?.imagePath} alt="ico" height={32} width={32} />
@@ -123,6 +124,7 @@ const SpotHead = ({ pairData, priceData, setPlatformId, excType, changeExcType }
         <IconButton disableRipple onClick={handleClick} sx={{ paddingTop: '0px', borderRadius: '50%', backgroundColor: 'transparent' }}>
           {isIconUp ? <ArrowDropUpIcon fontSize="large" /> : <ArrowDropDownIcon fontSize="large" />}
         </IconButton>
+        <Divider orientation="vertical" />
         <Popper
           id={id}
           open={open}
@@ -145,16 +147,16 @@ const SpotHead = ({ pairData, priceData, setPlatformId, excType, changeExcType }
           {({ TransitionProps }) => (
             <Transitions type="fade" in={open} {...TransitionProps}>
               {open && (
-                <Paper sx={{ marginLeft: '12px', marginTop: '12px' }}>
+                <Paper sx={{ marginLeft: '8px', marginTop: '12px' }}>
                   <ClickAwayListener onClickAway={handleClose}>
                     <Card
                       variant="outlined"
                       sx={{
-                        border: theme.palette.mode === 'dark' ? '0.5px solid #262626' : '1px solid #fff',
+                        // border: theme.palette.mode === 'dark' ? '0.5px solid #262626' : '1px solid #fff',
                         height: '583px',
                         display: 'flex',
                         flexDirection: 'column',
-                        bgcolor: theme.palette.mode === 'dark' ? 'text.black' : 'text.background',
+                        bgcolor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
                         padding: '16px'
                       }}
                     >
@@ -164,7 +166,7 @@ const SpotHead = ({ pairData, priceData, setPlatformId, excType, changeExcType }
                             height: '100%',
                             borderRadius: '5px',
                             width: '100%',
-                            borderColor: theme.palette.mode === 'dark' ? 'text.secondary' : 'text.tertiary',
+                            borderColor: theme.palette.mode === 'dark' ? '#31384b' : 'text.tertiary',
                             borderWidth: '1px',
                             borderStyle: 'solid',
                             backgroundColor: 'transparent',
@@ -308,7 +310,7 @@ const SpotHead = ({ pairData, priceData, setPlatformId, excType, changeExcType }
                         </TabList>
 
                         <TabPanel value="0" sx={{ padding: '0px' }}>
-                          <MarketTable flag="FAV" setPlatformId={setPlatformId} handleClose={handleClose} searchQuery={searchQuery} />
+                          <FavouriteTab setPlatformId={setPlatformId} handleClose={handleClose} searchQuery={searchQuery} />
                         </TabPanel>
 
                         <TabPanel value="1" sx={{ padding: '0px' }}>
@@ -330,74 +332,79 @@ const SpotHead = ({ pairData, priceData, setPlatformId, excType, changeExcType }
       </Stack>
 
       {pairData?.cmc_chart === 1 && (
-        <Stack direction='row'  >
-          <Button
-            disableRipple
-            onClick={() => {
-              changeExcType('GRA');
-              changeExcTypeButton('GRA');
-            }}
-            sx={{
-              height: '50%',
-              borderRadius: '5px 0 0 5px',
-              minHeight: '32px !important',
-              fontSize: selectedButton === 'GRA' ? '12px' : '12px',
-              fontWeight: selectedButton === 'GRA' ? '500' : '500',
-              color: selectedButton === 'GRA' ? (theme.palette.mode === 'dark' ? 'text.white' : 'text.white') : theme.palette.mode === 'dark' ? 'text.white' : 'text.black',
-              backgroundColor: selectedButton === 'GRA' ? 'text.buy' : (theme.palette.mode === 'dark' ? '#2B2B2E' : '#ECECEC'),
-              '&:hover': {
-                backgroundColor: selectedButton === 'GRA' ? 'text.buy' : (theme.palette.mode === 'dark' ? '#2B2B2E' : '#ECECEC'),
-              },
-            }}
-          >
-            GRA
-          </Button>
-          <Button
-            disableRipple
-            onClick={() => {
-              changeExcType('CMC');
-              changeExcTypeButton('CMC');
-            }}
-            sx={{
-              borderRadius: '0 5px 5px 0',
-              height: '50%',
-              minHeight: '32px !important',
-              fontSize: selectedButton === 'CMC' ? '12px' : '12px',
-              fontWeight: selectedButton === 'CMC' ? '500' : '500',
-              color: selectedButton === 'CMC' ? (theme.palette.mode === 'dark' ? 'white' : 'white') : theme.palette.mode === 'dark' ? 'white' : 'black',
-              backgroundColor: selectedButton === 'CMC' ? 'text.buy' : (theme.palette.mode === 'dark' ? '#2B2B2E' : '#ECECEC'),
-              padding: '0',
-              '&:hover': {
-                backgroundColor: selectedButton === 'CMC' ? 'text.buy' : (theme.palette.mode === 'dark' ? '#2B2B2E' : '#ECECEC'),
-              },
-            }}
-          >
-            CMC
-          </Button>
+        <Stack direction='row' alignItems='center' spacing={3} pl={3}>
+          <Stack direction='row'>
+            <Button
+              disableRipple
+              onClick={() => {
+                changeExcType('GRA');
+                changeExcTypeButton('GRA');
+              }}
+              sx={{
+                height: '50%',
+                borderRadius: '5px 0 0 5px',
+                minHeight: '32px !important',
+                fontSize: selectedButton === 'GRA' ? '12px' : '12px',
+                fontWeight: selectedButton === 'GRA' ? '500' : '500',
+                color: selectedButton === 'GRA' ? (theme.palette.mode === 'dark' ? 'text.white' : 'text.white') : theme.palette.mode === 'dark' ? 'text.white' : 'text.black',
+                backgroundColor: selectedButton === 'GRA' ? 'text.buy' : (theme.palette.mode === 'dark' ? '#1F2434' : '#F1F1F1'),
+                '&:hover': {
+                  backgroundColor: selectedButton === 'GRA' ? 'text.buy' : (theme.palette.mode === 'dark' ? '#1F2434' : '#F1F1F1'),
+                },
+              }}
+            >
+              GRA
+            </Button>
+            <Button
+              disableRipple
+              onClick={() => {
+                changeExcType('CMC');
+                changeExcTypeButton('CMC');
+              }}
+              sx={{
+                borderRadius: '0 5px 5px 0',
+                height: '50%',
+                minHeight: '32px !important',
+                fontSize: selectedButton === 'CMC' ? '12px' : '12px',
+                fontWeight: selectedButton === 'CMC' ? '500' : '500',
+                color: selectedButton === 'CMC' ? (theme.palette.mode === 'dark' ? 'white' : 'white') : theme.palette.mode === 'dark' ? 'white' : 'black',
+                backgroundColor: selectedButton === 'CMC' ? 'text.buy' : (theme.palette.mode === 'dark' ? '#1F2434' : '#F1F1F1'),
+                padding: '0',
+                '&:hover': {
+                  backgroundColor: selectedButton === 'CMC' ? 'text.buy' : (theme.palette.mode === 'dark' ? '#1F2434' : '#F1F1F1'),
+                },
+              }}
+            >
+              CMC
+            </Button>
+          </Stack >
+          <Divider orientation="vertical" />
         </Stack>
       )}
+      <Stack direction="row" spacing={5}>
+        <Stack spacing={0.5} pl={3}>
+          <Typography variant="body3" sx={{ color: getColor(priceData && priceData['24hChg'], theme) }}>
+            {priceData?.lastPrice}
+          </Typography>
+          <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+            {priceData?.sellPair === 'USDT' ? '$' : '₹'} {priceData?.lastPrice}
+          </Typography>
+        </Stack>
+        <MarketInfo value={priceData?.lastPrice} label="Market Price" />
+        <Stack spacing={0.7}>
+          <Typography variant="subtitle3" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+            24h Change
+          </Typography>
+          <Typography variant="subtitle1" sx={{ color: getColor(priceData && priceData['24hChg'], theme) }}>
+            {priceData && priceData[`24hChg`]}%
+          </Typography>
+        </Stack>
+        <MarketInfo value={priceData && priceData[`24hHighPr`]} label="24h High" />
+        <MarketInfo value={priceData && priceData[`24hLowPr`]} label="24h Low" />
+        <MarketInfo value={priceData && priceData[`24hBuyVol`]} label={`24h Volume(${priceData?.buyPair})`} />
+        <MarketInfo value={priceData && priceData[`24hSellVol`]} label={`24h Volume(${priceData?.sellPair})`} />
 
-      <Stack spacing={0.5}>
-        <Typography variant="body3" sx={{ color: getColor(priceData && priceData['24hChg'], theme) }}>
-          {priceData?.lastPrice}
-        </Typography>
-        <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-          {priceData?.sellPair === 'USDT' ? '$' : '₹'} {priceData?.lastPrice}
-        </Typography>
       </Stack>
-      <MarketInfo value={priceData?.lastPrice} label="Market Price" />
-      <Stack spacing={0.7}>
-        <Typography variant="subtitle3" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-          24h Change
-        </Typography>
-        <Typography variant="subtitle1" sx={{ color: getColor(priceData && priceData['24hChg'], theme) }}>
-          {priceData && priceData[`24hChg`]}%
-        </Typography>
-      </Stack>
-      <MarketInfo value={priceData && priceData[`24hHighPr`]} label="24h High" />
-      <MarketInfo value={priceData && priceData[`24hLowPr`]} label="24h Low" />
-      <MarketInfo value={priceData && priceData[`24hBuyVol`]} label={`24h Volume(${priceData?.buyPair})`} />
-      <MarketInfo value={priceData && priceData[`24hSellVol`]} label={`24h Volume(${priceData?.sellPair})`} />
     </Stack >
   );
 };

@@ -34,7 +34,7 @@ export default function InputLabel(theme) {
           },
           '&:-webkit-autofill': {
             WebkitBoxShadow:
-              theme.palette.mode === 'dark' ? '0 0 0 1000px #181818 inset !important' : '0 0 0 1000px white inset !important',
+              theme.palette.mode === 'dark' ? '0 0 0 1000px #131722 inset !important' : '0 0 0 1000px white inset !important',
             backgroundColor: 'red !important'
           }
         }
