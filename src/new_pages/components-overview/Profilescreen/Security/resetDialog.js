@@ -1,21 +1,16 @@
+import { useState, useEffect } from 'react';
+
 import {
-  Button,
-  CircularProgress,
-  Dialog,
-  FormHelperText,
-  Grid,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  Stack,
-  Typography,
+  Button,CircularProgress,Dialog,FormHelperText,Grid,
+  InputAdornment,InputLabel,OutlinedInput,Stack,Typography,
   useTheme
 } from '@mui/material';
-import { Formik } from 'formik';
-import { useState, useEffect } from 'react';
-import { resetSecurity, sendOtpSecurity } from '../../../../api/profile';
-import AnimateButton from 'src/components/@extended/AnimateButton';
+
 import * as Yup from 'yup';
+import { Formik } from 'formik';
+
+import AnimateButton from 'src/components/@extended/AnimateButton';
+import { resetSecurity, sendOtpSecurity } from '../../../../api/profile';
 
 const Email = ({ email }) => {
   const theme = useTheme();

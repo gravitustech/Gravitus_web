@@ -1,11 +1,19 @@
 import React from 'react';
-import { Grid, Box, useTheme } from '@mui/material';
+
+import {
+  Grid, Box,
+  useTheme
+} from '@mui/material';
+
 import Securityscreen from './Security';
+
+import useSWR from 'swr';
+
+import Lodergif from 'src/components/Gravitusloader';
+import { fetcher, getSecurityURL } from '../../../../api/profile';
+
 import securitypageimagelight from '../../../../assets/images/gravitusimage/securitypageimglight.svg';
 import securitypageimagedark from '../../../../assets/images/gravitusimage/securitypageimgdark.svg';
-import { fetcher, getSecurityURL } from '../../../../api/profile';
-import useSWR from 'swr';
-import Lodergif from 'src/components/Gravitusloader';
 
 const Security = ({ setSnackbarMessage, setSnackbarOpen }) => {
   const theme = useTheme();

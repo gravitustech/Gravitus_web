@@ -1,7 +1,13 @@
 import React from 'react';
-import { Grid, Box, useTheme, Card } from '@mui/material';
+
+import {
+  Grid, Box,
+  useTheme, Card
+} from '@mui/material';
+
 import Useridentitygrid from './useridentity';
 import Useridentitysteps from './useridentitysteps';
+
 import useridentitylight from '../../../../assets/images/gravitusimage/useridentitylight.svg';
 import useridentityimgdark from '../../../../assets/images/gravitusimage/useridentityimgdark.svg';
 

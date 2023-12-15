@@ -1,5 +1,10 @@
-import React from 'react'
-import { Grid, Box, useTheme, Typography, Stack } from '@mui/material';
+import React from 'react';
+
+import {
+  Grid, Box, useTheme,
+  Typography, Stack
+} from '@mui/material';
+
 import Accordioncomponents from './Accordioncomponents';
 
 const Faq = () => {
@@ -7,7 +12,7 @@ const Faq = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-        <Grid container pl={0} pr={2} spacing={2}>
+      <Grid container pl={0} pr={2} spacing={2}>
         <Grid item xs={12} md={12}>
           <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
             Frequently Asked Questions

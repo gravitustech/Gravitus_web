@@ -1,35 +1,26 @@
 import React, { useState, useEffect } from 'react';
+
 import {
-  Card,
-  Grid,
-  Stack,
-  Typography,
-  useTheme,
-  Button,
-  OutlinedInput,
-  FormHelperText,
-  Select,
-  MenuItem,
-  Tooltip,
-  IconButton,
-  InputLabel,
-  CircularProgress
+  Card, Grid, Stack, Typography, useTheme, Button, OutlinedInput, FormHelperText,Switch,
+  Select, MenuItem, Tooltip, IconButton, InputLabel, CircularProgress,FormControlLabel,
+  Dialog,InputAdornment
 } from '@mui/material';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
+
 import { styled } from '@mui/material/styles';
-import Dialog from '@mui/material/Dialog';
-import copyicon from '../../../../assets/images/gravitusimage/copyicon.svg';
-import AnimateButton from 'src/components/@extended/AnimateButton';
-import { Formik } from 'formik';
+
 import * as Yup from 'yup';
-import InputAdornment from '@mui/material/InputAdornment';
-import notesicon from '../../../../assets/images/gravitusimage/notesicon.svg';
-import { updateAuth, sendOtpSecurity, enableSecurity, disableSecurity } from '../../../../api/profile';
-import DoneIcon from '@mui/icons-material/Done';
-import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import { Formik } from 'formik';
+
 import CopyToClipboard from 'react-copy-to-clipboard';
+
+import DoneIcon from '@mui/icons-material/Done';
+
+import copyicon from '../../../../assets/images/gravitusimage/copyicon.svg';
+import notesicon from '../../../../assets/images/gravitusimage/notesicon.svg';
+
 import ResetDialog from './resetDialog';
+import AnimateButton from 'src/components/@extended/AnimateButton';
+import { updateAuth, sendOtpSecurity, enableSecurity, disableSecurity } from '../../../../api/profile';
 
 const IOSSwitch = styled((props) => <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />)(({ theme }) => ({
   width: 42,
@@ -373,7 +364,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                               emailOTP: values.otpmail,
                               ...(securityData?.pSecurity?.enabled === '1' && { phoneOTP })
                             };
-                            console.log('securityData?.pSecurity?.enabled ',securityData?.pSecurity?.enabled )
+                            console.log('securityData?.pSecurity?.enabled ', securityData?.pSecurity?.enabled)
                             try {
                               setIsLoading(true);
                               const { data } =

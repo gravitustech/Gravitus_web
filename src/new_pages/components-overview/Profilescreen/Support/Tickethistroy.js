@@ -1,5 +1,10 @@
-import { Box, Card, Grid, Stack, Typography, useTheme } from '@mui/material';
 import React from 'react';
+
+import {
+  Box, Card, Grid, Stack,
+  Typography, useTheme
+} from '@mui/material';
+
 import Tickethistroytab from './Tickethistroytable';
 
 const Tickethistroy = ({ historyData }) => {

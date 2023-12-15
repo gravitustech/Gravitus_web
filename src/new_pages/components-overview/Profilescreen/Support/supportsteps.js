@@ -1,5 +1,7 @@
-import { Grid, Typography, useTheme } from '@mui/material';
 import React from 'react';
+
+import { Grid, Typography, useTheme } from '@mui/material';
+
 import StepsComponents from 'src/layout_gravitus/MainLayout/Header/HeaderContent/Profile/StepsComponents';
 
 const SupportSteps = () => {

@@ -1,13 +1,20 @@
-import { Grid, Box, useTheme, Card } from '@mui/material';
 import React from 'react';
+
+import {
+  Grid, Box,
+  useTheme, Card
+} from '@mui/material';
+
+import useSWR from 'swr';
+
 import SupportScreen from './Support';
+import SupportSteps from './supportsteps';
 import Tickethistroy from './Tickethistroy';
+import Lodergif from 'src/components/Gravitusloader';
+import { fetcher, getTicketHistoryURL } from 'src/api/profile';
+
 import supportimagelight from '../../../../assets/images/gravitusimage/supportimagelight.svg';
 import supportimagedark from '../../../../assets/images/gravitusimage/supportimagedark.svg';
-import useSWR from 'swr';
-import { fetcher, getTicketHistoryURL } from 'src/api/profile';
-import Lodergif from 'src/components/Gravitusloader';
-import SupportSteps from './supportsteps';
 
 const Support = ({ setSnackbarMessage, setSnackbarOpen }) => {
   const { data, error, isLoading, mutate } = useSWR(

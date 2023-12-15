@@ -1,9 +1,16 @@
-import { Grid, Box, useTheme, Card } from '@mui/material';
 import React from 'react';
+
+import {
+  Grid, Box,
+  useTheme, Card
+} from '@mui/material';
+
 import AddUpi from './AddUpi';
 import AddImps from './AddImps';
+
 import paymentlight from '../../../../assets/images/gravitusimage/paymentlight.svg';
 import paymentdark from '../../../../assets/images/gravitusimage/paymentdark.svg';
+
 const Payment = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, mutate }) => {
   const theme = useTheme();
 

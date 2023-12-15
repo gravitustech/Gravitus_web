@@ -1,10 +1,11 @@
 import * as React from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
+
+import {
+  Accordion, AccordionDetails, Stack,
+  AccordionSummary, Typography, useTheme
+} from "@mui/material";
+
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useTheme, Stack } from "@mui/material";
 
 const Accordioncomponents = ({ title, description, description2, description3 }) => {
   const theme = useTheme();
@@ -15,7 +16,7 @@ const Accordioncomponents = ({ title, description, description2, description3 })
   };
   return (
     <Accordion
-      sx={{ boxShadow: 'none',  backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'}}
+      sx={{ boxShadow: 'none', backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground' }}
       expanded={expanded === "panel4"}
       onChange={handleChange("panel4")}
     >
