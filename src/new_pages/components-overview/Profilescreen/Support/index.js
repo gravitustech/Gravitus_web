@@ -1,13 +1,20 @@
-import { Grid, Box, useTheme, Card } from '@mui/material';
 import React from 'react';
+
+import {
+  Grid, Box,
+  useTheme, Card
+} from '@mui/material';
+
+import useSWR from 'swr';
+
 import SupportScreen from './Support';
+import SupportSteps from './supportsteps';
 import Tickethistroy from './Tickethistroy';
+import Lodergif from 'src/components/Gravitusloader';
+import { fetcher, getTicketHistoryURL } from 'src/api/profile';
+
 import supportimagelight from '../../../../assets/images/gravitusimage/supportimagelight.svg';
 import supportimagedark from '../../../../assets/images/gravitusimage/supportimagedark.svg';
-import useSWR from 'swr';
-import { fetcher, getTicketHistoryURL } from 'src/api/profile';
-import Lodergif from 'src/components/Gravitusloader';
-import SupportSteps from './supportsteps';
 
 const Support = ({ setSnackbarMessage, setSnackbarOpen }) => {
   const { data, error, isLoading, mutate } = useSWR(
@@ -23,13 +30,13 @@ const Support = ({ setSnackbarMessage, setSnackbarOpen }) => {
   return (
     data ? (
       <Box sx={{ flexGrow: 1 }}>
-        <Grid container pl={0} pr={2}>
+        <Grid container pl={0} pr={2} pb={3} spacing={2}>
           <Grid item xs={12} md={12}>
             <img
               src={theme.palette.mode === 'dark' ? supportimagedark : supportimagelight}
               alt="supportimagelight" style={{ width: '100%', height: 'auto' }} />
           </Grid>
-          <Grid item xs={12} md={5.92355} pt={2}>
+          <Grid item xs={12} md={6} >
             <Card
               variant="outlined"
               sx={{
@@ -40,8 +47,7 @@ const Support = ({ setSnackbarMessage, setSnackbarOpen }) => {
               <SupportScreen setSnackbarMessage={setSnackbarMessage} setSnackbarOpen={setSnackbarOpen} mutate={mutate} />
             </Card>
           </Grid>
-          <Grid md={0.1529}></Grid>
-          <Grid item xs={12} md={5.92355} pt={2}>
+          <Grid item xs={12} md={6}  >
             <Card
               variant="outlined"
               sx={{
@@ -53,7 +59,7 @@ const Support = ({ setSnackbarMessage, setSnackbarOpen }) => {
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={12} pt={2} pb={3}>
+          <Grid item xs={12} md={12} >
             {data &&
               <Tickethistroy historyData={data?.result} />}
           </Grid>

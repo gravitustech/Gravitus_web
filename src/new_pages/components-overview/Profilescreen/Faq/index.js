@@ -1,5 +1,10 @@
-import React from 'react'
-import { Grid, Box, useTheme, Typography, Stack } from '@mui/material';
+import React from 'react';
+
+import {
+  Grid, Box, useTheme,
+  Typography, Stack
+} from '@mui/material';
+
 import Accordioncomponents from './Accordioncomponents';
 
 const Faq = () => {
@@ -7,7 +12,7 @@ const Faq = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-        <Grid container pl={0} pr={2} spacing={2}>
+      <Grid container pl={0} pr={2} pb={3} spacing={2}>
         <Grid item xs={12} md={12}>
           <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
             Frequently Asked Questions
@@ -23,7 +28,7 @@ const Faq = () => {
             />
           </Stack>
 
-          <Stack pt={5}>
+          <Stack pt={3}>
             <Accordioncomponents
               title='What is Gravitus Spot Exchange?'
               description='Gravitus Spot Exchange is a platform where users can Buy and Sell Cryptocurrencies for immediate delivery and settlement. 
@@ -32,7 +37,7 @@ const Faq = () => {
             />
           </Stack>
 
-          <Stack pt={5}  >
+          <Stack pt={3}  >
             <Accordioncomponents
               title='What is two-factor authentication (2FA)?'
               description='Two-Factor Authentication (2FA) or 2-Step Verification enhances your account`s security by requiring an extra step during login. With 2FA, you need to provide your email, password, and a one-time code generated from a second device, typically your mobile phone.'
@@ -41,7 +46,7 @@ const Faq = () => {
             />
           </Stack>
 
-          <Stack pt={5}  >
+          <Stack pt={3}  >
             <Accordioncomponents
               title='Delayed or missing withdrawals'
               description='The most common solution to a missing withdrawal is time. Our systems usually take up to four hours to process withdrawals, 
@@ -59,21 +64,21 @@ const Faq = () => {
             />
           </Stack>
 
-          <Stack pt={5}>
+          <Stack pt={3}>
             <Accordioncomponents
               title=' What is Gravitus P2P?'
               description=' Gravitus P2P is a platform that facilitates peer-to-peer cryptocurrency transactions. It acts as an intermediary to ensure the safety and security of transactions between buyers and sellers.'
             />
           </Stack>
 
-          <Stack pt={5}  >
+          <Stack pt={3}  >
             <Accordioncomponents
               title='Why do I want to complete KYC?'
               description='KYC helps exchanges maintain a secure and trusted environment for all users. It reduces the risk of fraudulent activities and helps create a more transparent and accountable financial ecosystem.'
             />
           </Stack>
 
-          <Stack pt={5}  >
+          <Stack pt={3}  >
             <Accordioncomponents
               title='Delayed or missing deposits'
               description='The most common solution to a missing deposit is time. Our systems usually take up to four hours to process deposits, 

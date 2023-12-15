@@ -33,7 +33,7 @@ const P2P_Trades = () => {
 
   return (
     <>
-      <Grid container pl={15} pr={15} pt={3} pb={5}>
+      <Grid container pl={15} pr={15} pt={2} pb={3}>
         <Stack direction='row' spacing={2} alignItems='center'>
           <ArrowBackIosNewIcon onClick={goBack} pt={10} sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} />
           <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
@@ -63,7 +63,6 @@ const P2P_Trades = () => {
               }}>
               <P2PTradeTable orderInfo={data?.result?.orderInfo} />
             </Box>
-
           </Card>
         </>
       ) : (

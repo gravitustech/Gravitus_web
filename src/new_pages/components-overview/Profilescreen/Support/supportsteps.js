@@ -1,12 +1,14 @@
-import { Grid, Typography, useTheme } from '@mui/material';
 import React from 'react';
+
+import { Grid, Typography, useTheme } from '@mui/material';
+
 import StepsComponents from 'src/layout_gravitus/MainLayout/Header/HeaderContent/Profile/StepsComponents';
 
 const SupportSteps = () => {
   const theme = useTheme();
   return (
     <>
-      <Grid container pt={4} pb={7} pl={4} pr={4}>
+      <Grid container pt={4} pb={4.5} pl={4} pr={4}>
         <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
           Steps to Create Your Tickets
         </Typography>

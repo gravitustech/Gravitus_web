@@ -40,7 +40,7 @@ function OrderTableHead() {
   const theme = useTheme();
   return (
     <TableHead>
-      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#000' : '#fff' }}>
+      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
         {headCells.map((headCell, index) => (
           <TableCell
             sx={{ border: 'none' }}
@@ -78,15 +78,15 @@ export default function P2PTradeTable({ orderInfo }) {
           /* Custom scrollbar styles */
           scrollbarWidth: 'thin',
           scrollbarColor: 'gray lightgray',
-          height: '534px',
+          height: '564px',
           '&::-webkit-scrollbar': {
             width: '0px', // Width of the scrollbar
           },
           '&::-webkit-scrollbar-track': {
-            background: theme.palette.mode === "dark" ? 'black' : "text.background", // Track color
+            background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
           },
           '&::-webkit-scrollbar-thumb': {
-            background: theme.palette.mode === "dark" ? 'gray' : "lightgray",
+            background: theme.palette.mode === "dark" ? '#0F121A' : "lightgray",
             borderRadius: '8px', // Round the corners of the thumb
           },
         }}

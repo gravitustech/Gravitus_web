@@ -76,7 +76,7 @@ export default function Tickethistroytab({ historyData }) {
     <Box>
       <TableContainer variant="tablecontainer"
         sx={{
-          height: '365px',
+          height: '465px',
           /* Custom scrollbar styles */
           scrollbarWidth: 'thin',
           scrollbarColor: 'gray lightgray',

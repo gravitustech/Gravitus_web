@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import { Grid, Box, useTheme, Card, Stack, Typography, Button, Tooltip, IconButton } from '@mui/material';
-import Profiledeatils from './Profiledeatils';
-import Walletgrid from './walletgrid';
-import { Link as RouterLink } from 'react-router-dom';
-import appqrcode from '../../../../assets/images/gravitusimage/appqrcode.svg';
-import googleplay from '../../../../assets/images/gravitusimage/googleplay.svg';
+
+import {
+  Grid, Box, useTheme, Card, Stack,
+  Typography, Tooltip, IconButton
+} from '@mui/material';
+
+import DoneIcon from '@mui/icons-material/Done';
+import CopyToClipboard from 'react-copy-to-clipboard';
+
+import Profiledetails from './Profiledetails';
 import referimg from '../../../../assets/images/gravitusimage/referimg.svg';
 import copyicon from '../../../../assets/images/gravitusimage/copyicon.svg';
-import CopyToClipboard from 'react-copy-to-clipboard';
-import DoneIcon from '@mui/icons-material/Done';
+import appqrcode from '../../../../assets/images/gravitusimage/appqrcode.svg';
+import googleplay from '../../../../assets/images/gravitusimage/googleplay.svg';
 
 const Referrallink = ({ referrallink }) => {
   const theme = useTheme();
@@ -61,7 +65,7 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
   };
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid container pl={0} pr={2} spacing={2}>
+      <Grid container pl={0} pr={2} pb={3} spacing={2}>
         <Grid item xs={12} sm={6} md={12}>
           <Card
             variant="outlined"
@@ -70,7 +74,7 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
               backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
             }}
           >
-            <Profiledeatils userData={userData} setSnackbarMessage={setSnackbarMessage} setSnackbarOpen={setSnackbarOpen} mutate={mutate} />
+            <Profiledetails userData={userData} setSnackbarMessage={setSnackbarMessage} setSnackbarOpen={setSnackbarOpen} mutate={mutate} />
           </Card>
         </Grid>
 
@@ -86,7 +90,7 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
               pl={3}
               pr={3}
               pt={5.5}
-              pb={{ lg: 0, md: 3, sm: 3, xs: 3 }}
+              pb={{ lg: .5, md: 3, sm: 3, xs: 3 }}
               sx={{
                 background:
                   theme.palette.mode === 'dark'

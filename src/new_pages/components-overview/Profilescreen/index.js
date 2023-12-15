@@ -1,18 +1,3 @@
-import React, { useState } from 'react';
-import { Button, Grid, Stack, Typography, MenuItem, MenuList, Divider, Dialog } from '@mui/material';
-import { TabContext } from '@mui/lab';
-import { useTheme } from '@emotion/react';
-import Dashboard from './Dashboard/Dashboard';
-import Payment from './Payment';
-import Useridentity from './Useridentity';
-import Security from './Security';
-import About from './About';
-import Faq from './Faq';
-import Support from './Support';
-import TabPanel from '@mui/lab/TabPanel';
-import { useLocation, useNavigate } from 'react-router';
-
-import warninggif from '../../../assets/images/gravitusimage/warninggif.svg';
 
 //icons
 import dashboard from '../../../assets/images/gravitusimage/dashboard.svg';
@@ -40,11 +25,31 @@ import faqdark from '../../../assets/images/gravitusimage/faqdark.svg';
 import faqactivedark from '../../../assets/images/gravitusimage/faqactivedark.svg';
 
 import logout from '../../../assets/images/gravitusimage/logout.svg';
-import { getProfileURL, fetcher } from '../../../api/profile';
+import warninggif from '../../../assets/images/gravitusimage/warninggif.svg';
+
+import React, { useState } from 'react';
+
+import {
+  Button, Grid, Stack, Typography,
+  MenuItem, MenuList, Divider, Dialog, useTheme
+} from '@mui/material';
+
+import { TabContext, TabPanel } from '@mui/lab';
+
+import Faq from './Faq';
+import Support from './Support';
+import Payment from './Payment';
+import Security from './Security';
+import Useridentity from './Useridentity';
+import Dashboard from './Dashboard/Dashboard';
+
 import useSWR from 'swr';
-import CustomSnackBar from '../../../components/snackbar';
-import { logoutUserWithToken } from '../../../api/auth';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router';
+
+import { logoutUserWithToken } from '../../../api/auth';
+import CustomSnackBar from '../../../components/snackbar';
+import { getProfileURL, fetcher } from '../../../api/profile';
 import { logoutUser } from '../../../appRedux/actions/adminUser';
 
 function ProfileScreen() {

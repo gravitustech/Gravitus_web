@@ -48,7 +48,7 @@ const Mobilenumber = ({ number }) => {
   );
 };
 
-const Profiledeatils = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) => {
+const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) => {
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -551,6 +551,6 @@ const Profiledeatils = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
   );
 };
 
-export default Profiledeatils;
+export default Profiledetails;
 
 const countries = [{ code: 'IN', label: 'India', phone: '91' }];

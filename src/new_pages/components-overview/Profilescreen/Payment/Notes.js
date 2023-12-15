@@ -1,6 +1,8 @@
 import React from 'react';
-import notesicon from '../../../../assets/images/gravitusimage/notesicon.svg';
+
 import { Stack, Typography, useTheme } from '@mui/material';
+
+import notesicon from '../../../../assets/images/gravitusimage/notesicon.svg';
 
 const Notes = ({ description }) => {
   const theme = useTheme();

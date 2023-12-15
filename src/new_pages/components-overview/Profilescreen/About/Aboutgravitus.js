@@ -1,6 +1,10 @@
 import React from 'react';
+import {
+  Typography,
+  useTheme
+} from '@mui/material';
+
 import StepsComponents from '../../../../layout_gravitus/MainLayout/Header/HeaderContent/Profile/StepsComponents';
-import { Typography, useTheme } from '@mui/material';
 
 const Aboutgravitus = () => {
   const theme = useTheme();

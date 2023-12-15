@@ -112,10 +112,10 @@ const P2Ppage = () => {
               background: theme.palette.mode === 'dark' ? 'radial-gradient(circle,rgba(69, 69, 69, 1),rgba(2, 2, 2, 1))' : 'radial-gradient(58.07% 58.07% at 50% 41.93%, #FFF 0%, #AFE8E3 100%)',
             }}>
             <Grid item pb={0} md={2} lg={2} style={{ flexDirection: 'column', }} display={{ xs: 'none', md: 'block', lg: 'block' }}>
-              <img src={p2pimg1} alt='p2pimg1' width={100} />
+              {/* <img src={p2pimg1} alt='p2pimg1' width={100} /> */}
             </Grid>
 
-            <Grid item md={8} lg={8} pt={3.5} pb={0} sx={{ textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
+            <Grid item md={8} lg={8} pt={1} pb={5} sx={{ textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
               <Stack spacing={2} >
                 <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary', textAlign: 'center' }}>
                   Buy and Sell TetherUSD With Your INR Payment Method
@@ -127,7 +127,7 @@ const P2Ppage = () => {
             </Grid>
 
             <Grid item pt={0} pb={0} md={2} lg={2} textAlign='end' style={{ flexDirection: 'column', }} display={{ xs: 'none', md: 'block', lg: 'block' }}>
-              <img src={p2pimg2} alt='p2pimg2' width={100} />
+              {/* <img src={p2pimg2} alt='p2pimg2' width={100} /> */}
             </Grid>
           </Grid>
 
