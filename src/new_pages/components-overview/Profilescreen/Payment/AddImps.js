@@ -1,14 +1,24 @@
-import React from 'react';
-import { Grid, Stack, Button, Typography, FormHelperText, OutlinedInput, useTheme } from '@mui/material';
+import React, { useState } from 'react';
+
+import {
+  Grid, Stack, Button, Typography, FormHelperText,
+  OutlinedInput, useTheme, CircularProgress
+} from '@mui/material';
+
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import Notes from './Notes';
+
 import { useNavigate } from 'react-router';
+
+import Notes from './Notes';
 import { updatePayment } from '../../../../api/profile';
+
 const AddImps = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, mutate }) => {
-  console.log({ userData });
   const theme = useTheme();
   const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleNavigate = () => {
     navigate('/profile/support');
     setValue('4');
@@ -30,6 +40,7 @@ const AddImps = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, muta
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           console.log({ values });
+          setIsLoading(true);
           try {
             const { data } = await updatePayment({
               accountType: 'GRAVITUS',
@@ -49,9 +60,11 @@ const AddImps = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, muta
               console.log({ values });
               setStatus({ success: false });
               setSubmitting(false);
+              setIsLoading(false);
             } else {
               setSnackbarMessage({ msg: 'Payment updation failed', success: false });
               setSnackbarOpen(true);
+              setIsLoading(false);
             }
           } catch (err) {
             setSnackbarMessage({ msg: err.message, success: false });
@@ -59,6 +72,7 @@ const AddImps = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, muta
             setStatus({ success: false });
             setErrors({ submit: err.message });
             setSubmitting(false);
+            setIsLoading(false);
           }
         }}
       >
@@ -174,7 +188,7 @@ const AddImps = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, muta
                     Support
                   </Button>
                   <Button disableElevation disabled={userData?.checked} type="submit" variant="updatebutton">
-                    Update
+                    {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Update'}
                   </Button>
                 </Stack>
               </Grid>

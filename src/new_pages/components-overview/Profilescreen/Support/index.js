@@ -29,7 +29,7 @@ const Support = ({ setSnackbarMessage, setSnackbarOpen }) => {
               src={theme.palette.mode === 'dark' ? supportimagedark : supportimagelight}
               alt="supportimagelight" style={{ width: '100%', height: 'auto' }} />
           </Grid>
-          <Grid item xs={12} md={5} pt={2}>
+          <Grid item xs={12} md={5.92355} pt={2}>
             <Card
               variant="outlined"
               sx={{
@@ -41,7 +41,7 @@ const Support = ({ setSnackbarMessage, setSnackbarOpen }) => {
             </Card>
           </Grid>
           <Grid md={0.1529}></Grid>
-          <Grid item xs={12} md={6.8471} pt={2}>
+          <Grid item xs={12} md={5.92355} pt={2}>
             <Card
               variant="outlined"
               sx={{

@@ -1,5 +1,6 @@
 import {
   Button,
+  CircularProgress,
   Dialog,
   FormHelperText,
   Grid,
@@ -48,7 +49,9 @@ const Mobilenumber = ({ number }) => {
 
 const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessage, setSnackbarOpen, action, mutate }) => {
   const theme = useTheme();
-  console.log({ securityData });
+  
+  const [isLoading, setIsLoading] = useState(false);
+
   const [displayText1, setDisplayText1] = useState('SEND OTP');
   const [displayText2, setDisplayText2] = useState('SEND OTP');
   const [isResendMOTP, setIsResendMOTP] = useState(false);
@@ -151,6 +154,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
             authcode: action === 'preset' && securityData?.gSecurity?.enabled === '1' && Yup.string().max(6).required('OTP is requried*')
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+            setIsLoading(true);
             console.log({ values });
             const phoneOTP = values.otpmbl;
             const googleOTP = values.authcode;
@@ -169,13 +173,18 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
                 setSnackbarMessage({ msg: 'Rest your Authentication', success: true });
                 setSnackbarOpen(true);
                 handleCloseDialog();
+                setIsLoading(false);
               } else {
                 setSnackbarMessage({ msg: 'Request failed', success: false });
                 setSnackbarOpen(true);
+                handleCloseDialog();
+                setIsLoading(false);
               }
             } catch (err) {
               setSnackbarMessage({ msg: err.message, success: false });
               setSnackbarOpen(true);
+              handleCloseDialog();
+              setIsLoading(false);
             }
           }}
         >
@@ -311,7 +320,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
               <Grid item xs={12} pt={2.5}>
                 <AnimateButton>
                   <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
-                    SUBMIT
+                    {isLoading ? <CircularProgress color="inherit" size={30} /> : 'SUBMIT'}
                   </Button>
                 </AnimateButton>
               </Grid>

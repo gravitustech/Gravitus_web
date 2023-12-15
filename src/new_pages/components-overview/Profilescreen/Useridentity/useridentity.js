@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import {
   Grid, Stack, Button, Typography, FormHelperText, OutlinedInput,
-  useTheme, TextField, Card, IconButton, Box, Tooltip, Modal, Autocomplete
+  useTheme, TextField, Card, IconButton, Box, Tooltip, Modal, Autocomplete, CircularProgress
 } from '@mui/material';
 
 import * as Yup from 'yup';
@@ -16,10 +17,13 @@ import ImageCropper from 'src/components/_cropper';
 import { updateIdentity } from '../../../../api/profile';
 
 
-const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData }) => {
+const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, mutate }) => {
+  console.log('userData', userData)
+
   const theme = useTheme();
   const navigate = useNavigate();
 
+  const [isLoading, setIsLoading] = useState(false);
   let formData = new FormData();
   const Identity = [{ Identity: 'PANCARD' }];
 
@@ -40,12 +44,12 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
     setCroppedImage(undefined);
     setImageToCrop(undefined);
   };
-  
+
   const handleModalUpolad = () => {
     setImageToCrop(undefined);
     setModalOpen(false)
   };
-  
+
   const onUploadFile = (event) => {
     if (event.target.files && event.target.files.length > 0) {
       const reader = new FileReader();
@@ -93,9 +97,10 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
           docType: Yup.string().max(255).nullable().required('Select an Identity Type')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          setIsLoading(true);
           console.log({ values });
           formData.append('updateInfo', JSON.stringify({ fullName: values.name, pancard: values.pannumber, docType: values.docType }));
-          formData.append('fileName', imageToCrop.name);
+          formData.append('fileName', imageToCrop);
           if (croppedImage) {
             formData.append('fileI', croppedImage);
           } else {
@@ -105,15 +110,19 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
           try {
             const { data } = await updateIdentity(formData);
             if (Object.keys(data.result).length) {
-              console.log({ data });
+              console.log("data", data);
               setSnackbarMessage({ msg: 'Identity updated successfully', success: true });
               setSnackbarOpen(true);
               console.log({ values });
               setStatus({ success: false });
               setSubmitting(false);
+              setIsLoading(false);
+              mutate();
             } else {
               setSnackbarMessage({ msg: 'Identity updation failed', success: false });
               setSnackbarOpen(true);
+              setIsLoading(false);
+              mutate();
             }
           } catch (err) {
             setSnackbarMessage({ msg: err.message, success: false });
@@ -121,6 +130,8 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
             setStatus({ success: false });
             setErrors({ submit: err.message });
             setSubmitting(false);
+            setIsLoading(false);
+            mutate();
           }
         }}
       >
@@ -248,7 +259,7 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
                       {croppedImage ? (
                         <Box>
                           <img src={croppedImage} alt="wew" width="100%" height='auto' />
-                          {userData.status === '0'  && (
+                          {userData.status === '0' && (
                             <Tooltip title="click to clear the image" placement="top" arrow>
                               <DeleteForever
                                 onClick={() => setCroppedImage(null)}
@@ -346,8 +357,8 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
                   <Button variant="supportbutton" onClick={handleNavigate}>
                     Support
                   </Button>
-                  <Button disableElevation type="submit" variant="updatebutton">
-                    Update
+                  <Button disabled={userData?.status === '1' || userData?.status === '2'} disableElevation type="submit" variant="updatebutton">
+                    {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Update'}
                   </Button>
                 </Stack>
               </Grid>

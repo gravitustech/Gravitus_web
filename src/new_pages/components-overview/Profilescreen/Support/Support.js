@@ -1,13 +1,17 @@
-import { Button, Grid, Stack, Typography, OutlinedInput, FormHelperText, TextField, useTheme } from '@mui/material';
-import React from 'react';
-import AnimateButton from '../../../../components/@extended/AnimateButton';
-import { Formik } from 'formik';
-import Autocomplete from '@mui/material/Autocomplete';
-import * as Yup from 'yup';
-import notesicon from '../../../../assets/images/gravitusimage/notesicon.svg';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
+import React, { useState } from 'react';
+
+import {
+  Button, Grid, Stack, Typography, Autocomplete, TextareaAutosize,
+  FormHelperText, TextField, useTheme, CircularProgress
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
+
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+
 import { raiseTicket } from '../../../../api/profile';
+import AnimateButton from '../../../../components/@extended/AnimateButton';
+import notesicon from '../../../../assets/images/gravitusimage/notesicon.svg';
 
 const StyledTextarea = styled(TextareaAutosize)(({ theme, error }) => ({
   width: 'auto',
@@ -35,6 +39,9 @@ const StyledTextarea = styled(TextareaAutosize)(({ theme, error }) => ({
 
 const SupportScreen = ({ setSnackbarMessage, setSnackbarOpen, mutate }) => {
   const theme = useTheme();
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const Category = [
     { Category: 'Deposit' },
     { Category: 'Identity' },
@@ -71,6 +78,7 @@ const SupportScreen = ({ setSnackbarMessage, setSnackbarOpen, mutate }) => {
           })}
           onSubmit={async (values, actions) => {
             console.log({ values });
+            setIsLoading(true);
             const postData = { category: values.category, message: values.message };
             try {
               const { data } = await raiseTicket({ accountType: 'GRAVITUS', postData });
@@ -81,10 +89,12 @@ const SupportScreen = ({ setSnackbarMessage, setSnackbarOpen, mutate }) => {
                 mutate();
                 setSnackbarMessage({ msg: 'Ticket raised successfully', success: true });
                 setSnackbarOpen(true);
+                setIsLoading(false);
               }
             } catch (err) {
               setSnackbarMessage({ msg: err.message, success: false });
               setSnackbarOpen(true);
+              setIsLoading(false);
             }
           }}
         >
@@ -183,7 +193,7 @@ const SupportScreen = ({ setSnackbarMessage, setSnackbarOpen, mutate }) => {
               <Grid item xs={12} pt={3}>
                 <AnimateButton>
                   <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
-                    SUBMIT
+                    {isLoading ? <CircularProgress color="inherit" size={30} /> : 'SUBMIT'}
                   </Button>
                 </AnimateButton>
               </Grid>

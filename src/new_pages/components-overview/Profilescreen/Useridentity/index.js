@@ -5,7 +5,7 @@ import Useridentitysteps from './useridentitysteps';
 import useridentitylight from '../../../../assets/images/gravitusimage/useridentitylight.svg';
 import useridentityimgdark from '../../../../assets/images/gravitusimage/useridentityimgdark.svg';
 
-const Useridentity = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData }) => {
+const Useridentity = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, mutate }) => {
   const theme = useTheme();
 
   return (
@@ -18,7 +18,7 @@ const Useridentity = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData 
             style={{ width: '100%', height: 'auto' }}
           />
         </Grid>
-        <Grid item xs={12} md={5} pt={2}>
+        <Grid item xs={12} md={5.92355} pt={2}>
           <Card
             variant="outlined"
             sx={{
@@ -31,11 +31,12 @@ const Useridentity = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData 
               setSnackbarMessage={setSnackbarMessage}
               setSnackbarOpen={setSnackbarOpen}
               userData={userData}
+              mutate={mutate}
             />
           </Card>
         </Grid>
         <Grid md={0.1529}></Grid>
-        <Grid item xs={12} md={6.8471} pt={2}>
+        <Grid item xs={12} md={5.92355} pt={2}>
           <Card
             variant="outlined"
             sx={{

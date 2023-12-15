@@ -1,28 +1,22 @@
-import {
-  Grid,
-  Stack,
-  Avatar,
-  Typography,
-  useTheme,
-  Button,
-  OutlinedInput,
-  FormHelperText,
-  Select,
-  MenuItem,
-  InputLabel
-} from '@mui/material';
 import React, { useState, useEffect } from 'react';
+
+import {
+  Grid, Stack, Avatar, Typography, useTheme, Button,
+  OutlinedInput, FormHelperText, Select, MenuItem, CircularProgress
+} from '@mui/material';
+
 import ErrorIcon from '@mui/icons-material/Error';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import dashboardprofileimg from '../../../../assets/images/gravitusimage/dashboardprofileimg.svg';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import { Formik } from 'formik';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
 import * as Yup from 'yup';
-import AnimateButton from 'src/components/@extended/AnimateButton';
+import { Formik } from 'formik';
+
 import Dialog from '@mui/material/Dialog';
 import InputAdornment from '@mui/material/InputAdornment';
+import AnimateButton from 'src/components/@extended/AnimateButton';
+
 import { sendOTP, updateMobileNumber, resetMobileNumber, setMobileNumber, sendMOTP } from '../../../../api/profile';
-import useSWR from 'swr';
 
 const Email = ({ email }) => {
   const theme = useTheme();
@@ -56,6 +50,7 @@ const Mobilenumber = ({ number }) => {
 
 const Profiledeatils = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) => {
   const theme = useTheme();
+  const [isLoading, setIsLoading] = useState(false);
 
   //Sms-auth dialogbox
   console.log({ userData });
@@ -107,13 +102,6 @@ const Profiledeatils = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
       setSnackbarMessage({ msg: err.message, success: false });
       setSnackbarOpen(true);
     }
-
-    // if (isResend) {
-    //   setDisplayText('RESEND OTP');
-    // } else {
-    //   setDisplayText('SEND OTP');
-    // }
-    // setIsResend(true);
   };
 
   useEffect(() => {
@@ -128,6 +116,7 @@ const Profiledeatils = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
     }
     return () => clearTimeout(timeoutId);
   }, [isResend]);
+
   return (
     <>
       <Grid md={12} p={3} style={{ display: 'flex', flexDirection: 'row' }}>
@@ -231,7 +220,7 @@ const Profiledeatils = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                     </>
                   )}
                   <Dialog open={smsopenDialog} onClose={smshandleCloseDialog} aria-labelledby="dialog-title">
-                    <Stack p={4} spacing={2} width={520}>
+                    <Stack p={4} spacing={2} width={520} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
                       <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                         Mobile Number update
                       </Typography>
@@ -253,6 +242,7 @@ const Profiledeatils = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                             })
                         }
                         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                          setIsLoading(true);
                           console.log({ values });
                           try {
                             const { data } = otpState
@@ -267,6 +257,7 @@ const Profiledeatils = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                             if (Object.keys(data.result).length) {
                               console.log({ data });
                               mutate();
+                              setIsLoading(false);
                               setSnackbarMessage({ msg: otpState ? 'otp validated' : 'Mobile no submitted', success: true });
                               setSnackbarOpen(true);
                               if (otpState) {
@@ -274,13 +265,17 @@ const Profiledeatils = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                               }
                               setOtpState(true);
                             } else {
+                              setIsLoading(false);
                               setSnackbarMessage({ msg: 'Request failed', success: false });
                               setSnackbarOpen(true);
+                              smshandleCloseDialog();
                             }
                           } catch (err) {
+                            setIsLoading(false);
                             setStatus({ success: false });
                             setErrors({ submit: err.message });
                             setSubmitting(false);
+                            smshandleCloseDialog();
                           }
                         }}
                       >
@@ -381,7 +376,7 @@ const Profiledeatils = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                               <Grid item xs={12} pt={2}>
                                 <AnimateButton>
                                   <Button fullWidth size="large" type="submit" variant="contained">
-                                    SUBMIT
+                                    {isLoading ? <CircularProgress color="inherit" size={30} /> : 'SUBMIT'}
                                   </Button>
                                 </AnimateButton>
                               </Grid>
@@ -408,6 +403,7 @@ const Profiledeatils = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                           otpemail: Yup.string().max(5).required('OTP is required*')
                         })}
                         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                          setIsLoading(true);
                           console.log({ values });
                           try {
                             const { data } = await resetMobileNumber({
@@ -417,17 +413,22 @@ const Profiledeatils = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                             if (Object.keys(data.result).length) {
                               console.log({ data });
                               mutate();
+                              setIsLoading(false);
                               setSnackbarMessage({ msg: 'Mobile number reset successfully', success: true });
                               setSnackbarOpen(true);
                               resethandleCloseDialog();
                             } else {
+                              setIsLoading(false);
                               setSnackbarMessage({ msg: 'Request failed', success: false });
                               setSnackbarOpen(true);
+                              resethandleCloseDialog();
                             }
                           } catch (err) {
+                            setIsLoading(false);
                             setStatus({ success: false });
                             setErrors({ submit: err.message });
                             setSubmitting(false);
+                            resethandleCloseDialog();
                           }
                         }}
                       >
@@ -528,7 +529,7 @@ const Profiledeatils = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                               <Grid item xs={12} pt={2}>
                                 <AnimateButton>
                                   <Button fullWidth size="large" type="submit" variant="contained">
-                                    SUBMIT
+                                    {isLoading ? <CircularProgress color="inherit" size={30} /> : 'SUBMIT'}
                                   </Button>
                                 </AnimateButton>
                               </Grid>

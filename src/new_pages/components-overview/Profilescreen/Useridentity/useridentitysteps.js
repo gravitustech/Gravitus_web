@@ -6,7 +6,7 @@ const Useridentitysteps = () => {
   const theme = useTheme();
   return (
     <>
-      <Grid container pt={4} pb={11.07} pl={4} pr={4}>
+      <Grid container pt={4} pb={6} pl={4} pr={4}>
         <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
           Steps to Upload Your Identity
         </Typography>

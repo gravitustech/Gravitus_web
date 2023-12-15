@@ -1,22 +1,15 @@
-import PropTypes from 'prop-types';
-// import { useState } from 'react';
 import React from 'react';
-// import { Link as RouterLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-// material-ui
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, useTheme } from '@mui/material';
+import {
+  Box, Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Typography, Stack, useTheme
+} from '@mui/material';
+
 import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
-// import copyicon from '../images/copyicon.svg'
+
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
-function createData(Category, Message, Status, Date) {
-  return { Category, Message, Status, Date };
-}
-const rows = [
-  createData('Deposit', 'Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper amet tincidunt ', 'Opend', '26 Dec'),
-  createData('Trades', 'Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper amet tincidunt ', 'Opend', '26 Dec'),
-  createData('P2P Trades', 'Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper amet tincidunt ', 'Opend', '26 Dec'),
-  createData('Deposit', 'Lorem ipsum dolor sit amet consectetur. Volutpat ullamcorper amet tincidunt ', 'Opend', '26 Dec')
-];
+
 const headCells = [
   {
     id: 'Category',
@@ -77,7 +70,8 @@ OrderTableHead.propTypes = {
 
 export default function Tickethistroytab({ historyData }) {
   const theme = useTheme();
-  console.log({ historyData });
+
+  const reversedhistoryData = historyData && [...historyData].reverse();
   return (
     <Box>
       <TableContainer variant="tablecontainer"
@@ -103,7 +97,7 @@ export default function Tickethistroytab({ historyData }) {
         <Table aria-labelledby="tableTitle">
           <OrderTableHead />
           <TableBody>
-            {historyData.length === 0 ? (
+            {historyData?.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
                   <Norecordfoundcomponents
@@ -111,7 +105,7 @@ export default function Tickethistroytab({ historyData }) {
                 </TableCell>
               </TableRow>
             ) : (
-              historyData.map((row, index) => {
+              reversedhistoryData.map((row, index) => {
                 const labelId = `enhanced-table-checkbox-${index}`;
                 return (
                   <TableRow
@@ -158,7 +152,6 @@ export default function Tickethistroytab({ historyData }) {
                 );
               })
             )}
-
           </TableBody>
         </Table>
       </TableContainer>

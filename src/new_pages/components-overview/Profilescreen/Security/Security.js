@@ -12,7 +12,8 @@ import {
   MenuItem,
   Tooltip,
   IconButton,
-  InputLabel
+  InputLabel,
+  CircularProgress
 } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
@@ -138,6 +139,8 @@ const MobilenumberUpdate = ({ number }) => {
 const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mutate }) => {
   const theme = useTheme();
   // console.log({ securityData });
+  const [isLoading, setIsLoading] = useState(false);
+
   //G-auth dialogbox
 
   const [displayText1, setDisplayText1] = useState('SEND OTP');
@@ -370,7 +373,9 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                               emailOTP: values.otpmail,
                               ...(securityData?.pSecurity?.enabled === '1' && { phoneOTP })
                             };
+                            console.log('securityData?.pSecurity?.enabled ',securityData?.pSecurity?.enabled )
                             try {
+                              setIsLoading(true);
                               const { data } =
                                 securityData?.gSecurity?.enabled === '1'
                                   ? await disableSecurity({ accountType: 'GRAVITUS', postData })
@@ -382,14 +387,17 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                                 setSnackbarOpen(true);
                                 setOtpState(true);
                                 handleCloseDialog();
+                                setIsLoading(false);
                               } else {
                                 setSnackbarMessage({ msg: 'Request failed', success: false });
                                 setSnackbarOpen(true);
+                                setIsLoading(false);
                               }
                             } catch (err) {
                               setStatus({ success: false });
                               setErrors({ submit: err.message });
                               setSubmitting(false);
+                              setIsLoading(false);
                             }
                           }}
                         >
@@ -516,7 +524,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                                 <Grid item xs={12} pt={2}>
                                   <AnimateButton>
                                     <Button fullWidth size="large" type="submit" variant="contained">
-                                      SUBMIT
+                                      {isLoading ? <CircularProgress color="inherit" size={30} /> : 'SUBMIT'}
                                     </Button>
                                   </AnimateButton>
                                 </Grid>
@@ -665,6 +673,8 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                           ...(securityData?.gSecurity?.enabled === '1' && { googleOTP })
                         };
                         if (otpState) {
+                          setIsLoading(true);
+                          console.log('securityData?.pSecurity?.enabled', securityData?.pSecurity?.enabled)
                           try {
                             const { data } =
                               securityData?.pSecurity?.enabled === '1'
@@ -674,17 +684,26 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                               console.log({ data });
                               mutate();
                               setOtpState(false);
-                              setSnackbarMessage({ msg: 'Authentication is Enabled', success: true });
+                              {
+                                securityData?.pSecurity?.enabled === '1' ? (
+                                  setSnackbarMessage({ msg: 'Authentication is disabled', success: true })
+                                ) : (
+                                  setSnackbarMessage({ msg: 'Authentication is Enabled', success: true })
+                                )
+                              }
                               setSnackbarOpen(true);
                               smshandleCloseDialog();
+                              setIsLoading(false);
                             } else {
                               setSnackbarMessage({ msg: 'Request failed', success: false });
                               setSnackbarOpen(true);
+                              setIsLoading(false);
                             }
                           } catch (err) {
                             setStatus({ success: false });
                             setErrors({ submit: err.message });
                             setSubmitting(false);
+                            setIsLoading(false);
                           }
                         } else {
                           handleNext(values.mobilenumber);
@@ -815,7 +834,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                                 <Grid item xs={12} pt={2}>
                                   <AnimateButton>
                                     <Button fullWidth size="large" type="submit" variant="contained">
-                                      SUBMIT
+                                      {isLoading ? <CircularProgress color="inherit" size={30} /> : 'SUBMIT'}
                                     </Button>
                                   </AnimateButton>
                                 </Grid>
