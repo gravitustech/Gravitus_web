@@ -1,20 +1,20 @@
+import { useTheme } from '@mui/material';
+import './index.css';
+
+import { useSelector } from 'react-redux';
+import { widget } from '../_charting_library';
+import { socket } from '../../../../socket';
 
 import React, { useEffect, useRef, useReducer, useState } from 'react';
 import { Spot_ChartData_URL, fetcherCHART} from 'src/api_ng/spotTrade_ng';
 import { getConfig_ng, setConfig_ng } from '../../../../utils_ng/localStorage_ng';
 
-import { widget } from '../_charting_library';
-import { socket } from '../../../../socket';
-
-import './index.css';
-import { useTheme } from '@mui/material';
-
 export const TVChartContainer = ({ pairData, exchangeType }) => {
-  const chartContainerRef = useRef();
   const lastBarsCache = new Map();
+  const chartContainerRef = useRef();
   
-  const theme = useTheme();
-  // console.log(theme, 'theme');
+  const [tvWidget, setTvWidget] = useState(null);
+  const superConfig = useSelector((state) => state.config);
 
   const configurationData = {
     supported_resolutions: ['1', '15', '30', '60', '120', '240', '360', '480', '720', '1D', '1M'], // '1W', '12M', '24M', '48M'
@@ -138,7 +138,7 @@ export const TVChartContainer = ({ pairData, exchangeType }) => {
 
   useEffect(() => {
     const widgetOptions = {
-      theme       : 'light', // "light" | "dark"
+      theme       : superConfig.theme, // "light" | "dark"
       interval    : getConfig_ng('excTvRes'),
       symbol      : 'Gravitus: BNB/USDT',
       width       : '100%',
@@ -154,9 +154,19 @@ export const TVChartContainer = ({ pairData, exchangeType }) => {
       autosize    : true
     };
 
-    const tvWidget = new widget(widgetOptions);
-    return () => {tvWidget.remove();};
+    setTvWidget(new widget(widgetOptions));
+    // return () => { tvWidget.remove(); }; // Don't Remove Tv Widget
+
   }, [pairData.id, exchangeType]);
+
+  useEffect(() => {
+    if(tvWidget != null) {
+      tvWidget.onChartReady(function() {
+        tvWidget.changeTheme(superConfig.theme);
+      });
+    }
+    
+  }, [tvWidget, superConfig]);
 
   return (
     <>

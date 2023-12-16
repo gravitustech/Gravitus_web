@@ -14,7 +14,7 @@ import { initLocalStorage_ng, getConfig_sp } from './utils_ng/localStorage_ng';
 const App = () => {
   const dispatch = useDispatch();
   const localStore = initLocalStorage_ng();
-  
+
   useEffect(() => {
     socket.on('connect', () => {
       if (socket.connected) {

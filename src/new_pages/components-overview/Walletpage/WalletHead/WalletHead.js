@@ -1,6 +1,9 @@
 import { Typography, Stack, Button, useTheme, Grid } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import React from 'react';
+
+import useSWR, { mutate } from 'swr';
+import React, { useEffect } from 'react';
+import { Wallet_Fetch_Info } from 'src/api_ng/wallet_ng';
 
 const WalletIcon = () => (
   <svg width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -15,7 +18,7 @@ const WalletIcon = () => (
   </svg>
 );
 
-const WalletHead = ({ total }) => {
+const WalletHead = ({ totalInUsd }) => {
   const theme = useTheme();
   
   return (
@@ -38,7 +41,7 @@ const WalletHead = ({ total }) => {
               color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary'
             }}
           >
-            {total}
+            {totalInUsd}
           </Typography>
           <Typography
             pl={2}

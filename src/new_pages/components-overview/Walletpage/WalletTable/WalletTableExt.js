@@ -1,3 +1,8 @@
+import {
+  useTheme, Typography, Box, Stack, Link, Table, TableBody, TableCell,
+  TableContainer, TableHead, TableRow, Drawer, List, IconButton, TableSortLabel,
+  ButtonBase } from '@mui/material';
+
 import Refresh from '../../../../assets/images/gravitusimage/refresh.svg';
 import NoRecordFound from '../_Essentials/NoRecordFound';
 import InrDpWdlBtn from './InrDpWdlBtn';
@@ -15,16 +20,11 @@ import NumberFormat from 'react-number-format';
 import MoreDrawerContent from './MoreDrawer';
 import PropTypes from 'prop-types';
 
-import React, { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-
-import {
-  useTheme, Typography, Box, Stack, Link, Table, TableBody, TableCell,
-  TableContainer, TableHead, TableRow, Drawer, List, IconButton, TableSortLabel, ButtonBase
-} from '@mui/material';
+import React, { useState } from 'react';
+import useSWR, { mutate } from 'swr';
 
 import { Wallet_Fetch_Info, Wallet_Fetch_ById, postDataWallet } from 'src/api_ng/wallet_ng';
-import useSWR, { mutate } from 'swr';
 
 // ==============================|| MARKET TABLE - HEADER CELL ||============================== //
 
@@ -185,7 +185,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 // ==============================|| WALLET TABLE ||============================== //
 
-export default function WalletTableExt({ walletList, setWalletId }) {
+export default function WalletTableExt({ walletList }) {
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -247,7 +247,6 @@ export default function WalletTableExt({ walletList, setWalletId }) {
           setOpenDrawer(!openDrawer);
         }
         else if(actionType == 'reloadWallet') {
-          console.log('reloadWallet');
           mutate(Wallet_Fetch_Info);
         }
       }
@@ -261,8 +260,9 @@ export default function WalletTableExt({ walletList, setWalletId }) {
     fetchWalletById(wallet, 'moreDrawer');
   };
 
-  const reloadWallet = (wallet) => {
+  const syncWalletData = (wallet) => {
     fetchWalletById(wallet, 'reloadWallet');
+    mutate(Wallet_Fetch_Info);
   };
 
   return (
@@ -429,7 +429,7 @@ export default function WalletTableExt({ walletList, setWalletId }) {
                         </Link>
                         <ButtonBase
                           disableRipple
-                          onClick={() => reloadWallet(row.listing)}
+                          onClick={() => syncWalletData(row.listing)}
                         >
                           <img
                             src={Refresh}
