@@ -61,7 +61,7 @@ function CoinSelectTextfield({ values, errors, touched, walletList,
                 borderColor: touched?.coin && errors?.coin ? 'red' : '#959595',
               }
             }}
-            helperText={ !touched?.coin && values?.coin == null ? 'Please select the coin' : '' }
+            helperText={!touched?.coin && values?.coin == null ? 'Please select the coin' : ''}
           />
         )}
       />
