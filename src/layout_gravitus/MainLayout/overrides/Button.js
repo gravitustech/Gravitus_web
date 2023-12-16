@@ -101,19 +101,21 @@ export default function Button(theme) {
         },
         //
         inrdepositbutton: {
-          width: '277px',
-          height: '77px',
+          width: '100%',
+          height: '49px',
           borderRadius: '5px',
-          backgroundColor: theme.palette.mode === 'dark' ? '#181818' : '#F5F5F5',
+          color: theme.palette.mode === 'dark' ? '#F7F7F7' : '#8C8C8C',
+          backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F5F5F5',
           '&:hover': {
-            backgroundColor: theme.palette.mode === 'dark' ? '#181818' : '#F5F5F5'
+            backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F5F5F5'
           }
         },
         //
         inrdepositwithdrawbutton: {
           width: '280px',
           borderRadius: '5px',
-          border: '1px solid var(--primary-900, #8c8c8c)',
+          border: '1px solid',
+          borderColor: theme.palette.mode === 'dark' ? '#31384b' : 'text.tertiary',
           bgcolor: 'transparent',
           '&:hover': {
             bgcolor: 'transparent'
@@ -166,13 +168,15 @@ export default function Button(theme) {
         walletbutton: {
           width: '179px',
           height: '38px',
-          backgroundColor: theme.palette.mode === 'dark' ? '#232323' : '#F0F0F0',
+          backgroundColor: theme.palette.mode === 'dark' ? '#262b39' : '#FFFFFF',
           borderRadius: '5px',
           fontSize: '14px',
           fontWeight: 500,
-          color: '#8C8C8C',
+          color: theme.palette.mode === 'dark' ? '#F7F7F7' : '#8C8C8C',
+          border: '1px solid',
+          borderColor: theme.palette.mode === 'dark' ? '#31384b' : '#E1E1E1',
           '&:hover': {
-            background: theme.palette.mode === 'dark' ? '#232323' : '#F0F0F0'
+            background: theme.palette.mode === 'dark' ? '#262b39' : '#FFFFFF'
           }
         },
         //cancel button
@@ -353,9 +357,9 @@ export default function Button(theme) {
         },
         //
         fundsbutton: {
-          fontSize: '14px',
+          fontSize: '10px',
           fontWeight: 600,
-          height: '35px',
+          height: '32px',
           width: '100%',
           borderRadius: '5px',
           border: '1px solid',

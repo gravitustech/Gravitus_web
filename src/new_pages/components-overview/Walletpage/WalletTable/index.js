@@ -2,13 +2,18 @@ import { useTheme, Card, Box } from '@mui/material';
 import WalletTableExt from './WalletTableExt';
 
 import useSWR, { mutate } from 'swr';
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { Wallet_Fetch_Info } from 'src/api_ng/wallet_ng';
+import CustomSnackBar from 'src/components/snackbar';
 
 const WalletTable = ({ walletList }) => {
   const theme = useTheme();
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState(null);
+  
   return (
+    <>
     <Card
       sx={{
         border: 'none',
@@ -28,9 +33,17 @@ const WalletTable = ({ walletList }) => {
           backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
         }}
       >
-        <WalletTableExt walletList={walletList} />
+        <WalletTableExt walletList={walletList} setSnackbarOpen={setSnackbarOpen}
+          setSnackbarMessage={setSnackbarMessage} />
       </Box>
     </Card>
+
+      <CustomSnackBar
+        snackbarOpen={snackbarOpen}
+        setSnackbarOpen={setSnackbarOpen}
+        snackbarMessage={snackbarMessage && snackbarMessage.msg}
+        success={snackbarMessage && snackbarMessage.success} />
+    </>
   );
 };
 

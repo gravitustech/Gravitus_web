@@ -20,31 +20,20 @@ import { Field, Formik } from 'formik';
 import ImageCropper from 'src/components/_cropper';
 import { Post_Rs_Deposit, formDataWallet } from 'src/api_ng/wallet_ng';
 
-const modalStyle = {
-  position: 'absolute',
-  top: '50%', left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 1024, height: 'auto',
-  bgcolor: 'background.paper',
-  border: '1px solid #808080 !important',
-  boxShadow: 24, p: 4,
-  textAlign: 'center'
-};
-
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1
-});
-
 const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, formikValues, setSnackbarOpen, setSnackbarMessage, walletId }) => {
   const theme = useTheme();
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%', left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 1024, height: 'auto',
+    bgcolor: theme.palette.mode === 'dark' ? '#131722' : 'text.white',
+    border: '1px solid #808080 !important',
+    boxShadow: 24, p: 4,
+    textAlign: 'center'
+  };
+
+
   const formikMP = useRef();
 
   const [imageToCrop, setImageToCrop] = React.useState(undefined);
@@ -62,11 +51,13 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
   };
 
   const handleModalClose = () => {
-    setModalOpen(false)
-    setCroppedImage(undefined)
+    setModalOpen(false);
+    setCroppedImage(undefined);
+    setImageToCrop(undefined);
   };
 
   const handleModalUpolad = () => {
+    setImageToCrop(undefined);
     setModalOpen(false)
   };
 
@@ -105,28 +96,26 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
   });
 
   const depositRequest = () => {
-    setOpen(false);
+    setIsLoading(true);
     if (croppedImage != undefined) {
       var postData = {
         updateInfo: {
-          mode    : formikValues.payMode,
-          amount  : formikValues.depositAmount,
-          fromAccount : depositFrom.accountNo,
-          toAddress   : depositTo.accountNo,
-          receiptNo   : depositReq.utrId,
-          walletId    : walletId,
+          mode: formikValues.payMode,
+          amount: formikValues.depositAmount,
+          fromAccount: depositFrom.accountNo,
+          toAddress: depositTo.accountNo,
+          receiptNo: depositReq.utrId,
+          walletId: walletId,
         },
         fileName: 'dScreenshot',
         fileI: croppedImage
       };
 
-      setIsLoading(true);
       formDataWallet(Post_Rs_Deposit(), postData).then(function (res) {
-        
-        setIsLoading(false);
+        // setIsLoading(false);
         console.log(res, 'Post Deposit')
-        
         if (res.error !== 'ok') {
+          setIsLoading(false);
           if (res.error.name == "Missing Authorization") {
             // Logout User
           }
@@ -137,11 +126,15 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
             if (res.error.name != undefined) {
               setSnackbarMessage({ msg: res.error.name, success: false });
               setSnackbarOpen(true);
+              setOpen(false);
+              setIsLoading(false);
             }
             else {
               setSnackbarMessage({ msg: res.error, success: false });
               setSnackbarOpen(true);
-              console.log('res.error', res.error)
+              console.log('res.error', res.error);
+              setOpen(false);
+              setIsLoading(false);
             }
           }
         } else {
@@ -170,6 +163,8 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
     else {
       setSnackbarMessage({ msg: 'Upload Screenshot', success: false });
       setSnackbarOpen(true);
+      setIsLoading(false);
+      setOpen(false);
     }
   };
 
@@ -247,10 +242,11 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
                       getOptionLabel={(option) => `${option.AcNumber} (${option.Beneficiary})`}
                       onChange={(e, val) => setFieldValue('bankAccount', val)}
                       renderOption={(props, option) => (
-                        <Stack sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                        <Stack backgroundColor={theme.palette.mode === 'dark' ? '#262B39' : '#FFFFFF'}
+                          sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                           {...props} direction="row" spacing={1}>
-                          <Typography>{option.AcNumber}</Typography>
-                          <Typography>({option.Beneficiary})</Typography>
+                          <Typography sx={{ color: '#F7F7F7' }}>{option.AcNumber}</Typography>
+                          <Typography sx={{ color: '#F7F7F7' }}>({option.Beneficiary})</Typography>
                         </Stack>
                       )}
                       renderInput={(params) => (
@@ -317,7 +313,7 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
                             boxShadow: 'none',
                             borderRadius: '5px',
                             border: '2px solid',
-                            borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
+                            borderColor: theme.palette.mode === 'dark' ? '#31384b' : '#EFEFEF',
                             backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
                           }}
                         >
@@ -366,7 +362,7 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description">
                             <Box sx={modalStyle}>
-                              <Grid container spacing={0}>
+                              <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                                 {/* <Stack direction='row' spacing={1}> */}
                                 <Grid xs={12} md={6}>
                                   <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Selected Image</Typography>
@@ -438,7 +434,10 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
                 </form>
 
                 <Dialog onClose={handleClose} open={open}>
-                  <Stack p={4} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <Stack p={4} spacing={1} style={{
+                    display: 'flex', flexDirection: 'column', alignItems: 'center',
+                    background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground'
+                  }}>
                     <img src={warninggif} alt="warninggif" />
 
                     <Typography

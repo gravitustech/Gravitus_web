@@ -5,8 +5,8 @@ import Stack from '@mui/material/Stack';
 import React, { useState, useEffect } from 'react';
 import { Wallet_Fetch_ById, postDataWallet } from 'src/api_ng/wallet_ng';
 
-function CoinSelectTextfield({ values, errors, touched, walletList, 
-  walletId, setWalletId, setFieldValue, handleBlur}) {
+function CoinSelectTextfield({ values, errors, touched, walletList,
+  walletId, setWalletId, setFieldValue, handleBlur }) {
 
   console.log(touched, 'touched');
   console.log(errors, 'errors');
@@ -14,7 +14,7 @@ function CoinSelectTextfield({ values, errors, touched, walletList,
 
   const theme = useTheme();
   const [selectedItem, setSelectedItem] = useState(walletId && walletList.find((item) => item.listing.id === walletId));
-  
+
   const handleChange = async (evt, val, id) => {
     setFieldValue('coin', val);
     setSelectedItem(val);
@@ -36,7 +36,7 @@ function CoinSelectTextfield({ values, errors, touched, walletList,
         options={walletList}
         getOptionLabel={(option) => `${option.listing.ticker} (${option.listing.crypto})`}
         renderOption={(props, option) => (
-          <Stack {...props} direction="row" spacing={1} alignItems='center'>
+          <Stack {...props} direction="row" spacing={1} alignItems='center' backgroundColor={theme.palette.mode === 'dark' ? '#0F121A' : '#FFFFFF'}>
             <img src={option.listing.additionalI} alt="ico" width="24" height="24" />
             <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>{option.listing.ticker}</Typography>
             <Typography variant='subtitle2' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>{option.listing.crypto}</Typography>
@@ -61,7 +61,7 @@ function CoinSelectTextfield({ values, errors, touched, walletList,
                 borderColor: touched?.coin && errors?.coin ? 'red' : '#959595',
               }
             }}
-            helperText={!touched?.coin && values?.coin == null ? 'Please select the coin' : ''}
+            // helperText={!touched?.coin && values?.coin == null ? 'Please select the coin' : ''}
           />
         )}
       />

@@ -77,7 +77,7 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
     top: '50%', left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 1024, height: 'auto',
-    bgcolor: 'background.paper',
+    bgcolor: theme.palette.mode === 'dark' ? '#131722' : 'text.white',
     border: '1px solid #808080 !important',
     boxShadow: 24, p: 4,
     textAlign: 'center'

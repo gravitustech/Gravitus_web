@@ -53,7 +53,7 @@ function OrderTableHead() {
 
   return (
     <TableHead>
-      <TableRow>
+      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
         {headCells.map((headCell, index) => (
           <TableCell
             sx={{ border: 'none' }}
@@ -108,10 +108,10 @@ function DepositeTable({ historyData }) {
           width: '4px ', // Width of the scrollbar
         },
         '&::-webkit-scrollbar-track': {
-          background: theme.palette.mode === "dark" ? 'black' : "text.background", // Track color
+          background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
         },
         '&::-webkit-scrollbar-thumb': {
-          background: theme.palette.mode === "dark" ? 'gray' : "lightgray",
+          background: theme.palette.mode === "dark" ? '#0F121A' : "lightgray",
           borderRadius: '8px', // Round the corners of the thumb
         },
       }}
