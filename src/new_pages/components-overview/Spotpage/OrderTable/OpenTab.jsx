@@ -1,4 +1,10 @@
 import warninggif from '../../../../assets/images/gravitusimage/warninggif.svg';
+import NoRecordFound from '../../Walletpage/_Essentials/NoRecordFound';
+
+import {
+  Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+  Typography, Stack, Link, useTheme, Divider, Grid, Dialog, Button 
+} from '@mui/material';
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -6,32 +12,9 @@ import PropTypes from 'prop-types';
 import { socket } from '../../../../socket';
 import useSWR, { mutate } from 'swr';
 
-import { Spot_PreTrade_URL, fetcherSPOT } from 'src/api_ng/spotTrade_ng';
-import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../../utils_ng/localStorage_ng';
-
-// material-ui
-import {
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-  Stack,
-  Link,
-  useTheme,
-  Divider,
-  Grid,
-  Dialog,
-  Button
-} from '@mui/material';
-
 import { Link as RouterLink } from 'react-router-dom';
-
-import { Spot_CancelOrder_URL, postDataSPOT } from 'src/api_ng/spotTrade_ng';
-import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
+import { Spot_PreTrade_URL, Spot_CancelOrder_URL, postDataSPOT } from 'src/api_ng/spotTrade_ng';
+import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../../utils_ng/localStorage_ng';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
@@ -136,6 +119,7 @@ export default function OpenTab({ isAuthorised, platformId, orderTableData, setS
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
+
   const handleclick = (order) => {
     var postData = { id: order.id, platformId: order.platformId };
 
@@ -177,9 +161,7 @@ export default function OpenTab({ isAuthorised, platformId, orderTableData, setS
     let SPOTOrderEvt = '/SPOTOrder_' + getConfig_sp().userId + '/POST';
     socket.on(SPOTOrderEvt, function (res) {
 
-      console.log(res, 'Response from Sock Cancel');
       if (parseInt(res.platformId) === parseInt(platformId)) {
-
         if (res.action == 'cancelSuccess' && res.userId == getConfig_sp().userId) {
           mutate(Spot_PreTrade_URL);
           setSnackbarMessage({ msg: res.message, success: false });
@@ -203,6 +185,7 @@ export default function OpenTab({ isAuthorised, platformId, orderTableData, setS
   return (
     <>
       {isAuthorised ? (
+        
         <Box>
           {orderTableData?.ongoing?.length ? (
             <TableContainer varaint="tablecontainer"
@@ -370,7 +353,7 @@ export default function OpenTab({ isAuthorised, platformId, orderTableData, setS
                   <OrderTableHead />
                 </Table>
               </TableContainer>
-              <Norecordfoundcomponents
+              <NoRecordFound
                 description=' You have no open orders.' />
             </>
           )}

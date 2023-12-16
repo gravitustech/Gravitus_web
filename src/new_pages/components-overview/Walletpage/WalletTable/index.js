@@ -1,8 +1,11 @@
 import { useTheme, Card, Box } from '@mui/material';
 import WalletTableExt from './WalletTableExt';
-import React from 'react';
 
-const WalletTable = ({ walletList, walletId }) => {
+import useSWR, { mutate } from 'swr';
+import React, { useEffect } from 'react';
+import { Wallet_Fetch_Info } from 'src/api_ng/wallet_ng';
+
+const WalletTable = ({ walletList }) => {
   const theme = useTheme();
 
   return (
@@ -25,7 +28,7 @@ const WalletTable = ({ walletList, walletId }) => {
           backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
         }}
       >
-        <WalletTableExt walletList={walletList} walletId={walletId} />
+        <WalletTableExt walletList={walletList} />
       </Box>
     </Card>
   );

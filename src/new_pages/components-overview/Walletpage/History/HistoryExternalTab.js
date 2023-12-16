@@ -219,7 +219,7 @@ export default function HistoryExternalTab({ tableData }) {
 
                     <TableCell sx={{ border: 'none' }} align="left" >
                       <Tooltip title='Click to see the status' arrow placement='top' >
-                        <a href={href}>
+                        <a href={href} target="_blank" rel="noopener noreferrer">
                           <TransactionId transactionid={txId} />
                         </a>
                       </Tooltip>

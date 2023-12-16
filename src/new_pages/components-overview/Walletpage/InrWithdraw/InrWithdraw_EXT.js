@@ -14,12 +14,13 @@ import CardInr from './Card';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-import { useNavigate } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useSWR, { mutate } from 'swr';
 
 import { Send_OTP } from '../../../../api_ng/system_ng';
 import { sendOtpSecurity } from '../../../../api/profile';
-import { Estimate_Withdrawal, Sign_Withdrawal, postDataWallet } from '../../../../api_ng/wallet_ng';
+import { Estimate_Withdrawal, Sign_Withdrawal, Pre_Rs_Withdraw, postDataWallet } from '../../../../api_ng/wallet_ng';
 
 const Email = ({ email }) => {
   const theme = useTheme();
@@ -62,8 +63,8 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
   const [isResendMOTP, setIsResendMOTP] = useState(false);
   const [isResendPOTP, setIsResendPOTP] = useState(false);
 
-  const [showInitWDL, setShowInitWDL] = useState(false);
-  const [confirmOrInitWDL, setConfirmOrInitWDL] = useState(false);
+  const [confirmWDL, setConfirmWDL] = useState(false);
+  const [initiateWDL, setInitiateWDL] = useState(false);
   
   const [withdrawData, setWithdrawData] = useState(null);
   const [signWithdrawal, setSignWithdrawal] = useState(null);
@@ -85,15 +86,16 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
     payMode     : inrWithdrawData?.pfStatus?.payMode,
   }];
 
-  const closeConfirmOrSignWDL = () => {
-    setConfirmOrInitWDL(false);
+  const closeConfirmWDL = () => {
+    setConfirmWDL(false);
     setIsResendMOTP(false);
     setIsResendPOTP(false);
-    setShowInitWDL(false);
   };
 
-  const showInitWithdrawal = async () => {
-    setShowInitWDL(true);
+  const closeInitiateWDL = () => {
+    setInitiateWDL(false);
+    setIsResendMOTP(false);
+    setIsResendPOTP(false);
   };
 
   const reqSendOTP = async (action) => {
@@ -132,14 +134,8 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
   };
 
   function InitWithdrawal(postData) {
-    console.log(postData, 'postData');
     postDataWallet(Sign_Withdrawal(), postData).then(function (res) {
-      console.log(res, 'Sign Withdrawal');
-
       if (res.error !== 'ok') {
-        handleCloseDialog();
-        setIsLoading(false);
-
         if (res.error.name == "Missing Authorization") {
           // Logout User
         }
@@ -157,8 +153,12 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
           }
         }
       } else {
-        setShowInitWDL(false);
-        setConfirmOrInitWDL(false);
+        // console.log(res.result, 'Sign Withdrawal');
+        setInitiateWDL(false);
+
+        setResendPOTP('SEND OTP');
+        setResendMOTP('SEND OTP')
+        setColor('');
 
         setIsResendMOTP(false);
         setIsResendPOTP(false);
@@ -166,21 +166,24 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
         setSnackbarMessage({ msg: res.result, success: false });
         setSnackbarOpen(true);
 
+        setSelectedBankAccount(null);
         formikEW.current.resetForm({
           values: {
-            bankAccount: null,
-            amount: '',
-            // submit: null
+            bankAccount : null,
+            amount      : '',
+            submit      : null
           }
         });
 
         formikSW.current.resetForm({
           values: {
-            gcode: '',
-            otpmail: '',
-            otpmbl: ''
+            gcode     : '',
+            otpmail   : '',
+            otpmbl    : ''
           }
         });
+
+        mutate(Pre_Rs_Withdraw);
       }
     }, function (err) {
       console.log(err);
@@ -215,7 +218,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
       } else {
         // console.log(res.result, 'Estimate WDL');
         setSignWithdrawal(res.result);
-        setConfirmOrInitWDL(true);
+        setConfirmWDL(true);
       }
     }, function (err) {
       console.log(err);
@@ -412,15 +415,14 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                   </Grid>
                 </form>
 
-                <Dialog onClose={closeConfirmOrSignWDL} open={confirmOrInitWDL}>
-                  {!showInitWDL ? (
-                    (
-                      <Stack p={4} spacing={2.5}>
+                <Dialog onClose={closeConfirmWDL} open={confirmWDL}>
+                  (
+                    <Stack p={4} spacing={2.5}>
                         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                           <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                             Withdrawal Details
                           </Typography>
-                          <IconButton edge="end" color="inherit" onClick={closeConfirmOrSignWDL} aria-label="close">
+                          <IconButton edge="end" color="inherit" onClick={closeConfirmWDL} aria-label="close">
                             <CloseIcon />
                           </IconButton>
                         </Stack>
@@ -435,10 +437,10 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
 
                         <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                           <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                            Amount
+                            Total Amount
                           </Typography>
                           <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                            {signWithdrawal?.amount} INR
+                            {signWithdrawal?.total} INR
                           </Typography>
                         </Stack>
 
@@ -452,16 +454,19 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                         </Stack>
 
                         <Stack pt={1} direction="row" spacing={4} justifyContent="space-around">
-                          <Button variant="contained5" onClick={closeConfirmOrSignWDL}>
+                          <Button variant="contained5" onClick={closeConfirmWDL}>
                             Cancel
                           </Button>
-                          <Button variant="contained4" onClick={showInitWithdrawal}>
+                          <Button variant="contained4" onClick={()=> {setConfirmWDL(false); setInitiateWDL(true)}}>
                             Confirm
                           </Button>
                         </Stack>
                       </Stack>
-                    )
-                  ) : (
+                  )
+                </Dialog>
+
+                <Dialog onClose={closeInitiateWDL} open={initiateWDL}>
+                  (
                     <Stack p={4} spacing={2.5} width={480}>
                       <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                         Widthdraw Security
@@ -616,7 +621,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                         )}
                       </Formik>
                     </Stack>
-                  )}
+                  )
                 </Dialog>
               </>
             )}

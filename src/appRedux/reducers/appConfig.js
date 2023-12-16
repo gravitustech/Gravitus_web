@@ -2,8 +2,8 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   theme     : 'light',
-  toppings  : ['Cheese'], // Array Exp
-  gluten    : true // Boolean Exp
+  toppings   : ['Cheese'], // Array Exp
+  gluten     : true // Boolean Exp
 };
 
 export const configReducer = createSlice({
@@ -11,7 +11,7 @@ export const configReducer = createSlice({
   initialState,
   reducers : {
     toggleTheme(state) {
-      state.theme == 'light' ? 'dark' : light;
+      state.theme = state.theme == 'light' ? 'dark' : 'light';
     },
     addToppings(state, action) {
       state.toppings = [...state.toppings, action.payload];
@@ -22,6 +22,6 @@ export const configReducer = createSlice({
   }
 })
 
-export const {toggleTheme} = configReducer.actions;
+export const {toggleTheme, toggleGluten} = configReducer.actions;
 
 export default configReducer.reducer;

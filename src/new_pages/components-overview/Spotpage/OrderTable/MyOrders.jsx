@@ -11,17 +11,16 @@ import OpenTab from './OpenTab';
 import React from 'react';
 
 const MyOrders = ({ isAuthorised, platformId, orderTableData, setSnackbarOpen, setSnackbarMessage }) => {
-  const [value, setValue] = React.useState('0');
   const theme = useTheme();
+  const [value, setValue] = React.useState('0');
+
+  const [hideCancelled, setHideCancelled] = React.useState(false);
+  const cancelhandleChange = (event) => {
+    setHideCancelled(event.target.checked);
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-
-  const [hideCancelled, setHideCancelled] = React.useState(false);
-
-  const cancelhandleChange = (event) => {
-    setHideCancelled(event.target.checked);
   };
 
   const tabData = [{
