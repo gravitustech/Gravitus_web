@@ -3,90 +3,29 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Stack from '@mui/material/Stack';
 
 import React, { useState, useEffect } from 'react';
-// import { useLocation } from 'react-router';
-// import { values } from 'lodash';
-
-// import { getWalletDataById } from '../../../../../../api/wallet';
 import { Wallet_Fetch_ById, postDataWallet } from 'src/api_ng/wallet_ng';
 
-function CoinSelectTextfield({ walletList, walletId, setWalletId, setWalletData,
-  setHistoryData, handleBlur, error, touched, errors, values, setFieldValue, coin, formik}) {
+function CoinSelectTextfield({ values, errors, touched, walletList, 
+  walletId, setWalletId, setFieldValue, handleBlur}) {
+
+  console.log(touched, 'touched');
+  console.log(errors, 'errors');
+  console.log(values, 'values');
 
   const theme = useTheme();
   const [selectedItem, setSelectedItem] = useState(walletId && walletList.find((item) => item.listing.id === walletId));
-
-  // ################### Start Fetch Wallet By Id ################### 
-
-  function fetchWalletById(walletId) {
-    var postData = {
-      "walletId" : walletId
-    };
-
-    postDataWallet(Wallet_Fetch_ById(), postData).then(function (res) {
-      console.log(res);
-      
-      if (res.error !== 'ok') {
-        handleCloseDialog();
-        setIsLoading(false);
-
-        if(res.error.name == "Missing Authorization") {
-          // Logout User
-        }
-        else if (res.error.name == "Invalid Authorization") {
-          // Logout User
-        }
-        else {
-          if(res.error.name != undefined) {
-            setSnackbarMessage({ msg: res.error.name, success: false });
-            setSnackbarOpen(true);
-          }
-          else {
-            setSnackbarMessage({ msg: res.error, success: false });
-            setSnackbarOpen(true);
-          }
-        }
-      } else {
-        setHistoryData(res.result.external.filter((item) => item.transType === 'Withdraw'));
-        setWalletData(res.result);
-      }
-    }, function (err) {
-      console.log(err);
-      // Logout User
-    });
-  }
-
-  // ################### End ###################
-
-  const handleChange = async (e, val, id,) => {
+  
+  const handleChange = async (evt, val, id) => {
+    setFieldValue('coin', val);
     setSelectedItem(val);
     setWalletId(id);
-    setFieldValue('coin', val);
-
-    if (id) {
-      try {
-        fetchWalletById(id);
-
-        // Govarthan Code
-        // const { data } = await getWalletDataById({ accountType: 'GRAVITUS', postData: { walletId: id } });
-        // setHistoryData(data.result.external.filter((item) => item.transType === 'Withdraw'));
-        // setWalletData(data.result);
-      } catch (e) {
-        console.log(e.message);
-      }
-    } else {
-      setHistoryData(null)
-      setWalletData(null)
-      setFieldValue('coin', val);
-    }
   };
 
   useEffect(() => {
     if (walletId) {
-      handleChange(
-        null,
-        walletList.find((item) => item.listing.id === walletId),
-        walletId
-      );
+      var superCoin = walletList.find((item) => item.listing.id === walletId);
+      setFieldValue('coin', superCoin);
+      setSelectedItem(superCoin);
     }
   }, [walletId]);
 
@@ -104,8 +43,8 @@ function CoinSelectTextfield({ walletList, walletId, setWalletId, setWalletData,
           </Stack>
         )}
         value={selectedItem}
-        onChange={(e, val) => {
-          handleChange(e, val, val?.listing?.id);
+        onChange={(evt, val) => {
+          handleChange(evt, val, val?.listing?.id);
         }}
         renderInput={(params) => (
           <TextField
@@ -114,15 +53,15 @@ function CoinSelectTextfield({ walletList, walletId, setWalletId, setWalletData,
             onBlur={handleBlur}
             onChange={handleChange}
             placeholder="Select the coin"
-            error={Boolean(touched?.coin && error?.coin)}
+            error={Boolean(touched?.coin && errors?.coin)}
             sx={{
               '& .MuiInputBase-input': {
                 height: '12px',
                 borderRadius: '5px',
-                borderColor: error && touched ? 'red' : '#959595',
+                borderColor: touched?.coin && errors?.coin ? 'red' : '#959595',
               }
             }}
-            helperText={error && touched ? error : ''}
+            helperText={ !touched?.coin && values?.coin == null ? 'Please select the coin' : '' }
           />
         )}
       />

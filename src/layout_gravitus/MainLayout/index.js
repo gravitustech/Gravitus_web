@@ -1,12 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useMemo } from 'react';
-
-// Router
-import { Link as RouterLink } from 'react-router-dom';
-import { Link, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-
 import '@fontsource/inter';
 import '@fontsource/inter/300.css';
 import '@fontsource/inter/400.css';
@@ -32,12 +23,14 @@ import {
 import CssBaseline from '@mui/material/CssBaseline';
 
 // File Imports
-import Notification from './Header/HeaderContent/Notification';
 import GravitusNavigationlogin from './Header/Navgrouplogin/Navigationlogin';
-import Profile from './Header/HeaderContent/Profile/index';
+import Notification from './Header/HeaderContent/Notification';
 import GravitusNavigation from './Header/Navgroup/Naviagtion';
+import Profile from './Header/HeaderContent/Profile/index';
+
 import Typography from './typography';
 import CustomShadows from './shadows';
+
 // import Palette from './palette';
 import ComponentsOverrides from './overrides';
 
@@ -52,8 +45,19 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import GravitusNavigationRegister from './Header/Navgroupregister/NavigationRegister';
 import GravitusNavigationLogo from './Header/Navgrouplogo/NavigationLogo';
+import GravitusNavigationRegister from './Header/Navgroupregister/NavigationRegister';
+
+import PropTypes from 'prop-types';
+import { useMemo } from 'react';
+
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleTheme } from '../../appRedux/reducers/appConfig';
+
+// Router
+import { Link, Outlet } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { getConfig_ng, setConfig_ng } from 'src/utils_ng/localStorage_ng';
 
 const ThemePaletteModeContext = React.createContext({
@@ -66,7 +70,9 @@ const GravitusMainLayout = () => {
 
   const isMatch = useMediaQuery(theme.breakpoints.down('md'));
   const isAuthorised = useSelector((state) => state.user.isAuthenticated);
-  const [openDrawer, setopenDrawer] = useState(false); // Drawer
+
+  const [openDrawer, setopenDrawer] = useState(false);
+  const dispatch = useDispatch();
 
   const toggleDrawer = () => {
     setopenDrawer(!openDrawer);
@@ -77,7 +83,8 @@ const GravitusMainLayout = () => {
   };
 
   const toggleSuperTheme = () => {
-    // Toggle Material Ui Theme
+    themePaletteModeContext.toggleThemePaletteMode();
+    dispatch(toggleTheme());
   };
 
   return (
@@ -131,9 +138,7 @@ const GravitusMainLayout = () => {
                     <ListItem sx={{ pl: 9 }}>
                       <Button
                         disableRipple
-                        // onClick={toggleSuperTheme}
-                        // onClick={()=> toggleSuperTheme()}
-                        onClick={themePaletteModeContext.toggleThemePaletteMode}
+                        onClick={() => toggleSuperTheme()} 
                         color="inherit"
                         sx={{ height: '32px' }}
                       >
@@ -196,7 +201,7 @@ const GravitusMainLayout = () => {
                 </>
               )}
 
-              <IconButton disableRipple sx={{ ml: 1 }} onClick={themePaletteModeContext.toggleThemePaletteMode} color="inherit">
+              <IconButton disableRipple sx={{ ml: 1 }} onClick={() => toggleSuperTheme()} color="inherit">
                 {theme.palette.mode === 'dark' ? (
                   <WbSunnyIcon sx={{ color: 'text.white' }} />
                 ) : (
@@ -221,13 +226,9 @@ GravitusMainLayout.propTypes = {
 };
 
 export default function App() {
-  const storedThemeMode = getConfig_ng('themePaletteMode');
+  const storedThemeMode =  useSelector((state) => state.config.theme);
   const isSystemDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [themePaletteMode, setThemePaletteMode] = useState(storedThemeMode || (isSystemDarkMode ? 'dark' : 'light'));
-
-  useEffect(() => {
-    setConfig_ng('themePaletteMode', themePaletteMode);
-  }, [themePaletteMode]);
 
   const themePaletteModeContextProvider = React.useMemo(
     () => ({

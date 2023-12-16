@@ -61,9 +61,9 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
 
   const [isResendMOTP, setIsResendMOTP] = useState(false);
   const [isResendPOTP, setIsResendPOTP] = useState(false);
-  
-  const [showInitWDL, setShowInitWDL] = useState(false);
-  const [confirmOrInitWDL, setConfirmOrInitWDL] = useState(false);
+
+  const [confirmWDL, setConfirmWDL] = useState(false);
+  const [initiateWDL, setInitiateWDL] = useState(false);
 
   const [withdrawData, setWithdrawData] = useState(null);
   const [signWithdrawal, setSignWithdrawal] = useState(null);
@@ -81,12 +81,53 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
     }
   };
 
-  const closeConfirmOrSignWDL = () => {
-    setConfirmOrInitWDL(false);
+  const closeConfirmWDL = () => {
+    setConfirmWDL(false);
     setIsResendMOTP(false);
     setIsResendPOTP(false);
-    setShowInitWDL(false);
   };
+
+  const closeInitiateWDL = () => {
+    setInitiateWDL(false);
+    setIsResendMOTP(false);
+    setIsResendPOTP(false);
+  };
+
+  function fetchWalletById() {
+    var postData = {"walletId" : walletId};
+
+    postDataWallet(Wallet_Fetch_ById(), postData).then(function (res) {
+      if (res.error !== 'ok') {
+        if(res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if(res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        // console.log(res.result, 'Fetch By Id - Form Fields');
+        setHistoryData(res.result.external.filter((item) => item.transType === 'Withdraw'));
+        setWalletId(res.result.listing.id);
+        setWalletData(res.result);
+
+        // setSignWithdrawal(null);
+        setWithdrawData(null);
+      }
+    }, function (err) {
+      console.log(err);
+      // Logout User
+    });
+  }
 
   const reqSendOTP = async (action) => {
     try {
@@ -126,12 +167,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
 
   function InitWithdrawal(postData) {
     postDataWallet(Sign_Withdrawal(), postData).then(function (res) {
-      console.log(res, 'Sign Withdrawal');
-
       if (res.error !== 'ok') {
-        handleCloseDialog();
-        setIsLoading(false);
-
         if (res.error.name == "Missing Authorization") {
           // Logout User
         }
@@ -149,8 +185,12 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
           }
         }
       } else {
-        setShowInitWDL(false);
-        setConfirmOrInitWDL(false);
+        // console.log(res.result, 'Sign Withdrawal');
+        setInitiateWDL(false);
+
+        setResendPOTP('SEND OTP');
+        setResendMOTP('SEND OTP');
+        setColor('');
 
         setIsResendMOTP(false);
         setIsResendPOTP(false);
@@ -162,8 +202,9 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
           values: {
             toAddress : '',
             amount    : '',
-            total     : ''
-            // submit: null
+            total     : '',
+            coin      : walletList.find((item) => item.listing.id === walletId),
+            submit    : null
           }
         });
 
@@ -175,7 +216,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
           }
         });
 
-        mutate(Wallet_Fetch_ById);
+        fetchWalletById();
       }
     }, function (err) {
       console.log(err);
@@ -183,17 +224,11 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
     });
   }
 
-  const showInitWithdrawal = async () => {
-    setShowInitWDL(true);
-  };
-
   function estimateWithdrawal() {
     var postData = withdrawData;
     postData.walletId = walletId;
 
     postDataWallet(Estimate_Withdrawal(), postData).then(function (res) {
-      console.log(res, 'Estimate Withdrawal');
-
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User
@@ -214,13 +249,23 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
       } else {
         // console.log(res.result, 'Estimate WDL');
         setSignWithdrawal(res.result);
-        setConfirmOrInitWDL(true);
+        setConfirmWDL(true);
       }
     }, function (err) {
       console.log(err);
       // Logout User
     });
   }
+
+  useEffect(() => {
+    if(walletId != undefined) {
+      fetchWalletById(walletId);
+    }
+    else {
+      setHistoryData(undefined);
+      setWalletData(undefined);
+    }
+  }, [walletId]);
 
   useEffect(() => {
     let timeoutId;
@@ -247,6 +292,18 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
     }
     return () => clearTimeout(timeoutId);
   }, [isResendPOTP]);
+
+  // To be deleted
+  // function handleTest() {
+  //   console.log("Handle Test");
+  //   mutate(Wallet_Fetch_ById);
+  // }
+
+  // return(
+  //   <>
+  //     <button type="button" onClick={()=> handleTest()}>Click Me!</button>
+  //   </>
+  // );
 
   return (
     <Grid>
@@ -286,7 +343,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
           }
         }}
       >
-        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue, coin }) => (
+        {({ values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue, isSubmitting, coin }) => (
           <>
             <form noValidate onSubmit={handleSubmit}>
               <Grid>
@@ -294,18 +351,15 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
                   <FormLabel number="01." title="Select the coin" />
                 </Stack>
                 <CoinSelectTextfield
+                  values={values}
+                  errors={errors}
+                  touched={touched}
                   walletList={walletList}
                   walletId={walletId}
                   setWalletId={setWalletId}
-                  setHistoryData={setHistoryData}
-                  setWalletData={setWalletData}
+                  setFieldValue={setFieldValue}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  error={coin}
-                  touched={touched}
-                  errors={errors}
-                  values={values}
-                  setFieldValue={setFieldValue}
                 />
                 <Stack direction="row" justifyContent="space-between" alignItems="center" pt={3} pb={3} sx={{ width: '100%' }}>
                   <FormLabel number="02." title="Withdrawal To" />
@@ -430,70 +484,71 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
                     </AnimateButton>
                   </Grid>
                 </Grid>
-
               </Grid>
             </form>
 
-            <Dialog onClose={closeConfirmOrSignWDL} open={confirmOrInitWDL}>
-              {!showInitWDL ? (
-                (
-                  <Stack p={4} spacing={2.5}>
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                      <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        Withdrawal Details
-                      </Typography>
-                      <IconButton edge="end" color="inherit" onClick={closeConfirmOrSignWDL} aria-label="close">
-                        <CloseIcon />
-                      </IconButton>
-                    </Stack>
-
-                    <Stack pt={1} direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                      <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                        To Address
-                      </Typography>
-                      <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {signWithdrawal?.toAddress}
-                      </Typography>
-                    </Stack>
-
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                      <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                        Amount
-                      </Typography>
-                      <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {signWithdrawal?.amount} {walletData?.walletInfo?.crypto}
-                      </Typography>
-                    </Stack>
-
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                      <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                        Total Amount
-                      </Typography>
-                      <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {signWithdrawal?.total} {walletData?.walletInfo?.crypto}
-                      </Typography>
-                    </Stack>
-
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                      <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                        Estimated Fee
-                      </Typography>
-                      <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {signWithdrawal?.transFees} {walletData?.walletInfo?.crypto}
-                      </Typography>
-                    </Stack>
-
-                    <Stack pt={1} direction="row" spacing={0} justifyContent="space-around">
-                      <Button variant="contained5" onClick={closeConfirmOrSignWDL}>
-                        Cancel
-                      </Button>
-                      <Button variant="contained4" onClick={showInitWithdrawal}>
-                        Confirm
-                      </Button>
-                    </Stack>
+            <Dialog onClose={closeConfirmWDL} open={confirmWDL}>
+              (
+                <Stack p={4} spacing={2.5}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                    <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                      Withdrawal Details
+                    </Typography>
+                    <IconButton edge="end" color="inherit" onClick={closeConfirmWDL} aria-label="close">
+                      <CloseIcon />
+                    </IconButton>
                   </Stack>
-                )
-              ) : (
+
+                  <Stack pt={1} direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                      To Address
+                    </Typography>
+                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                      {signWithdrawal?.toAddress}
+                    </Typography>
+                  </Stack>
+
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                      Amount
+                    </Typography>
+                    <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                      {signWithdrawal?.amount} {walletData?.walletInfo?.crypto}
+                    </Typography>
+                  </Stack>
+
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                      Total Amount
+                    </Typography>
+                    <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                      {signWithdrawal?.total} {walletData?.walletInfo?.crypto}
+                    </Typography>
+                  </Stack>
+
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                      Estimated Fee
+                    </Typography>
+                    <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                      {signWithdrawal?.transFees} {walletData?.walletInfo?.crypto}
+                    </Typography>
+                  </Stack>
+
+                  <Stack pt={1} direction="row" spacing={0} justifyContent="space-around">
+                    <Button variant="contained5" onClick={closeConfirmWDL}>
+                      Cancel
+                    </Button>
+                    <Button variant="contained4" onClick={() => {setConfirmWDL(false); setInitiateWDL(true)}}>
+                      Confirm
+                    </Button>
+                  </Stack>
+                </Stack>
+              )
+            </Dialog>
+
+            <Dialog onClose={closeInitiateWDL} open={initiateWDL}>
+              (
                 <Stack p={4} spacing={2.5} width={480}>
                   <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                     Widthdraw Security
@@ -656,8 +711,9 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
                     )}
                   </Formik>
                 </Stack>
-              )}
+              )
             </Dialog>
+
           </>
         )}
       </Formik>
