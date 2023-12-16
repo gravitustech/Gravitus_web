@@ -226,7 +226,7 @@ GravitusMainLayout.propTypes = {
 };
 
 export default function App() {
-  const storedThemeMode =  useSelector((state) => state.config.theme);
+  const storedThemeMode = useSelector((state) => state.config.theme);
   const isSystemDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [themePaletteMode, setThemePaletteMode] = useState(storedThemeMode || (isSystemDarkMode ? 'dark' : 'light'));
 
