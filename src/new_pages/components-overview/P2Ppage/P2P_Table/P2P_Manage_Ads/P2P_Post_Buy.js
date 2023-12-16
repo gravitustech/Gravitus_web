@@ -298,7 +298,7 @@ const P2P_Post_Buy = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarOp
       </Formik>
 
       <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title">
-        <Stack p={4} spacing={2.8}>
+        <Stack p={4} spacing={2.8} sx={{background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground'}}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
             <Typography variant="title1" sx={{ color: 'text.buy' }}>
               Buy USDT

@@ -203,7 +203,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
     top: '50%', left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 1024, height: 'auto',
-    bgcolor: 'background.paper',
+    bgcolor: theme.palette.mode === 'dark' ? '#131722' : 'text.white',
     border: '1px solid #808080 !important',
     boxShadow: 24, p: 4,
     textAlign: 'center'
@@ -476,27 +476,10 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                 </Typography>
               </Stack>
 
-              <Stack pt={3}>
-                <Card
-                  contentSX={{ p: 2.25 }}
-                  sx={{
-                    border: 'none',
-                    boxShadow: 'none'
-                  }}
-                >
-                  <Stack
-                    sx={{
-                      color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary',
-                      backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
-                    }}
-                    pr={1}
-                    pt={1}
-                    pb={1}
-                  >
-                    <UpiImpsTabs orderDetails={orderDetails} />
-                  </Stack>
-                </Card>
+              <Stack pt={2}>
+                <UpiImpsTabs orderDetails={orderDetails} />
               </Stack>
+
               <Stack direction="row" spacing={3} pt={3}>
                 <Button variant="sellAppealbutton" disabled >
                   Appeal
@@ -557,27 +540,10 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                   </Typography>
                 </Stack>
 
-                <Stack pt={3}>
-                  <Card
-                    contentSX={{ p: 2.25 }}
-                    sx={{
-                      border: 'none',
-                      boxShadow: 'none'
-                    }}
-                  >
-                    <Stack
-                      sx={{
-                        color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary',
-                        backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
-                      }}
-                      pr={1}
-                      pt={1}
-                      pb={1}
-                    >
-                      <UpiImpsTabs orderDetails={orderDetails} />
-                    </Stack>
-                  </Card>
+                <Stack pt={2}>
+                  <UpiImpsTabs orderDetails={orderDetails} />
                 </Stack>
+
                 <Stack direction="row" spacing={3} pt={3}>
                   {
                     resultdata?.actionLabel_2 === 'Confirm Receipt' ? (
@@ -612,7 +578,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                   onClose={closeConfirmDlg}
                   open={open}
                 >
-                  <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: theme.palette.mode === 'dark' ? '#131722' : 'text.white', }}>
                     <img src={warninggif} alt='warninggif' />
                     <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                       Confirm ?
@@ -691,7 +657,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                               value={values.reason}
                               onChange={(e, val) => setFieldValue('reason', val)}
                               renderOption={(props, option) => (
-                                <Stack {...props} direction='row' spacing={1}>
+                                <Stack {...props} direction='row' spacing={1} backgroundColor={theme.palette.mode === 'dark' ? '#0F121A' : '#FFFFFF'}>
                                   <Typography >
                                     {option}
                                   </Typography>
@@ -764,7 +730,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                                 borderRadius: '5px',
                                 border: '2px solid',
                                 borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
-                                backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
+                                backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'
                               }}
                             >
                               <Stack
@@ -797,8 +763,8 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                                   >
                                     <AddCircleOutlinedIcon
                                       sx={{
-                                        width: '46px',
-                                        height: '46px',
+                                        width: '42px',
+                                        height: '42px',
                                         color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary'
                                       }}
                                     />
@@ -814,7 +780,7 @@ const Trade_Seller_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => 
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description">
                             <Box sx={modalStyle}>
-                              <Grid container spacing={0}>
+                              <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                                 {/* <Stack direction='row' spacing={1}> */}
                                 <Grid xs={12} md={6}>
                                   <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Selected Image</Typography>

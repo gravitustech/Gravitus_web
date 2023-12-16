@@ -208,7 +208,7 @@ function ProfileScreen() {
               onClick={() => handleMenuItemClick(tab.value)}
               sx={{
                 backgroundColor:
-                  value === tab.value ? (theme.palette.mode === 'dark' ? '#262B39' : '#EFEFEF') : theme.palette.mode === 'dark' ? '' : '',
+                  value === tab.value ? (theme.palette.mode === 'dark' ? '#262B39' : '#FFFFFF') : theme.palette.mode === 'dark' ? '' : '',
                 width: '220px',
                 height: '51px',
                 display: 'flex',
@@ -218,7 +218,7 @@ function ProfileScreen() {
                 marginBottom: '8px',
                 '&:hover': {
                   backgroundColor:
-                    value === tab.value ? (theme.palette.mode === 'dark' ? '#262B39' : '#EFEFEF') : theme.palette.mode === 'dark' ? '' : ''
+                    value === tab.value ? (theme.palette.mode === 'dark' ? '#262B39' : '#FFFFFF') : theme.palette.mode === 'dark' ? '' : ''
                 }
               }}
             >

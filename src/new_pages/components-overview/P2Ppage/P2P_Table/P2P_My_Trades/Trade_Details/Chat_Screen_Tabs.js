@@ -94,15 +94,15 @@ const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
                   fontSize: value === '0' ? '14px' : '14px',
                   fontWeight: value === '0' ? '500' : '500',
                   color: value === '0' ? theme.palette.mode === 'dark' ? 'white' : 'white' : theme.palette.mode === 'dark' ? 'white' : 'black',
-                  backgroundColor: value === '0' ? theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' : theme.palette.mode === 'dark' ? '#2B2B2E' : '#ECECEC',
+                  backgroundColor: value === '0' ? theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' : theme.palette.mode === 'dark' ? '#262b39 ' : '#ECECEC',
                   borderRadius: '5px  0 0 5px',
                   minHeight: '40px',
                 }}
                 label={
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                   <span style={{ marginRight: '16px' }}>Chat</span>
-                  <Badge badgeContent={2} color="primary">
-                  </Badge>
+                  {/* <Badge badgeContent={2} color="primary">
+                  </Badge> */}
                 </div>
                 }
                 value="0"
@@ -113,15 +113,15 @@ const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
                   fontSize: value === '1' ? '14px' : '14px',
                   fontWeight: value === '1' ? '500' : '500',
                   color: value === '1' ? theme.palette.mode === 'dark' ? 'white' : 'white' : theme.palette.mode === 'dark' ? 'white' : 'black',
-                  backgroundColor: value === '1' ? theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' : theme.palette.mode === 'dark' ? '#2B2B2E' : '#ECECEC',
+                  backgroundColor: value === '1' ? theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' : theme.palette.mode === 'dark' ? '#262b39' : '#ECECEC',
                   borderRadius: '0 5px 5px 0',
                   minHeight: '40px',
                 }}
                 label={
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                   <span style={{ marginRight: '16px' }}>  Appeal History</span>
-                  <Badge badgeContent={2} color="primary">
-                  </Badge>
+                  {/* <Badge badgeContent={2} color="primary">
+                  </Badge> */}
                 </div>
                 }
                 value="1"
@@ -142,8 +142,8 @@ const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
         </TabPanel>
         <TabPanel value="1" sx={{ padding: '0', paddingTop: '12px' }}>
           <AppealChatscreen
-            // messages={appealMessage}
-            messages={Appealdata?.result?.appealMessage}
+            messages={appealMessage}
+            // messages={Appealdata?.result?.appealMessage}
             orderDetails={Appealdata?.result?.orderDetails}
             counterPart={counterPart}
             mutate={mutate}

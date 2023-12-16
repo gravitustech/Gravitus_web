@@ -39,6 +39,9 @@ const UpiImpsTabs = ({ orderDetails }) => {
               disableRipple
               key={index}
               sx={{
+                paddingBottom: '0px',
+                paddingLeft: tab.value === '0' ? '0px' : '16px',
+                minWidth: '0px',
                 fontSize: value === tab.value ? '16px' : '16px',
                 fontWeight: value === tab.value ? '700' : '400',
                 color:
@@ -54,21 +57,16 @@ const UpiImpsTabs = ({ orderDetails }) => {
                 },
               }}
               label={
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center'
-                  }}
-                >
-                  {tab.label}
-                </div>
+
+                tab.label
+
               }
               value={tab.value}
             />
           ))}
         </TabList>
         {tabData.map((tab, index) => (
-          <TabPanel key={index} value={tab.value} sx={{ width: '100%', pt: 0, pl: 4 }}>
+          <TabPanel key={index} value={tab.value} sx={{ width: '100%', pt: 0, pl: 0 }}>
             {tab.screen}
           </TabPanel>
         ))}

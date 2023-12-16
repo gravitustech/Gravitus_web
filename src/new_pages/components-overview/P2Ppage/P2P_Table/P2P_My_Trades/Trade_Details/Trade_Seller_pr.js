@@ -5,7 +5,7 @@ import CustomSnackBar from 'src/components/snackbar';
 import Trade_Seller_Dts_Ext from './Trade_Seller_sp';
 import Chat_Appeal_Tab from './Chat_Screen_Tabs';
 
-import { useTheme, Grid, Stack, Typography } from '@mui/material';
+import { useTheme, Grid, Stack, Typography, Card, Box } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import useSWR, { mutate } from 'swr';
@@ -50,12 +50,12 @@ const Trade_Seller_Dts = (route) => {
   // }
 
   useEffect(() => {
-    let P2POrderEvent = '/P2POrder_'+ getConfig_sp().userId +'/POST';
+    let P2POrderEvent = '/P2POrder_' + getConfig_sp().userId + '/POST';
 
-    if(orderData != undefined) {
-      socket.on(P2POrderEvent, function(res) {
+    if (orderData != undefined) {
+      socket.on(P2POrderEvent, function (res) {
 
-        if(orderData.orderDetails.orderId == res.orderId && res.notifyType == 'orderUpdate') {
+        if (orderData.orderDetails.orderId == res.orderId && res.notifyType == 'orderUpdate') {
           mutate(P2P_OrderDetails_URL);
         }
       });
@@ -69,25 +69,45 @@ const Trade_Seller_Dts = (route) => {
 
   return (
     <>
-      <Grid container pl={15} pr={15} pt={3}  >
-        <Stack direction='row' spacing={2} alignItems='center'>
-          <ArrowBackIosNewIcon onClick={goBack} pt={12} sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} />
-          <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-            Sell USDT
-          </Typography>
-        </Stack>
-      </Grid>
-      {data ? (
-        <Grid container pt={3} pl={15} pr={15} pb={3}>
-          <Trade_Seller_Dts_Ext data={data} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
-
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Chat_Appeal_Tab orderData={orderData} counterPart={counterPart} appealMessage={orderData?.appealMessage} />
-          </Grid>
+      <Card
+        sx={{
+          border: 'none',
+          width: '100%',
+          boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
+        }}
+      >
+        <Grid container pl={15} pr={15} pt={2} pb={3} sx={{
+          backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground',
+        }}>
+          <Stack direction='row' spacing={2} alignItems='center'>
+            <ArrowBackIosNewIcon onClick={goBack} pt={10} sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} />
+            <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+              Sell USDT
+            </Typography>
+          </Stack>
         </Grid>
-      ) : (
-        <Lodergif />
-      )}
+        <Box
+          pt={1}
+          pb={3}
+          pl={18.5}
+          pr={15}
+          lg={12}
+          sx={{
+            backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground',
+          }}>
+          {data ? (
+            <Grid container pt={2} pb={3} sx={{ background: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground' }} >
+              <Trade_Seller_Dts_Ext data={data} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
+
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Chat_Appeal_Tab orderData={orderData} counterPart={counterPart} appealMessage={orderData?.appealMessage} />
+              </Grid>
+            </Grid>
+          ) : (
+            <Lodergif />
+          )}
+        </Box>
+      </Card>
       <CustomSnackBar
         snackbarOpen={snackbarOpen}
         setSnackbarOpen={setSnackbarOpen}

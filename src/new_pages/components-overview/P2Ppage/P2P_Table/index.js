@@ -61,7 +61,7 @@ const P2P_Table = ({ isAuthorised, P2PData, setSnackbarOpen, setSnackbarMessage 
                     fontSize: value === '0' ? '14px' : '14px',
                     fontWeight: value === '0' ? '500' : '500',
                     color: value === '0' ? theme.palette.mode === 'dark' ? 'white' : 'white' : theme.palette.mode === 'dark' ? 'white' : 'black',
-                    backgroundColor: value === '0' ? theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' : theme.palette.mode === 'dark' ? '#2B2B2E' : '#ECECEC',
+                    backgroundColor: value === '0' ? theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' : theme.palette.mode === 'dark' ? '#262b39' : '#F1F1F1',
                     borderRadius: '5px  0 0 5px',
                     minHeight: '40px',
                   }}
@@ -83,7 +83,7 @@ const P2P_Table = ({ isAuthorised, P2PData, setSnackbarOpen, setSnackbarMessage 
                     fontSize: value === '1' ? '14px' : '14px',
                     fontWeight: value === '1' ? '500' : '500',
                     color: value === '1' ? theme.palette.mode === 'dark' ? 'white' : 'white' : theme.palette.mode === 'dark' ? 'white' : 'black',
-                    backgroundColor: value === '1' ? theme.palette.mode === 'dark' ? 'text.sell' : 'text.sell' : theme.palette.mode === 'dark' ? '#2B2B2E' : '#ECECEC',
+                    backgroundColor: value === '1' ? theme.palette.mode === 'dark' ? 'text.sell' : 'text.sell' : theme.palette.mode === 'dark' ? '#262b39' : '#F1F1F1',
                     borderRadius: '0 5px 5px 0',
                     minHeight: '40px',
                   }}

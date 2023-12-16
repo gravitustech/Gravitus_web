@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react';
 import useSWR, { mutate } from 'swr';
 
-import { useTheme, Stack, Typography, Grid, FormHelperText,
+import {
+  useTheme, Stack, Typography, Grid, FormHelperText,
   OutlinedInput, Button, InputAdornment, Checkbox, FormGroup,
-  FormControlLabel, Dialog, Divider } from '@mui/material';
+  FormControlLabel, Dialog, Divider
+} from '@mui/material';
 
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -12,7 +14,6 @@ import { P2P_PostOrder_URL, P2P_SuperOrders_URL, postDataP2P } from 'src/api_ng/
 const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarOpen, setSnackbarMessage }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  
   const theme = useTheme();
   const formikPostSell = useRef();
 
@@ -97,7 +98,7 @@ const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarO
       price: inputs.price,
       quantity: inputs.quantity,
       amount: inputs.totalamount,
-      paymodes: inputs.paymentoption.map((mode) => ({ mode : mode, checked : true })),
+      paymodes: inputs.paymentoption.map((mode) => ({ mode: mode, checked: true })),
     };
 
     postDataP2P(P2P_PostOrder_URL(), postData).then(function (res) {
@@ -106,14 +107,14 @@ const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarO
 
       console.log(res);
       if (res.error !== 'ok') {
-        if(res.error.name == "Missing Authorization") {
+        if (res.error.name == "Missing Authorization") {
           // Logout User
         }
         else if (res.error.name == "Invalid Authorization") {
           // Logout User
         }
         else {
-          if(res.error.name != undefined) {
+          if (res.error.name != undefined) {
             setSnackbarMessage({ msg: res.error.name, success: false });
             setSnackbarOpen(true);
           }
@@ -129,12 +130,14 @@ const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarO
         setInputs({ price: '', quantity: '', totalamount: '', paymentoption: [] });
         mutate(P2P_SuperOrders_URL);
 
-        formikPostSell?.current?.resetForm({values : { 
-          price: '', 
-          quantity: '',
-          totalamount: '',
-          paymentoption: []
-        }});
+        formikPostSell?.current?.resetForm({
+          values: {
+            price: '',
+            quantity: '',
+            totalamount: '',
+            paymentoption: []
+          }
+        });
       }
     }, function (err) {
       console.log(err);
@@ -149,7 +152,7 @@ const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarO
     <Stack>
       <Formik
         innerRef={formikPostSell}
-        initialValues={ formikInit }
+        initialValues={formikInit}
         validationSchema={Yup.object().shape({
           price: Yup.number().positive('Enter a positive number').required("Don't leave empty"),
           quantity: Yup.number().positive('Enter a positive number').required("Don't leave empty")
@@ -357,7 +360,7 @@ const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarO
       </Formik>
 
       <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title">
-        <Stack p={4} spacing={2.5}>
+        <Stack p={4} spacing={2.5} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
             <Typography variant="title1" sx={{ color: 'text.sell' }}>
               Sell USDT

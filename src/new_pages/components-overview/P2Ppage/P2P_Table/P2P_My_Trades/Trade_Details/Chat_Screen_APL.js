@@ -115,7 +115,7 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
     top: '50%', left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 1024, height: 'auto',
-    bgcolor: 'background.paper',
+    bgcolor: theme.palette.mode === 'dark' ? '#131722' : 'text.white',
     border: '1px solid #808080 !important',
     boxShadow: 24, p: 4,
     textAlign: 'center'
@@ -215,13 +215,13 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
           height: '100%',
           borderRadius: '5px',
           border: `2px solid`,
-          borderColor: theme.palette.mode === 'dark' ? '#212121' : '#F0F0F0',
+          borderColor: theme.palette.mode === 'dark' ? '#232730' : '#ececec',
           boxShadow: `0px 2.726541757583618px 29.951322555541992px 0px rgba(0, 0, 0, 0.02),
                 0px 9.157886505126953px 48.472755432128906px 0px rgba(0, 0, 0, 0.02)`,
         }}>
           <Stack direction="row" alignItems="center" spacing={1} p={1.5}
             sx={{
-              bgcolor: theme.palette.mode === "dark" ? '#212121' : "#fafafa",
+              backgroundColor: theme.palette.mode === 'dark' ? '#262b39' : '#f7f7f7',
               color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary'
             }}>
             <StyledBadge
@@ -244,9 +244,9 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              bgcolor: theme.palette.mode === "dark" ? 'text.black' : "text.background",
+              bgcolor: theme.palette.mode === "dark" ? '#131722' : "text.background",
               overflowY: 'scroll',
-              height: '575px',
+              height: '520px',
               /* Custom scrollbar styles */
               scrollbarWidth: 'thin', // For Firefox
               scrollbarColor: 'gray lightgray', // For Firefox
@@ -254,10 +254,10 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
                 width: '4px', // Width of the scrollbar
               },
               '&::-webkit-scrollbar-track': {
-                background: theme.palette.mode === "dark" ? 'black' : "text.background",  // Track color
+                background: theme.palette.mode === "dark" ? 'transparent' : "transparent",  // Track color
               },
               '&::-webkit-scrollbar-thumb': {
-                background: theme.palette.mode === "dark" ? 'lightgray' : "lightgray",
+                background: theme.palette.mode === "dark" ? '#262B39' : "lightgray",
                 borderRadius: '8px', // Round the corners of the thumb
               },
             }}
@@ -270,7 +270,7 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
           </Box>
 
           <Box sx={{
-            bgcolor: theme.palette.mode === "dark" ? 'text.black' : "text.background",
+            bgcolor: theme.palette.mode === "dark" ? '#131722' : "#FFFFFF",
           }} >
             <Stack  >
               <Formik
@@ -333,11 +333,11 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
                 onClose={handleModalClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
-                <Box sx={modalStyle}>
+                <Box sx={modalStyle} >
 
-                  <Grid container spacing={0}>
+                  <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                     {/* <Stack direction='row' spacing={1}> */}
-                    <Grid xs={12} md={6}>
+                    <Grid xs={12} md={6} >
                       <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Selected Image</Typography>
                       <Box >
                         <ImageCropper
@@ -406,7 +406,7 @@ const ModalContent = styled("div")`
   flex-direction: column;
   align-items: center;
   background-color: ${(props) =>
-    props.theme.palette.mode === 'dark' ? props.theme.palette.text.white : props.theme.palette.text.white};
+    props.theme.palette.mode === 'dark' ? '#131722' : 'rgb(255, 255, 255)'};
   padding: 16px;
   border-radius: 5px;
   outline: none;
@@ -456,7 +456,7 @@ const Message = ({ message }) => {
               p: 2,
               ml: isBot ? 1 : 10,
               mr: isBot ? 10 : 1,
-              backgroundColor: isBot ? message?.messageFrom === "Admin" ? theme.palette.mode === "dark" ? '#4A4A4A' : "#E3FFFD" : 'text.buy' : message?.messageFrom === "Admin" ? theme.palette.mode === "dark" ? '#4A4A4A' : "#E3FFFD" : theme.palette.mode === "dark" ? '#232323' : "#F5F5F5",
+              backgroundColor: isBot ? message?.messageFrom === "Admin" ? theme.palette.mode === "dark" ? '#4f5565' : "#E3FFFD" : 'text.buy' : message?.messageFrom === "Admin" ? theme.palette.mode === "dark" ? '#4f5565' : "#E3FFFD" : theme.palette.mode === "dark" ? '#262B39' : "#F5F5F5",
               borderRadius: isBot ? '20px 20px 20px 0px' : '20px 20px 0px 20px',
               color: isBot ? message?.messageFrom === "Admin" ?
                 theme.palette.mode === "dark" ? 'text.white' : "text.black" : 'text.white' :
@@ -488,8 +488,8 @@ const Message = ({ message }) => {
             </Button>
           </Stack>
 
-          <StyledModal open={open} onClose={handleClose}>
-            <ModalContent>
+          <StyledModal open={open} onClose={handleClose} >
+            <ModalContent >
               <CloseButton
                 sx={{
                   color: 'text.black', backgroundColor: 'text.white',
@@ -506,8 +506,8 @@ const Message = ({ message }) => {
               <Stack pt={3}>
                 <Tooltip title="click to download the image" placement="top" arrow>
                   <Button onClick={handleDownload} justifyContent='flex-end' >
-                    <DownloadIcon sx={{ color: theme.palette.mode === 'dark' ? 'text.black' : 'text.black', }} />
-                    <Typography pl={1} sx={{ color: theme.palette.mode === 'dark' ? 'text.secondary' : 'text.secondary', }}>
+                    <DownloadIcon sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.black', }} />
+                    <Typography pl={1} sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary', }}>
                       Download
                     </Typography>
                   </Button>

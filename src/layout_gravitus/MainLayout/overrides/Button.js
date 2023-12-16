@@ -149,7 +149,7 @@ export default function Button(theme) {
         filterbutton: {
           height: '32px',
           borderRadius: '5px',
-          border: '1px solid var(--disabled, #BFBFBF)',
+          border: theme.palette.mode === 'dark' ? '1px solid var(--disabled, #545f7f)' : '1px solid var(--disabled, #BFBFBF)',
           background: 'transparent'
         },
         //
@@ -179,13 +179,13 @@ export default function Button(theme) {
         p2pcancelbutton: {
           width: '40%',
           height: '40px',
-          backgroundColor: theme.palette.mode === 'dark' ? '#232323' : '#F0F0F0',
+          backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F0F0F0',
           borderRadius: '5px',
           fontSize: '14px',
           fontWeight: 500,
-          color: theme.palette.mode === 'dark' ? '#D9D9D9' : '#8c8c8c',
+          color: theme.palette.mode === 'dark' ? '#cfcfcf' : '#8c8c8c',
           '&:hover': {
-            backgroundColor: theme.palette.mode === 'dark' ? '#232323' : '#F0F0F0'
+            backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F0F0F0'
           }
         },
         p2pnextbutton: {
@@ -204,13 +204,13 @@ export default function Button(theme) {
         cancelbutton: {
           width: '40%',
           height: '38px',
-          backgroundColor: theme.palette.mode === 'dark' ? '#232323' : '#F0F0F0',
+          backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F0F0F0',
           borderRadius: '5px',
           fontSize: '14px',
           fontWeight: 500,
-          color: theme.palette.mode === 'dark' ? '#D9D9D9' : '#8c8c8c',
+          color: theme.palette.mode === 'dark' ? '#cfcfcf' : '#8c8c8c',
           '&:hover': {
-            backgroundColor: theme.palette.mode === 'dark' ? '#232323' : '#F0F0F0'
+            backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F0F0F0'
           }
         },
         //
@@ -229,14 +229,14 @@ export default function Button(theme) {
         sellAppealbutton: {
           height: '40px',
           width: '40%',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : '#F0F0F0',
           borderRadius: '5px',
-          fontSize: '16px',
+          fontSize: '14px',
           fontWeight: 700,
-          color: '#262626',
-          border: '1px solid var(--primary, #8C8C8C)',
+          color: theme.palette.mode === 'dark' ? '#D9D9D9' : '#8c8c8c',
+          border: theme.palette.mode === 'dark' ? '1px solid var(--primary, #262B39)' : 'px solid var(--primary, #F7F7F7)',
           '&:hover': {
-            backgroundColor: '#FFFFFF'
+            backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : '#F0F0F0',
           }
         },
         buybutton: {

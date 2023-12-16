@@ -40,7 +40,7 @@ function OrderTableHead() {
   const theme = useTheme();
   return (
     <TableHead>
-      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
+      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#0F121A' : '#fff' }}>
         {headCells.map((headCell, index) => (
           <TableCell
             sx={{ border: 'none' }}

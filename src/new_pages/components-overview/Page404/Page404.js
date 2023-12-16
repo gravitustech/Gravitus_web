@@ -53,13 +53,19 @@ export default function Page404() {
         >
 
           <StyledContent sx={{ textAlign: 'center', alignItems: 'center' }}>
-            <img src={pageimg} alt='pageimg' width={350} />
+            {
+              theme.palette.mode === 'dark' ? (
+                <img src={pageimg} alt='pageimg' width={350} />
+              ) : (
+                <img src={pageimg} alt='pageimg' width={350} />
+              )
+            }
           </StyledContent>
         </Grid>
         <Grid p={{
-          lg: 7.1, sm: 7.1,xs:5
+          lg: 7.1, sm: 7.1, xs: 5
         }} sx={{
-          backgroundColor: '#00413C',
+          backgroundColor: theme.palette.mode === 'dark' ? '#131722' : '#00413C',
           width: '100%',
           justifyContent: 'center',
           textAlign: 'center',

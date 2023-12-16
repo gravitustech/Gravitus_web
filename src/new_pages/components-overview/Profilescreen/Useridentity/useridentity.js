@@ -296,7 +296,7 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
                       aria-labelledby="modal-modal-title"
                       aria-describedby="modal-modal-description">
                       <Box sx={modalStyle}>
-                        <Grid container spacing={0}>
+                        <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                           {/* <Stack direction='row' spacing={1}> */}
                           <Grid xs={12} md={6}>
                             <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Selected Image</Typography>
