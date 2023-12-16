@@ -148,7 +148,7 @@ const P2P_Table = ({ isAuthorised, P2PData, setSnackbarOpen, setSnackbarMessage 
                         }} />
                       </IconButton>
                     )}
-                    <img src={p2pinricon} alt='p2pinricon' width={18} />
+                    <img src={p2pinricon} alt='p2pinricon' width={18}  />
                     <Typography
                       variant="subtitle1"
                       sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
