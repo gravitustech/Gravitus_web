@@ -1,37 +1,13 @@
 import { 
   Box, Table, TableBody, TableCell, TableContainer, TableHead, 
   TableRow, Typography, Stack, useTheme } from '@mui/material';
+
 import Norecordfoundcomponents from '../_Essentials/NoRecordFound';
 
 import PropTypes from 'prop-types';
 import React from 'react';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
-
-function createData(Type, Amount, Fees, Address, TransactionId, Status, Date) {
-  return { Type, Amount, Fees, Address, TransactionId, Status, Date };
-}
-
-const rows = [
-  createData(
-    'Trade',
-    '0.012BTC',
-    '0.0 BTC',
-    '1A1zP1eP5QGefi2DMpPTfTL5SLmv7DivfNa',
-    '1A1zP1eP5QGefi2DMpPTf...',
-    'Processed',
-    '26 Dec, 12PM'
-  ),
-  createData(
-    'Trade',
-    '0.012BTC',
-    '0.0 BTC',
-    '1A1zP1eP5QGefi2DMpPTfTL5SLmv7DivfNa',
-    '1A1zP1eP5QGefi2DMpPTf...',
-    'Processed',
-    '26 Dec, 12PM'
-  )
-];
 
 const headCells = [
   {
@@ -72,7 +48,7 @@ function OrderTableHead() {
   const theme = useTheme();
   return (
     <TableHead>
-      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#000' : '#fff' }}>
+      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#0F121A' : '#fff' }}>
         {headCells.map((headCell, index) => (
           <TableCell
             sx={{ border: 'none' }}
@@ -116,10 +92,10 @@ export default function HistoryInternalTab({ tableData }) {
             width: '0px ', // Width of the scrollbar
           },
           '&::-webkit-scrollbar-track': {
-            background: theme.palette.mode === "dark" ? 'black' : "text.background", // Track color
+            background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
           },
           '&::-webkit-scrollbar-thumb': {
-            background: theme.palette.mode === "dark" ? 'gray' : "lightgray",
+            background: theme.palette.mode === "dark" ? '#0F121A' : "lightgray",
             borderRadius: '8px', // Round the corners of the thumb
           },
         }}

@@ -1,7 +1,8 @@
 import {
   useTheme, Typography, Box, Stack, Link, Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow, Drawer, List, IconButton, TableSortLabel,
-  ButtonBase } from '@mui/material';
+  ButtonBase
+} from '@mui/material';
 
 import Refresh from '../../../../assets/images/gravitusimage/refresh.svg';
 import NoRecordFound from '../_Essentials/NoRecordFound';
@@ -24,7 +25,8 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import useSWR, { mutate } from 'swr';
 
-import { Wallet_Fetch_Info, Wallet_Fetch_ById, postDataWallet } from 'src/api_ng/wallet_ng';
+import { Wallet_Fetch_Info, Wallet_Fetch_ById, postDataWallet, Pre_Rs_Deposit, fetcherWallet } from 'src/api_ng/wallet_ng';
+import CustomSnackBar from 'src/components/snackbar';
 
 // ==============================|| MARKET TABLE - HEADER CELL ||============================== //
 
@@ -59,7 +61,8 @@ const headCells = [
 
 function OrderTableHead({ order, orderBy, onRequestSort }) {
   const theme = useTheme();
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState(null);
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -185,10 +188,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 // ==============================|| WALLET TABLE ||============================== //
 
-export default function WalletTableExt({ walletList }) {
-
-  const theme = useTheme();
+export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackbarMessage }) {
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const [order, setOrder] = React.useState('desc');
   const [orderBy, setOrderBy] = React.useState('totalInUsd');
@@ -220,11 +222,11 @@ export default function WalletTableExt({ walletList }) {
   };
 
   const fetchWalletById = (wallet, actionType) => {
-    var postData = { "walletId" : wallet.id };
-    
+    var postData = { "walletId": wallet.id };
+
     postDataWallet(Wallet_Fetch_ById(), postData).then(function (res) {
       // console.log(res, "Fetch Wallet By Id");
-      
+
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User
@@ -241,12 +243,12 @@ export default function WalletTableExt({ walletList }) {
           }
         }
       } else {
-        if(actionType == 'moreDrawer') {
+        if (actionType == 'moreDrawer') {
           setWalletData(res.result)
           setWalletListing(wallet);
           setOpenDrawer(!openDrawer);
         }
-        else if(actionType == 'reloadWallet') {
+        else if (actionType == 'reloadWallet') {
           mutate(Wallet_Fetch_Info);
         }
       }
@@ -265,6 +267,90 @@ export default function WalletTableExt({ walletList }) {
     mutate(Wallet_Fetch_Info);
   };
 
+  function useINR_Predeposit() {
+    var postData = { walletId: 17 };
+
+    const { data, error, isLoading } = useSWR([Pre_Rs_Deposit(), postData], fetcherWallet, {
+      revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
+    });
+
+    return { data, error, isLoading };
+  }
+
+  const {
+    data: walletINRRc,
+    error: walletINREr,
+    isLoading: isWALLETINRDataLoading
+  } = useINR_Predeposit();
+
+  if (walletINREr) {
+    // Call Logout User
+  }
+
+  const INRdepositButton = () => { 
+    // Your condition to determine the route
+    if (walletINRRc.error !== 'ok') {
+      if (walletINRRc.error.name == "Missing Authorization") {
+        // Logout User
+      }
+      else if (walletINRRc.error.name == "Invalid Authorization") {
+        // Logout User
+      }
+      else {
+        if (walletINRRc.error.name != undefined) {
+          setSnackbarMessage({ msg: walletINRRc.error.name, success: false });
+          setSnackbarOpen(true);
+        }
+        else if (walletINRRc.error.action != undefined) {
+          setSnackbarMessage({ msg: walletINRRc.error.message, success: false });
+          setSnackbarOpen(true);
+        }
+        else {
+          setSnackbarMessage({ msg: walletINRRc.error, success: false });
+          setSnackbarOpen(true);
+        }
+      }
+    } else {
+      navigate('/inrdeposit');
+    }
+  };
+
+  const CryptodepositButton = () => {
+    navigate('/deposit');
+  }
+
+  const INRwithdrawButton = () => {
+    // Your condition to determine the route
+    if (walletINRRc.error !== 'ok') {
+      if (walletINRRc.error.name == "Missing Authorization") {
+        // Logout User
+      }
+      else if (walletINRRc.error.name == "Invalid Authorization") {
+        // Logout User
+      }
+      else {
+        if (walletINRRc.error.name != undefined) {
+          setSnackbarMessage({ msg: walletINRRc.error.name, success: false });
+          setSnackbarOpen(true);
+        }
+        else if (walletINRRc.error.action != undefined) {
+          setSnackbarMessage({ msg: walletINRRc.error.message, success: false });
+          setSnackbarOpen(true);
+        }
+        else {
+          setSnackbarMessage({ msg: walletINRRc.error, success: false });
+          setSnackbarOpen(true);
+        }
+      }
+    } else {
+      navigate('/inrwithdraw');
+    }
+  };
+
+  const CryptowithdrawButton = () => {
+    navigate('/withdraw');
+  }
+
   return (
     <Box>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -282,7 +368,7 @@ export default function WalletTableExt({ walletList }) {
             [theme.breakpoints.up('lg')]: {
               width: '20%'
             },
-            borderColor: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary',
+            borderColor: theme.palette.mode === 'dark' ? '#31384b' : 'text.tertiary',
             borderWidth: '1px',
             borderStyle: 'solid',
             backgroundColor: 'transparent',
@@ -311,7 +397,7 @@ export default function WalletTableExt({ walletList }) {
         />
 
         {/* Inr Deposite Withdraw */}
-        <InrDpWdlBtn />
+        <InrDpWdlBtn setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
       </Stack>
       <br />
       <TableContainer
@@ -400,8 +486,8 @@ export default function WalletTableExt({ walletList }) {
                         <Link
                           variant="body1"
                           color="text.buy"
-                          component={RouterLink}
-                          to={listing.id === 17 ? '/inrdeposit' : '/deposit'}
+                          sx={{ cursor: 'pointer' }}
+                          onClick={listing.id === 17 ? (INRdepositButton) : (CryptodepositButton)}
                           state={{ walletId: listing.id }}
                         >
                           Deposit
@@ -409,8 +495,8 @@ export default function WalletTableExt({ walletList }) {
                         <Link
                           variant="body1"
                           color="text.buy"
-                          component={RouterLink}
-                          to={listing.id === 17 ? '/inrwithdraw' : '/withdraw'}
+                          sx={{ cursor: 'pointer' }}
+                          onClick={listing.id === 17 ? (INRwithdrawButton) : (CryptowithdrawButton)}
                           state={{ walletId: listing.id }}
                         >
                           Withdraw
@@ -449,7 +535,7 @@ export default function WalletTableExt({ walletList }) {
       </TableContainer>
 
       <Drawer open={openDrawer} onClose={handleCloseDrawer} anchor="right">
-        <Box sx={{ width: 520 }}>
+        <Box sx={{ width: 520, backgroundColor: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
           <IconButton sx={{ marginLeft: '450px' }} onClick={handleCloseDrawer}>
             <CloseIcon />
           </IconButton>

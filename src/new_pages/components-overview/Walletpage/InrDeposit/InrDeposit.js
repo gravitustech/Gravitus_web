@@ -48,6 +48,7 @@ const InrDeposit = () => {
     handleOpen();
   }, [])
 
+  // console.log('walletINRRc',walletINRRc)
   return (
     <>
       {step === 1 && walletINRRc && (

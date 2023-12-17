@@ -13,24 +13,50 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { setConfig_ng } from 'src/utils_ng/localStorage_ng';
 import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
+import { FavouritesCrypto_URL, MarketOverview_URL, postDataSystem } from 'src/api_ng/system_ng';
 
-function MyComponent({ id }) {
-  const [clicked, setClicked] = useState(localStorage.getItem(`iconClicked-${id}`) === 'true');
+import useSWR, { mutate } from 'swr';
 
-  useEffect(() => {
-    localStorage.setItem(`iconClicked-${id}`, clicked.toString());
-  }, [clicked]);
+function MyComponent({ id, row }) {
 
-  const handleClick = () => {
-    setClicked(!clicked);
+  const toggleFavourites = (row) => {
+    var postData = {
+      "platformId": row?.platformId
+    };
+
+    postDataSystem(FavouritesCrypto_URL(), postData).then(function (res) {
+      // console.log("res", res);
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            // console.log(res.error.name)
+          }
+          else {
+            // console.log('error')
+          }
+        }
+      } else {
+        // console.log('No error')
+        mutate(MarketOverview_URL);
+      }
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
   };
 
   return (
     <>
-      {clicked ? (
-        <StarIcon onClick={handleClick} style={{ color: '#F0B90B', cursor: 'pointer' }} />
+       {row?.favourites ? (
+        <StarIcon onClick={() => toggleFavourites(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />
       ) : (
-        <StarBorderIcon onClick={handleClick} style={{ cursor: 'pointer' }} />
+        <StarBorderIcon onClick={() => toggleFavourites(row)} style={{ cursor: 'pointer' }} />
       )}
     </>
   );
@@ -266,15 +292,15 @@ function getComparator(order, orderBy) {
 
 // Function to perform stable sorting with the comparator
 function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
+  const stabilizedThis = array?.map((el, index) => [el, index]);
+  stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) {
       return order;
     }
     return a[1] - b[1];
   });
-  return stabilizedThis.map((el) => el[0]);
+  return stabilizedThis?.map((el) => el[0]);
 }
 
 // ==============================|| MARKET TABLE ||============================== //
@@ -303,10 +329,7 @@ export default function FavouriteTab({ marketData, flag, searchQuery, listings, 
 
   const FavouriteData = marketData?.favourites;
 
-  const filteredlist = stableSort(FavouriteData, getComparator(order, orderBy))
-    .filter((row) => row.tradePair.toLowerCase().includes(searchQuery.toLowerCase()));
-
-  console.log('FavouriteData', FavouriteData);
+  const filteredlist = stableSort(FavouriteData, getComparator(order, orderBy))?.filter((row) => row.tradePair.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
     <Box>
@@ -338,7 +361,7 @@ export default function FavouriteTab({ marketData, flag, searchQuery, listings, 
         <Table aria-labelledby="tableTitle">
           <OrderTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
           <TableBody>
-            {filteredlist.length === 0 ? (
+            {filteredlist?.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none' }}>
                   <Norecordfoundcomponents description="No Results Found" />
@@ -346,7 +369,7 @@ export default function FavouriteTab({ marketData, flag, searchQuery, listings, 
               </TableRow>
             ) : (
               <>
-                {filteredlist.map((row, index) => {
+                {filteredlist?.map((row, index) => {
                   return (
                     <TableRow
                       sx={{ border: 0, padding: '0', height: '64px' }}
@@ -355,7 +378,7 @@ export default function FavouriteTab({ marketData, flag, searchQuery, listings, 
                     >
                       <TableCell sx={{ border: 'none', padding: '0' }} component="th" scope="row" align="left">
                         <Stack direction="row" alignItems="center" spacing={0.5}>
-                          {<MyComponent id={row.id} />}
+                          {<MyComponent row={row} id={row.platformId} />}
                           <img src={row.imagePath} alt="ico" width="24" height="24" />
                           <Typography
                             variant="body1"

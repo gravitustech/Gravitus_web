@@ -79,18 +79,18 @@ const Spotpage = () => {
   useEffect(() => {
     if (spotRc != undefined) {
       if (spotRc.error != 'ok') {
-        if (spotRc.error.name === "Missing Authorization") {
+        if (spotRc?.error?.name === "Missing Authorization") {
           // LogOut User;
         }
-        else if (spotRc.error.name === "Invalid Authorization") {
+        else if (spotRc?.error?.name === "Invalid Authorization") {
           // LogOut User;
         }
-        else if (spotRc.error.name != 'Invalid Authorization') {
-          console.log(spotRc.error);
+        else if (spotRc?.error?.name != 'Invalid Authorization') {
+          // console.log(spotRc.error);
           // Show 'spotRc.error' snack bar
         }
         else {
-          console.log(spotRc.error);
+          // console.log(spotRc.error);
           // Show 'spotRc.error' snack bar
         }
       }

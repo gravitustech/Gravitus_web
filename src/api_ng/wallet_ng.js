@@ -64,12 +64,7 @@ export async function formDataWallet(url, postData) {
     uploadData.append('fileName', postData.fileName);
     uploadData.append('updateInfo', JSON.stringify(postData.updateInfo));
 
-    var superData = {
-      "accountType": "GRAVITUS",
-      "postData": { "appVersion": 205 }
-    };
-
-    axiosClient.post(url, superData)
+    axiosClient.post(url, uploadData)
       .then(response => {
         // Handle response
         resolve(JSON.parse(JSON.stringify(response.data)));

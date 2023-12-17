@@ -1,6 +1,6 @@
 import {
   Grid, OutlinedInput, Stack, Typography, useTheme, FormHelperText,
-  Button, IconButton, TextField, InputAdornment
+  Button, IconButton, TextField, InputAdornment, CircularProgress
 } from '@mui/material';
 
 import Dialog from '@mui/material/Dialog';
@@ -24,9 +24,9 @@ import { Wallet_Fetch_ById, Estimate_Withdrawal, Sign_Withdrawal, postDataWallet
 
 const Email = ({ email }) => {
   const theme = useTheme();
-  const firstTwo = email.slice(0, 4);
-  const lastTwo = email.slice(-10);
-  
+  const firstTwo = email?.slice(0, 4);
+  const lastTwo = email?.slice(-10);
+
   const middle = '*******';
   const maskedEmail = `${firstTwo}${middle}${lastTwo}`;
 
@@ -39,9 +39,9 @@ const Email = ({ email }) => {
 
 const Mobilenumber = ({ number }) => {
   const theme = useTheme();
-  const firstTwo = number.slice(0, 2);
-  const lastTwo = number.slice(-2);
-  
+  const firstTwo = number?.slice(0, 2);
+  const lastTwo = number?.slice(-2);
+
   const middle = '******';
   const Mobilenumber = `${firstTwo}${middle}${lastTwo}`;
 
@@ -55,7 +55,12 @@ const Mobilenumber = ({ number }) => {
 const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWalletData, setHistoryData, setSnackbarMessage, setSnackbarOpen }) => {
   const theme = useTheme();
 
-  const [color, setColor] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [otpisLoading, setOtpIsLoading] = useState(false);
+
+  const [POTPcolor, setPOTPColor] = useState('');
+  const [MOTPcolor, setMOTPColor] = useState('');
+
   const [resendPOTP, setResendPOTP] = useState('SEND OTP');
   const [resendMOTP, setResendMOTP] = useState('SEND OTP');
 
@@ -89,23 +94,29 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
 
   const closeInitiateWDL = () => {
     setInitiateWDL(false);
+
+    setResendPOTP('RESEND OTP');
+    setResendMOTP('RESEND OTP')
+    setPOTPColor('');
+    setMOTPColor('');
+
     setIsResendMOTP(false);
     setIsResendPOTP(false);
   };
 
   function fetchWalletById() {
-    var postData = {"walletId" : walletId};
+    var postData = { "walletId": walletId };
 
     postDataWallet(Wallet_Fetch_ById(), postData).then(function (res) {
       if (res.error !== 'ok') {
-        if(res.error.name == "Missing Authorization") {
+        if (res.error.name == "Missing Authorization") {
           // Logout User
         }
         else if (res.error.name == "Invalid Authorization") {
           // Logout User
         }
         else {
-          if(res.error.name != undefined) {
+          if (res.error.name != undefined) {
             setSnackbarMessage({ msg: res.error.name, success: false });
             setSnackbarOpen(true);
           }
@@ -129,44 +140,62 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
     });
   }
 
-  const reqSendOTP = async (action) => {
+  function reqSendOTP(action) {
     try {
-      const { data } = await sendOtpSecurity({
-        accountType: 'GRAVITUS',
-        postData: { verifyType: 'wSecurity', action }
+      var postData = { verifyType: 'wSecurity', action }
+      postDataWallet(Send_OTP(), postData).then(function (res) {
+        if (res.error !== 'ok') {
+          if (res.error.name == "Missing Authorization") {
+            // Logout User
+          }
+          else if (res.error.name == "Invalid Authorization") {
+            // Logout User
+          }
+          else {
+            if (res.error.name != undefined) {
+              setSnackbarMessage({ msg: res.error.name, success: false });
+              setSnackbarOpen(true);
+            }
+            else {
+              setSnackbarMessage({ msg: res.error, success: false });
+              setSnackbarOpen(true);
+            }
+          }
+        } else {
+          // console.log(res.result, 'SENT OTP');
+          setSnackbarMessage({ msg: 'OTP Sent successfully', success: true });
+          setSnackbarOpen(true);
+
+          if (!isResendMOTP && action === 'sendMOTP') {
+            if (!isResendMOTP) {
+              setIsResendMOTP(true);
+              setResendMOTP('RESEND OTP');
+            }
+            setMOTPColor('grey');
+          }
+
+          if (!isResendPOTP && action === 'sendPOTP') {
+            if (!isResendPOTP) {
+              setIsResendPOTP(true);
+              setResendPOTP('RESEND OTP');
+            }
+            setPOTPColor('grey');
+          }
+        }
+      }, function (err) {
+        // console.log(err);
+        // Logout User
       });
-
-      if (Object.keys(data.result).length) {
-        setSnackbarMessage({ msg: 'OTP Sent successfully', success: true });
-        setSnackbarOpen(true);
-
-        if (!isResendMOTP && action === 'sendMOTP') {
-          if (!isResendMOTP) {
-            setIsResendMOTP(true);
-            setResendMOTP('RESEND OTP');
-          }
-          setColor('grey');
-        }
-        
-        if (!isResendPOTP && action === 'sendPOTP') {
-          if (!isResendPOTP) {
-            setIsResendPOTP(true);
-            setResendPOTP('RESEND OTP');
-          }
-          setColor('grey');
-        }
-      } else {
-        setSnackbarMessage({ msg: 'OTP Request failed', success: false });
-        setSnackbarOpen(true);
-      }
     } catch (err) {
-      setSnackbarMessage({ msg: err.message, success: false });
-      setSnackbarOpen(true);
+      setErrors({ submit: err.message });
+      setStatus({ success: false });
     }
-  };
+  }
 
   function InitWithdrawal(postData) {
+    setOtpIsLoading(true);
     postDataWallet(Sign_Withdrawal(), postData).then(function (res) {
+      setOtpIsLoading(false);
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User
@@ -188,8 +217,8 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
         // console.log(res.result, 'Sign Withdrawal');
         setInitiateWDL(false);
 
-        setResendPOTP('SEND OTP');
-        setResendMOTP('SEND OTP');
+        setResendPOTP('RESEND OTP');
+        setResendMOTP('RESEND OTP');
         setColor('');
 
         setIsResendMOTP(false);
@@ -200,35 +229,38 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
 
         formikEW.current.resetForm({
           values: {
-            toAddress : '',
-            amount    : '',
-            total     : '',
-            coin      : walletList.find((item) => item.listing.id === walletId),
-            submit    : null
+            toAddress: '',
+            amount: '',
+            total: '',
+            coin: walletList.find((item) => item.listing.id === walletId),
+            submit: null
           }
         });
 
         formikSW.current.resetForm({
           values: {
-            gcode   : '',
-            otpmail : '',
-            otpmbl  : ''
+            gcode: '',
+            otpmail: '',
+            otpmbl: ''
           }
         });
 
         fetchWalletById();
       }
     }, function (err) {
-      console.log(err);
+      // console.log(err);
       // Logout User
     });
   }
 
-  function estimateWithdrawal() {
-    var postData = withdrawData;
+  function estimateWithdrawal(values) {
+    setIsLoading(true);
+    setWithdrawData(values);
+    var postData = values;
     postData.walletId = walletId;
 
     postDataWallet(Estimate_Withdrawal(), postData).then(function (res) {
+      setIsLoading(false);
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User
@@ -239,6 +271,10 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
         else {
           if (res.error.name != undefined) {
             setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
             setSnackbarOpen(true);
           }
           else {
@@ -252,13 +288,13 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
         setConfirmWDL(true);
       }
     }, function (err) {
-      console.log(err);
+      // console.log(err);
       // Logout User
     });
   }
 
   useEffect(() => {
-    if(walletId != undefined) {
+    if (walletId != undefined) {
       fetchWalletById(walletId);
     }
     else {
@@ -274,7 +310,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
       timeoutId = setTimeout(() => {
         setResendMOTP('RESEND OTP');
         setIsResendMOTP(false);
-        setColor('');
+        setMOTPColor('');
       }, 30000);
     }
     return () => clearTimeout(timeoutId);
@@ -282,12 +318,12 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
 
   useEffect(() => {
     let timeoutId;
-    
+
     if (isResendPOTP) {
       timeoutId = setTimeout(() => {
         setResendPOTP('RESEND OTP');
         setIsResendPOTP(false);
-        setColor('');
+        setPOTPColor('');
       }, 30000);
     }
     return () => clearTimeout(timeoutId);
@@ -331,15 +367,15 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
-            setWithdrawData(values);
+            setIsLoading(true);
             estimateWithdrawal(values);
-
             setStatus({ success: false });
             setSubmitting(false);
           } catch (err) {
             setErrors({ submit: err.message });
             setStatus({ success: false });
             setSubmitting(false);
+            setIsLoading(false);
           }
         }}
       >
@@ -479,7 +515,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
                         type="submit"
                         variant="contained"
                       >
-                        SUBMIT
+                        {isLoading ? <CircularProgress color="inherit" size={30} /> : 'SUBMIT'}
                       </Button>
                     </AnimateButton>
                   </Grid>
@@ -488,230 +524,226 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
             </form>
 
             <Dialog onClose={closeConfirmWDL} open={confirmWDL}>
-              (
-                <Stack p={4} spacing={2.5}>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                    <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                      Withdrawal Details
-                    </Typography>
-                    <IconButton edge="end" color="inherit" onClick={closeConfirmWDL} aria-label="close">
-                      <CloseIcon />
-                    </IconButton>
-                  </Stack>
-
-                  <Stack pt={1} direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                      To Address
-                    </Typography>
-                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                      {signWithdrawal?.toAddress}
-                    </Typography>
-                  </Stack>
-
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                      Amount
-                    </Typography>
-                    <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                      {signWithdrawal?.amount} {walletData?.walletInfo?.crypto}
-                    </Typography>
-                  </Stack>
-
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                      Total Amount
-                    </Typography>
-                    <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                      {signWithdrawal?.total} {walletData?.walletInfo?.crypto}
-                    </Typography>
-                  </Stack>
-
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                      Estimated Fee
-                    </Typography>
-                    <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                      {signWithdrawal?.transFees} {walletData?.walletInfo?.crypto}
-                    </Typography>
-                  </Stack>
-
-                  <Stack pt={1} direction="row" spacing={0} justifyContent="space-around">
-                    <Button variant="contained5" onClick={closeConfirmWDL}>
-                      Cancel
-                    </Button>
-                    <Button variant="contained4" onClick={() => {setConfirmWDL(false); setInitiateWDL(true)}}>
-                      Confirm
-                    </Button>
-                  </Stack>
+              <Stack p={4} spacing={2.5} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                  <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                    Withdrawal Details
+                  </Typography>
+                  <IconButton edge="end" color="inherit" onClick={closeConfirmWDL} aria-label="close">
+                    <CloseIcon />
+                  </IconButton>
                 </Stack>
-              )
+
+                <Stack pt={1} direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                  <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                    To Address
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                    {signWithdrawal?.toAddress}
+                  </Typography>
+                </Stack>
+
+                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                  <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                    Amount
+                  </Typography>
+                  <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                    {signWithdrawal?.amount} {walletData?.walletInfo?.crypto}
+                  </Typography>
+                </Stack>
+
+                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                  <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                    Total Amount
+                  </Typography>
+                  <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                    {signWithdrawal?.total} {walletData?.walletInfo?.crypto}
+                  </Typography>
+                </Stack>
+
+                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                  <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                    Estimated Fee
+                  </Typography>
+                  <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                    {signWithdrawal?.transFees} {walletData?.walletInfo?.crypto}
+                  </Typography>
+                </Stack>
+
+                <Stack pt={1} direction="row" spacing={0} justifyContent="space-around">
+                  <Button variant="contained5" onClick={closeConfirmWDL}>
+                    Cancel
+                  </Button>
+                  <Button variant="contained4" onClick={() => { setConfirmWDL(false); setInitiateWDL(true) }}>
+                    {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Confirm'}
+                  </Button>
+                </Stack>
+              </Stack>
             </Dialog>
 
             <Dialog onClose={closeInitiateWDL} open={initiateWDL}>
-              (
-                <Stack p={4} spacing={2.5} width={480}>
-                  <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                    Widthdraw Security
-                  </Typography>
-                  <Formik
-                    innerRef={formikSW}
-                    initialValues={{
-                      gcode: '',
-                      otpmail: '',
-                      otpmbl: ''
-                    }}
-                    validationSchema={Yup.object().shape({
-                      otpmbl: signWithdrawal?.pSecurity?.enabled === '1' && Yup.number().positive().required("Don't leave a empty"),
-                      otpmail: Yup.number().positive().required("Don't leave a empty"),
-                      gcode: signWithdrawal?.gSecurity?.enabled === '1' && Yup.number().positive().required("Don't leave a empty")
-                    })}
-                    onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                      const phoneOTP = values.otpmbl;
-                      const googleOTP = values.gcode;
+              <Stack p={4} spacing={2.5} width={480} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
+                <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                  Widthdraw Security
+                </Typography>
+                <Formik
+                  innerRef={formikSW}
+                  initialValues={{
+                    gcode: '',
+                    otpmail: '',
+                    otpmbl: ''
+                  }}
+                  validationSchema={Yup.object().shape({
+                    otpmbl: signWithdrawal?.pSecurity?.enabled === '1' && Yup.number().positive().required("Don't leave a empty"),
+                    otpmail: Yup.number().positive().required("Don't leave a empty"),
+                    gcode: signWithdrawal?.gSecurity?.enabled === '1' && Yup.number().positive().required("Don't leave a empty")
+                  })}
+                  onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                    const phoneOTP = values.otpmbl;
+                    const googleOTP = values.gcode;
 
-                      const signData = {
-                        walletId    : walletId,
-                        toAddress   : signWithdrawal.toAddress,
-                        amount      : signWithdrawal.amount,
-                        verifyType  : 'wSecurity',
-                        emailOTP    : values.otpmail,
-                        ...(signWithdrawal?.pSecurity?.enabled === '1' && { phoneOTP }),
-                        ...(signWithdrawal?.gSecurity?.enabled === '1' && { googleOTP })
-                      };
+                    const signData = {
+                      walletId: walletId,
+                      toAddress: signWithdrawal.toAddress,
+                      amount: signWithdrawal.amount,
+                      verifyType: 'wSecurity',
+                      emailOTP: values.otpmail,
+                      ...(signWithdrawal?.pSecurity?.enabled === '1' && { phoneOTP }),
+                      ...(signWithdrawal?.gSecurity?.enabled === '1' && { googleOTP })
+                    };
 
-                      try {
-                        InitWithdrawal(signData);
-                      } catch (err) {
-                        setStatus({ success: false });
-                        setErrors({ submit: err.message });
-                        setSubmitting(false);
-                      }
-                    }}
-                  >
-                    {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                      <>
-                        <form noValidate onSubmit={handleSubmit}>
-                          <Grid item spacing={3} pt={1}>
-                            <Stack spacing={1}>
-                              {signWithdrawal?.pSecurity?.enabled === '1' && (
-                                <>
-                                  <Typography
-                                    variant="body1"
-                                    sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                    try {
+                      InitWithdrawal(signData);
+                    } catch (err) {
+                      setStatus({ success: false });
+                      setErrors({ submit: err.message });
+                      setSubmitting(false);
+                    }
+                  }}
+                >
+                  {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+                    <>
+                      <form noValidate onSubmit={handleSubmit}>
+                        <Grid item spacing={3} pt={1}>
+                          <Stack spacing={1}>
+                            {signWithdrawal?.pSecurity?.enabled === '1' && (
+                              <>
+                                <Typography
+                                  variant="body1"
+                                  sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                                >
+                                  OTP will be send to  <Mobilenumber number={signWithdrawal?.pSecurity?.authKey} />
+                                </Typography>
+                                <OutlinedInput
+                                  id="otpmbl-login"
+                                  type="text"
+                                  value={values.otpmbl}
+                                  name="otpmbl"
+                                  onBlur={handleBlur}
+                                  onChange={handleChange}
+                                  placeholder=" "
+                                  fullWidth
+                                  error={Boolean(touched.otpmbl && errors.otpmbl)}
+                                  endAdornment={
+                                    <InputAdornment>
+                                      <Button
+                                        disableRipple
+                                        style={{
+                                          color: POTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
+                                          fontSize: '12px'
+                                        }}
+                                        onClick={() => reqSendOTP('sendPOTP')}
+                                        disabled={isResendPOTP}
+                                      >
+                                        {resendPOTP}
+                                      </Button>
+                                    </InputAdornment>
+                                  }
+                                />
+                                {touched.otpmbl && errors.otpmbl && (
+                                  <FormHelperText error id="standard-weight-helper-text-otp-login">
+                                    {errors.otpmbl}
+                                  </FormHelperText>
+                                )}
+                              </>
+                            )}
+                            <Typography
+                              variant="body1"
+                              sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                            >
+                              OTP will be send to <Email email={signWithdrawal?.mSecurity?.authKey} />
+                            </Typography>
+                            <OutlinedInput
+                              id="otpmail-login"
+                              type="text"
+                              value={values.otpmail}
+                              name="otpmail"
+                              onBlur={handleBlur}
+                              onChange={handleChange}
+                              placeholder=" "
+                              fullWidth
+                              error={Boolean(touched.otpmail && errors.otpmail)}
+                              endAdornment={
+                                <InputAdornment>
+                                  <Button
+                                    disableRipple
+                                    style={{
+                                      color: MOTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
+                                      fontSize: '12px'
+                                    }}
+                                    onClick={() => reqSendOTP('sendMOTP')}
+                                    disabled={isResendMOTP}
                                   >
-                                    OTP will be send to  <Mobilenumber number={signWithdrawal?.pSecurity?.authKey} />
-                                  </Typography>
-                                  <OutlinedInput
-                                    id="otpmbl-login"
-                                    type="text"
-                                    value={values.otpmbl}
-                                    name="otpmbl"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    placeholder=" "
-                                    fullWidth
-                                    error={Boolean(touched.otpmbl && errors.otpmbl)}
-                                    endAdornment={
-                                      <InputAdornment>
-                                        <Button
-                                          disableRipple
-                                          style={{
-                                            color: color || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
-                                            fontSize: '12px'
-                                          }}
-                                          onClick={() => reqSendOTP('sendPOTP')}
-                                          disabled={isResendPOTP}
-                                        >
-                                          {resendPOTP}
-                                        </Button>
-                                      </InputAdornment>
-                                    }
-                                  />
-                                  {touched.otpmbl && errors.otpmbl && (
-                                    <FormHelperText error id="standard-weight-helper-text-otp-login">
-                                      {errors.otpmbl}
-                                    </FormHelperText>
-                                  )}
-                                </>
-                              )}
-                              <Typography
-                                variant="body1"
-                                sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                              >
-                                OTP will be send to <Email email={signWithdrawal?.mSecurity?.authKey} />
-                              </Typography>
-                              <OutlinedInput
-                                id="otpmail-login"
-                                type="text"
-                                value={values.otpmail}
-                                name="otpmail"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                placeholder=" "
-                                fullWidth
-                                error={Boolean(touched.otpmail && errors.otpmail)}
-                                endAdornment={
-                                  <InputAdornment>
-                                    <Button
-                                      disableRipple
-                                      style={{
-                                        color: color || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
-                                        fontSize: '12px'
-                                      }}
-                                      onClick={() => reqSendOTP('sendMOTP')}
-                                      disabled={isResendMOTP}
-                                    >
-                                      {resendMOTP}
-                                    </Button>
-                                  </InputAdornment>
-                                }
-                              />
-                              {touched.otpmail && errors.otpmail && (
-                                <FormHelperText error id="standard-weight-helper-text-otp-login">
-                                  {errors.otpmail}
-                                </FormHelperText>
-                              )}
-                              {signWithdrawal?.gSecurity?.enabled === '1' && (
-                                <>
-                                  <Typography
-                                    variant="body1"
-                                    sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                                  >
-                                    Google Authenticator Code
-                                  </Typography>
-                                  <OutlinedInput
-                                    id="gcode"
-                                    type="gcode"
-                                    value={values.gcode}
-                                    name="gcode"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    placeholder=""
-                                    fullWidth
-                                    error={Boolean(touched.gcode && errors.gcode)}
-                                  />
-                                  {touched.gcode && errors.gcode && (
-                                    <FormHelperText error id="standard-weight-helper-text-email-login">
-                                      {errors.gcode}
-                                    </FormHelperText>
-                                  )}
-                                </>
-                              )}
-                            </Stack>
-                          </Grid>
-                          <Grid item xs={12} pt={2}>
-                            <AnimateButton>
-                              <Button fullWidth size="large" type="submit" variant="contained">
-                                SUBMIT
-                              </Button>
-                            </AnimateButton>
-                          </Grid>
-                        </form>
-                      </>
-                    )}
-                  </Formik>
-                </Stack>
-              )
+                                    {resendMOTP}
+                                  </Button>
+                                </InputAdornment>
+                              }
+                            />
+                            {touched.otpmail && errors.otpmail && (
+                              <FormHelperText error id="standard-weight-helper-text-otp-login">
+                                {errors.otpmail}
+                              </FormHelperText>
+                            )}
+                            {signWithdrawal?.gSecurity?.enabled === '1' && (
+                              <>
+                                <Typography
+                                  variant="body1"
+                                  sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                                >
+                                  Google Authenticator Code
+                                </Typography>
+                                <OutlinedInput
+                                  id="gcode"
+                                  type="gcode"
+                                  value={values.gcode}
+                                  name="gcode"
+                                  onBlur={handleBlur}
+                                  onChange={handleChange}
+                                  placeholder=""
+                                  fullWidth
+                                  error={Boolean(touched.gcode && errors.gcode)}
+                                />
+                                {touched.gcode && errors.gcode && (
+                                  <FormHelperText error id="standard-weight-helper-text-email-login">
+                                    {errors.gcode}
+                                  </FormHelperText>
+                                )}
+                              </>
+                            )}
+                          </Stack>
+                        </Grid>
+                        <Grid item xs={12} pt={2}>
+                          <AnimateButton>
+                            <Button fullWidth size="large" type="submit" variant="contained">
+                              {otpisLoading ? <CircularProgress color="inherit" size={30} /> : 'SUBMIT'}
+                            </Button>
+                          </AnimateButton>
+                        </Grid>
+                      </form>
+                    </>
+                  )}
+                </Formik>
+              </Stack>
             </Dialog>
 
           </>

@@ -47,17 +47,17 @@ const HistoryPageNG = () => {
     return { data, error, isLoading };
   }
 
-  const { 
+  const {
     data: statementRc,
-    error: statementEr, 
-    isLoading: isSTATEMENTDataLoading 
+    error: statementEr,
+    isLoading: isSTATEMENTDataLoading
   } = useWalletHistory();
 
   if (statementEr) {
     // Call Logout User
   }
-  
-  if(statementRc) {
+
+  if (statementRc) {
     if (statementRc != undefined) {
       if (statementRc.error != 'ok') {
         if (statementRc?.error?.name === "Missing Authorization") {
@@ -80,123 +80,92 @@ const HistoryPageNG = () => {
       }
     }
   }
-  
+
   return (
     <>
-      <Grid container pl={14} pr={15} pt={3} pb={5}>
-        <Stack direction="row" spacing={0.8} alignItems="center">
-          <IconButton disableRipple onClick={goBack}>
-            <ArrowBackIosNewIcon
-              pt={10}
-              sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-            />
-          </IconButton>
-
-          <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-            Wallet History
-          </Typography>
-        </Stack>
-      </Grid>
-
-      {STATEMENTData ? (
-        <Card
+      <Card
+        sx={{
+          border: 'none',
+          width: '100%',
+          boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
+        }}
+      >
+        <Grid container pl={15} pr={15} pt={2} pb={3} sx={{
+          backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground',
+        }}>
+          <Stack direction='row' spacing={2} alignItems='center'>
+            <ArrowBackIosNewIcon onClick={goBack} pt={10} sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} />
+            <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+              Wallet History
+            </Typography>
+          </Stack>
+        </Grid>
+        <Box
+          pt={3}
+          pb={3}
+          pl={20}
+          pr={15}
+          lg={12}
           sx={{
-            border: 'none',
-            width: '100%',
-            borderRadius: '78px 78px 0px 0px',
-            boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
-          }}
-        >
-          <Box
-            pt={3}
-            pb={3}
-            pl={20}
-            pr={15}
-            lg={12}
-            sx={{
-              backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
-            }}
-          >
+            minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' },
+            backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground',
+          }}>
+          {STATEMENTData ? (
             <Stack>
               <TabContext value={value}>
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
-                  <TabList onChange={handleChange} indicatorColor="none" textColor="inherit">
-                    <Tab
-                      disableRipple
-                      sx={{
-                        padding: '0',
-                        fontSize: value === '0' ? '16px' : '16px',
-                        fontWeight: value === '0' ? '700' : '400',
-                        color:
-                          value === '0'
-                            ? theme.palette.mode === 'dark'
-                              ? 'text.secondarydark'
-                              : 'text.secondary'
-                            : theme.palette.mode === 'dark'
-                              ? 'text.primarydark'
-                              : 'text.primary',
-                        '&:hover': {
-                          color:
-                            value === '0'
-                              ? theme.palette.mode === 'dark'
-                                ? 'text.white'
-                                : 'text.black'
-                              : theme.palette.mode === 'dark'
-                                ? 'text.white'
-                                : 'text.black'
-                        }
-                      }}
-                      label={
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center'
-                          }}
-                        >
-                          External
-                        </div>
-                      }
-                      value="0"
-                    />
-                    <Tab
-                      disableRipple
-                      sx={{
-                        padding: '0',
-                        fontSize: value === '1' ? '16px' : '16px',
-                        fontWeight: value === '1' ? '700' : '400',
-                        color:
-                          value === '1'
-                            ? theme.palette.mode === 'dark'
-                              ? 'text.secondarydark'
-                              : 'text.secondary'
-                            : theme.palette.mode === 'dark'
-                              ? 'text.primarydark'
-                              : 'text.primary',
-                        '&:hover': {
-                          color:
-                            value === '1'
-                              ? theme.palette.mode === 'dark'
-                                ? 'text.white'
-                                : 'text.black'
-                              : theme.palette.mode === 'dark'
-                                ? 'text.white'
-                                : 'text.black'
-                        }
-                      }}
-                      label={
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center'
-                          }}
-                        >
-                          Internal
-                        </div>
-                      }
-                      value="1"
-                    />
-                  </TabList>
-                </Stack>
+                <TabList onChange={handleChange} indicatorColor="none" textColor='inherit'>
+                  <Tab
+                    disableRipple
+                    sx={{
+                      padding: '0',
+                      fontSize: value === '0' ? '16px' : '16px',
+                      fontWeight: value === '0' ? '700' : '400',
+                      color:
+                        value === '0'
+                          ? theme.palette.mode === 'dark'
+                            ? 'text.secondarydark'
+                            : 'text.secondary'
+                          : theme.palette.mode === 'dark'
+                            ? 'text.primarydark'
+                            : 'text.primary',
+                      '&:hover': {
+                        color: value === '0' ? theme.palette.mode === 'dark' ? 'text.white' : 'text.black' : theme.palette.mode === 'dark' ? 'text.white' : 'text.black',
+                      },
+                    }}
+                    label={<div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}>
+
+                      External
+                    </div>}
+                    value="0" />
+                  <Tab
+                    disableRipple
+                    sx={{
+                      padding: '0',
+                      fontSize: value === '1' ? '16px' : '16px',
+                      fontWeight: value === '1' ? '700' : '400',
+                      color:
+                        value === '1'
+                          ? theme.palette.mode === 'dark'
+                            ? 'text.secondarydark'
+                            : 'text.secondary'
+                          : theme.palette.mode === 'dark'
+                            ? 'text.primarydark'
+                            : 'text.primary',
+                      '&:hover': {
+                        color: value === '1' ? theme.palette.mode === 'dark' ? 'text.white' : 'text.black' : theme.palette.mode === 'dark' ? 'text.white' : 'text.black',
+                      },
+                    }}
+                    label={<div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}>
+                      Internal
+                    </div>}
+                    value="1" />
+                </TabList>
 
                 <TabPanel value="0" sx={{ padding: '0px' }}>
                   <HistoryExternalTab tableData={STATEMENTData?.external} />
@@ -206,11 +175,11 @@ const HistoryPageNG = () => {
                 </TabPanel>
               </TabContext>
             </Stack>
-          </Box>
-        </Card>
-      ) : (
-        <Lodergif />
-      )}
+          ) : (
+            <Lodergif />
+          )}
+        </Box>
+      </Card>
     </>
   );
 };

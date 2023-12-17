@@ -126,7 +126,7 @@ function CoinSelectTextfield({ walletList, setDepositData, setHistoryData }) {
         // disableCloseOnSelect
         getOptionLabel={(option) => `${option.listing.ticker} (${option.listing.crypto})`}
         renderOption={(props, option) => (
-          <Stack {...props} direction="row" spacing={1} alignItems="center">
+          <Stack {...props} direction="row" spacing={1} alignItems="center" backgroundColor={theme.palette.mode === 'dark' ? '#0F121A' : '#FFFFFF'}>
             <img src={option.listing.additionalI} alt="ico" width="24" height="24" />
             <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
               {option.listing.ticker}

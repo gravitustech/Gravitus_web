@@ -3,7 +3,7 @@ import NoRecordFound from '../../Walletpage/_Essentials/NoRecordFound';
 
 import {
   Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Typography, Stack, Link, useTheme, Divider, Grid, Dialog, Button 
+  Typography, Stack, Link, useTheme, Divider, Grid, Dialog, Button, CircularProgress
 } from '@mui/material';
 
 import React, { useState, useEffect } from 'react';
@@ -110,6 +110,7 @@ export default function OpenTab({ isAuthorised, platformId, orderTableData, setS
   const theme = useTheme();
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOpenDialog = (row) => {
     setSelectedRow(row);
@@ -121,10 +122,11 @@ export default function OpenTab({ isAuthorised, platformId, orderTableData, setS
   };
 
   const handleclick = (order) => {
+    setIsLoading(true);
     var postData = { id: order.id, platformId: order.platformId };
 
     postDataSPOT(Spot_CancelOrder_URL(), postData).then(function (res) {
-      // console.log(res);
+      setIsLoading(false);
       handleCloseDialog();
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
@@ -185,7 +187,7 @@ export default function OpenTab({ isAuthorised, platformId, orderTableData, setS
   return (
     <>
       {isAuthorised ? (
-        
+
         <Box>
           {orderTableData?.ongoing?.length ? (
             <TableContainer varaint="tablecontainer"
@@ -338,7 +340,7 @@ export default function OpenTab({ isAuthorised, platformId, orderTableData, setS
                         Cancel
                       </Button>
                       <Button variant='contained4' onClick={() => handleclick(selectedRow)}>
-                        Confirm
+                        {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Confirm'}
                       </Button>
                     </Stack>
 

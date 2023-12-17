@@ -7,27 +7,23 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Box, Stack, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useTheme, Button, ButtonBase } from '@mui/material';
 
 // Icon import
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import StarIcon from '@mui/icons-material/Star';
+import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
+
+import useSWR, { mutate } from 'swr';
 import { setConfig_ng } from 'src/utils_ng/localStorage_ng';
-import { FavouritesCrypto_URL, postDataSystem } from 'src/api_ng/system_ng';
-import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
+import { MarketOverview_URL, FavouritesCrypto_URL, postDataSystem } from 'src/api_ng/system_ng';
 
 function MyComponent({ id, row }) {
-  const [clicked, setClicked] = useState(localStorage.getItem(`iconClicked-${id}`) === 'true');
-
-  useEffect(() => {
-    localStorage.setItem(`iconClicked-${id}`, clicked.toString());
-  }, [clicked]);
-
-  const handleClick = (row) => {
+  
+  const toggleFavourites = (row) => {
     var postData = {
       "platformId": row?.platformId
     };
-
-    // console.log('postData', postData)
 
     postDataSystem(FavouritesCrypto_URL(), postData).then(function (res) {
       console.log("res", res);
@@ -48,7 +44,7 @@ function MyComponent({ id, row }) {
         }
       } else {
         // console.log('No error')
-        setClicked(!clicked)
+        mutate(MarketOverview_URL);
       }
     }, function (err) {
       // console.log(err);
@@ -58,10 +54,10 @@ function MyComponent({ id, row }) {
 
   return (
     <>
-      {clicked ? (
-        <StarIcon onClick={() => handleClick(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />
+      {row.favourites ? (
+        <StarIcon onClick={() => toggleFavourites(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />
       ) : (
-        <StarBorderIcon onClick={() => handleClick(row)} style={{ cursor: 'pointer' }} />
+        <StarBorderIcon onClick={() => toggleFavourites(row)} style={{ cursor: 'pointer' }} />
       )}
     </>
   );
@@ -119,8 +115,10 @@ function getColor(value, theme) {
     return theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary';
   }
 }
+
 function OrderTableHead({ order, orderBy, onRequestSort }) {
   const [clickCounts, setClickCounts] = useState({});
+  const theme = useTheme();
 
   const createSortHandler = (property) => () => {
     const currentClickCount = clickCounts[property] || 0;
@@ -137,7 +135,7 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
       setClickCounts({ ...clickCounts, [property]: nextClickCount });
     }
   };
-  const theme = useTheme();
+  
   return (
     <TableHead>
       <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
@@ -297,15 +295,15 @@ function getComparator(order, orderBy) {
 
 // Function to perform stable sorting with the comparator
 function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
+  const stabilizedThis = array?.map((el, index) => [el, index]);
+  stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) {
       return order;
     }
     return a[1] - b[1];
   });
-  return stabilizedThis.map((el) => el[0]);
+  return stabilizedThis?.map((el) => el[0]);
 }
 
 // ==============================|| MARKET TABLE ||============================== //
@@ -332,11 +330,9 @@ export default function MarketTable({ marketData, flag, searchQuery, listings, s
     navigate('/Spotpage')
   };
 
-  const filteredlist = stableSort(listings, getComparator(order, orderBy))
-    .filter((item) =>
+  const filteredlist = stableSort(listings, getComparator(order, orderBy))?.filter((item) =>
       flag === 'USDT' ? item.sellPair === 'USDT' && item.platform === 'SPOT' : item.sellPair === 'INR' && item.platform === 'SPOT'
-    )
-    .filter((row) => row.tradePair.toLowerCase().includes(searchQuery.toLowerCase()));
+    )?.filter((row) => row.tradePair.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
     <Box>
@@ -368,7 +364,7 @@ export default function MarketTable({ marketData, flag, searchQuery, listings, s
         <Table aria-labelledby="tableTitle">
           <OrderTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
           <TableBody>
-            {filteredlist.length === 0 ? (
+            {filteredlist?.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none' }}>
                   <Norecordfoundcomponents description="No Results Found" />
@@ -376,7 +372,7 @@ export default function MarketTable({ marketData, flag, searchQuery, listings, s
               </TableRow>
             ) : (
               <>
-                {filteredlist.map((row, index) => {
+                {filteredlist?.map((row, index) => {
                   return (
                     <TableRow
                       sx={{ border: 0, padding: '0', height: '64px' }}

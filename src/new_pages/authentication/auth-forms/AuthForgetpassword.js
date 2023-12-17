@@ -10,8 +10,8 @@ import {
   Stack,
   // InputLabel,
   CircularProgress,
-  Typography
-  // useTheme
+  Typography,
+  useTheme
 } from '@mui/material';
 
 // third party
@@ -26,7 +26,7 @@ import { useState } from 'react';
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const GravitusAuthForgetpassword = () => {
-  // const theme = useTheme();
+  const theme = useTheme();
   const navigate = useNavigate();
 
   const inputs = { accountType: 'GRAVITUS' };
@@ -71,7 +71,7 @@ const GravitusAuthForgetpassword = () => {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <Typography htmlFor="email-login" variant="body1" >
+                  <Typography htmlFor="email-login" variant="body1"  sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                     Enter your Registered Email Id
                   </Typography>
                   <OutlinedInput

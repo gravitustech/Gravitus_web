@@ -9,13 +9,12 @@ import ComponentsCardGain from './MarketHead/GainMarketCard.js';
 import ComponentsCardLoss from './MarketHead/LossMarketCard.js';
 import Footer from '../Homepage/Footer/Footer';
 
-import { fetcher, getMarketURL } from '../../../api/spot';
 import { useSelector } from 'react-redux';
 import { socket } from '../../../socket';
-import useSWR, {mutate} from 'swr';
+import useSWR, { mutate } from 'swr';
 
 import { MarketOverview_URL, fetcherSystem } from 'src/api_ng/system_ng';
-import { getConfig_ng } from 'src/utils_ng/localStorage_ng';
+import { getConfig_ng, getConfig_sp } from 'src/utils_ng/localStorage_ng';
 
 const Marketpage = () => {
   const isAuthorised = useSelector((state) => state.user.isAuthenticated);
@@ -25,7 +24,7 @@ const Marketpage = () => {
   const theme = useTheme();
 
   function useMarketOverview() {
-    var postData = { "callfrom": 'markets' };
+    var postData = { "callfrom": 'markets', 'superId' : getConfig_sp().userId};
 
     const { data, error, isLoading } = useSWR([MarketOverview_URL(), postData], fetcherSystem, {
       revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
@@ -34,11 +33,11 @@ const Marketpage = () => {
     return { data, error, isLoading };
   }
 
-  const { data, error, isLoading } = useMarketOverview();
+  const { data : marketRc, error : marketEr, isLoading } = useMarketOverview();
 
   useEffect(() => {
     var marketOverviewEvt = '/MARKETUpdate/POST';
-    socket.on(marketOverviewEvt, function(res){
+    socket.on(marketOverviewEvt, function (res) {
       mutate(MarketOverview_URL);
     });
 
@@ -47,9 +46,11 @@ const Marketpage = () => {
     };
   }, []);
 
+  console.log(marketRc, "Market Overview");
+
   return (
     <>
-      {data ? (
+      {marketRc ? (
         <>
           <Grid pl={15} pr={15} pt={3}>
             <Grid item xs={12} lg={12} md={12}>
@@ -60,30 +61,30 @@ const Marketpage = () => {
 
             <Grid container spacing={2} pt={3} pb={3}>
               <Grid item xs={12} sm={6} md={6} lg={4}>
-                <ComponentsCardTop title="Top Currencies" marketData={data.result} />
+                <ComponentsCardTop title="Top Currencies" marketData={marketRc?.result} />
               </Grid>
 
               <Grid item xs={12} sm={6} md={6} lg={4}>
-                <ComponentsCardGain title="Top Gainers" marketData={data.result} />
+                <ComponentsCardGain title="Top Gainers" marketData={marketRc?.result} />
               </Grid>
 
               <Grid item xs={12} sm={6} md={6} lg={4}>
-                <ComponentsCardLoss title="Top Losers" marketData={data.result} />
+                <ComponentsCardLoss title="Top Losers" marketData={marketRc?.result} />
               </Grid>
             </Grid>
           </Grid>
           <MarketpageTable
-            marketData={data.result}
+            marketData={marketRc?.result}
             setPlatformId={setPlatformId}
             listings={
               socketData
-                ? data?.result?.listings.map((item) => {
-                  if (item.platformId === Number(socketData.platformId)) {
-                    return { ...item, lastPrice: socketData.lastPrice, '24hVolume': socketData['24hVolume'] };
+                ? marketRc?.result?.listings.map((item) => {
+                  if (item.platformId === Number(socketData?.platformId)) {
+                    return { ...item, lastPrice: socketData?.lastPrice, '24hVolume': socketData['24hVolume'] };
                   }
                   return item;
                 })
-                : data.result.listings
+                : marketRc?.result?.listings
             }
             socketData={socketData}
             setSocketData={setSocketData}
@@ -91,7 +92,10 @@ const Marketpage = () => {
           <Footer isAuthorised={isAuthorised} />
         </>
       ) : (
+        <>
         <Lodergif />
+        {console.log("marketRc is undefined")}
+        </>
       )}
     </>
   );

@@ -44,7 +44,7 @@ function OrderTableHead() {
   const theme = useTheme();
   return (
     <TableHead>
-      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#373737' : '#fff' }}>
+      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
         {headCells.map((headCell, index) => (
           <TableCell
             sx={{ border: 'none' }}
@@ -89,10 +89,10 @@ export default function InternalTab({ internalData }) {
             width: '0px', // Width of the scrollbar
           },
           '&::-webkit-scrollbar-track': {
-            background: theme.palette.mode === "dark" ? 'black' : "text.background", // Track color
+            background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
           },
           '&::-webkit-scrollbar-thumb': {
-            background: theme.palette.mode === "dark" ? 'gray' : "lightgray",
+            background: theme.palette.mode === "dark" ? '#262B39' : "lightgray",
             borderRadius: '8px', // Round the corners of the thumb
           },
         }}

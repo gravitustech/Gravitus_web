@@ -14,7 +14,7 @@ function getColor(value, theme) {
 function ComponentsCardGain({ title, marketData }) {
   const theme = useTheme();
 
-  const filteredlist = (marketData.listings)
+  const filteredlist = (marketData?.listings)
 
   return (
     <MainCard
@@ -43,8 +43,7 @@ function ComponentsCardGain({ title, marketData }) {
       >
         <Table aria-labelledby="tableTitle">
           <TableBody>
-            {filteredlist
-              .filter(row => row[`24hChg`] > 0)
+            {filteredlist?.filter(row => row[`24hChg`] > 0)
               .slice(0, 3)
               .map((row, index) => {
                 return (

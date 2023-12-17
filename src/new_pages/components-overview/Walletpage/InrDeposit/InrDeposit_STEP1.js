@@ -130,8 +130,8 @@ const InrDeposit_STEP1 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
                       onChange={(e, val) => setFieldValue('paymode', val)}
                       // getOptionLabel={(option) => `${option.DepositMode}`}
                       renderOption={(props, option) => (
-                        <Stack {...props} direction="row" spacing={1}>
-                          <Typography>{option}</Typography>
+                        <Stack {...props} direction="row" spacing={1} backgroundColor={theme.palette.mode === 'dark' ? '#262B39' : '#FFFFFF'}>
+                          <Typography sx={{color:theme.palette.mode === 'dark' ? '#F7F7F7' : 'text.secondary'}}>{option}</Typography>
                         </Stack>
                       )}
                       renderInput={(params) => (
@@ -206,7 +206,7 @@ const InrDeposit_STEP1 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
           </Stack>
 
           <Dialog open={open}>
-            <Stack p={4} spacing={2.5}>
+            <Stack p={4} spacing={2.5} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
               <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.white' : 'text.secondary' }}>
                 Do not pay via UPI deposit for this deposit
               </Typography>

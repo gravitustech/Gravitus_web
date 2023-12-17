@@ -1,5 +1,5 @@
 {
-  "name": "gravitus-web-exchange",
+  "name": "GRAVITUS_Exchange",
   "version": "1.0",
   "private": true,
   "dependencies": {

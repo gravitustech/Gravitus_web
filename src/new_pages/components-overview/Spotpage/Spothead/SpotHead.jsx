@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 import {
   Typography, useTheme, Stack, IconButton, ClickAwayListener, Paper,
   Popper, Card, Divider, ButtonGroup, Box, Button
@@ -21,10 +23,12 @@ import Tab from '@mui/material/Tab';
 
 import Transitions from '../../../../components/@extended/Transitions';
 import MarketTable from './MarketTable';
-
-import React, { useState } from 'react';
-import { getConfig_ng, setConfig_ng } from '../../../../utils_ng/localStorage_ng';
 import FavouriteTab from './FavouriteTab';
+
+
+import useSWR, { mutate } from 'swr';
+import { MarketOverview_URL, fetcherSystem } from 'src/api_ng/system_ng';
+import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../../utils_ng/localStorage_ng';
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 1, 5),
@@ -106,6 +110,18 @@ const SpotHead = ({ pairData, priceData, setPlatformId, excType, changeExcType }
     setConfig_ng('excType', exchangeType);
     setSelectedButton(exchangeType);
   }
+
+  function useMarketOverview() {
+    var postData = { "callfrom": 'markets', 'superId': getConfig_sp().userId };
+
+    const { data, error, isLoading } = useSWR([MarketOverview_URL(), postData], fetcherSystem, {
+      revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
+    });
+
+    return { data, error, isLoading };
+  }
+
+  const { data:MarketRc, error } = useMarketOverview();
 
   return (
     <Stack direction="row" >
@@ -310,15 +326,15 @@ const SpotHead = ({ pairData, priceData, setPlatformId, excType, changeExcType }
                         </TabList>
 
                         <TabPanel value="0" sx={{ padding: '0px' }}>
-                          <FavouriteTab setPlatformId={setPlatformId} handleClose={handleClose} searchQuery={searchQuery} />
+                          <FavouriteTab setPlatformId={setPlatformId} handleClose={handleClose} searchQuery={searchQuery} Marketdata={MarketRc}/>
                         </TabPanel>
 
                         <TabPanel value="1" sx={{ padding: '0px' }}>
-                          <MarketTable flag="USDT" setPlatformId={setPlatformId} handleClose={handleClose} searchQuery={searchQuery} />
+                          <MarketTable flag="USDT" setPlatformId={setPlatformId} handleClose={handleClose} searchQuery={searchQuery} Marketdata={MarketRc}/>
                         </TabPanel>
 
                         <TabPanel value="2" sx={{ padding: '0px' }}>
-                          <MarketTable flag="INR" setPlatformId={setPlatformId} handleClose={handleClose} searchQuery={searchQuery} />
+                          <MarketTable flag="INR" setPlatformId={setPlatformId} handleClose={handleClose} searchQuery={searchQuery} Marketdata={MarketRc}/>
                         </TabPanel>
                       </TabContext>
                     </Card>

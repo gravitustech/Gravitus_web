@@ -97,7 +97,7 @@ export const getConfig_sp = (key) => {
 	}
 	else {
 		return {
-			"userId" : "guestUser",
+			"userId" : "guest",
 			"token"  : "none"
 		};
 	}

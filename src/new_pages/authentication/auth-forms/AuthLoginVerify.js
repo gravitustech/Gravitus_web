@@ -16,6 +16,7 @@ import useSWR from 'swr';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAdminUserStateAction } from '../../../appRedux/actions/adminUser';
 import { fetcher, getSecurityURL, sendOtpSecurity, signinSecurity } from '../../../api/profile';
+import { Send_OTP, postDataSystem } from 'src/api_ng/system_ng';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -56,13 +57,19 @@ const GravitusAuthLoginVerify = () => {
 
   const userDetails = useSelector((state) => state.user.user);
 
-  const [color, setColor] = useState('');
-  const [displayText, setDisplayText] = useState('SEND OTP');
-  const [isResend, setIsResend] = useState(false);
   const [verifyMethodState, setVerifyMethodState] = useState(false);
   const [verifyMethod, setVerifyMethod] = useState('email');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
+
+  const [POTPcolor, setPOTPColor] = useState('');
+  const [MOTPcolor, setMOTPColor] = useState('');
+
+  const [resendPOTP, setResendPOTP] = useState('SEND OTP');
+  const [resendMOTP, setResendMOTP] = useState('SEND OTP');
+
+  const [isResendMOTP, setIsResendMOTP] = useState(false);
+  const [isResendPOTP, setIsResendPOTP] = useState(false);
 
   const { data, error, isLoading } = useSWR(
     getSecurityURL(),
@@ -74,47 +81,84 @@ const GravitusAuthLoginVerify = () => {
     setVerifyMethod(str);
     setVerifyMethodState(false);
   };
-  
-  const handleOTP = async (action) => {
-    try {
-      const { data } = await sendOtpSecurity({
-        accountType: 'GRAVITUS',
-        postData: {
-          verifyType: 'sSecurity',
-          action
-        }
-      });
 
-      if (Object.keys(data.result).length) {
-        setSnackbarMessage({ msg: isResend ? 'OTP Resent successfully' : 'OTP Sent successfully', success: true });
-        setSnackbarOpen(true);
-        if (!isResend) {
-          setIsResend(true);
-          setDisplayText('RESEND OTP');
+  function reqSendOTP(action) {
+    try {
+      var postData = { verifyType: 'sSecurity', action }
+      postDataSystem(Send_OTP(), postData).then(function (res) {
+        if (res.error !== 'ok') {
+          if (res.error.name == "Missing Authorization") {
+            // Logout User
+          }
+          else if (res.error.name == "Invalid Authorization") {
+            // Logout User
+          }
+          else {
+            if (res.error.name != undefined) {
+              setSnackbarMessage({ msg: res.error.name, success: false });
+              setSnackbarOpen(true);
+            }
+            else {
+              setSnackbarMessage({ msg: res.error, success: false });
+              setSnackbarOpen(true);
+            }
+          }
+        } else {
+          // console.log(res.result, 'SENT OTP');
+          setSnackbarMessage({ msg: 'OTP Sent successfully', success: true });
+          setSnackbarOpen(true);
+
+          if (!isResendMOTP && action === 'sendMOTP') {
+            if (!isResendMOTP) {
+              setIsResendMOTP(true);
+              setResendMOTP('RESEND OTP');
+            }
+            setMOTPColor('grey');
+          }
+
+          if (!isResendPOTP && action === 'sendPOTP') {
+            if (!isResendPOTP) {
+              setIsResendPOTP(true);
+              setResendPOTP('RESEND OTP');
+            }
+            setPOTPColor('grey');
+          }
         }
-        setColor('grey');
-      } else {
-        setSnackbarMessage({ msg: 'OTP Request failed', success: false });
-        setSnackbarOpen(true);
-      }
+      }, function (err) {
+        // console.log(err);
+        // Logout User
+      });
     } catch (err) {
-      setSnackbarMessage({ msg: err.message, success: false });
-      setSnackbarOpen(true);
+      setErrors({ submit: err.message });
+      setStatus({ success: false });
     }
-  };
+  }
+ 
+  useEffect(() => {
+    let timeoutId;
+
+    if (isResendMOTP) {
+      timeoutId = setTimeout(() => {
+        setResendMOTP('RESEND OTP');
+        setIsResendMOTP(false);
+        setMOTPColor('');
+      }, 30000);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [isResendMOTP]);
 
   useEffect(() => {
     let timeoutId;
-    if (isResend) {
+
+    if (isResendPOTP) {
       timeoutId = setTimeout(() => {
-        setDisplayText('RESEND OTP');
-        setColor('');
-        // setIsResend('RESEND OTP');
-        setIsResend(false);
-      }, 30000); // 1 minute = 60000 milliseconds
+        setResendPOTP('RESEND OTP');
+        setIsResendPOTP(false);
+        setPOTPColor('');
+      }, 30000);
     }
     return () => clearTimeout(timeoutId);
-  }, [isResend]);
+  }, [isResendPOTP]);
 
   return (
     <>
@@ -185,9 +229,9 @@ const GravitusAuthLoginVerify = () => {
             authcode: ''
           }}
           validationSchema={Yup.object().shape({
-            otpmail  : verifyMethod === 'email' && Yup.number().positive().required('OTP is required*'),
-            otpmbl   : verifyMethod === 'phone' && Yup.number().positive().required('OTP is required*'),
-            authcode : verifyMethod === 'google' && Yup.number().positive().required('G-Code is required*')
+            otpmail: verifyMethod === 'email' && Yup.number().positive().required('OTP is required*'),
+            otpmbl: verifyMethod === 'phone' && Yup.number().positive().required('OTP is required*'),
+            authcode: verifyMethod === 'google' && Yup.number().positive().required('G-Code is required*')
           })}
           // validationSchema={
           //   (verifyMethod === 'email' && Yup.object().shape({ otpmail: Yup.string().max(5).required('OTP is required') }),
@@ -240,7 +284,7 @@ const GravitusAuthLoginVerify = () => {
                 <Grid item xs={12}>
                   {verifyMethod === 'email' && (
                     <Stack spacing={1}>
-                      <InputLabel htmlFor="email-login" variant="body2">
+                      <InputLabel htmlFor="email-login" variant="body2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                         OTP will be sent to <Email email={data?.result?.mSecurity?.authKey} />
                       </InputLabel>
                       <OutlinedInput
@@ -258,13 +302,13 @@ const GravitusAuthLoginVerify = () => {
                             <Button
                               disableRipple
                               style={{
-                                color: color || (theme.palette.mode === 'dark' ? 'white' : 'black'),
+                                color: MOTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                                 fontSize: '12px'
                               }}
-                              onClick={() => handleOTP('sendMOTP')}
-                              disabled={isResend}
+                              onClick={() => reqSendOTP('sendMOTP')}
+                              disabled={isResendMOTP}
                             >
-                              {displayText}
+                              {resendMOTP}
                             </Button>
                           </InputAdornment>
                         }
@@ -278,7 +322,7 @@ const GravitusAuthLoginVerify = () => {
                   )}
                   {verifyMethod === 'phone' && (
                     <Stack spacing={1}>
-                      <InputLabel htmlFor="otpmbl-login" variant="subtitle3">
+                      <InputLabel htmlFor="otpmbl-login" variant="subtitle3" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                         OTP will be sent to <Mobilenumber number={data.result.pSecurity.authKey} />
                       </InputLabel>
                       <OutlinedInput
@@ -296,13 +340,13 @@ const GravitusAuthLoginVerify = () => {
                             <Button
                               disableRipple
                               style={{
-                                color: color || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
+                                color: POTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                                 fontSize: '12px'
                               }}
-                              onClick={() => handleOTP('sendPOTP')}
-                              disabled={isResend}
+                              onClick={() => reqSendOTP('sendPOTP')}
+                              disabled={isResendPOTP}
                             >
-                              {displayText}
+                              {resendPOTP}
                             </Button>
                           </InputAdornment>
                         }
@@ -360,7 +404,7 @@ const GravitusAuthLoginVerify = () => {
                             color: color || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                             fontSize: "12px"
                           }}
-                          onClick={handleOTP}
+                          onClick={reqSendOTP}
                         >
                           {displayText}
                         </Button>

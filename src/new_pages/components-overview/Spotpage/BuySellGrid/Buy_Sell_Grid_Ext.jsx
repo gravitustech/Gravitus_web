@@ -35,9 +35,9 @@ const CustomSlider = styled(Slider)(({ theme, flag }) => ({
 }));
 
 const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletData,
-  selectedOrder, setSelectedOrder, setSnackbarOpen, setSnackbarMessage, orderSide, 
+  selectedOrder, setSelectedOrder, setSnackbarOpen, setSnackbarMessage, orderSide,
   orderType, superSide, superType }) => {
-  
+
   const theme = useTheme();
   const navigate = useNavigate();
   const [value, setValue] = useState('0'); //orderbook value
@@ -56,14 +56,14 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
   // Dialog box
   const [open, setOpen] = React.useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  
+
   var formikInit = {};
   if (selectedOrder != undefined && selectedOrder.platformId == pairData.id) {
     formikInit = {
       price: selectedOrder ? selectedOrder.price : priceData?.lastPrice,
       stoplimitprice: '',
       quantity: selectedOrder ? selectedOrder.quantity : '',
-      totalamount: selectedOrder ? selectedOrder.price * selectedOrder.quantity : '',
+      totalamount: selectedOrder ? (selectedOrder.price * selectedOrder.quantity).toFixed(pairData?.amountFloat) : '',
       submit: null
     };
   }
@@ -104,7 +104,7 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
 
       const firstValue = parseFloat(numericValue);
       const secondValue = isNaN(firstValue) ? '' : (firstValue * (values?.quantity)).toFixed(pairData?.priceFloat).replace(/(\.0*|0+)$/, ''); //.replace(/(\.0*|0+)$/, '')
-      
+
       setFieldValue('price', numericValue);
       setFieldValue('totalamount', secondValue);
     }
@@ -116,10 +116,10 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
         parts[1] = parts[1].substring(0, pairData?.quantityFloat);
         numericValue = parts.join('.');
       }
-      
+
       const firstValue = parseFloat(numericValue);
       const secondValue = isNaN(firstValue) ? '' : (firstValue * parseFloat(values?.price)).toFixed(pairData?.amountFloat).replace(/(\.0*|0+)$/, ''); //.replace(/(\.0*|0+)$/, '')
-      
+
       setFieldValue('quantity', numericValue);
       setFieldValue('totalamount', secondValue);
     }
@@ -133,7 +133,7 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
 
       const firstValue = parseFloat(numericValue);
       const secondValue = isNaN(firstValue) ? '' : (firstValue / parseFloat(values?.price)).toFixed(pairData?.quantityFloat).replace(/(\.0*|0+)$/, ''); //.replace(/(\.0*|0+)$/, '')
-      
+
       setFieldValue('totalamount', numericValue);
       setFieldValue('quantity', secondValue);
     }
@@ -142,18 +142,18 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
   const handleConfirm = () => {
     setIsLoading(true);
     let postData = {
-      platformId  : priceData?.platformId,
-      orderType   : 'limit',
-      side        : superSide === '1' ? 1 : 2,
-      price       : inputs.price,
-      quantity    : inputs.quantity,
-      amount      : inputs.totalamount
+      platformId: priceData?.platformId,
+      orderType: 'limit',
+      side: superSide === '1' ? 1 : 2,
+      price: inputs.price,
+      quantity: inputs.quantity,
+      amount: inputs.totalamount
     };
 
     if (inputs.stoplimitprice) {
       postData = { ...postData, sPrice: inputs.stoplimitprice, orderType: 'stop' };
     }
-    
+
     postDataSPOT(Spot_PostOrder_URL(), postData).then(function (res) {
       handleCloseDialog();
       if (res.error !== 'ok') {
@@ -166,8 +166,11 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
         }
         else {
           if (res.error.name != undefined) {
-            // setSnackbarMessage({ msg: 'Order Created successfully', success: false });
             setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
             setSnackbarOpen(true);
           }
           else {
@@ -193,7 +196,7 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
     socket.on(SPOTOrderEvt, function (res) {
 
       setIsLoading(false);
-      console.log(res, 'Response from Sock Post');
+      // console.log(res, 'Response from Sock Post');
 
       if (parseInt(res.platformId) === parseInt(platformId)) {
         if ((res.action == 'postSuccess' || res.action == 'matchSuccess' || res.action == 'stopOrder') && res.userId == getConfig_sp().userId) {
@@ -201,13 +204,15 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
           setSelectedOrder(undefined); // Reset Selected Order
           setInputs({ price: 0, quantity: 0, totalamount: 0, stoplimitprice: 0 });
 
-          formikRef.current.resetForm({values : {
-            price: priceData?.lastPrice,
-            stoplimitprice: '',
-            quantity: '',
-            totalamount: '',
-            submit: null
-          }});
+          formikRef.current.resetForm({
+            values: {
+              price: priceData?.lastPrice,
+              stoplimitprice: '',
+              quantity: '',
+              totalamount: '',
+              submit: null
+            }
+          });
 
           mutate(Spot_PreTrade_URL);
           setSnackbarMessage({ msg: res.message, success: false });
@@ -450,11 +455,11 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
                     }
                     onChange={(event, newValue) => {
                       var numericValue = superSide === '1' ? parseFloat(walletData?.sellPair || 0) : parseFloat(walletData?.buyPair || 0);
-                      
+
                       const updatedValue = (numericValue * (newValue / 100));
                       superSide === '1' ? handleChange({ target: { name: 'totalamount', value: updatedValue } }) : handleChange({ target: { name: 'quantity', value: updatedValue } });
-                      
-                      const secondValue = superSide === '1' ? (updatedValue / parseFloat(values?.price)).toFixed(pairData?.quantityFloat).replace(/(\.0*|0+)$/, '') : (updatedValue * parseFloat(values?.price)).toFixed(pairData?.amountFloat).replace(/(\.0*|0+)$/, ''); 
+
+                      const secondValue = superSide === '1' ? (updatedValue / parseFloat(values?.price)).toFixed(pairData?.quantityFloat).replace(/(\.0*|0+)$/, '') : (updatedValue * parseFloat(values?.price)).toFixed(pairData?.amountFloat).replace(/(\.0*|0+)$/, '');
                       superSide === '1' ? handleChange({ target: { name: 'quantity', value: secondValue } }) : handleChange({ target: { name: 'totalamount', value: secondValue } });
                     }}
                   />
@@ -548,7 +553,7 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
         )}
       </Formik>
       <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title" >
-        <Stack p={4} spacing={2.5} sx={{background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground'}}>
+        <Stack p={4} spacing={2.5} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
             <Typography variant="title1" sx={{ color: superSide === '1' ? 'text.buy' : 'text.sell' }}  >
               {superSide === '1' ? 'Buy' : 'Sell'}  {priceData?.buyPair}
