@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
 import {
-  Button, CircularProgress, Dialog, FormHelperText, Grid,
-  InputAdornment, InputLabel, OutlinedInput, Stack, Typography,
+  Button,CircularProgress,Dialog,FormHelperText,Grid,
+  InputAdornment,InputLabel,OutlinedInput,Stack,Typography,
   useTheme
 } from '@mui/material';
 
@@ -44,7 +44,7 @@ const Mobilenumber = ({ number }) => {
 
 const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessage, setSnackbarOpen, action, mutate }) => {
   const theme = useTheme();
-
+  
   const [isLoading, setIsLoading] = useState(false);
 
   const [displayText1, setDisplayText1] = useState('SEND OTP');
@@ -53,10 +53,6 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
   const [isResendPOTP, setIsResendPOTP] = useState(false);
   const [isMOtpLoading, setIsMOtpLoading] = useState(false);
   const [isPOtpLoading, setIsPOtpLoading] = useState(false);
-
-  const [isMOTPcolor, setIsMOTPColor] = useState('');
-  const [isPOTPcolor, setIsPOTPColor] = useState('');
-
 
   const handleOTP = async (action) => {
     if (action === 'sendPOTP') {
@@ -81,22 +77,14 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
         if (!isResendMOTP && action === 'sendMOTP') {
           setIsResendMOTP(true);
           setDisplayText2('RESEND OTP');
-          isMOTPcolor('grey');
         }
         if (!isResendPOTP && action === 'sendPOTP') {
           setIsResendPOTP(true);
           setDisplayText1('RESEND OTP');
-          isPOTPcolor('grey');
         }
-      
+        // setColor('grey');
       } else {
-        if (data.error && (data.error.name !== undefined)) {
-          setSnackbarMessage({ msg: data.error.name, success: false });
-        } else if (data.error) {
-          setSnackbarMessage({ msg: data.error, success: false });
-        } else {
-          setSnackbarMessage({ msg: 'OTP Request failed', success: false });
-        }
+        setSnackbarMessage({ msg: 'OTP Request failed', success: false });
         setSnackbarOpen(true);
       }
     } catch (err) {
@@ -117,8 +105,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
     if (isPOtpLoading) {
       timeoutId = setTimeout(() => {
         setDisplayText1('RESEND OTP');
-        setIsPOTPColor('');
-        setIsResendPOTP(false);
+        setIsPOtpLoading(false);
       }, 30000); // 1 minute = 60000 milliseconds
     }
     return () => clearTimeout(timeoutId);
@@ -129,8 +116,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
     if (isMOtpLoading) {
       timeoutId = setTimeout(() => {
         setDisplayText2('RESEND OTP');
-        isMOTPcolor('');
-        setIsResendMOTP(false);
+        setIsMOtpLoading(false);
       }, 30000); // 1 minute = 60000 milliseconds
     }
     return () => clearTimeout(timeoutId);
@@ -141,10 +127,8 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
     setOpenDialog(false);
     setIsResendMOTP(false);
     setIsResendPOTP(false);
-    setDisplayText1('RESEND OTP');
-    setDisplayText2('RESEND OTP');
-    isMOTPcolor('');
-    setIsPOTPColor('');
+    setDisplayText1('SEND OTP');
+    setDisplayText2('SEND OTP');
   };
   return (
     <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title">
@@ -226,7 +210,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
                           disableRipple
                           disabled={isPOtpLoading}
                           style={{
-                            color: isPOTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
+                            color: isPOtpLoading ? "grey" : (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                             fontSize: '12px'
                           }}
                           onClick={() => handleOTP('sendPOTP')}
@@ -276,7 +260,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
                         disableRipple
                         disabled={isMOtpLoading}
                         style={{
-                          color: isMOTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
+                          color: isMOtpLoading ? "grey" : (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                           fontSize: '12px'
                         }}
                         onClick={() => handleOTP('sendMOTP')}
