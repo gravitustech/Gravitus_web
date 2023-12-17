@@ -82,13 +82,13 @@ export async function formDataSystem(url, postData) {
   });
 }
 
+export const MarketOverview_URL = () => {
+  return 'api/generic/dashboard/markets';
+};
+
 // Two Factor Authentication (Sign, Reset Security, Withdrawal - INR & Crypto)
 export const Send_OTP = () => {
   return 'api/activity/security/sendOTP';
-};
-
-export const MarketOverview_URL = () => {
-  return 'api/generic/dashboard/markets';
 };
 
 export const FavouritesCrypto_URL = () => {
@@ -98,6 +98,7 @@ export const FavouritesCrypto_URL = () => {
 export const Security_URL = () => {
   return 'api/activity/security/secFeatures'
 }
+
 // Identity
 
 // Paymethods

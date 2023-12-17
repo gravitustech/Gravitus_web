@@ -22,7 +22,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const MarketpageTable = ({ marketData, listings,setPlatformId }) => {
   const theme = useTheme();
-  // console.log({ listings });
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event, newValue) => {

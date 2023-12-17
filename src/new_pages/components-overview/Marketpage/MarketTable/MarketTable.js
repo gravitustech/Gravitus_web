@@ -7,27 +7,23 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Box, Stack, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useTheme, Button, ButtonBase } from '@mui/material';
 
 // Icon import
-import StarBorderIcon from '@mui/icons-material/StarBorder';
-import StarIcon from '@mui/icons-material/Star';
+import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
+
+import useSWR, { mutate } from 'swr';
 import { setConfig_ng } from 'src/utils_ng/localStorage_ng';
-import { FavouritesCrypto_URL, postDataSystem } from 'src/api_ng/system_ng';
-import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
+import { MarketOverview_URL, FavouritesCrypto_URL, postDataSystem } from 'src/api_ng/system_ng';
 
 function MyComponent({ id, row }) {
-  const [clicked, setClicked] = useState(localStorage.getItem(`iconClicked-${id}`) === 'true');
-
-  useEffect(() => {
-    localStorage.setItem(`iconClicked-${id}`, clicked.toString());
-  }, [clicked]);
-
-  const handleClick = (row) => {
+  
+  const toggleFavourites = (row) => {
     var postData = {
       "platformId": row?.platformId
     };
-
-    // console.log('postData', postData)
 
     postDataSystem(FavouritesCrypto_URL(), postData).then(function (res) {
       console.log("res", res);
@@ -48,7 +44,7 @@ function MyComponent({ id, row }) {
         }
       } else {
         // console.log('No error')
-        setClicked(!clicked)
+        mutate(MarketOverview_URL);
       }
     }, function (err) {
       // console.log(err);
@@ -58,10 +54,10 @@ function MyComponent({ id, row }) {
 
   return (
     <>
-      {clicked ? (
-        <StarIcon onClick={() => handleClick(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />
+      {row.favourites ? (
+        <StarIcon onClick={() => toggleFavourites(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />
       ) : (
-        <StarBorderIcon onClick={() => handleClick(row)} style={{ cursor: 'pointer' }} />
+        <StarBorderIcon onClick={() => toggleFavourites(row)} style={{ cursor: 'pointer' }} />
       )}
     </>
   );
@@ -119,8 +115,10 @@ function getColor(value, theme) {
     return theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary';
   }
 }
+
 function OrderTableHead({ order, orderBy, onRequestSort }) {
   const [clickCounts, setClickCounts] = useState({});
+  const theme = useTheme();
 
   const createSortHandler = (property) => () => {
     const currentClickCount = clickCounts[property] || 0;
@@ -137,7 +135,7 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
       setClickCounts({ ...clickCounts, [property]: nextClickCount });
     }
   };
-  const theme = useTheme();
+  
   return (
     <TableHead>
       <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
