@@ -297,15 +297,15 @@ function getComparator(order, orderBy) {
 
 // Function to perform stable sorting with the comparator
 function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
+  const stabilizedThis = array?.map((el, index) => [el, index]);
+  stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) {
       return order;
     }
     return a[1] - b[1];
   });
-  return stabilizedThis.map((el) => el[0]);
+  return stabilizedThis?.map((el) => el[0]);
 }
 
 // ==============================|| MARKET TABLE ||============================== //
@@ -332,11 +332,9 @@ export default function MarketTable({ marketData, flag, searchQuery, listings, s
     navigate('/Spotpage')
   };
 
-  const filteredlist = stableSort(listings, getComparator(order, orderBy))
-    .filter((item) =>
+  const filteredlist = stableSort(listings, getComparator(order, orderBy))?.filter((item) =>
       flag === 'USDT' ? item.sellPair === 'USDT' && item.platform === 'SPOT' : item.sellPair === 'INR' && item.platform === 'SPOT'
-    )
-    .filter((row) => row.tradePair.toLowerCase().includes(searchQuery.toLowerCase()));
+    )?.filter((row) => row.tradePair.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
     <Box>
@@ -368,7 +366,7 @@ export default function MarketTable({ marketData, flag, searchQuery, listings, s
         <Table aria-labelledby="tableTitle">
           <OrderTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
           <TableBody>
-            {filteredlist.length === 0 ? (
+            {filteredlist?.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none' }}>
                   <Norecordfoundcomponents description="No Results Found" />
@@ -376,7 +374,7 @@ export default function MarketTable({ marketData, flag, searchQuery, listings, s
               </TableRow>
             ) : (
               <>
-                {filteredlist.map((row, index) => {
+                {filteredlist?.map((row, index) => {
                   return (
                     <TableRow
                       sx={{ border: 0, padding: '0', height: '64px' }}

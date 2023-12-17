@@ -173,7 +173,7 @@ function OrderTableBody(props) {
       amount: inputs.totalamount,
       matchId: row.matchId
     };
-
+    setIsLoading(true);
     postDataP2P(P2P_MatchTrade_URL(), postData).then(function (res) {
       console.log(res);
 
@@ -190,6 +190,10 @@ function OrderTableBody(props) {
         else {
           if (res.error.name != undefined) {
             setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
             setSnackbarOpen(true);
           }
           else {

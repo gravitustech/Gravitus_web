@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react';
 import useSWR, { mutate } from 'swr';
 
-import { useTheme, Stack, Typography, Grid, FormHelperText,
+import {
+  useTheme, Stack, Typography, Grid, FormHelperText,
   OutlinedInput, Button, InputAdornment, Checkbox, FormGroup,
-  FormControlLabel, Dialog, Divider } from '@mui/material';
+  FormControlLabel, Dialog, Divider, CircularProgress
+} from '@mui/material';
 
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -12,10 +14,10 @@ import { P2P_PostOrder_URL, P2P_SuperOrders_URL, postDataP2P } from 'src/api_ng/
 const P2P_Post_Buy = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarOpen, setSnackbarMessage, }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  
+
   const theme = useTheme();
   const formikPostBuy = useRef();
-  
+
   var formikInit = {
     price: priceInfo?.lastPrice,
     quantity: '',
@@ -98,22 +100,26 @@ const P2P_Post_Buy = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarOp
       quantity: inputs.quantity,
       amount: inputs.totalamount,
     };
-
+    setIsLoading(true);
     postDataP2P(P2P_PostOrder_URL(), postData).then(function (res) {
       setIsLoading(false);
       handleCloseDialog();
 
       console.log(res);
       if (res.error !== 'ok') {
-        if(res.error.name == "Missing Authorization") {
+        if (res.error.name == "Missing Authorization") {
           // Logout User
         }
         else if (res.error.name == "Invalid Authorization") {
           // Logout User
         }
         else {
-          if(res.error.name != undefined) {
+          if (res.error.name != undefined) {
             setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
             setSnackbarOpen(true);
           }
           else {
@@ -124,15 +130,17 @@ const P2P_Post_Buy = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarOp
       } else {
         setSnackbarMessage({ msg: 'Order Created successfully', success: false });
         setSnackbarOpen(true);
-        
+
         setInputs({ price: '', quantity: '', totalamount: '' });
         mutate(P2P_SuperOrders_URL);
 
-        formikPostBuy.current.resetForm({values : { 
-          price: '', 
-          quantity: '', 
-          totalamount: '' 
-        }});
+        formikPostBuy.current.resetForm({
+          values: {
+            price: '',
+            quantity: '',
+            totalamount: ''
+          }
+        });
       }
     }, function (err) {
       console.log(err);
@@ -298,7 +306,7 @@ const P2P_Post_Buy = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarOp
       </Formik>
 
       <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title">
-        <Stack p={4} spacing={2.8} sx={{background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground'}}>
+        <Stack p={4} spacing={2.8} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
             <Typography variant="title1" sx={{ color: 'text.buy' }}>
               Buy USDT
@@ -352,7 +360,9 @@ const P2P_Post_Buy = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarOp
             <Button variant="contained5" onClick={handleCloseDialog}>
               Cancel
             </Button>
-            <Button variant="contained4" onClick={handleConfirm}>Confirm</Button>
+            <Button variant="contained4" onClick={handleConfirm}>
+              {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Confirm'}
+            </Button>
           </Stack>
         </Stack>
       </Dialog>

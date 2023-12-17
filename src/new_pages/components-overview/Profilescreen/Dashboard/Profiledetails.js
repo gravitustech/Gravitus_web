@@ -52,6 +52,11 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
 
+  //send otp
+  const [color, setColor] = useState('');
+  const [displayText, setDisplayText] = useState('SEND OTP');
+  const [isResend, setIsResend] = useState(false);
+
   //Sms-auth dialogbox
   console.log({ userData });
 
@@ -64,6 +69,9 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
   const smshandleCloseDialog = () => {
     smssetOpenDialog(false);
     setOtpState(false)
+    setDisplayText('RESEND OTP');
+    setColor('');
+    setIsResend(false)
   };
 
   //Sms-auth dialogbox
@@ -76,11 +84,10 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
 
   const resethandleCloseDialog = () => {
     resetsetOpenDialog(false);
+    setDisplayText('RESEND OTP');
+    setColor('');
+    setIsResend(false)
   };
-  //send otp
-  const [color, setColor] = useState('');
-  const [displayText, setDisplayText] = useState('SEND OTP');
-  const [isResend, setIsResend] = useState(false);
 
   const handleOTP = async (action) => {
     try {
@@ -95,7 +102,13 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
         }
         setColor('grey');
       } else {
-        setSnackbarMessage({ msg: 'OTP Request failed', success: false });
+        if (data.error && (data.error.name !== undefined)) {
+          setSnackbarMessage({ msg: data.error.name, success: false });
+        } else if (data.error) {
+          setSnackbarMessage({ msg: data.error, success: false });
+        } else {
+          setSnackbarMessage({ msg: 'OTP Request failed', success: false });
+        }
         setSnackbarOpen(true);
       }
     } catch (err) {

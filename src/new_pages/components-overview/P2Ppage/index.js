@@ -65,19 +65,19 @@ const P2Ppage = () => {
   useEffect(() => {
     if(P2PRc != undefined) {
       if(P2PRc.error != 'ok') {
-        if(P2PRc.error.name === "Missing Authorization") {
+        if(P2PRc?.error?.name === "Missing Authorization") {
           // LogOut User;
         }
-        else if (P2PRc.error.name === "Invalid Authorization") {
+        else if (P2PRc?.error?.name === "Invalid Authorization") {
           // LogOut User;
         }
-        else if(P2PRc.error.name != 'Invalid Authorization') {
-          setSnackbarMessage({ msg: P2PRc.error.name, success: false });
-          setSnackbarOpen(true);
+        else if(P2PRc?.error?.name != 'Invalid Authorization') {
+          // setSnackbarMessage({ msg: P2PRc?.error?.name, success: false });
+          // setSnackbarOpen(true);
         }
         else {
-          setSnackbarMessage({ msg: P2PRc.error, success: false });
-          setSnackbarOpen(true);
+          // setSnackbarMessage({ msg: P2PRc?.error, success: false });
+          // setSnackbarOpen(true);
         }
       }
       else {

@@ -29,7 +29,7 @@ const Popularcurrency = ({ marketData }) => {
           alignItems="center"
           spacing={1}
           component={RouterLink}
-          to="/market"
+          to="/Market"
           sx={{
             textDecorationLine: 'none',
             color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary',

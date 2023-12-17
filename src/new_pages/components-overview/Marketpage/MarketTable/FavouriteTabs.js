@@ -266,15 +266,15 @@ function getComparator(order, orderBy) {
 
 // Function to perform stable sorting with the comparator
 function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
+  const stabilizedThis = array?.map((el, index) => [el, index]);
+  stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) {
       return order;
     }
     return a[1] - b[1];
   });
-  return stabilizedThis.map((el) => el[0]);
+  return stabilizedThis?.map((el) => el[0]);
 }
 
 // ==============================|| MARKET TABLE ||============================== //
@@ -303,8 +303,7 @@ export default function FavouriteTab({ marketData, flag, searchQuery, listings, 
 
   const FavouriteData = marketData?.favourites;
 
-  const filteredlist = stableSort(FavouriteData, getComparator(order, orderBy))
-    .filter((row) => row.tradePair.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredlist = stableSort(FavouriteData, getComparator(order, orderBy))?.filter((row) => row.tradePair.toLowerCase().includes(searchQuery.toLowerCase()));
 
   console.log('FavouriteData', FavouriteData);
 
@@ -338,7 +337,7 @@ export default function FavouriteTab({ marketData, flag, searchQuery, listings, 
         <Table aria-labelledby="tableTitle">
           <OrderTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
           <TableBody>
-            {filteredlist.length === 0 ? (
+            {filteredlist?.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none' }}>
                   <Norecordfoundcomponents description="No Results Found" />
@@ -346,7 +345,7 @@ export default function FavouriteTab({ marketData, flag, searchQuery, listings, 
               </TableRow>
             ) : (
               <>
-                {filteredlist.map((row, index) => {
+                {filteredlist?.map((row, index) => {
                   return (
                     <TableRow
                       sx={{ border: 0, padding: '0', height: '64px' }}

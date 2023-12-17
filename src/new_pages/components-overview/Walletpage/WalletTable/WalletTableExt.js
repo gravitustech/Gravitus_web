@@ -535,7 +535,7 @@ export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackba
       </TableContainer>
 
       <Drawer open={openDrawer} onClose={handleCloseDrawer} anchor="right">
-        <Box sx={{ width: 520 }}>
+        <Box sx={{ width: 520, backgroundColor: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
           <IconButton sx={{ marginLeft: '450px' }} onClick={handleCloseDrawer}>
             <CloseIcon />
           </IconButton>

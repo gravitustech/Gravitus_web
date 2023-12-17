@@ -131,7 +131,7 @@ const InrDeposit_STEP1 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
                       // getOptionLabel={(option) => `${option.DepositMode}`}
                       renderOption={(props, option) => (
                         <Stack {...props} direction="row" spacing={1} backgroundColor={theme.palette.mode === 'dark' ? '#262B39' : '#FFFFFF'}>
-                          <Typography sx={{color:'#F7F7F7'}}>{option}</Typography>
+                          <Typography sx={{color:theme.palette.mode === 'dark' ? '#F7F7F7' : 'text.secondary'}}>{option}</Typography>
                         </Stack>
                       )}
                       renderInput={(params) => (

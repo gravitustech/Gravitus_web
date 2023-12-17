@@ -376,8 +376,8 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                           backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#FFFFFF'
                         }}
                           {...props} direction="row" spacing={1}>
-                          <Typography sx={{ color: '#F7F7F7' }}>{option.AcNumber}</Typography>
-                          <Typography sx={{ color: '#F7F7F7' }}>({option.Beneficiary})</Typography>
+                          <Typography sx={{color:theme.palette.mode === 'dark' ? '#F7F7F7' : 'text.secondary'}}>{option.AcNumber}</Typography>
+                          <Typography sx={{color:theme.palette.mode === 'dark' ? '#F7F7F7' : 'text.secondary'}}>({option.Beneficiary})</Typography>
                         </Stack>
                       )}
                       renderInput={(params) => (

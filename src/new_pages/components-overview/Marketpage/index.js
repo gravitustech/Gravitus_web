@@ -12,7 +12,7 @@ import Footer from '../Homepage/Footer/Footer';
 import { fetcher, getMarketURL } from '../../../api/spot';
 import { useSelector } from 'react-redux';
 import { socket } from '../../../socket';
-import useSWR, {mutate} from 'swr';
+import useSWR, { mutate } from 'swr';
 
 import { MarketOverview_URL, fetcherSystem } from 'src/api_ng/system_ng';
 import { getConfig_ng } from 'src/utils_ng/localStorage_ng';
@@ -38,7 +38,7 @@ const Marketpage = () => {
 
   useEffect(() => {
     var marketOverviewEvt = '/MARKETUpdate/POST';
-    socket.on(marketOverviewEvt, function(res){
+    socket.on(marketOverviewEvt, function (res) {
       mutate(MarketOverview_URL);
     });
 
@@ -47,6 +47,7 @@ const Marketpage = () => {
     };
   }, []);
 
+  console.log('data', data)
   return (
     <>
       {data ? (
@@ -60,30 +61,30 @@ const Marketpage = () => {
 
             <Grid container spacing={2} pt={3} pb={3}>
               <Grid item xs={12} sm={6} md={6} lg={4}>
-                <ComponentsCardTop title="Top Currencies" marketData={data.result} />
+                <ComponentsCardTop title="Top Currencies" marketData={data?.result} />
               </Grid>
 
               <Grid item xs={12} sm={6} md={6} lg={4}>
-                <ComponentsCardGain title="Top Gainers" marketData={data.result} />
+                <ComponentsCardGain title="Top Gainers" marketData={data?.result} />
               </Grid>
 
               <Grid item xs={12} sm={6} md={6} lg={4}>
-                <ComponentsCardLoss title="Top Losers" marketData={data.result} />
+                <ComponentsCardLoss title="Top Losers" marketData={data?.result} />
               </Grid>
             </Grid>
           </Grid>
           <MarketpageTable
-            marketData={data.result}
+            marketData={data?.result}
             setPlatformId={setPlatformId}
             listings={
               socketData
                 ? data?.result?.listings.map((item) => {
-                  if (item.platformId === Number(socketData.platformId)) {
-                    return { ...item, lastPrice: socketData.lastPrice, '24hVolume': socketData['24hVolume'] };
+                  if (item.platformId === Number(socketData?.platformId)) {
+                    return { ...item, lastPrice: socketData?.lastPrice, '24hVolume': socketData['24hVolume'] };
                   }
                   return item;
                 })
-                : data.result.listings
+                : data?.result?.listings
             }
             socketData={socketData}
             setSocketData={setSocketData}
@@ -91,7 +92,10 @@ const Marketpage = () => {
           <Footer isAuthorised={isAuthorised} />
         </>
       ) : (
+        <>
         <Lodergif />
+        {console.log("data is undefined")}
+        </>
       )}
     </>
   );

@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import {
   useTheme, Stack, Typography, Grid, FormHelperText,
   OutlinedInput, Button, InputAdornment, Checkbox, FormGroup,
-  FormControlLabel, Dialog, Divider
+  FormControlLabel, Dialog, Divider, CircularProgress
 } from '@mui/material';
 
 import * as Yup from 'yup';
@@ -116,6 +116,10 @@ const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarO
         else {
           if (res.error.name != undefined) {
             setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
             setSnackbarOpen(true);
           }
           else {
@@ -427,7 +431,9 @@ const P2P_Post_Sell = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarO
             <Button variant="contained5" onClick={handleCloseDialog}>
               Cancel
             </Button>
-            <Button variant="contained4" onClick={handleConfirm}>Confirm</Button>
+            <Button variant="contained4" onClick={handleConfirm}>
+              {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Confirm'}
+            </Button>
           </Stack>
           {/* <Stack>
             <Typography

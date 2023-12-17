@@ -163,7 +163,6 @@ function OrderTableBody(props) {
   }
 
   const handleConfirm = () => {
-    setIsLoading(true);
     var postData = {
       platformId: pairInfo.id,
       matchId: row.matchId,
@@ -172,7 +171,7 @@ function OrderTableBody(props) {
       amount: inputs.totalamount,
       paymodes: inputs.paymentoption.map((mode) => ({ mode: mode, checked: true })),
     };
-
+    setIsLoading(true);
     postDataP2P(P2P_MatchTrade_URL(), postData).then(function (res) {
       console.log(res);
 
@@ -189,6 +188,10 @@ function OrderTableBody(props) {
         else {
           if (res.error.name != undefined) {
             setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
             setSnackbarOpen(true);
           }
           else {
