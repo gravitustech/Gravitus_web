@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 import {
-  Card, Grid, Stack, Typography, useTheme, Button, OutlinedInput, FormHelperText,Switch,
-  Select, MenuItem, Tooltip, IconButton, InputLabel, CircularProgress,FormControlLabel,
-  Dialog,InputAdornment
+  Card, Grid, Stack, Typography, useTheme, Button, OutlinedInput, FormHelperText, Switch,
+  Select, MenuItem, Tooltip, IconButton, InputLabel, CircularProgress, FormControlLabel,
+  Dialog, InputAdornment
 } from '@mui/material';
 
 import { styled } from '@mui/material/styles';
@@ -21,6 +21,7 @@ import notesicon from '../../../../assets/images/gravitusimage/notesicon.svg';
 import ResetDialog from './resetDialog';
 import AnimateButton from 'src/components/@extended/AnimateButton';
 import { updateAuth, sendOtpSecurity, enableSecurity, disableSecurity } from '../../../../api/profile';
+import { Send_OTP, postDataSystem } from 'src/api_ng/system_ng';
 
 const IOSSwitch = styled((props) => <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />)(({ theme }) => ({
   width: 42,
@@ -133,91 +134,101 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
   const [isLoading, setIsLoading] = useState(false);
 
   //G-auth dialogbox
-
-  const [displayText1, setDisplayText1] = useState('SEND OTP');
-  const [isResendPOTP, setIsResendPOTP] = useState(false);
-  const [isPOtpLoading, setIsPOtpLoading] = useState(false);
-
-  const [displayText2, setDisplayText2] = useState('SEND OTP');
-  const [isResendMOTP, setIsResendMOTP] = useState(false);
-  const [isMOtpLoading, setIsMOtpLoading] = useState(false);
-
   const [openDialog, setOpenDialog] = useState(false);
   const [openResetDialog, setOpenResetDialog] = useState(false);
   const [otpState, setOtpState] = useState(false);
   const [resetAction, setResetAction] = useState(false);
 
-  const handleOTP = async (action, flag) => {
-    console.log({ flag });
-    if (action === 'sendPOTP') {
-      console.log({ action });
-      setIsPOtpLoading(true);
-    }
-    if (action === 'sendMOTP') {
-      setIsMOtpLoading(true);
-    }
+  const [POTPcolor, setPOTPColor] = useState('');
+  const [MOTPcolor, setMOTPColor] = useState('');
+
+  const [resendPOTP, setResendPOTP] = useState('SEND OTP');
+  const [resendMOTP, setResendMOTP] = useState('SEND OTP');
+
+  const [isResendMOTP, setIsResendMOTP] = useState(false);
+  const [isResendPOTP, setIsResendPOTP] = useState(false);
+
+  function reqSendOTP(action, flag) {
     try {
-      const { data } = await sendOtpSecurity({
-        accountType: 'GRAVITUS',
-        postData: {
-          verifyType: flag ? 'dSecurity' : 'vSecurity',
-          action
+      var postData = { verifyType: flag ? 'dSecurity' : 'vSecurity', action }
+      postDataSystem(Send_OTP(), postData).then(function (res) {
+        if (res.error !== 'ok') {
+          if (res.error.name == "Missing Authorization") {
+            // Logout User
+          }
+          else if (res.error.name == "Invalid Authorization") {
+            // Logout User
+          }
+          else {
+            if (res.error.name != undefined) {
+              setSnackbarMessage({ msg: res.error.name, success: false });
+              setSnackbarOpen(true);
+            }
+            else {
+              setSnackbarMessage({ msg: res.error, success: false });
+              setSnackbarOpen(true);
+            }
+          }
+        } else {
+          // console.log(res.result, 'SENT OTP');
+          setSnackbarMessage({ msg: 'OTP Sent successfully', success: true });
+          setSnackbarOpen(true);
+
+          if (!isResendMOTP && action === 'sendMOTP') {
+            if (!isResendMOTP) {
+              setIsResendMOTP(true);
+              setResendMOTP('RESEND OTP');
+            }
+            setMOTPColor('grey');
+          }
+
+          if (!isResendPOTP && action === 'sendPOTP') {
+            if (!isResendPOTP) {
+              setIsResendPOTP(true);
+              setResendPOTP('RESEND OTP');
+            }
+            setPOTPColor('grey');
+          }
         }
+      }, function (err) {
+        // console.log(err);
+        // Logout User
       });
-      if (Object.keys(data.result).length) {
-        console.log({ data });
-        // setSnackbarMessage({ msg: isResendMOTP ? 'OTP Resent successfully' : 'OTP Sent successfully', success: true });
-        // setSnackbarMessage({ msg: isResendPOTP ? 'OTP Resent successfully' : 'OTP Sent successfully', success: true });
-        setSnackbarMessage({ msg: 'OTP Sent successfully', success: true });
-        setSnackbarOpen(true);
-        if (!isResendMOTP && action === 'sendMOTP') {
-          setIsResendMOTP(true);
-          setDisplayText2('RESEND OTP');
-        }
-        if (!isResendPOTP && action === 'sendPOTP') {
-          setIsResendPOTP(true);
-          setDisplayText1('RESEND OTP');
-        }
-      } else {
-        setSnackbarMessage({ msg: 'OTP Request failed', success: false });
-        setSnackbarOpen(true);
-      }
     } catch (err) {
-      setSnackbarMessage({ msg: err.message, success: false });
-      setSnackbarOpen(true);
+      // console.log('err', err)
+      // setErrors({ submit: err.message });
+      // setStatus({ success: false });
     }
-
-    // if (isResend) {
-    //   setDisplayText('RESEND OTP');
-    // } else {
-    //   setDisplayText('SEND OTP');
-    // }
-    // setIsResend(true);
-  };
-  useEffect(() => {
-    let timeoutId;
-    if (isPOtpLoading) {
-      timeoutId = setTimeout(() => {
-        setDisplayText1('RESEND OTP');
-        setIsPOtpLoading(false);
-      }, 30000); // 1 minute = 60000 milliseconds
-    }
-    return () => clearTimeout(timeoutId);
-  }, [isPOtpLoading]);
+  }
 
   useEffect(() => {
     let timeoutId;
-    if (isMOtpLoading) {
+
+    if (isResendMOTP) {
       timeoutId = setTimeout(() => {
-        setDisplayText2('RESEND OTP');
-        setIsMOtpLoading(false);
-      }, 30000); // 1 minute = 60000 milliseconds
+        setResendMOTP('RESEND OTP');
+        setIsResendMOTP(false);
+        setMOTPColor('');
+      }, 30000);
     }
     return () => clearTimeout(timeoutId);
-  }, [isMOtpLoading]);
+  }, [isResendMOTP]);
+
+  useEffect(() => {
+    let timeoutId;
+
+    if (isResendPOTP) {
+      timeoutId = setTimeout(() => {
+        setResendPOTP('RESEND OTP');
+        setIsResendPOTP(false);
+        setPOTPColor('');
+      }, 30000);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [isResendPOTP]);
 
   const handleNext = async (phone) => {
-    console.log({ phone });
+    // console.log({ phone });
     setOtpState(true);
     const postData = phone ? { action: 'updatePAuth', mobileNo: phone, intCode: '+91' } : { action: 'updateGAuth' };
     try {
@@ -226,7 +237,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
         postData
       });
       if (Object.keys(data.result).length) {
-        console.log({ data });
+        // console.log({ data });
         setSnackbarMessage({ msg: 'Authentication request sent', success: true });
         setSnackbarOpen(true);
       } else {
@@ -250,10 +261,13 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setOtpState(false);
+    setResendPOTP('RESEND OTP');
+    setResendMOTP('RESEND OTP')
+    setPOTPColor('');
+    setMOTPColor('');
+
     setIsResendMOTP(false);
     setIsResendPOTP(false);
-    // setDisplayText1('SEND OTP');
-    // setDisplayText2('SEND OTP');
   };
 
   //Sms-auth dialogbox
@@ -274,12 +288,15 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
   };
 
   const smshandleCloseDialog = () => {
-    setIsResendMOTP(false);
-    setIsResendPOTP(false);
-    setDisplayText1('SEND OTP');
-    setDisplayText2('SEND OTP');
     smssetOpenDialog(false);
     setOtpState(false);
+    setResendPOTP('RESEND OTP');
+    setResendMOTP('RESEND OTP')
+    setPOTPColor('');
+    setMOTPColor('');
+
+    setIsResendMOTP(false);
+    setIsResendPOTP(false);
   };
 
   const handleReset = (action) => {
@@ -321,7 +338,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
 
               <Stack direction="row" spacing={4}>
                 {securityData?.gShow === 'true' && (
-                  <Button variant="transparent" onClick={() => handleReset('greset')}>
+                  <Button disableRipple variant="transparent" onClick={() => handleReset('greset')}>
                     <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                       Reset
                     </Typography>
@@ -355,7 +372,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                             gcode: Yup.string().max(6).required('G-Code is requried*')
                           })}
                           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                            console.log({ values });
+                            // console.log({ values });
                             const phoneOTP = values.otpmbl;
                             const postData = {
                               verifyType: securityData?.gSecurity?.enabled === '1' ? 'dSecurity' : 'vSecurity',
@@ -364,7 +381,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                               emailOTP: values.otpmail,
                               ...(securityData?.pSecurity?.enabled === '1' && { phoneOTP })
                             };
-                            console.log('securityData?.pSecurity?.enabled ', securityData?.pSecurity?.enabled)
+                            // console.log('securityData?.pSecurity?.enabled ', securityData?.pSecurity?.enabled)
                             try {
                               setIsLoading(true);
                               const { data } =
@@ -423,14 +440,13 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                                             <InputAdornment>
                                               <Button
                                                 disableRipple
-                                                disabled={isPOtpLoading}
+                                                disabled={isResendPOTP}
                                                 style={{
-                                                  color: isPOtpLoading ? 'grey' : theme.palette.mode === 'dark' ? '#fff' : '#000',
-                                                  fontSize: '12px'
+                                                  color: POTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'), fontSize: '12px'
                                                 }}
-                                                onClick={() => handleOTP('sendPOTP', securityData?.gSecurity?.enabled === '1')}
+                                                onClick={() => reqSendOTP('sendPOTP', securityData?.gSecurity?.enabled === '1')}
                                               >
-                                                {displayText1}
+                                                {resendPOTP}
                                               </Button>
                                             </InputAdornment>
                                           }
@@ -466,14 +482,13 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                                         <InputAdornment>
                                           <Button
                                             disableRipple
-                                            disabled={isMOtpLoading}
+                                            disabled={isResendMOTP}
                                             style={{
-                                              color: isMOtpLoading ? 'grey' : theme.palette.mode === 'dark' ? '#fff' : '#000',
-                                              fontSize: '12px'
+                                              color: MOTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'), fontSize: '12px'
                                             }}
-                                            onClick={() => handleOTP('sendMOTP', securityData?.gSecurity?.enabled === '1')}
+                                            onClick={() => reqSendOTP('sendMOTP', securityData?.gSecurity?.enabled === '1')}
                                           >
-                                            {displayText2}
+                                            {resendMOTP}
                                           </Button>
                                         </InputAdornment>
                                       }
@@ -654,7 +669,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                           : Yup.object().shape({ mobilenumber: Yup.string().max(10).required("Don't leave a empty") })
                       }
                       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        console.log({ values });
+                        // console.log({ values });
                         const googleOTP = values.gcode;
                         const postData = {
                           verifyType: securityData?.pSecurity?.enabled === '1' ? 'dSecurity' : 'vSecurity',
@@ -665,14 +680,14 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                         };
                         if (otpState) {
                           setIsLoading(true);
-                          console.log('securityData?.pSecurity?.enabled', securityData?.pSecurity?.enabled)
+                          // console.log('securityData?.pSecurity?.enabled', securityData?.pSecurity?.enabled)
                           try {
                             const { data } =
                               securityData?.pSecurity?.enabled === '1'
                                 ? await disableSecurity({ accountType: 'GRAVITUS', postData })
                                 : await enableSecurity({ accountType: 'GRAVITUS', postData });
                             if (Object.keys(data.result).length) {
-                              console.log({ data });
+                              // console.log({ data });
                               mutate();
                               setOtpState(false);
                               {
@@ -731,14 +746,14 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                                       endAdornment={
                                         <InputAdornment>
                                           <Button
-                                            disabled={isPOtpLoading}
+                                            disabled={isResendPOTP}
                                             style={{
-                                              color: isPOtpLoading ? 'grey' : theme.palette.mode === 'dark' ? '#fff' : '#000',
+                                              color: POTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                                               fontSize: '12px'
                                             }}
-                                            onClick={() => handleOTP('sendPOTP', securityData?.pSecurity?.enabled === '1')}
+                                            onClick={() => reqSendOTP('sendPOTP', securityData?.pSecurity?.enabled === '1')}
                                           >
-                                            {displayText1}
+                                            {resendPOTP}
                                           </Button>
                                         </InputAdornment>
                                       }
@@ -772,14 +787,14 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                                       endAdornment={
                                         <InputAdornment>
                                           <Button
-                                            disabled={isMOtpLoading}
+                                            disabled={isResendMOTP}
                                             style={{
-                                              color: isMOtpLoading ? 'grey' : theme.palette.mode === 'dark' ? '#fff' : '#000',
+                                              color: MOTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                                               fontSize: '12px'
                                             }}
-                                            onClick={() => handleOTP('sendMOTP', securityData?.pSecurity?.enabled === '1')}
+                                            onClick={() => reqSendOTP('sendMOTP', securityData?.pSecurity?.enabled === '1')}
                                           >
-                                            {displayText2}
+                                            {resendMOTP}
                                           </Button>
                                         </InputAdornment>
                                       }

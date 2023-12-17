@@ -245,10 +245,15 @@ function ProfileScreen() {
           ))}
           <MenuItem
             onClick={handleCloseMenu}
-            sx={{ width: '220px', height: '51px', display: 'flex', alignItems: 'start', paddingLeft: '36px' }}
+            sx={{ width: '220px', height: '51px' }}
           >
-            <Button disableRipple>
-              <Stack direction="row" spacing={1.4} onClick={handleOpenDialog}>
+            <Button disableRipple fullWidth sx={{
+                backgroundColor: 'transparent',  
+                '&:hover': {
+                  backgroundColor: 'transparent',  
+                },
+            }}>
+              <Stack direction="row" spacing={1.4} onClick={handleOpenDialog} sx={{ paddingRight: '52px' }}>
                 <img src={logout} alt="logout" width={24} />
                 <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary' }}>
                   Logout

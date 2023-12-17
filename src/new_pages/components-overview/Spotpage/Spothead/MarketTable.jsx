@@ -14,12 +14,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-import useSWR, { mutate } from 'swr';
 import { setConfig_ng } from '../../../../utils_ng/localStorage_ng';
 
 import { FavouritesCrypto_URL, MarketOverview_URL, fetcherSystem, postDataSystem } from 'src/api_ng/system_ng';
 import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
 
+import useSWR, { mutate } from 'swr';
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
 const keyframes = `
@@ -64,21 +64,13 @@ function getColor(value, theme) {
 }
 
 function MyComponent({ id, row }) {
-  const [clicked, setClicked] = useState(localStorage.getItem(`iconClicked-${id}`) === 'true');
 
-  useEffect(() => {
-    localStorage.setItem(`iconClicked-${id}`, clicked.toString());
-  }, [clicked]);
-
-  const handleClick = (row) => {
+  const toggleFavourites = (row) => {
     var postData = {
       "platformId": row?.platformId
     };
 
-    // console.log('postData', postData)
-
     postDataSystem(FavouritesCrypto_URL(), postData).then(function (res) {
-      console.log("res", res);
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User
@@ -96,7 +88,7 @@ function MyComponent({ id, row }) {
         }
       } else {
         // console.log('No error')
-        setClicked(!clicked)
+        mutate(MarketOverview_URL);
       }
     }, function (err) {
       // console.log(err);
@@ -106,10 +98,10 @@ function MyComponent({ id, row }) {
 
   return (
     <>
-      {clicked ? (
-        <StarIcon onClick={() => handleClick(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />
+      {row.favourites ? (
+        <StarIcon onClick={() => toggleFavourites(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />
       ) : (
-        <StarBorderIcon onClick={() => handleClick(row)} style={{ cursor: 'pointer' }} />
+        <StarBorderIcon onClick={() => toggleFavourites(row)} style={{ cursor: 'pointer' }} />
       )}
     </>
   );
@@ -317,7 +309,7 @@ function stableSort(array, comparator) {
 
 // ==============================|| ORDER TABLE ||============================== //
 
-export default function MarketTable({ flag, setPlatformId, handleClose, searchQuery }) {
+export default function MarketTable({ flag, setPlatformId, handleClose, searchQuery, Marketdata }) {
   const theme = useTheme();
   const [orderBy, setOrderBy] = useState('defaultProperty'); // Replace 'defaultProperty' with the default sorting property
 
@@ -327,18 +319,6 @@ export default function MarketTable({ flag, setPlatformId, handleClose, searchQu
   const isSelected = (Name) => {
     selected.indexOf(Name) !== -1
   };
-
-  function useMarketOverview() {
-    var postData = { "callfrom": 'markets' };
-
-    const { data, error, isLoading } = useSWR([MarketOverview_URL(), postData], fetcherSystem, {
-      revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
-    });
-
-    return { data, error, isLoading };
-  }
-
-  const { data, error } = useMarketOverview();
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -352,7 +332,7 @@ export default function MarketTable({ flag, setPlatformId, handleClose, searchQu
     setConfig_ng('spotPair', { platformId: id });
   };
 
-  const filteredListings = (data && data.result && data.result.listings || [])
+  const filteredListings = (Marketdata && Marketdata.result && Marketdata.result.listings || [])
     .filter((item) =>
       flag === 'USDT'
         ? item.sellPair === 'USDT' && item.platform === 'SPOT'
@@ -380,7 +360,7 @@ export default function MarketTable({ flag, setPlatformId, handleClose, searchQu
           background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
         },
         '&::-webkit-scrollbar-thumb': {
-          background: theme.palette.mode === "dark" ? '#0F121A' : "lightgray",
+          background: theme.palette.mode === "dark" ? '#262B39' : "lightgray",
           borderRadius: '8px', // Round the corners of the thumb
         },
       }}
@@ -393,7 +373,7 @@ export default function MarketTable({ flag, setPlatformId, handleClose, searchQu
         }}
       >
         <OrderTableHead order={order} orderBy={orderBy} onRequestSort={handleRequestSort} />
-        {data ? (
+        {Marketdata ? (
           <TableBody>
             {filteredListings?.length === 0 ? (
               <TableRow>

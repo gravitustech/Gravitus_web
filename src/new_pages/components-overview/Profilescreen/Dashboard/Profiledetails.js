@@ -58,8 +58,6 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
   const [isResend, setIsResend] = useState(false);
 
   //Sms-auth dialogbox
-  console.log({ userData });
-
   const [smsopenDialog, smssetOpenDialog] = useState(false);
   const [otpState, setOtpState] = useState(false);
   const smshandleClickOpenDialog = () => {
@@ -93,7 +91,7 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
     try {
       const { data } = action === 'POTP' ? await sendOTP({ accountType: 'GRAVITUS' }) : await sendMOTP({ accountType: 'GRAVITUS' });
       if (Object.keys(data.result).length) {
-        console.log({ data });
+        // console.log({ data });
         setSnackbarMessage({ msg: isResend ? 'OTP Resent successfully' : 'OTP Sent successfully', success: true });
         setSnackbarOpen(true);
         if (!isResend) {
@@ -256,7 +254,7 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                         }
                         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                           setIsLoading(true);
-                          console.log({ values });
+                          // console.log({ values });
                           try {
                             const { data } = otpState
                               ? await setMobileNumber({
@@ -268,7 +266,7 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                                 postData: { mobileNo: values.mobilenumber, intCode: '+91' }
                               });
                             if (Object.keys(data.result).length) {
-                              console.log({ data });
+                              // console.log({ data });
                               mutate();
                               setIsLoading(false);
                               setSnackbarMessage({ msg: otpState ? 'otp validated' : 'Mobile no submitted', success: true });
@@ -417,14 +415,14 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                         })}
                         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                           setIsLoading(true);
-                          console.log({ values });
+                          // console.log({ values });
                           try {
                             const { data } = await resetMobileNumber({
                               accountType: 'GRAVITUS',
                               postData: { validateOTP: values.otpemail }
                             });
                             if (Object.keys(data.result).length) {
-                              console.log({ data });
+                              // console.log({ data });
                               mutate();
                               setIsLoading(false);
                               setSnackbarMessage({ msg: 'Mobile number reset successfully', success: true });

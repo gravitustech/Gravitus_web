@@ -31,9 +31,9 @@ export default function Button(theme) {
           }
         },
         contained1: {
-          backgroundColor: theme.palette.mode === 'dark' ? '#232323' : '#FFF',
+          backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#FFF',
           color: '#959595',
-          borderColor: '#959595',
+          borderColor: theme.palette.mode === 'dark' ? '#31384b' : '#E1E1E1',
           borderWidth: '1px',
           borderStyle: 'solid',
           borderRadius: '5px',
@@ -44,7 +44,7 @@ export default function Button(theme) {
           }
         },
         contained2: {
-          backgroundColor: theme.palette.mode === 'dark' ? '#232323' : '#F9F9F9',
+          backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F9F9F9',
           color: theme.palette.mode === 'dark' ? '#BFBFBF' : '#959595',
           borderRadius: '5px',
           height: '64px'

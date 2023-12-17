@@ -63,7 +63,7 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
       price: selectedOrder ? selectedOrder.price : priceData?.lastPrice,
       stoplimitprice: '',
       quantity: selectedOrder ? selectedOrder.quantity : '',
-      totalamount: selectedOrder ? selectedOrder.price * selectedOrder.quantity : '',
+      totalamount: selectedOrder ? (selectedOrder.price * selectedOrder.quantity).toFixed(pairData?.amountFloat) : '',
       submit: null
     };
   }
@@ -196,7 +196,7 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
     socket.on(SPOTOrderEvt, function (res) {
 
       setIsLoading(false);
-      console.log(res, 'Response from Sock Post');
+      // console.log(res, 'Response from Sock Post');
 
       if (parseInt(res.platformId) === parseInt(platformId)) {
         if ((res.action == 'postSuccess' || res.action == 'matchSuccess' || res.action == 'stopOrder') && res.userId == getConfig_sp().userId) {

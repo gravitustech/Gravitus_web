@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
 import {
-  Button,CircularProgress,Dialog,FormHelperText,Grid,
-  InputAdornment,InputLabel,OutlinedInput,Stack,Typography,
+  Button, CircularProgress, Dialog, FormHelperText, Grid,
+  InputAdornment, InputLabel, OutlinedInput, Stack, Typography,
   useTheme
 } from '@mui/material';
 
@@ -11,11 +11,12 @@ import { Formik } from 'formik';
 
 import AnimateButton from 'src/components/@extended/AnimateButton';
 import { resetSecurity, sendOtpSecurity } from '../../../../api/profile';
+import { Send_OTP, postDataSystem } from 'src/api_ng/system_ng';
 
 const Email = ({ email }) => {
   const theme = useTheme();
-  const firstTwo = email.slice(0, 4);
-  const lastTwo = email.slice(-10);
+  const firstTwo = email?.slice(0, 4);
+  const lastTwo = email?.slice(-10);
   const middle = '*******';
 
   const maskedEmail = `${firstTwo}${middle}${lastTwo}`;
@@ -29,8 +30,8 @@ const Email = ({ email }) => {
 
 const Mobilenumber = ({ number }) => {
   const theme = useTheme();
-  const firstTwo = number.slice(0, 2);
-  const lastTwo = number.slice(-2);
+  const firstTwo = number?.slice(0, 2);
+  const lastTwo = number?.slice(-2);
   const middle = '******';
 
   const Mobilenumber = `${firstTwo}${middle}${lastTwo}`;
@@ -44,91 +45,106 @@ const Mobilenumber = ({ number }) => {
 
 const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessage, setSnackbarOpen, action, mutate }) => {
   const theme = useTheme();
-  
+
   const [isLoading, setIsLoading] = useState(false);
 
-  const [displayText1, setDisplayText1] = useState('SEND OTP');
-  const [displayText2, setDisplayText2] = useState('SEND OTP');
+  const [POTPcolor, setPOTPColor] = useState('');
+  const [MOTPcolor, setMOTPColor] = useState('');
+
+  const [resendPOTP, setResendPOTP] = useState('SEND OTP');
+  const [resendMOTP, setResendMOTP] = useState('SEND OTP');
+
   const [isResendMOTP, setIsResendMOTP] = useState(false);
   const [isResendPOTP, setIsResendPOTP] = useState(false);
-  const [isMOtpLoading, setIsMOtpLoading] = useState(false);
-  const [isPOtpLoading, setIsPOtpLoading] = useState(false);
 
-  const handleOTP = async (action) => {
-    if (action === 'sendPOTP') {
-      console.log({ action });
-      setIsPOtpLoading(true);
-    }
-    if (action === 'sendMOTP') {
-      setIsMOtpLoading(true);
-    }
+  function reqSendOTP(action) {
     try {
-      const { data } = await sendOtpSecurity({
-        accountType: 'GRAVITUS',
-        postData: {
-          verifyType: 'rSecurity',
-          action
+      var postData = { verifyType: 'rSecurity', action }
+      postDataSystem(Send_OTP(), postData).then(function (res) {
+        if (res.error !== 'ok') {
+          if (res.error.name == "Missing Authorization") {
+            // Logout User
+          }
+          else if (res.error.name == "Invalid Authorization") {
+            // Logout User
+          }
+          else {
+            if (res.error.name != undefined) {
+              setSnackbarMessage({ msg: res.error.name, success: false });
+              setSnackbarOpen(true);
+            }
+            else {
+              setSnackbarMessage({ msg: res.error, success: false });
+              setSnackbarOpen(true);
+            }
+          }
+        } else {
+          // console.log(res.result, 'SENT OTP');
+          setSnackbarMessage({ msg: 'OTP Sent successfully', success: true });
+          setSnackbarOpen(true);
+
+          if (!isResendMOTP && action === 'sendMOTP') {
+            if (!isResendMOTP) {
+              setIsResendMOTP(true);
+              setResendMOTP('RESEND OTP');
+            }
+            setMOTPColor('grey');
+          }
+
+          if (!isResendPOTP && action === 'sendPOTP') {
+            if (!isResendPOTP) {
+              setIsResendPOTP(true);
+              setResendPOTP('RESEND OTP');
+            }
+            setPOTPColor('grey');
+          }
         }
+      }, function (err) {
+        // console.log(err);
+        // Logout User
       });
-      if (Object.keys(data.result).length) {
-        console.log({ data });
-        setSnackbarMessage({ msg: 'OTP Sent successfully', success: true });
-        setSnackbarOpen(true);
-        if (!isResendMOTP && action === 'sendMOTP') {
-          setIsResendMOTP(true);
-          setDisplayText2('RESEND OTP');
-        }
-        if (!isResendPOTP && action === 'sendPOTP') {
-          setIsResendPOTP(true);
-          setDisplayText1('RESEND OTP');
-        }
-        // setColor('grey');
-      } else {
-        setSnackbarMessage({ msg: 'OTP Request failed', success: false });
-        setSnackbarOpen(true);
-      }
     } catch (err) {
-      setSnackbarMessage({ msg: err.message, success: false });
-      setSnackbarOpen(true);
+      // console.log('err', err)
+      // setErrors({ submit: err.message });
+      // setStatus({ success: false });
     }
-
-    // if (isResend) {
-    //   setDisplayText('RESEND OTP');
-    // } else {
-    //   setDisplayText('SEND OTP');
-    // }
-    // setIsResend(true);
-  };
+  }
 
   useEffect(() => {
     let timeoutId;
-    if (isPOtpLoading) {
+
+    if (isResendMOTP) {
       timeoutId = setTimeout(() => {
-        setDisplayText1('RESEND OTP');
-        setIsPOtpLoading(false);
-      }, 30000); // 1 minute = 60000 milliseconds
+        setResendMOTP('RESEND OTP');
+        setIsResendMOTP(false);
+        setMOTPColor('');
+      }, 30000);
     }
     return () => clearTimeout(timeoutId);
-  }, [isPOtpLoading]);
+  }, [isResendMOTP]);
 
   useEffect(() => {
     let timeoutId;
-    if (isMOtpLoading) {
+
+    if (isResendPOTP) {
       timeoutId = setTimeout(() => {
-        setDisplayText2('RESEND OTP');
-        setIsMOtpLoading(false);
-      }, 30000); // 1 minute = 60000 milliseconds
+        setResendPOTP('RESEND OTP');
+        setIsResendPOTP(false);
+        setPOTPColor('');
+      }, 30000);
     }
     return () => clearTimeout(timeoutId);
-  }, [isMOtpLoading]);
-
+  }, [isResendPOTP]);
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    setResendPOTP('RESEND OTP');
+    setResendMOTP('RESEND OTP')
+    setPOTPColor('');
+    setMOTPColor('');
+
     setIsResendMOTP(false);
     setIsResendPOTP(false);
-    setDisplayText1('SEND OTP');
-    setDisplayText2('SEND OTP');
   };
   return (
     <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title">
@@ -150,7 +166,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             setIsLoading(true);
-            console.log({ values });
+            // console.log({ values });
             const phoneOTP = values.otpmbl;
             const googleOTP = values.authcode;
             const postData = {
@@ -163,9 +179,9 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
             try {
               const { data } = await resetSecurity({ accountType: 'GRAVITUS', postData });
               if (Object.keys(data.result).length) {
-                console.log({ data });
+                // console.log({ data });
                 mutate();
-                setSnackbarMessage({ msg: 'Rest your Authentication', success: true });
+                setSnackbarMessage({ msg: 'Reset your Authentication', success: true });
                 setSnackbarOpen(true);
                 handleCloseDialog();
                 setIsLoading(false);
@@ -180,6 +196,9 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
               setSnackbarOpen(true);
               handleCloseDialog();
               setIsLoading(false);
+              setStatus({ success: false });
+              setErrors({ submit: err.message });
+              setSubmitting(false);
             }
           }}
         >
@@ -187,7 +206,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
             <form noValidate onSubmit={handleSubmit}>
               {action === 'greset' && securityData?.pSecurity?.enabled === '1' && (
                 <Stack spacing={1} pt={3} width={440}>
-                  <InputLabel htmlFor="otpmbl-login" variant="subtitle3">
+                  <InputLabel htmlFor="otpmbl-login" variant="subtitle3" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                     OTP will sent to <Mobilenumber number={securityData?.pSecurity?.authKey} />
                   </InputLabel>
                   <OutlinedInput
@@ -208,24 +227,15 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
                       <InputAdornment>
                         <Button
                           disableRipple
-                          disabled={isPOtpLoading}
                           style={{
-                            color: isPOtpLoading ? "grey" : (theme.palette.mode === 'dark' ? '#fff' : '#000'),
+                            color: POTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                             fontSize: '12px'
                           }}
-                          onClick={() => handleOTP('sendPOTP')}
+                          onClick={() => reqSendOTP('sendPOTP')}
+                          disabled={isResendPOTP}
                         >
-                          {displayText1}
+                          {resendPOTP}
                         </Button>
-                        {/* <Button
-                          style={{
-                            color: color || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
-                            fontSize: '12px'
-                          }}
-                          onClick={() => handleOTP('sendPOTP')}
-                        >
-                          Send OTP
-                        </Button> */}
                       </InputAdornment>
                     }
                   />
@@ -237,7 +247,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
                 </Stack>
               )}
               <Stack spacing={1} pt={3} width={440}>
-                <InputLabel htmlFor="email-login" variant="body2">
+                <InputLabel htmlFor="email-login" variant="body2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                   OTP will sent to <Email email={securityData?.mSecurity?.authKey} />
                 </InputLabel>
                 <OutlinedInput
@@ -258,24 +268,15 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
                     <InputAdornment>
                       <Button
                         disableRipple
-                        disabled={isMOtpLoading}
                         style={{
-                          color: isMOtpLoading ? "grey" : (theme.palette.mode === 'dark' ? '#fff' : '#000'),
+                          color: MOTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                           fontSize: '12px'
                         }}
-                        onClick={() => handleOTP('sendMOTP')}
+                        onClick={() => reqSendOTP('sendMOTP')}
+                        disabled={isResendMOTP}
                       >
-                        {displayText2}
+                        {resendMOTP}
                       </Button>
-                      {/* <Button
-                        style={{
-                          color: color || (theme.palette.mode === 'dark' ? 'white' : 'black'),
-                          fontSize: '12px'
-                        }}
-                        onClick={() => handleOTP('sendMOTP')}
-                      >
-                        send OTP
-                      </Button> */}
                     </InputAdornment>
                   }
                 />
@@ -287,7 +288,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
               </Stack>
               {action === 'preset' && securityData?.gSecurity?.enabled === '1' && (
                 <Stack spacing={1} pt={3} width={440}>
-                  <InputLabel htmlFor="authcode-login" variant="subtitle3">
+                  <InputLabel htmlFor="authcode-login" variant="subtitle3" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                     Enter the Google Authentication Code
                   </InputLabel>
                   <OutlinedInput

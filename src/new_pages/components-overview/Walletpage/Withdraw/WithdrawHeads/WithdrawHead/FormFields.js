@@ -58,7 +58,9 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
   const [isLoading, setIsLoading] = useState(false);
   const [otpisLoading, setOtpIsLoading] = useState(false);
 
-  const [color, setColor] = useState('');
+  const [POTPcolor, setPOTPColor] = useState('');
+  const [MOTPcolor, setMOTPColor] = useState('');
+
   const [resendPOTP, setResendPOTP] = useState('SEND OTP');
   const [resendMOTP, setResendMOTP] = useState('SEND OTP');
 
@@ -95,7 +97,8 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
 
     setResendPOTP('RESEND OTP');
     setResendMOTP('RESEND OTP')
-    setColor('');
+    setPOTPColor('');
+    setMOTPColor('');
 
     setIsResendMOTP(false);
     setIsResendPOTP(false);
@@ -159,7 +162,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
             }
           }
         } else {
-          console.log(res.result, 'SENT OTP');
+          // console.log(res.result, 'SENT OTP');
           setSnackbarMessage({ msg: 'OTP Sent successfully', success: true });
           setSnackbarOpen(true);
 
@@ -168,7 +171,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
               setIsResendMOTP(true);
               setResendMOTP('RESEND OTP');
             }
-            setColor('grey');
+            setMOTPColor('grey');
           }
 
           if (!isResendPOTP && action === 'sendPOTP') {
@@ -176,11 +179,11 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
               setIsResendPOTP(true);
               setResendPOTP('RESEND OTP');
             }
-            setColor('grey');
+            setPOTPColor('grey');
           }
         }
       }, function (err) {
-        console.log(err);
+        // console.log(err);
         // Logout User
       });
     } catch (err) {
@@ -245,7 +248,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
         fetchWalletById();
       }
     }, function (err) {
-      console.log(err);
+      // console.log(err);
       // Logout User
     });
   }
@@ -285,7 +288,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
         setConfirmWDL(true);
       }
     }, function (err) {
-      console.log(err);
+      // console.log(err);
       // Logout User
     });
   }
@@ -307,7 +310,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
       timeoutId = setTimeout(() => {
         setResendMOTP('RESEND OTP');
         setIsResendMOTP(false);
-        setColor('');
+        setMOTPColor('');
       }, 30000);
     }
     return () => clearTimeout(timeoutId);
@@ -320,7 +323,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
       timeoutId = setTimeout(() => {
         setResendPOTP('RESEND OTP');
         setIsResendPOTP(false);
-        setColor('');
+        setPOTPColor('');
       }, 30000);
     }
     return () => clearTimeout(timeoutId);
@@ -646,7 +649,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
                                       <Button
                                         disableRipple
                                         style={{
-                                          color: color || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
+                                          color: POTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                                           fontSize: '12px'
                                         }}
                                         onClick={() => reqSendOTP('sendPOTP')}
@@ -685,7 +688,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
                                   <Button
                                     disableRipple
                                     style={{
-                                      color: color || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
+                                      color: MOTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                                       fontSize: '12px'
                                     }}
                                     onClick={() => reqSendOTP('sendMOTP')}

@@ -59,7 +59,9 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
   const [otpisLoading, setOtpIsLoading] = useState(false);
 
 
-  const [color, setColor] = useState('');
+  const [POTPcolor, setPOTPColor] = useState('');
+  const [MOTPcolor, setMOTPColor] = useState('');
+
   const [resendPOTP, setResendPOTP] = useState('SEND OTP');
   const [resendMOTP, setResendMOTP] = useState('SEND OTP');
 
@@ -100,7 +102,8 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
 
     setResendPOTP('RESEND OTP');
     setResendMOTP('RESEND OTP')
-    setColor('');
+    setPOTPColor('');
+    setMOTPColor('');
 
     setIsResendMOTP(false);
     setIsResendPOTP(false);
@@ -128,7 +131,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
             }
           }
         } else {
-          console.log(res.result, 'SENT OTP');
+          // console.log(res.result, 'SENT OTP');
           setSnackbarMessage({ msg: 'OTP Sent successfully', success: true });
           setSnackbarOpen(true);
 
@@ -137,7 +140,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
               setIsResendMOTP(true);
               setResendMOTP('RESEND OTP');
             }
-            setColor('grey');
+            setMOTPColor('grey');
           }
 
           if (!isResendPOTP && action === 'sendPOTP') {
@@ -145,11 +148,11 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
               setIsResendPOTP(true);
               setResendPOTP('RESEND OTP');
             }
-            setColor('grey');
+            setPOTPColor('grey');
           }
         }
       }, function (err) {
-        console.log(err);
+        // console.log(err);
         // Logout User
       });
     } catch (err) {
@@ -157,7 +160,6 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
       setStatus({ success: false });
     }
   }
-
 
   function InitWithdrawal(postData) {
     setOtpIsLoading(true);
@@ -265,7 +267,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
       timeoutId = setTimeout(() => {
         setResendMOTP('RESEND OTP');
         setIsResendMOTP(false);
-        setColor('');
+        setMOTPColor('');
       }, 30000);
     }
     return () => clearTimeout(timeoutId);
@@ -277,7 +279,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
       timeoutId = setTimeout(() => {
         setResendPOTP('RESEND OTP');
         setIsResendPOTP(false);
-        setColor('');
+        setPOTPColor('');
       }, 30000);
     }
     return () => clearTimeout(timeoutId);
@@ -376,8 +378,8 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                           backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#FFFFFF'
                         }}
                           {...props} direction="row" spacing={1}>
-                          <Typography sx={{color:theme.palette.mode === 'dark' ? '#F7F7F7' : 'text.secondary'}}>{option.AcNumber}</Typography>
-                          <Typography sx={{color:theme.palette.mode === 'dark' ? '#F7F7F7' : 'text.secondary'}}>({option.Beneficiary})</Typography>
+                          <Typography sx={{ color: theme.palette.mode === 'dark' ? '#F7F7F7' : 'text.secondary' }}>{option.AcNumber}</Typography>
+                          <Typography sx={{ color: theme.palette.mode === 'dark' ? '#F7F7F7' : 'text.secondary' }}>({option.Beneficiary})</Typography>
                         </Stack>
                       )}
                       renderInput={(params) => (
@@ -565,7 +567,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                                       endAdornment={<InputAdornment>
                                         <Button
                                           style={{
-                                            color: color || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
+                                            color: POTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                                             fontSize: '12px'
                                           }}
                                           onClick={() => reqSendOTP('sendPOTP')}
@@ -601,7 +603,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
                                     <Button
                                       disableRipple
                                       style={{
-                                        color: color || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
+                                        color: MOTPcolor || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                                         fontSize: '12px'
                                       }}
                                       onClick={() => reqSendOTP('sendMOTP')}
