@@ -65,7 +65,7 @@ const Marketpage = () => {
               </Grid>
 
               <Grid item xs={12} sm={6} md={6} lg={4}>
-                <ComponentsCardGain title="Top Gainers" marketData={marketRc?.result} />
+                <ComponentsCardGain title="New Listings" marketData={marketRc?.result} />
               </Grid>
 
               <Grid item xs={12} sm={6} md={6} lg={4}>

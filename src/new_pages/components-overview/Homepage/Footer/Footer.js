@@ -132,7 +132,7 @@ const Footer = ({ isAuthorised }) => {
       ></Divider>
       <Container>
         <Typography pt={5} textAlign="center" sx={{ color: theme.palette.mode === 'dark' ? 'text.white' : 'text.white' }}>
-          &copy; 2023 Gravitus
+          &copy; 2024 Gravitus
         </Typography>
       </Container>
     </Grid>

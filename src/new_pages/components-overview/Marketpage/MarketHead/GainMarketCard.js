@@ -16,6 +16,9 @@ function ComponentsCardGain({ title, marketData }) {
 
   const filteredlist = (marketData?.listings)
 
+  console.log('filteredlist',filteredlist)
+  const selectedIndices = [4, 8, 10];
+
   return (
     <MainCard
       contentSX={{ p: 2.25 }}
@@ -43,8 +46,9 @@ function ComponentsCardGain({ title, marketData }) {
       >
         <Table aria-labelledby="tableTitle">
           <TableBody>
-            {filteredlist?.filter(row => row[`24hChg`] > 0)
-              .slice(0, 3)
+            {/* {filteredlist?.filter(row => row[`24hChg`] > 0)
+              .slice(0, 3) */}
+            {filteredlist?.filter((_, index) => selectedIndices.includes(index))
               .map((row, index) => {
                 return (
                   <TableRow
