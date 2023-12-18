@@ -11,13 +11,9 @@ function getColor(value, theme) {
   }
 }
 
-function ComponentsCardGain({ title, marketData }) {
+function ComponentsCardGain({ title, TopGainers, marketData }) {
   const theme = useTheme();
-
   const filteredlist = (marketData?.listings)
-
-  console.log('filteredlist',filteredlist)
-  const selectedIndices = [4, 8, 10];
 
   return (
     <MainCard
@@ -46,9 +42,8 @@ function ComponentsCardGain({ title, marketData }) {
       >
         <Table aria-labelledby="tableTitle">
           <TableBody>
-            {/* {filteredlist?.filter(row => row[`24hChg`] > 0)
-              .slice(0, 3) */}
-            {filteredlist?.filter((_, index) => selectedIndices.includes(index))
+            {TopGainers
+              .slice(0, 3)
               .map((row, index) => {
                 return (
                   <TableRow

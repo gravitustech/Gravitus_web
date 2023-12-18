@@ -11,7 +11,7 @@ function getColor(value, theme) {
   }
 }
 
-function ComponentsCardLoss({ title, marketData }) {
+function ComponentsCardLoss({ title, TopLosers, marketData }) {
   const theme = useTheme();
   const filteredlist = (marketData?.listings)
 
@@ -42,7 +42,7 @@ function ComponentsCardLoss({ title, marketData }) {
       >
         <Table aria-labelledby="tableTitle">
           <TableBody>
-            {filteredlist?.filter(row => row[`24hChg`] < 0)
+            {TopLosers
               .slice(0, 3)
               .map((row, index) => {
                 return (

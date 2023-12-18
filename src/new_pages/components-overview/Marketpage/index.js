@@ -20,8 +20,34 @@ const Marketpage = () => {
   const isAuthorised = useSelector((state) => state.user.isAuthenticated);
   const [platformId, setPlatformId] = useState(getConfig_ng('spotPair').platformId);
 
+  const [TopCurrencies, setTopCurrencies] = useState(null);
+  const [TopGainers, setTopGainers] = useState(null);
+  const [TopLosers, setTopLosers] = useState(null);
+
   const [socketData, setSocketData] = useState();
   const theme = useTheme();
+
+  function getDisplayInfo() {
+    // if(TopGainers.length > 0 && TopLosers.length > 0) {
+    //   return 4;
+    // }
+    // else {
+    //   return 6
+    // }
+
+    return 6
+  }
+
+  function filterTopCryptos(marketRc) {
+    // setTopCurrencies(marketRc?.listings?.filter((_, index) => selectedIndices.includes(index)));
+    // setTopGainers(marketRc?.listings?.filter(row => row[`24hChg`] > 0));
+    // setTopLosers(marketRc?.listings?.filter(row => row[`24hChg`] < 0));
+
+    // To be deleted
+    // filteredlist?.filter((_, index) => selectedIndices.includes(index))
+    // filteredlist?.filter(row => row[`24hChg`] > 0)
+    // filteredlist?.filter(row => row[`24hChg`] < 0)
+  }
 
   function useMarketOverview() {
     var postData = { "callfrom": 'markets', 'superId' : getConfig_sp().userId};
@@ -34,6 +60,7 @@ const Marketpage = () => {
   }
 
   const { data : marketRc, error : marketEr, isLoading } = useMarketOverview();
+  filterTopCryptos(marketRc)
 
   useEffect(() => {
     var marketOverviewEvt = '/MARKETUpdate/POST';
@@ -59,19 +86,23 @@ const Marketpage = () => {
               </Typography>
             </Grid>
 
-            <Grid container spacing={2} pt={3} pb={3}>
-              <Grid item xs={12} sm={6} md={6} lg={4}>
-                <ComponentsCardTop title="Top Currencies" marketData={marketRc?.result} />
-              </Grid>
+            {
+              TopCurrencies && 
+              <Grid container spacing={2} pt={3} pb={3}>
+                <Grid item xs={12} sm={6} md={6} lg={getDisplayInfo()}>
+                  <ComponentsCardTop title="Top Currencies" TopCurrencies={TopCurrencies} marketData={marketRc?.result} />
+                </Grid>
 
-              <Grid item xs={12} sm={6} md={6} lg={4}>
-                <ComponentsCardGain title="New Listings" marketData={marketRc?.result} />
-              </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={getDisplayInfo()}>
+                  <ComponentsCardGain title="New Listings" TopGainers={TopGainers} marketData={marketRc?.result} />
+                </Grid>
 
-              <Grid item xs={12} sm={6} md={6} lg={4}>
-                <ComponentsCardLoss title="Top Losers" marketData={marketRc?.result} />
+                <Grid item xs={12} sm={6} md={6} lg={getDisplayInfo()}>
+                  <ComponentsCardLoss title="Top Losers" TopLosers={TopLosers} marketData={marketRc?.result} />
+                </Grid>
               </Grid>
-            </Grid>
+            }
+            
           </Grid>
           <MarketpageTable
             marketData={marketRc?.result}

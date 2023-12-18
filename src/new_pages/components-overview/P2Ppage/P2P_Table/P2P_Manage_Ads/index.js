@@ -90,6 +90,12 @@ const P2P_Manage_Ads = () => {
       else {
         // console.log(PostRc.result, 'Update from Use Effect');
         setP2POrders({ type: 'getUPDATE', data: PostRc.result });
+
+        if(PostRc.result.pfStatus.action != 'none') {
+          setSnackbarMessage({ msg: PostRc.result.pfStatus.message, success: false });
+          setSnackbarOpen(true);
+          // Go to Routes
+        }
       }
     }
 
