@@ -21,7 +21,7 @@ function CoinSelectTextfield({ walletList, setDepositData, setHistoryData }) {
     };
 
     postDataWallet(Deposit_Address(), postData).then(function (res) {
-      console.log(res);
+      // console.log(res);
       
       if (res.error !== 'ok') {
         handleCloseDialog();
@@ -47,7 +47,7 @@ function CoinSelectTextfield({ walletList, setDepositData, setHistoryData }) {
         setDepositData(res.result);
       }
     }, function (err) {
-      console.log(err);
+      // console.log(err);
       // Logout User
     });
   }
@@ -60,7 +60,7 @@ function CoinSelectTextfield({ walletList, setDepositData, setHistoryData }) {
     };
 
     postDataWallet(Wallet_Fetch_ById(), postData).then(function (res) {
-      console.log(res);
+      // console.log(res);
       
       if (res.error !== 'ok') {
         handleCloseDialog();
@@ -86,7 +86,7 @@ function CoinSelectTextfield({ walletList, setDepositData, setHistoryData }) {
         setHistoryData(res.result.external.filter((item) => item.transType === 'Deposit'));
       }
     }, function (err) {
-      console.log(err);
+      // console.log(err);
       // Logout User
     });
   }
@@ -100,7 +100,7 @@ function CoinSelectTextfield({ walletList, setDepositData, setHistoryData }) {
         fetchWalletById(id);
         fetchWalletAddr(id);
       } catch (e) {
-        console.log(e.message);
+        // console.log(e.message);
       }
     } else {
       setHistoryData(null);

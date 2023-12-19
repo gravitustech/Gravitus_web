@@ -216,7 +216,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
         mutate(Pre_Rs_Withdraw);
       }
     }, function (err) {
-      console.log(err);
+      // console.log(err);
       // Logout User
     });
   }
@@ -256,7 +256,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
         setConfirmWDL(true);
       }
     }, function (err) {
-      console.log(err);
+      // console.log(err);
       // Logout User
     });
   }

@@ -99,7 +99,7 @@ const InrDeposit_STEP1 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
                   ),
               })}
               onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                console.log({ values });
+                // console.log({ values });
                 setFormikValues({ ...formikValues, depositAmount: values.depositamount, payMode: values.paymode });
                 setStep(2);
                 try {

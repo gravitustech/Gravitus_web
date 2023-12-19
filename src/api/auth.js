@@ -13,7 +13,7 @@ export const loginUser = (inputs) => {
 };
 
 export const logoutUserWithToken = (token) => {
-  console.log({ token });
+  // console.log({ token });
   return apiConfig.post(`${LOGOUT_URL}${token}`);
 };
 

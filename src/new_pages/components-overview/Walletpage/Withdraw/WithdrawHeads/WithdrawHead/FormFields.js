@@ -135,7 +135,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
         setWithdrawData(null);
       }
     }, function (err) {
-      console.log(err);
+      // console.log(err);
       // Logout User
     });
   }

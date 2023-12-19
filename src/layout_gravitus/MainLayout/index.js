@@ -125,7 +125,7 @@ const GravitusMainLayout = () => {
                 </IconButton>
               </Grid>
               <Drawer open={openDrawer} onClose={handleCloseDrawer} anchor="right">
-                <List>
+                <List sx={{backgroundColor:theme.palette.mode==='dark'?'#131722':'text.white'}}>
                   <Box sx={{ width: 350 }}>
                     <IconButton disableRipple sx={{ marginLeft: '290px' }} onClick={toggleDrawer}>
                       <CloseIcon />

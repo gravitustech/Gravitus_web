@@ -109,7 +109,7 @@ const P2Ppage = () => {
             style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
             sx={{
               margin: '0',
-              background: theme.palette.mode === 'dark' ? 'radial-gradient(396.53% 49.54% at 50% 44.95%, #697186 0%, #21283B 100%)' : 'radial-gradient(58.07% 58.07% at 50% 41.93%, #FFF 0%, #AFE8E3 100%)',
+              background: theme.palette.mode === 'dark' ? 'radial-gradient(396.53% 49.54% at 50% 44.95%, #43537D 0%, #1A2136 100%)' : 'radial-gradient(58.07% 58.07% at 50% 41.93%, #FFF 0%, #AFE8E3 100%)',
             }}>
             <Grid item pb={0} md={2} lg={2} style={{ flexDirection: 'column', }} display={{ xs: 'none', md: 'block', lg: 'block' }}>
               {/* <img src={p2pimg1} alt='p2pimg1' width={100} /> */}
@@ -132,7 +132,7 @@ const P2Ppage = () => {
           </Grid>
 
           <Grid sx={{
-            background: theme.palette.mode === 'dark' ? '#21283B' : 'radial-gradient(circle,rgba(255, 255, 255, 1),rgba(173, 231, 226, 1))',
+            background: theme.palette.mode === 'dark' ? '#1a2136' : 'radial-gradient(circle,rgba(255, 255, 255, 1),rgba(173, 231, 226, 1))',
           }}>
             <P2P_Table isAuthorised={isAuthorised} P2PData={P2PData} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
           </Grid>

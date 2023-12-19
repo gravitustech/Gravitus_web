@@ -19,14 +19,14 @@ import { setConfig_ng } from 'src/utils_ng/localStorage_ng';
 import { MarketOverview_URL, FavouritesCrypto_URL, postDataSystem } from 'src/api_ng/system_ng';
 
 function MyComponent({ id, row }) {
-  
+
   const toggleFavourites = (row) => {
     var postData = {
       "platformId": row?.platformId
     };
 
     postDataSystem(FavouritesCrypto_URL(), postData).then(function (res) {
-      console.log("res", res);
+      // console.log("res", res);
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User
@@ -112,7 +112,7 @@ function getColor(value, theme) {
   } else if (value < 0) {
     return 'text.sell';
   } else {
-    return theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary';
+    return theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary';
   }
 }
 
@@ -135,7 +135,7 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
       setClickCounts({ ...clickCounts, [property]: nextClickCount });
     }
   };
-  
+
   return (
     <TableHead>
       <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
@@ -181,7 +181,7 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                                   ? 'text.secondarydark'
                                   : 'text.secondary'
                                 : theme.palette.mode === 'dark'
-                                  ? 'text.primarydark'
+                                  ? 'text.primary'
                                   : 'text.primary'
                           }}
                         />
@@ -199,7 +199,7 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                                   ? 'text.secondarydark'
                                   : 'text.secondary'
                                 : theme.palette.mode === 'dark'
-                                  ? 'text.primarydark'
+                                  ? 'text.primary'
                                   : 'text.primary'
                           }}
                         />
@@ -225,7 +225,7 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                                   ? 'text.secondarydark'
                                   : 'text.secondary'
                                 : theme.palette.mode === 'dark'
-                                  ? 'text.primarydark'
+                                  ? 'text.primary'
                                   : 'text.primary'
                           }}
                         />
@@ -243,7 +243,7 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                                   ? 'text.secondarydark'
                                   : 'text.secondary'
                                 : theme.palette.mode === 'dark'
-                                  ? 'text.primarydark'
+                                  ? 'text.primary'
                                   : 'text.primary'
                           }}
                         />
@@ -327,12 +327,12 @@ export default function MarketTable({ marketData, flag, searchQuery, listings, s
   const handleSelect = (id) => {
     setPlatformId(id);
     setConfig_ng('spotPair', { platformId: id });
-    navigate('/Spotpage')
+    navigate('/Spot')
   };
 
   const filteredlist = stableSort(listings, getComparator(order, orderBy))?.filter((item) =>
-      flag === 'USDT' ? item.sellPair === 'USDT' && item.platform === 'SPOT' : item.sellPair === 'INR' && item.platform === 'SPOT'
-    )?.filter((row) => row.tradePair.toLowerCase().includes(searchQuery.toLowerCase()));
+    flag === 'USDT' ? item.sellPair === 'USDT' && item.platform === 'SPOT' : item.sellPair === 'INR' && item.platform === 'SPOT'
+  )?.filter((row) => row.tradePair.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
     <Box>
@@ -419,13 +419,25 @@ export default function MarketTable({ marketData, flag, searchQuery, listings, s
                       </TableCell>
 
                       <TableCell sx={{ border: 'none' }} align="right">
-                        <Button variant="p2pbuybutton"
+                        <Typography
                           onClick={() => handleSelect(row.platformId)}
-                        >
-                          <Typography variant="body1" color="white">
-                            Trade
-                          </Typography>
-                        </Button>
+                          variant="body1"
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            cursor: 'pointer',
+                            minHeight: '32px',
+                            minWidth: '72px',
+                            borderRadius: '3px',
+                            color: 'text.white',
+                            background: ' #00BBAB',
+                            '&:hover': {
+                              background: '#00BBAB'
+                            }
+                          }}>
+                          Trade
+                        </Typography>
                       </TableCell>
                     </TableRow>
                   );

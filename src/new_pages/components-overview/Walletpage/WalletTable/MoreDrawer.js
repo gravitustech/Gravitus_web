@@ -82,7 +82,7 @@ const MoreDrawer = ({ walletListing, walletData }) => {
                 {walletData?.walletInfo?.sOrders} {walletListing?.ticker}
               </Typography>
               <Typography variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' }}>
-                {walletData?.walletInfo?.inVesting} {walletListing?.ticker}
+                {walletData?.walletInfo?.sVesting} {walletListing?.ticker}
               </Typography>
             </Stack>
           </Stack>

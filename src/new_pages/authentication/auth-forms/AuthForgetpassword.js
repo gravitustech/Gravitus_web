@@ -46,10 +46,10 @@ const GravitusAuthForgetpassword = () => {
           setIsLoading(true);
 
           try {
-            console.log({ values });
+            // console.log({ values });
             const { data } = await resetPassword({ ...inputs, postData: { emailId: values.email } });
             if (data.error === 'ok') {
-              console.log({ data });
+              // console.log({ data });
               navigate('/forgetpasswordstatus');
             } else {
               setIsLoading(false);

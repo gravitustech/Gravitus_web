@@ -11,14 +11,14 @@ import DownloadIcon from '@mui/icons-material/Download';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 
 import useSWR, { mutate } from 'swr';
-import { P2P_TradeMessages_URL, P2P_SendMessage_URL, P2P_SendPicture_URL, formDataP2P, postDataP2P, P2P_UpdateAppeal_URL } from "src/api_ng/peer2peer_ng";
+import { P2P_TradeMessages_URL, P2P_AppealMessages_URL, P2P_SendMessage_URL, P2P_SendPicture_URL, formDataP2P, postDataP2P, P2P_UpdateAppeal_URL } from "src/api_ng/peer2peer_ng";
 import { getConfig_ng, setConfig_ng } from '../../../../../../utils_ng/localStorage_ng';
 
 import ImageCropper from "src/components/_cropper";
 import { Formik } from "formik";
 
 const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMessage, setSnackbarOpen }) => {
-  const reversedMessages = messages && messages;
+  const reversedMessages = messages && [...messages].reverse();
   const [input, setInput] = React.useState(""); // Message in Use Sate
 
   const theme = useTheme();
@@ -73,7 +73,7 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
           }
         }
       } else {
-        mutate(P2P_TradeMessages_URL);
+        mutate(P2P_AppealMessages_URL);
         setInput('');
 
         // Reset Formik using ref & update based on sock
@@ -192,7 +192,7 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
           setSnackbarMessage({ msg: "Picture Uploaded", success: false });
           setSnackbarOpen(true);
 
-          mutate(P2P_TradeMessages_URL);
+          mutate(P2P_AppealMessages_URL);
           setCroppedImage('undefined');
           setImageToCrop('undefined');
           // Update based on sock

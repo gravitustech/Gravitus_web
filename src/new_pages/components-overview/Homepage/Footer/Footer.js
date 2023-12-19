@@ -44,7 +44,7 @@ const Footer = ({ isAuthorised }) => {
             <Typography
               variant="title2"
               component={RouterLink}
-              to="/Spotpage"
+              to="/Spot"
               sx={{
                 textDecorationLine: 'none',
                 color: theme.palette.mode === 'dark' ? 'text.white' : 'text.white',

@@ -28,7 +28,6 @@ const Support = ({ setSnackbarMessage, setSnackbarOpen }) => {
   const theme = useTheme();
 
   return (
-    data ? (
       <Box sx={{ flexGrow: 1 }}>
         <Grid container pl={0} pr={2} pb={3} spacing={2}>
           <Grid item xs={12} md={12}>
@@ -65,9 +64,6 @@ const Support = ({ setSnackbarMessage, setSnackbarOpen }) => {
           </Grid>
         </Grid>
       </Box>
-    ) : (
-      <Lodergif />
-    )
   );
 };
 

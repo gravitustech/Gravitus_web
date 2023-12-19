@@ -50,14 +50,14 @@ const HomepageHeadnewuser = () => {
         <Grid pt={10} sx={{ textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
           <style dangerouslySetInnerHTML={{ __html: keyframes }} />
           {theme.palette.mode === 'dark' ? (
-            <img src={head1imgdark} alt="head1img" width={75} style={imageStyle} />
+            <img src={head1img} alt="head1img" width={75} style={imageStyle} />
           ) : (
             <img src={head1img} alt="head1img" width={75} style={imageStyle} />
           )}
         </Grid>
         <Grid pt={20} sx={{ textAlign: 'end', justifyContent: 'end', alignItems: 'end' }}>
           {theme.palette.mode === 'dark' ? (
-            <img src={head2imgdark} alt="head1img" width={75} style={imageStyle} />
+            <img src={head2img} alt="head1img" width={75} style={imageStyle} />
           ) : (
             <img src={head2img} alt="head1img" width={75} style={imageStyle} />
           )}
@@ -96,7 +96,7 @@ const HomepageHeadnewuser = () => {
           </Stack>
           <Stack pt={5} sx={{ alignItems: 'center', justifyContent: 'center' }}>
             {theme.palette.mode === 'dark' ? (
-              <img src={headmainimgdark} alt="head1img" width={200} style={imageStyle} />
+              <img src={headmainimg} alt="head1img" width={200} style={imageStyle} />
             ) : (
               <img src={headmainimg} alt="head1img" width={200} style={imageStyle} />
             )}
@@ -107,14 +107,14 @@ const HomepageHeadnewuser = () => {
       <Grid item container md={2} lg={2} style={{ flexDirection: 'column' }} display={{ xs: 'none', md: 'block', lg: 'block' }}>
         <Grid pt={10} sx={{ textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
           {theme.palette.mode === 'dark' ? (
-            <img src={head3imgdark} alt="head1img" width={75} style={imageStyle} />
+            <img src={head3img} alt="head1img" width={75} style={imageStyle} />
           ) : (
             <img src={head3img} alt="head1img" width={75} style={imageStyle} />
           )}
         </Grid>
         <Grid pt={20} sx={{ textAlign: 'start', justifyContent: 'start', alignItems: 'start' }}>
           {theme.palette.mode === 'dark' ? (
-            <img src={head4imgdark} alt="head1img" width={75} style={imageStyle} />
+            <img src={head4img} alt="head1img" width={75} style={imageStyle} />
           ) : (
             <img src={head4img} alt="head1img" width={75} style={imageStyle} />
           )}

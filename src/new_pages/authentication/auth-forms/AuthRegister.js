@@ -49,7 +49,7 @@ const GravitusAuthRegister = () => {
   const [formikValues, setFormikValues] = useState(false);
 
   const handleConfirm = async () => {
-    console.log({ formikValues });
+    // console.log({ formikValues });
     const { data } = await validateReferral({ ...inputs, postData: { emailId: formikValues.email, referralId: formikValues.referralid } });
     if (data.error === 'ok') {
       const { data: resp } = await signupUser({
@@ -110,7 +110,7 @@ const GravitusAuthRegister = () => {
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           // console.log('am in')
           try {
-            console.log({ values });
+            // console.log({ values });
             if (values.referralid.length) {
               setFormikValues({ ...formikValues, email: values.email, password: values.password, referralid: values.referralid });
               setIsSuccessDialogOpen(true);
@@ -126,7 +126,7 @@ const GravitusAuthRegister = () => {
               }
             }
           } catch (err) {
-            console.error(err);
+            // console.error(err);
             setStatus({ success: false });
             setErrors({ submit: err.message });
             setSubmitting(false);

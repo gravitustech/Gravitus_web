@@ -11,9 +11,9 @@ function getColor(value, theme) {
   }
 }
 
-function ComponentsCardLoss({ title, TopLosers, marketData }) {
+function ComponentsCardLoss({ title, TopLosers }) {
   const theme = useTheme();
-  const filteredlist = (marketData?.listings)
+  const filteredlist = (TopLosers?.result?.listings)
 
   return (
     <MainCard
@@ -42,44 +42,42 @@ function ComponentsCardLoss({ title, TopLosers, marketData }) {
       >
         <Table aria-labelledby="tableTitle">
           <TableBody>
-            {TopLosers
-              .slice(0, 3)
-              .map((row, index) => {
-                return (
-                  <TableRow
-                    role="checkbox"
-                    sx={{ border: 0, padding: '0', height: '42px' }}
-                    tabIndex={-1}
-                    key={index}
-                  >
-                    <TableCell sx={{ border: 'none', padding: '0' }} component="th" scope="row" align="left">
-                      <Stack direction="row" alignItems="center" spacing={0.5}>
-                        <img src={row.imagePath} alt="ico" width="24" height="24" />
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
-                          }}
-                        >
-                          <span style={{ marginLeft: '4px' }}> {row.tradePair}</span>
-                        </Typography>
-                      </Stack>
-                    </TableCell>
-
-                    <TableCell sx={{ border: 'none', padding: '0' }} align="left">
-                      <Typography variant="body1" sx={{ color: getColor(row[`24hChg`], theme) }}>
-                        {row.lastPrice}
+            {filteredlist?.filter(row => row[`24hChg`] < 0).slice(0, 3).map((row, index) => {
+              return (
+                <TableRow
+                  role="checkbox"
+                  sx={{ border: 0, padding: '0', height: '42px' }}
+                  tabIndex={-1}
+                  key={index}
+                >
+                  <TableCell sx={{ border: 'none', padding: '0' }} component="th" scope="row" align="left">
+                    <Stack direction="row" alignItems="center" spacing={0.5}>
+                      <img src={row.imagePath} alt="ico" width="24" height="24" />
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
+                        }}
+                      >
+                        <span style={{ marginLeft: '4px' }}> {row.tradePair}</span>
                       </Typography>
-                    </TableCell>
+                    </Stack>
+                  </TableCell>
 
-                    <TableCell sx={{ border: 'none', padding: '0' }} align="right">
-                      <Typography variant="body1" sx={{ color: getColor(row[`24hChg`], theme) }}>
-                        {row[`24hChg`]}%
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                  <TableCell sx={{ border: 'none', padding: '0' }} align="left">
+                    <Typography variant="body1" sx={{ color: getColor(row[`24hChg`], theme) }}>
+                      {row.lastPrice}
+                    </Typography>
+                  </TableCell>
+
+                  <TableCell sx={{ border: 'none', padding: '0' }} align="right">
+                    <Typography variant="body1" sx={{ color: getColor(row[`24hChg`], theme) }}>
+                      {row[`24hChg`]}%
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

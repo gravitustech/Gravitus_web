@@ -239,7 +239,7 @@ const GravitusAuthLoginVerify = () => {
           //   verifyMethod === 'google' && Yup.object().shape({ authcode: Yup.string().max(6).required('Auth code is required') }))
           // }
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-            console.log({ values });
+            // console.log({ values });
             const phoneOTP = values.otpmbl;
             const emailOTP = values.otpmail;
             const googleOTP = values.authcode;
@@ -255,7 +255,7 @@ const GravitusAuthLoginVerify = () => {
             try {
               const { data } = await signinSecurity({ accountType: 'GRAVITUS', postData });
               if (Object.keys(data.result).length) {
-                console.log({ data });
+                // console.log({ data });
                 setSnackbarMessage({ msg: 'login verified successfully', success: true });
                 setSnackbarOpen(true);
                 dispatch(

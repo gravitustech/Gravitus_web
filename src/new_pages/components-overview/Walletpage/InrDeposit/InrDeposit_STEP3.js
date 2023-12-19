@@ -113,7 +113,7 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
 
       formDataWallet(Post_Rs_Deposit(), postData).then(function (res) {
         // setIsLoading(false);
-        console.log(res, 'Post Deposit')
+        // console.log(res, 'Post Deposit')
         if (res.error !== 'ok') {
           setIsLoading(false);
           if (res.error.name == "Missing Authorization") {
@@ -132,7 +132,7 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
             else {
               setSnackbarMessage({ msg: res.error, success: false });
               setSnackbarOpen(true);
-              console.log('res.error', res.error);
+              // console.log('res.error', res.error);
               setOpen(false);
               setIsLoading(false);
             }
@@ -156,7 +156,7 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
           setStep(1);
         }
       }, function (err) {
-        console.log(err);
+        // console.log(err);
         // Logout User
       });
     }

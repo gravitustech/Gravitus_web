@@ -75,19 +75,19 @@ const MainRoutes = {
       element: <Registerstatus />
     },
     {
-      path: 'market',
+      path: 'Market',
       element: <Marketpage />
     },
     {
-      path: 'Spotpage',
+      path: 'Spot',
       element: <Spotpage />
     },
     {
-      path: 'p2p',
+      path: 'P2P',
       element: <P2Ppage />
     },
     {
-      path: 'wallet',
+      path: 'Wallet',
       element: <Walletpage />
     },
     {

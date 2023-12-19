@@ -159,7 +159,7 @@ export default function HistoryTab({ isAuthorised, orderTableData, priceData, ca
                     // const isItemSelected = isSelected(row.Name);
                     const labelId = `enhanced-table-checkbox-${index}`;
                     const shouldRenderRow = !hideCancelled || (hideCancelled && row.status !== 'Cancelled');
-                    console.log('row', row)
+                    // console.log('row', row)
                     return shouldRenderRow && (
                       <TableRow
                         sx={{ '&:last-child td, &:last-child th': { border: 0 }, height: '52px' }}

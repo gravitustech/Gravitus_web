@@ -186,7 +186,7 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
         // Logic moved to sock update
       }
     }, function (err) {
-      console.log(err);
+      // console.log(err);
       // Logout User
     });
   };

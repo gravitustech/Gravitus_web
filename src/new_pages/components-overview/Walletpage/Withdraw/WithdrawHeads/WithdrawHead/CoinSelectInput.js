@@ -8,9 +8,9 @@ import { Wallet_Fetch_ById, postDataWallet } from 'src/api_ng/wallet_ng';
 function CoinSelectTextfield({ values, errors, touched, walletList,
   walletId, setWalletId, setFieldValue, handleBlur }) {
 
-  console.log(touched, 'touched');
-  console.log(errors, 'errors');
-  console.log(values, 'values');
+  // console.log(touched, 'touched');
+  // console.log(errors, 'errors');
+  // console.log(values, 'values');
 
   const theme = useTheme();
   const [selectedItem, setSelectedItem] = useState(walletId && walletList.find((item) => item.listing.id === walletId));

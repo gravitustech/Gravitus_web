@@ -142,7 +142,6 @@ const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
         </TabPanel>
         <TabPanel value="1" sx={{ padding: '0', paddingTop: '12px' }}>
           <AppealChatscreen
-            // messages={appealMessage}
             messages={Appealdata?.result?.appealMessage}
             orderDetails={Appealdata?.result?.orderDetails}
             counterPart={counterPart}

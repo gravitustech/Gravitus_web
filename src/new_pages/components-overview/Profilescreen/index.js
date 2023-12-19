@@ -51,6 +51,7 @@ import { logoutUserWithToken } from '../../../api/auth';
 import CustomSnackBar from '../../../components/snackbar';
 import { getProfileURL, fetcher } from '../../../api/profile';
 import { logoutUser } from '../../../appRedux/actions/adminUser';
+import Lodergif from 'src/components/Gravitusloader';
 
 function ProfileScreen() {
   const theme = useTheme();
@@ -187,7 +188,6 @@ function ProfileScreen() {
   ];
 
   const handleLogout = async () => {
-    console.log('asas');
     try {
       // console.log({ values });
       await logoutUserWithToken(token);
@@ -202,9 +202,9 @@ function ProfileScreen() {
     <Grid lg={12} pt={0} sx={{ minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' }, backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : '#F7F7F7' }}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <MenuList anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
-          {tabData.map((tab) => (
+          {tabData.map((tab, index) => (
             <MenuItem
-              key={tab.value}
+              key={index}
               onClick={() => handleMenuItemClick(tab.value)}
               sx={{
                 backgroundColor:
@@ -248,10 +248,10 @@ function ProfileScreen() {
             sx={{ width: '220px', height: '51px' }}
           >
             <Button disableRipple fullWidth sx={{
-                backgroundColor: 'transparent',  
-                '&:hover': {
-                  backgroundColor: 'transparent',  
-                },
+              backgroundColor: 'transparent',
+              '&:hover': {
+                backgroundColor: 'transparent',
+              },
             }}>
               <Stack direction="row" spacing={1.4} onClick={handleOpenDialog} sx={{ paddingRight: '52px' }}>
                 <img src={logout} alt="logout" width={24} />
@@ -260,39 +260,53 @@ function ProfileScreen() {
                 </Typography>
               </Stack>
             </Button>
-            <Dialog open={openDialog} onClose={handleCloseDialog} >
-              <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
-                <img src={warninggif} alt='warninggif' />
-                <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                  Confirm ?
-                </Typography>
-                <Typography textAlign='center' variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                  Are you sure you did like to logout your account?
-                </Typography>
+            {data ? (<>
+              <Dialog open={openDialog} onClose={handleCloseDialog} >
+                <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
+                  <img src={warninggif} alt='warninggif' />
+                  <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                    Confirm ?
+                  </Typography>
+                  <Typography textAlign='center' variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                    Are you sure you did like to logout your account?
+                  </Typography>
 
-                <Stack pt={3} direction="row" spacing={2} justifyContent="space-between">
-                  <Button variant="contained5" onClick={handleCloseDialog}>
-                    No
-                  </Button>
-                  <Button variant='contained4' onClick={handleLogout}>
-                    Yes
-                  </Button>
+                  <Stack pt={3} direction="row" spacing={2} justifyContent="space-between">
+                    <Button variant="contained5" onClick={handleCloseDialog}>
+                      No
+                    </Button>
+                    <Button variant='contained4' onClick={handleLogout}>
+                      Yes
+                    </Button>
+                  </Stack>
+
                 </Stack>
-
-              </Stack>
-            </Dialog>
+              </Dialog>
+            </>) : (
+              <>
+              </>
+            )}
           </MenuItem>
         </MenuList>
         <Grid item pt={1} display={{ xs: 'none', md: 'none', lg: 'block' }}>
           <Divider orientation="vertical" sx={{ height: '100%' }} />
         </Grid>
         <TabContext value={value}>
-          {data &&
-            tabData.map((tab) => (
-              <TabPanel key={tab.value} value={tab.value} sx={{ width: '100%', padding: '13px' }}>
-                {tab.screen}
-              </TabPanel>
-            ))}
+          {data ? (
+            <>
+              {data &&
+                tabData.map((tab) => (
+                  <TabPanel key={tab.value} value={tab.value} sx={{ width: '100%', padding: '13px' }}>
+                    {tab.screen}
+                  </TabPanel>
+                ))}
+            </>) : (
+            <>
+              <Stack sx={{ width: '100%' }}>
+                <Lodergif />
+              </Stack>
+            </>
+          )}
         </TabContext>
       </div>
       <CustomSnackBar

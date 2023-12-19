@@ -13,7 +13,7 @@ function getColor(value, theme) {
 
 function ComponentsCardGain({ title, TopGainers, marketData }) {
   const theme = useTheme();
-  const filteredlist = (marketData?.listings)
+  const filteredlist = (TopGainers?.result?.listings)
 
   return (
     <MainCard
@@ -42,9 +42,7 @@ function ComponentsCardGain({ title, TopGainers, marketData }) {
       >
         <Table aria-labelledby="tableTitle">
           <TableBody>
-            {TopGainers
-              .slice(0, 3)
-              .map((row, index) => {
+            {filteredlist?.filter(row=>row[`24hChg`]>0).slice(0, 3).map((row, index) => {
                 return (
                   <TableRow
                     role="checkbox"

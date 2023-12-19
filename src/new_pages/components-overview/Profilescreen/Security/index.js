@@ -25,7 +25,7 @@ const Security = ({ setSnackbarMessage, setSnackbarOpen }) => {
 
   console.log('res', data, error, isLoading);
 
-  return data ? (
+  return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container pl={0} pr={2}>
         <Grid item xs={12} md={12}>
@@ -47,9 +47,7 @@ const Security = ({ setSnackbarMessage, setSnackbarOpen }) => {
         </Grid>
       </Grid>
     </Box>
-  ) : (
-    <Lodergif />
-  );
+  )
 };
 
 export default Security;

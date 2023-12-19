@@ -30,7 +30,7 @@ const utilities = {
       id: 'util-spot',
       title: 'Spot',
       type: 'item',
-      url: '/Spotpage',
+      url: '/Spot',
       icon: icons.spoticons
     },
     {

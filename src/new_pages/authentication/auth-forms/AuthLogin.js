@@ -119,7 +119,7 @@ const GravitusAuthLogin = () => {
               setSnackbarOpen(true);
             }
           } catch (err) {
-            console.log(err);
+            // console.log(err);
             // Logout User
           }
         }}

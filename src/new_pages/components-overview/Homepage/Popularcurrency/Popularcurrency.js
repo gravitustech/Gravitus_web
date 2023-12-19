@@ -10,6 +10,7 @@ const Popularcurrency = ({ marketData }) => {
   
   return (
     <Grid
+    display={{ xs: 'none', sm: 'block', md: 'block', lg: 'block' }}
       container
       pl={{ md: 6, sm: 8, xs: 6, lg: 15 }}
       pr={{ md: 6, sm: 8, xs: 6, lg: 15 }}

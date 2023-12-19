@@ -253,7 +253,7 @@ export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackba
         }
       }
     }, function (err) {
-      console.log(err);
+      // console.log(err);
       // Logout User
     });
   }
@@ -287,7 +287,7 @@ export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackba
     // Call Logout User
   }
 
-  const INRdepositButton = () => { 
+  const INRdepositButton = () => {
     // Your condition to determine the route
     if (walletINRRc.error !== 'ok') {
       if (walletINRRc.error.name == "Missing Authorization") {
@@ -314,10 +314,6 @@ export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackba
       navigate('/inrdeposit');
     }
   };
-
-  const CryptodepositButton = () => {
-    navigate('/deposit');
-  }
 
   const INRwithdrawButton = () => {
     // Your condition to determine the route
@@ -346,10 +342,6 @@ export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackba
       navigate('/inrwithdraw');
     }
   };
-
-  const CryptowithdrawButton = () => {
-    navigate('/withdraw');
-  }
 
   return (
     <Box>
@@ -483,24 +475,58 @@ export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackba
 
                     <TableCell sx={{ border: 'none' }} align="right" spacing={3}>
                       <Stack direction="row" justifyContent="space-between">
-                        <Link
-                          variant="body1"
-                          color="text.buy"
-                          sx={{ cursor: 'pointer' }}
-                          onClick={listing.id === 17 ? (INRdepositButton) : (CryptodepositButton)}
-                          state={{ walletId: listing.id }}
-                        >
-                          Deposit
-                        </Link>
-                        <Link
-                          variant="body1"
-                          color="text.buy"
-                          sx={{ cursor: 'pointer' }}
-                          onClick={listing.id === 17 ? (INRwithdrawButton) : (CryptowithdrawButton)}
-                          state={{ walletId: listing.id }}
-                        >
-                          Withdraw
-                        </Link>
+                        {listing.id === 17 ? (
+                          <>
+                            <Link
+                              variant="body1"
+                              color="text.buy"
+                              sx={{ cursor: 'pointer' }}
+                              onClick={INRdepositButton}
+                            >
+                              Deposit
+                            </Link>
+                          </>
+                        ) : (
+                          <>
+                            <Link
+                              variant="body1"
+                              color="text.buy"
+                              sx={{ cursor: 'pointer' }}
+                              component={RouterLink}
+                              to={'/deposit'}
+                              state={{ walletId: listing.id }}
+                            >
+                              Deposit
+                            </Link>
+                          </>
+                        )}
+
+                        {listing.id === 17 ? (
+                          <>
+                            <Link
+                              variant="body1"
+                              color="text.buy"
+                              sx={{ cursor: 'pointer' }}
+                              onClick={INRwithdrawButton}
+                            >
+                              Withdraw
+                            </Link>
+                          </>
+                        ) : (
+                          <>
+                            <Link
+                              variant="body1"
+                              color="text.buy"
+                              sx={{ cursor: 'pointer' }}
+                              component={RouterLink}
+                              to={'/withdraw'}
+                              state={{ walletId: listing.id }}
+                            >
+                              Withdraw
+                            </Link>
+                          </>
+                        )}
+
                         <Link variant="body1" color="text.buy" component={RouterLink} to="/history" state={{ walletId: listing.id }}>
                           History
                         </Link>

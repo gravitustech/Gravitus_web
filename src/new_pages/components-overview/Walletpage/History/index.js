@@ -67,11 +67,11 @@ const HistoryPageNG = () => {
           // LogOut User;
         }
         else if (statementRc?.error?.name != 'Invalid Authorization') {
-          console.log(statementRc.error.name);
+          // console.log(statementRc.error.name);
           // Show 'statementRc.error' snack bar
         }
         else {
-          console.log(statementRc.error);
+          // console.log(statementRc.error);
           // Show 'statementRc.error' snack bar
         }
       }

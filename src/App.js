@@ -18,7 +18,7 @@ const App = () => {
   useEffect(() => {
     socket.on('connect', () => {
       if (socket.connected) {
-        console.log('Socket Connected');
+        // console.log('Socket Connected');
 
         var authenticate = {"userId" : "none"};
         if(getConfig_sp().userId != 'guestUser' && getConfig_sp().token != 'none') {
@@ -26,7 +26,7 @@ const App = () => {
         }
 
         socket.emit('authentication', authenticate, (res) => {
-          console.log('Socket Authenticated', { res });
+          // console.log('Socket Authenticated', { res });
         });
 
         dispatch(
@@ -38,7 +38,7 @@ const App = () => {
     });
 
     socket.on('authenticated', (res) => {
-      console.log('User is authenticated - ' + res);
+      // console.log('User is authenticated - ' + res);
     });
 
     socket.on('/NOTIFYUpdate/POST', (res) => {

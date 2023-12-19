@@ -11,11 +11,10 @@ function getColor(value, theme) {
   }
 }
 
-function ComponentsCardTop({ title, TopCurrencies, marketData }) {
+function ComponentsCardTop({ title, TopCurrencies }) {
   const theme = useTheme();
-  const filteredlist = (marketData?.listings)
+  const filteredlist = (TopCurrencies?.result?.listings)
   const selectedIndices = [1, 2, 7];
-
   return (
     <MainCard
       contentSX={{ p: 2.25 }}
@@ -43,7 +42,7 @@ function ComponentsCardTop({ title, TopCurrencies, marketData }) {
       >
         <Table aria-labelledby="tableTitle">
           <TableBody>
-            {TopCurrencies.map((row, index) => {
+            {filteredlist?.filter((_, index) => selectedIndices.includes(index))?.map((row, index) => {
               return (
                 <TableRow
                   role="checkbox"

@@ -53,7 +53,7 @@ function MyComponent({ id, row }) {
 
   return (
     <>
-       {row?.favourites ? (
+      {row?.favourites ? (
         <StarIcon onClick={() => toggleFavourites(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />
       ) : (
         <StarBorderIcon onClick={() => toggleFavourites(row)} style={{ cursor: 'pointer' }} />
@@ -111,7 +111,7 @@ function getColor(value, theme) {
   } else if (value < 0) {
     return 'text.sell';
   } else {
-    return theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary';
+    return theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary';
   }
 }
 function OrderTableHead({ order, orderBy, onRequestSort }) {
@@ -178,7 +178,7 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                                   ? 'text.secondarydark'
                                   : 'text.secondary'
                                 : theme.palette.mode === 'dark'
-                                  ? 'text.primarydark'
+                                  ? 'text.primary'
                                   : 'text.primary'
                           }}
                         />
@@ -196,7 +196,7 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                                   ? 'text.secondarydark'
                                   : 'text.secondary'
                                 : theme.palette.mode === 'dark'
-                                  ? 'text.primarydark'
+                                  ? 'text.primary'
                                   : 'text.primary'
                           }}
                         />
@@ -324,7 +324,7 @@ export default function FavouriteTab({ marketData, flag, searchQuery, listings, 
   const handleSelect = (id) => {
     setPlatformId(id);
     setConfig_ng('spotPair', { platformId: id });
-    navigate('/Spotpage')
+    navigate('/Spot')
   };
 
   const FavouriteData = marketData?.favourites;
@@ -416,13 +416,25 @@ export default function FavouriteTab({ marketData, flag, searchQuery, listings, 
                       </TableCell>
 
                       <TableCell sx={{ border: 'none' }} align="right">
-                        <Button variant="p2pbuybutton"
+                        <Typography
                           onClick={() => handleSelect(row.platformId)}
-                        >
-                          <Typography variant="body1" color="white">
-                            Trade
-                          </Typography>
-                        </Button>
+                          variant="body1"
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            cursor: 'pointer',
+                            minHeight: '32px',
+                            minWidth: '72px',
+                            borderRadius: '3px',
+                            color: 'text.white',
+                            background: ' #00BBAB',
+                            '&:hover': {
+                              background: '#00BBAB'
+                            }
+                          }}>
+                          Trade
+                        </Typography>
                       </TableCell>
                     </TableRow>
                   );

@@ -42,8 +42,8 @@ function a11yProps(index) {
 
 const Email = ({ email }) => {
   const theme = useTheme();
-  const firstTwo = email.slice(0, 4);
-  const lastTwo = email.slice(-10);
+  const firstTwo = email?.slice(0, 4);
+  const lastTwo = email?.slice(-10);
 
   const middle = '***';
   const maskedEmail = `${firstTwo}${middle}${lastTwo}`;

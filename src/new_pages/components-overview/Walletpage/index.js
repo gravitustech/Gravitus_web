@@ -55,11 +55,11 @@ const Walletpage = () => {
           // LogOut User;
         }
         else if (walletRc?.error?.name != 'Invalid Authorization') {
-          console.log(walletRc.error);
+          // console.log(walletRc.error);
           // Show 'walletRc.error' snack bar
         }
         else {
-          console.log(walletRc.error);
+          // console.log(walletRc.error);
           // Show 'walletRc.error' snack bar
         }
       }

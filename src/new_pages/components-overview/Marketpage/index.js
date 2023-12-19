@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Typography, Grid, useTheme } from '@mui/material';
+import React, { useEffect, useReducer, useState } from 'react';
+import { Typography, Grid, useTheme, Stack } from '@mui/material';
+import Marquee from "react-fast-marquee";
 
+import Footer from '../Homepage/Footer/Footer';
 import Lodergif from 'src/components/Gravitusloader';
 import MarketpageTable from './MarketTable/index.js';
-
-import ComponentsCardTop from './MarketHead/TopMarketCard.js';
-import ComponentsCardGain from './MarketHead/GainMarketCard.js';
-import ComponentsCardLoss from './MarketHead/LossMarketCard.js';
-import Footer from '../Homepage/Footer/Footer';
+import CurrencyCard from './MarketHead_sp/CurrencyCards.js';
 
 import { useSelector } from 'react-redux';
 import { socket } from '../../../socket';
@@ -17,40 +15,14 @@ import { MarketOverview_URL, fetcherSystem } from 'src/api_ng/system_ng';
 import { getConfig_ng, getConfig_sp } from 'src/utils_ng/localStorage_ng';
 
 const Marketpage = () => {
-  const isAuthorised = useSelector((state) => state.user.isAuthenticated);
-  const [platformId, setPlatformId] = useState(getConfig_ng('spotPair').platformId);
-
-  const [TopCurrencies, setTopCurrencies] = useState(null);
-  const [TopGainers, setTopGainers] = useState(null);
-  const [TopLosers, setTopLosers] = useState(null);
-
-  const [socketData, setSocketData] = useState();
   const theme = useTheme();
 
-  function getDisplayInfo() {
-    // if(TopGainers.length > 0 && TopLosers.length > 0) {
-    //   return 4;
-    // }
-    // else {
-    //   return 6
-    // }
-
-    return 6
-  }
-
-  function filterTopCryptos(marketRc) {
-    // setTopCurrencies(marketRc?.listings?.filter((_, index) => selectedIndices.includes(index)));
-    // setTopGainers(marketRc?.listings?.filter(row => row[`24hChg`] > 0));
-    // setTopLosers(marketRc?.listings?.filter(row => row[`24hChg`] < 0));
-
-    // To be deleted
-    // filteredlist?.filter((_, index) => selectedIndices.includes(index))
-    // filteredlist?.filter(row => row[`24hChg`] > 0)
-    // filteredlist?.filter(row => row[`24hChg`] < 0)
-  }
+  const isAuthorised = useSelector((state) => state.user.isAuthenticated);
+  const [platformId, setPlatformId] = useState(getConfig_ng('spotPair').platformId);
+  const [socketData, setSocketData] = useState();
 
   function useMarketOverview() {
-    var postData = { "callfrom": 'markets', 'superId' : getConfig_sp().userId};
+    var postData = { "callfrom": 'markets', 'superId': getConfig_sp().userId };
 
     const { data, error, isLoading } = useSWR([MarketOverview_URL(), postData], fetcherSystem, {
       revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
@@ -59,8 +31,7 @@ const Marketpage = () => {
     return { data, error, isLoading };
   }
 
-  const { data : marketRc, error : marketEr, isLoading } = useMarketOverview();
-  filterTopCryptos(marketRc)
+  const { data: marketRc, error: marketEr, isLoading } = useMarketOverview();
 
   useEffect(() => {
     var marketOverviewEvt = '/MARKETUpdate/POST';
@@ -73,36 +44,44 @@ const Marketpage = () => {
     };
   }, []);
 
-  console.log(marketRc, "Market Overview");
-
   return (
     <>
-      {marketRc ? (
+      {marketRc?.result ? (
         <>
-          <Grid pl={15} pr={15} pt={3}>
-            <Grid item xs={12} lg={12} md={12}>
+          <Grid pl={15} pr={15} pt={3} pb={3}>
+            <Grid item xs={12} lg={12} md={12} pb={3}>
               <Typography sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} variant="h1">
                 Market Overview
               </Typography>
             </Grid>
 
-            {
-              TopCurrencies && 
-              <Grid container spacing={2} pt={3} pb={3}>
-                <Grid item xs={12} sm={6} md={6} lg={getDisplayInfo()}>
-                  <ComponentsCardTop title="Top Currencies" TopCurrencies={TopCurrencies} marketData={marketRc?.result} />
-                </Grid>
+            <Marquee
+              speed={75}
+              gradient={true}
+              gradientWidth={56}
+              gradientColor={theme.palette.mode === 'dark' ? '#0F121A' : '#F7F7F7'}
+              // pauseOnHover={true}
+              pauseOnClick={true}
+            >
+              <Stack direction='row' spacing={2} pr={2.5}>
+                <CurrencyCard MarketData={marketRc} />
+              </Stack>
+            </Marquee>
 
-                <Grid item xs={12} sm={6} md={6} lg={getDisplayInfo()}>
-                  <ComponentsCardGain title="New Listings" TopGainers={TopGainers} marketData={marketRc?.result} />
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={6} lg={getDisplayInfo()}>
-                  <ComponentsCardLoss title="Top Losers" TopLosers={TopLosers} marketData={marketRc?.result} />
-                </Grid>
+            {/* <Grid container spacing={2} pt={3} pb={3}>
+              <Grid item xs={12} sm={6} md={6} lg={4} >
+                <ComponentsCardTop title="Top Currencies" TopCurrencies={marketRc} />
               </Grid>
-            }
-            
+
+              <Grid item xs={12} sm={6} md={6} lg={4} >
+                <ComponentsCardGain title="Top Gainers" TopGainers={marketRc} />
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={6} lg={4} >
+                <ComponentsCardLoss title="Top Losers" TopLosers={marketRc} />
+              </Grid>
+            </Grid> */}
+
           </Grid>
           <MarketpageTable
             marketData={marketRc?.result}
@@ -124,8 +103,7 @@ const Marketpage = () => {
         </>
       ) : (
         <>
-        <Lodergif />
-        {console.log("marketRc is undefined")}
+          <Lodergif />
         </>
       )}
     </>

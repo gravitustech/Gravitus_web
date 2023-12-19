@@ -28,14 +28,14 @@ const HomepageHead = () => {
               A foundational tool for novice users to gain insight into the cryptocurrency world.
             </Typography>
             <Stack pt={3}>
-              <Button variant='homespotbutton' component={RouterLink} to="/Spotpage">
+              <Button variant='homespotbutton' component={RouterLink} to="/Spot">
                 TRADE NOW
               </Button>
             </Stack>
           </Stack>
         </Grid>
 
-        <Grid item xs={12} sm={12} md={5} lg={5} display={{ xs: 'none', sm: 'block', md: 'block', lg: 'block' }} >
+        <Grid item xs={12} sm={12} md={5} lg={5} display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }} >
           <Stack textAlign='center' alignItems='center'>
             {theme.palette.mode === 'dark' ? (
               <img src={homepageimg1dark} alt='homepageimg1' width={500} />
