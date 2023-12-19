@@ -23,7 +23,7 @@ const Security = ({ setSnackbarMessage, setSnackbarOpen }) => {
     // { suspense: true }
   );
 
-  console.log('res', data, error, isLoading);
+  // console.log('res', data, error, isLoading);
 
   return (
     <Box sx={{ flexGrow: 1 }}>

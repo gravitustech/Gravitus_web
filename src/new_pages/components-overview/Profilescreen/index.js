@@ -74,7 +74,7 @@ function ProfileScreen() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
 
-  console.log(page);
+  // console.log(page);
   const { data, error, isLoading, mutate } = useSWR(
     getProfileURL(),
     (url) => fetcher(url, { accountType: 'GRAVITUS' })
@@ -194,7 +194,7 @@ function ProfileScreen() {
       dispatch(logoutUser());
       navigate('/');
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 

@@ -18,7 +18,7 @@ import { updateIdentity } from '../../../../api/profile';
 
 
 const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, mutate }) => {
-  console.log('userData', userData)
+  // console.log('userData', userData)
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -98,7 +98,7 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           setIsLoading(true);
-          console.log({ values });
+          // console.log({ values });
           formData.append('updateInfo', JSON.stringify({ fullName: values.name, pancard: values.pannumber, docType: values.docType }));
           formData.append('fileName', imageToCrop);
           if (croppedImage) {
@@ -110,10 +110,10 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
           try {
             const { data } = await updateIdentity(formData);
             if (Object.keys(data.result).length) {
-              console.log("data", data);
+              // console.log("data", data);
               setSnackbarMessage({ msg: 'Identity updated successfully', success: true });
               setSnackbarOpen(true);
-              console.log({ values });
+              // console.log({ values });
               setStatus({ success: false });
               setSubmitting(false);
               setIsLoading(false);

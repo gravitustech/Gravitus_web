@@ -23,7 +23,7 @@ const Support = ({ setSnackbarMessage, setSnackbarOpen }) => {
     // { suspense: true }
   );
 
-  console.log('res', data, error, isLoading);
+  // console.log('res', data, error, isLoading);
 
   const theme = useTheme();
 

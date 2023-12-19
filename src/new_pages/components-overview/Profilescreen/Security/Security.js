@@ -389,7 +389,7 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                                   ? await disableSecurity({ accountType: 'GRAVITUS', postData })
                                   : await enableSecurity({ accountType: 'GRAVITUS', postData });
                               if (Object.keys(data.result).length) {
-                                console.log({ data });
+                                // console.log({ data });
                                 mutate();
                                 setSnackbarMessage({ msg: 'otp validated', success: true });
                                 setSnackbarOpen(true);

@@ -54,7 +54,7 @@ const SupportScreen = ({ setSnackbarMessage, setSnackbarOpen, mutate }) => {
 
 
   const handleCustomChange = (e, val, setFieldValue) => {
-    console.log({ setFieldValue }, { val });
+    // console.log({ setFieldValue }, { val });
     if (val) {
       setFieldValue('category', val.Category);
     }
@@ -77,13 +77,13 @@ const SupportScreen = ({ setSnackbarMessage, setSnackbarOpen, mutate }) => {
             category: Yup.string().max(255).nullable().required('Select the type of category')
           })}
           onSubmit={async (values, actions) => {
-            console.log({ values });
+            // console.log({ values });
             setIsLoading(true);
             const postData = { category: values.category, message: values.message };
             try {
               const { data } = await raiseTicket({ accountType: 'GRAVITUS', postData });
               if (Object.keys(data.result).length) {
-                console.log({ data });
+                // console.log({ data });
                 actions.resetForm({ values: { message: '', category: null } });
                 // document.getElementById('country-customized-option-demo').value =values.category;
                 mutate();
