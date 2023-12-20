@@ -4,13 +4,14 @@ import { Grid, useTheme, Typography, Stack } from '@mui/material';
 
 import BuildPortfoliocomponents from './BuildPortfoliocomponents';
 import buildportfolio from '../../../../assets/images/gravitusimage/buildportfolio.svg';
+import buildportfoliodark from '../../../../assets/images/gravitusimage/buildportfoliodark.svg';
 
 const BuildPortfolio = () => {
   const theme = useTheme();
 
   return (
     <Grid container pl={{ md: 6, sm: 8, xs: 6, lg: 15 }} pr={{ md: 6, sm: 8, xs: 6, lg: 15 }}
-    pt={{ xs: 2, sm: 4, md: 20, lg: 20 }} pb={20}
+      pt={{ xs: 2, sm: 4, md: 20, lg: 20 }} pb={20}
       sx={{
         background: theme.palette.mode === 'dark' ? 'radial-gradient(51.97% 51.97% at 50% 48.03%, #5B6172 0%, #131722 100%)' : 'radial-gradient(circle,rgba(255, 255, 255, 1),rgba(173, 231, 226, 1))',
       }}>
@@ -46,7 +47,11 @@ const BuildPortfolio = () => {
 
         <Grid item xs={12} sm={6} lg={6} display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }} >
           <Stack alignItems="center"  >
-            <img src={buildportfolio} alt='buildportfolio' width={540} />
+            {theme.palette.mode === 'dark' ? (
+              <img src={buildportfoliodark} alt='buildportfolio' width={540} />
+            ) : (
+              <img src={buildportfolio} alt='buildportfolio' width={540} />
+            )}
           </Stack>
         </Grid>
       </Grid>

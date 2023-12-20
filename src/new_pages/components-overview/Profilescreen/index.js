@@ -112,6 +112,10 @@ function ProfileScreen() {
     setAnchorEl(null);
   };
 
+  React.useEffect(() => {
+    setValue(indexToTabname[page]);
+  }, [page]);
+  
   const handleMenuItemClick = (newValue) => {
     navigate(`/profile/${tabNameToIndex[newValue]}`);
     setValue(newValue);

@@ -16,13 +16,17 @@ import Payment from '../../../../../assets/images/gravitusimage/Paymenticon.svg'
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';  
 
 // ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
 
 const ProfileTab = ({ handleLogout, setOpen }) => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedIndex, setSelectedIndex] = useState('');
+
+  const currentPath = location.pathname;
 
   const handleListItemClick = (event, index) => {
     navigate(`/profile/${tabNameToIndex[index]}`);
@@ -56,7 +60,8 @@ const ProfileTab = ({ handleLogout, setOpen }) => {
       {menuItems.map((item) => (
         <ListItemButton
           key={item.index}
-          selected={selectedIndex === item.index}
+          // selected={selectedIndex === item.index}
+          selected={selectedIndex === item.index || currentPath === `/profile/${tabNameToIndex[item.index]}`}
           onClick={item.index === 7 ? handleLogout : (event) => handleListItemClick(event, item.index)}
         >
           <ListItemIcon>

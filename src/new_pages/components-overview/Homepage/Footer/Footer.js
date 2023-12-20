@@ -73,7 +73,7 @@ const Footer = ({ isAuthorised }) => {
               <Typography
                 variant="title2"
                 component={RouterLink}
-                to="/profile"
+                to="/profile/dashboard"
                 sx={{
                   textDecorationLine: 'none',
                   color: theme.palette.mode === 'dark' ? 'text.white' : 'text.white',

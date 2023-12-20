@@ -96,7 +96,7 @@ const HomepageHeadnewuser = () => {
           </Stack>
           <Stack pt={5} sx={{ alignItems: 'center', justifyContent: 'center' }}>
             {theme.palette.mode === 'dark' ? (
-              <img src={headmainimg} alt="head1img" width={200} style={imageStyle} />
+              <img src={headmainimgdark} alt="head1img" width={200} style={imageStyle} />
             ) : (
               <img src={headmainimg} alt="head1img" width={200} style={imageStyle} />
             )}
