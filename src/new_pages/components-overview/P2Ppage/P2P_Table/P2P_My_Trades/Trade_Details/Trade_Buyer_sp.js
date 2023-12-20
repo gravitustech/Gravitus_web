@@ -16,9 +16,10 @@ import DoneIcon from '@mui/icons-material/Done';
 import { Check, DeleteForever } from '@mui/icons-material';
 import { styled } from "@mui/material/styles";
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useReducer } from 'react';
 import useSWR, { mutate } from 'swr';
 import PropTypes from "prop-types";
+import moment from 'moment';
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -166,7 +167,27 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
   const counterPart = data?.result?.counterPart;
   const orderDetails = data?.result?.orderDetails;
 
-  console.log('resultdata', resultdata);
+  const [timeLeftOver, setTimeLeftOver] = useReducer(updateTimeLeftOver, null);
+  const [expiryTime, setExpiryTime] = useReducer(updateLeftOverMins, null);
+
+  // console.log('resultdata', resultdata);
+
+  function updateTimeLeftOver(state, action) {
+    if (action.type === 'setDATA') {
+      return action.data;
+    }
+  }
+
+  function updateLeftOverMins(state, action) {
+    if (action.type === 'setDATA') {
+      return action.data;
+    }
+  }
+  
+  // if (orderDetails != undefined) {
+  //   console.log(orderDetails.expiryTime, 'Set Expiry Date');
+  //   setExpiryTime({ type: 'setDATA', data: orderDetails.expiryTime });
+  // }
 
   const [activeStep, setActiveStep] = React.useState(
     resultdata?.actionCaption === "Order Timed Out" ? 3 :
@@ -174,12 +195,46 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
         : (resultdata?.superStatus === 0 ? 0 : 2)
   );
 
+  useEffect(() => {
+    if(orderDetails != undefined) {
+      var remaining = parseInt(expiryTime) - parseInt(moment().format('x'));
+      var nLeftOverMins = (parseInt(remaining) / 60000).toFixed(0);
+      console.log(nLeftOverMins, 'nLeftOverMins');
+
+      if(nLeftOverMins > 0 && orderDetails.status != 1 && orderDetails.status != -1 && orderDetails.status != -2) {
+        setTimeLeftOver({ type: 'setDATA', data: nLeftOverMins });
+  
+        const stopTimer = setInterval(() => {
+          var remaining = parseInt(expiryTime) - parseInt(moment().format('x'));
+          var nLeftOverMins = (parseInt(remaining) / 60000).toFixed(0);
+          // console.log(nLeftOverMins, 'nLeftOverMins');
+
+          if(nLeftOverMins > 0) {
+            setTimeLeftOver({ type: 'setDATA', data: nLeftOverMins });
+          }
+          else {
+            setTimeLeftOver({ type: 'setDATA', data: 0 });
+          }
+        }, 10000);
+
+        return () => clearInterval(stopTimer);
+      }
+      else {
+        setTimeLeftOver({ type: 'setDATA', data: 0 });
+      }
+    }
+    
+  }, [expiryTime]);
+
   React.useEffect(() => {
     setActiveStep(
       resultdata?.actionCaption === "Order Timed Out" ? 3 :
         resultdata?.superStatus === 3 ? 3
           : (resultdata?.superStatus === 0 ? 0 : 2)
     );
+    
+    console.log(resultdata.orderDetails.expiryTime, 'expiryTime');
+    setExpiryTime({ type: 'setDATA', data: resultdata.orderDetails.expiryTime });
   }, [resultdata]);
 
   const [skipped, setSkipped] = useState(new Set());
@@ -500,7 +555,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
 
             <Stack pt={0.8} direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
               <Typography variant="subtitle1">
-                {resultdata?.actionMessage} {resultdata?.leftOverMins} minutes.
+                {resultdata?.actionMessage} {timeLeftOver} minutes.
               </Typography>
               <Typography textAlign='end' variant="subtitle2" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                 Duration

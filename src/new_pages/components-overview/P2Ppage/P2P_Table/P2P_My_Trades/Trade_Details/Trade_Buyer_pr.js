@@ -10,8 +10,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import useSWR, { mutate } from 'swr';
 import React, { useState, useEffect } from 'react';
-import { socket } from '../../../../../../socket';
 
+import { socket } from '../../../../../../socket';
 import { P2P_OrderDetails_URL, fetcherP2P } from 'src/api_ng/peer2peer_ng'
 import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../../../../utils_ng/localStorage_ng';
 
@@ -22,6 +22,7 @@ const Trade_Buyer_Dts = (route) => {
 
   const location = useLocation();
   const tradeDetails = location.state;
+  var stopTimer = undefined;
 
   const navigate = useNavigate();
   const goBack = () => {
@@ -42,24 +43,17 @@ const Trade_Buyer_Dts = (route) => {
   const orderData = data?.result; // Overall Data
   const counterPart = data?.result?.counterPart;
 
-  if (data != undefined && data.error != 'ok') {
-    console.log(data.error, 'Error in Response');
+  if (error) {
+    // Logout User
   }
-  // else {
-  //   console.log(orderData, 'Order Details');
-  // }
 
   useEffect(() => {
     let P2POrderEvent = '/P2POrder_' + getConfig_sp().userId + '/POST';
-
-    if (orderData != undefined) {
-      socket.on(P2POrderEvent, function (res) {
-
-        if (orderData.orderDetails.orderId == res.orderId && res.notifyType == 'orderUpdate') {
-          mutate(P2P_OrderDetails_URL);
-        }
-      });
-    }
+    socket.on(P2POrderEvent, function (res) {
+      if (orderData.orderDetails.orderId == res.orderId && res.notifyType == 'orderUpdate') {
+        mutate(P2P_OrderDetails_URL);
+      }
+    });
 
     return () => {
       socket.off(P2POrderEvent);

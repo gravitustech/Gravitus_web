@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useTheme, Card, Stack, Typography, Grid, Box, Tab } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
+import { socket } from '../../../../../socket';
 import useSWR, { mutate } from 'swr';
+
 import { P2P_SuperTrades_URL, fetcherP2P } from 'src/api_ng/peer2peer_ng';
-import { getConfig_ng, setConfig_ng } from '../../../../../utils_ng/localStorage_ng';
+import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../../../utils_ng/localStorage_ng';
 
 import OngoingTrades from './Trades_Open';
 import HistoryTrades from './Trades_History';
@@ -37,11 +39,25 @@ const P2P_My_Trades = () => {
     return { data: data, error: error, isLoading }
   }
 
-  const { data, error, isLoading } = useRetrieveTrades();
+  const { data : myTradeRc, error : myTradeEr, isLoading } = useRetrieveTrades();
+  console.log(myTradeRc, 'My Trades');
 
-  if (data != undefined && data.error != 'ok') {
-    console.log(data.error, 'Error in Response');
+  if (myTradeEr) {
+    // Call Logout User
   }
+
+  useEffect(() => {
+    let P2POrderEvent = '/P2POrder_' + getConfig_sp().userId + '/POST';
+    socket.on(P2POrderEvent, function (res) {
+      console.log("Refresh Trade History");
+      mutate(P2P_SuperTrades_URL);
+    });
+
+    return () => {
+      socket.off(P2POrderEvent);
+    };
+
+  }, []);
 
   return (
     <>
@@ -72,7 +88,7 @@ const P2P_My_Trades = () => {
             minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' },
             backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground',
           }}>
-          {data ? (
+          {myTradeRc ? (
             <Stack>
               <TabContext value={value}>
                 <TabList onChange={handleChange} indicatorColor="none" textColor='inherit'>
@@ -130,10 +146,10 @@ const P2P_My_Trades = () => {
                 </TabList>
 
                 <TabPanel value="0" sx={{ padding: '0px' }}>
-                  <OngoingTrades trades={data?.result?.trades} pairInfo={data?.result?.pairInfo} />
+                  <OngoingTrades trades={myTradeRc?.result?.trades} pairInfo={myTradeRc?.result?.pairInfo} />
                 </TabPanel>
                 <TabPanel value="1" sx={{ padding: '0px' }}>
-                  <HistoryTrades trades={data?.result?.trades} pairInfo={data?.result?.pairInfo} />
+                  <HistoryTrades trades={myTradeRc?.result?.trades} pairInfo={myTradeRc?.result?.pairInfo} />
                 </TabPanel>
               </TabContext>
             </Stack>

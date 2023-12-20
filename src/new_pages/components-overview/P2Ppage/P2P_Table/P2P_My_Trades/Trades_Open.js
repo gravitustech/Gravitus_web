@@ -159,7 +159,7 @@ export default function OpenTradesTab({ trades, pairInfo }) {
                     role="checkbox"
                     sx={{ '&:last-child td, &:last-child th': { border: 0 }, height: '64px', }}
                     tabIndex={-1}
-                    key={row.side}>
+                    key={index}>
                     <TableCell sx={{ border: 'none' }} component="th" id={labelId} scope="row" align="left">
                       <Stack direction="row" alignItems="center" spacing={1}>
                         <Typography variant='body1' sx={{ color: row.side === 'BUY' ? 'text.buy' : 'text.sell' }}>
