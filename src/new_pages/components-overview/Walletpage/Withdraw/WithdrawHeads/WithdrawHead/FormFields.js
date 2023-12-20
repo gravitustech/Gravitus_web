@@ -219,7 +219,9 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
 
         setResendPOTP('RESEND OTP');
         setResendMOTP('RESEND OTP');
-        setColor('');
+
+        setPOTPColor('');
+        setMOTPColor('');
 
         setIsResendMOTP(false);
         setIsResendPOTP(false);

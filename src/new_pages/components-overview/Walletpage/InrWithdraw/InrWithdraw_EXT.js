@@ -187,9 +187,11 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
         setInitiateWDL(false);
 
         setResendPOTP('RESEND OTP');
-        setResendMOTP('RESEND OTP')
-        setColor('');
+        setResendMOTP('RESEND OTP');
 
+        setPOTPColor('');
+        setMOTPColor('');
+        
         setIsResendMOTP(false);
         setIsResendPOTP(false);
 
