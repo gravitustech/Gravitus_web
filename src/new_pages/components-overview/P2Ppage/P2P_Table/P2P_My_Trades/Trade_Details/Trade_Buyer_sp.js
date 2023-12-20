@@ -169,11 +169,11 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
 
   const [timeLeftOver, setTimeLeftOver] = useReducer(updateTimeLeftOver, null);
   const [expiryTime, setExpiryTime] = useReducer(updateLeftOverMins, null);
-
   // console.log('resultdata', resultdata);
 
   function updateTimeLeftOver(state, action) {
     if (action.type === 'setDATA') {
+      console.log(action.data, 'Time Left Over');
       return action.data;
     }
   }
@@ -184,11 +184,6 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
     }
   }
   
-  // if (orderDetails != undefined) {
-  //   console.log(orderDetails.expiryTime, 'Set Expiry Date');
-  //   setExpiryTime({ type: 'setDATA', data: orderDetails.expiryTime });
-  // }
-
   const [activeStep, setActiveStep] = React.useState(
     resultdata?.actionCaption === "Order Timed Out" ? 3 :
       resultdata?.superStatus === 3 ? 3
@@ -199,12 +194,12 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
     if(orderDetails != undefined) {
       var remaining = parseInt(expiryTime) - parseInt(moment().format('x'));
       var nLeftOverMins = (parseInt(remaining) / 60000).toFixed(0);
-      console.log(nLeftOverMins, 'nLeftOverMins');
-
+      var stopTimer = undefined;
+      
       if(nLeftOverMins > 0 && orderDetails.status != 1 && orderDetails.status != -1 && orderDetails.status != -2) {
         setTimeLeftOver({ type: 'setDATA', data: nLeftOverMins });
   
-        const stopTimer = setInterval(() => {
+        stopTimer = setInterval(() => {
           var remaining = parseInt(expiryTime) - parseInt(moment().format('x'));
           var nLeftOverMins = (parseInt(remaining) / 60000).toFixed(0);
           // console.log(nLeftOverMins, 'nLeftOverMins');
@@ -217,13 +212,14 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
           }
         }, 10000);
 
-        return () => clearInterval(stopTimer);
+        
       }
       else {
         setTimeLeftOver({ type: 'setDATA', data: 0 });
       }
     }
     
+    return () => clearInterval(stopTimer);
   }, [expiryTime]);
 
   React.useEffect(() => {
