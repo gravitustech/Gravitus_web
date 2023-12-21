@@ -91,7 +91,7 @@ const P2Ppage = () => {
   useEffect(() => {
     let P2PPreTradeEvent = '/P2PPreTrade/POST';
     socket.on(P2PPreTradeEvent, function (res) {
-      console.log(res, "Refresh Pre Trade Event");
+      // console.log(res, "Refresh Pre Trade Event");
       if(parseInt(res.pairInfo.id) === parseInt(platformId)) {
         setP2PData({ type: 'sockUPDATE', data: res });
         // mutate(P2P_PreTrade_URL);
@@ -99,7 +99,7 @@ const P2Ppage = () => {
     });
 
     return () => {
-      console.log('Close PreTrade Socket');
+      // console.log('Close PreTrade Socket');
       socket.off(P2PPreTradeEvent);
     };
 
