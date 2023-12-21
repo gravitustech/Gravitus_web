@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 
 // material-ui
 import {
@@ -37,12 +37,14 @@ import warninggif from '../../../assets/images/gravitusimage/warninggif.svg';
 // ============================|| FIREBASE - REGISTER ||============================ //
 
 const GravitusAuthRegister = () => {
+
   const theme = useTheme();
+  let {emailId} = useParams();
   const navigate = useNavigate();
-  const [level, setLevel] = useState();
-  const [showPassword, setShowPassword] = useState(false);
   const inputs = { accountType: 'GRAVITUS' };
 
+  const [level, setLevel] = useState();
+  const [showPassword, setShowPassword] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -92,12 +94,15 @@ const GravitusAuthRegister = () => {
   const handleCloseSuccessDialog = () => {
     setIsSuccessDialogOpen(false);
   };
+
+  
+
   return (
     <>
       <Formik
         initialValues={{
           email: '',
-          referralid: '',
+          referralid: emailId ? emailId : '',
           password: '',
           submit: null
         }}

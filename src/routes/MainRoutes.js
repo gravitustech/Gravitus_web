@@ -71,6 +71,10 @@ const MainRoutes = {
       element: <GravitusAuthRegister />
     },
     {
+      path: 'register/:emailId',
+      element: <GravitusAuthRegister />
+    },
+    {
       path: 'registerstatus',
       element: <Registerstatus />
     },

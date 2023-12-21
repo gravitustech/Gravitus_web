@@ -54,6 +54,8 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
   const [activeId, setActiveId] = useState(null);
   const [copied, setCopied] = useState(false);
 
+  var hostName = process.env.REACT_APP_HOST_URL;
+
   const handleCopy = (id) => {
     setActiveId(id);
     setCopied(true);
@@ -170,8 +172,8 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
                         Referral Link
                       </Typography>
                       <Stack direction="row" spacing={1} alignItems="center">
-                        <Referrallink referrallink={'https://www.gravitustech.com/GR1234567'} />
-                        <CopyToClipboard text="https://www.gravitustech.com/GR1234567" onCopy={() => handleCopy(2)}>
+                        <Referrallink referrallink={`${hostName}/register/${userData.emailId}`} />
+                        <CopyToClipboard text={`${hostName}/register/${userData.emailId}`} onCopy={() => handleCopy(2)}>
                           <Tooltip placement="top" disableFocusListener title={activeId === 2 && copied ? 'Copied' : 'Click to copy'} arrow>
                             <IconButton disableRipple>
                               {activeId === 2 && copied ? (
