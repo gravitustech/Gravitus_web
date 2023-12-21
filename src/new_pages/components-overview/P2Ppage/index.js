@@ -86,23 +86,25 @@ const P2Ppage = () => {
         setPlatformId(P2PRc.result.pairInfo.id);
       }
     }
+  }, [P2PRc]);
 
-    // P2P Pre Trade Events
+  useEffect(() => {
     let P2PPreTradeEvent = '/P2PPreTrade/POST';
     socket.on(P2PPreTradeEvent, function (res) {
-      // mutate(P2P_PreTrade_URL);
-      if (parseInt(res.pairInfo.id) === parseInt(platformId)) {
+      console.log(res, "Refresh Pre Trade Event");
+      if(parseInt(res.pairInfo.id) === parseInt(platformId)) {
         setP2PData({ type: 'sockUPDATE', data: res });
+        // mutate(P2P_PreTrade_URL);
       }
     });
 
     return () => {
+      console.log('Close PreTrade Socket');
       socket.off(P2PPreTradeEvent);
     };
 
-  }, [P2PRc]);
+  }, [platformId]);
 
-  // console.log('P2PData', P2PData)
   return (
     <>
       {P2PData ? (
