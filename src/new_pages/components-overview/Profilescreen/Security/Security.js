@@ -261,8 +261,8 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setOtpState(false);
-    setResendPOTP('RESEND OTP');
-    setResendMOTP('RESEND OTP')
+    setResendPOTP('SEND OTP');
+    setResendMOTP('SEND OTP')
     setPOTPColor('');
     setMOTPColor('');
 
@@ -290,8 +290,8 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
   const smshandleCloseDialog = () => {
     smssetOpenDialog(false);
     setOtpState(false);
-    setResendPOTP('RESEND OTP');
-    setResendMOTP('RESEND OTP')
+    setResendPOTP('SEND OTP');
+    setResendMOTP('SEND OTP')
     setPOTPColor('');
     setMOTPColor('');
 

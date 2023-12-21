@@ -208,7 +208,7 @@ const InrDeposit_STEP1 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
           <Dialog open={open}>
             <Stack p={4} spacing={2.5} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
               <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.white' : 'text.secondary' }}>
-                Do not pay via UPI deposit for this deposit
+                Do not pay via UPI Methods for this deposit
               </Typography>
 
               <Stack spacing={2} pt={2}>

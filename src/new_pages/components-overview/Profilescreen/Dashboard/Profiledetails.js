@@ -67,7 +67,7 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
   const smshandleCloseDialog = () => {
     smssetOpenDialog(false);
     setOtpState(false)
-    setDisplayText('RESEND OTP');
+    setDisplayText('SEND OTP');
     setColor('');
     setIsResend(false)
   };
@@ -82,7 +82,7 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
 
   const resethandleCloseDialog = () => {
     resetsetOpenDialog(false);
-    setDisplayText('RESEND OTP');
+    setDisplayText('SEND OTP');
     setColor('');
     setIsResend(false)
   };

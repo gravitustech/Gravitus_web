@@ -95,8 +95,8 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
   const closeInitiateWDL = () => {
     setInitiateWDL(false);
 
-    setResendPOTP('RESEND OTP');
-    setResendMOTP('RESEND OTP')
+    setResendPOTP('SEND OTP');
+    setResendMOTP('SEND OTP')
     setPOTPColor('');
     setMOTPColor('');
 
@@ -217,8 +217,8 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
         // console.log(res.result, 'Sign Withdrawal');
         setInitiateWDL(false);
 
-        setResendPOTP('RESEND OTP');
-        setResendMOTP('RESEND OTP');
+        setResendPOTP('SEND OTP');
+        setResendMOTP('SEND OTP');
 
         setPOTPColor('');
         setMOTPColor('');

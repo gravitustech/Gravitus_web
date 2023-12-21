@@ -587,68 +587,69 @@ function OrderTableBody(props) {
                                   >
                                     Sell {pairInfo.buyPair}
                                   </Button>
-                                  <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title">
-                                    <Stack p={4} spacing={2.5} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
-                                      <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                                        <Typography variant="title1" sx={{ color: 'text.sell' }}>
-                                          Sell {pairInfo.buyPair}
-                                        </Typography>
-                                        <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                                          P2P Order
-                                        </Typography>
-                                      </Stack>
-                                      <Divider>
-                                      </Divider>
-                                      <DialogBoxValue
-                                        title='Price'
-                                        value={row.price}
-                                        pair={pairInfo.sellPair}
-                                      />
-                                      <DialogBoxValue
-                                        title='Quantity'
-                                        value={inputs.quantity}
-                                        pair={pairInfo.buyPair}
-                                      />
-                                      <DialogBoxValue
-                                        title='After TDS 1%'
-                                        value={SellTds}
-                                        pair={pairInfo.buyPair}
-                                      />
-                                      <Divider></Divider>
-                                      <DialogBoxValue
-                                        title='Total Amount'
-                                        value={inputs.totalamount}
-                                        pair={pairInfo.sellPair}
-                                      />
 
-                                      <Divider></Divider>
-                                      <Stack pt={1} direction='row' spacing={2} justifyContent='space-between'>
-                                        <Button variant="contained5" onClick={handleCloseDialog} >
-                                          Cancel
-                                        </Button>
-                                        <Button component={RouterLink}
-                                          // to="/sellorderpage"
-                                          onClick={() => handleConfirm()}
-                                          variant="confirmsell">
-                                          {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Confirm'}
-                                        </Button>
-                                      </Stack>
-                                    </Stack>
-
-                                    {/* <Stack p={4} spacing={2.5} alignItems="center">
-                                    <img src={ordersuccessgif} alt='ordersuccessgif' width={60}/>
-                                    <Typography variant='title2'  sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                                      Order matched successfully
-                                    </Typography>
-                                  </Stack> */}
-
-                                  </Dialog>
                                 </Stack>
                               </Grid>
                             </Grid>
                           </form>
                         )}
                       </Formik>
+                      <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title">
+                        <Stack p={4} spacing={2.5} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
+                          <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                            <Typography variant="title1" sx={{ color: 'text.sell' }}>
+                              Sell {pairInfo.buyPair}
+                            </Typography>
+                            <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                              P2P Order
+                            </Typography>
+                          </Stack>
+                          <Divider>
+                          </Divider>
+                          <DialogBoxValue
+                            title='Price'
+                            value={row.price}
+                            pair={pairInfo.sellPair}
+                          />
+                          <DialogBoxValue
+                            title='Quantity'
+                            value={inputs.quantity}
+                            pair={pairInfo.buyPair}
+                          />
+                          <DialogBoxValue
+                            title='After TDS 1%'
+                            value={SellTds}
+                            pair={pairInfo.buyPair}
+                          />
+                          <Divider></Divider>
+                          <DialogBoxValue
+                            title='Total Amount'
+                            value={inputs.totalamount}
+                            pair={pairInfo.sellPair}
+                          />
+
+                          <Divider></Divider>
+                          <Stack pt={1} direction='row' spacing={2} justifyContent='space-between'>
+                            <Button variant="contained5" onClick={handleCloseDialog} >
+                              Cancel
+                            </Button>
+                            <Button component={RouterLink}
+                              // to="/sellorderpage"
+                              onClick={() => handleConfirm()}
+                              variant="confirmsell">
+                              {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Confirm'}
+                            </Button>
+                          </Stack>
+                        </Stack>
+
+                        {/* <Stack p={4} spacing={2.5} alignItems="center">
+                          <img src={ordersuccessgif} alt='ordersuccessgif' width={60} />
+                          <Typography variant='title2' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                            Order matched successfully
+                          </Typography>
+                        </Stack> */}
+
+                      </Dialog>
                     </Stack>
                   </Grid>
                 </Grid>

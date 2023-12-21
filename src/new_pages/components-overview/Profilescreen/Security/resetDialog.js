@@ -138,8 +138,8 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    setResendPOTP('RESEND OTP');
-    setResendMOTP('RESEND OTP')
+    setResendPOTP('SEND OTP');
+    setResendMOTP('SEND OTP')
     setPOTPColor('');
     setMOTPColor('');
 

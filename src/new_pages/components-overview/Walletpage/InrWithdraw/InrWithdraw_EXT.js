@@ -100,8 +100,8 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
   const closeInitiateWDL = () => {
     setInitiateWDL(false);
 
-    setResendPOTP('RESEND OTP');
-    setResendMOTP('RESEND OTP')
+    setResendPOTP('SEND OTP');
+    setResendMOTP('SEND OTP')
     setPOTPColor('');
     setMOTPColor('');
 
@@ -186,8 +186,8 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
         // console.log(res.result, 'Sign Withdrawal');
         setInitiateWDL(false);
 
-        setResendPOTP('RESEND OTP');
-        setResendMOTP('RESEND OTP');
+        setResendPOTP('SEND OTP');
+        setResendMOTP('SEND OTP');
 
         setPOTPColor('');
         setMOTPColor('');

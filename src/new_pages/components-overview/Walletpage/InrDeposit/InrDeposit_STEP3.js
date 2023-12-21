@@ -144,6 +144,7 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
           setDepositReq(undefined);
           setImageToCrop(undefined);
           setCroppedImage(undefined);
+          setFormikValues(false);
 
           formikMP.current.resetForm({
             values: {

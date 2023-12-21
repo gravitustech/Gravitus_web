@@ -30,6 +30,7 @@ const InrDeposit_STEP2 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
 
   const handlePrev = () => {
     setStep(1);
+    setFormikValues(false);
   };
 
   return (
