@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 
 import {
   Grid, Box, useTheme, Card, Stack,
-  Typography, Tooltip, IconButton
+  Typography, Tooltip, IconButton, Button
 } from '@mui/material';
 
 import DoneIcon from '@mui/icons-material/Done';
 import CopyToClipboard from 'react-copy-to-clipboard';
-
+import { RWebShare } from "react-web-share";
+import ShareIcon from '@mui/icons-material/Share';
 import Profiledetails from './Profiledetails';
 import referimg from '../../../../assets/images/gravitusimage/referimg.svg';
 import copyicon from '../../../../assets/images/gravitusimage/copyicon.svg';
@@ -16,7 +17,7 @@ import googleplay from '../../../../assets/images/gravitusimage/googleplay.svg';
 
 const Referrallink = ({ referrallink }) => {
   const theme = useTheme();
-  const firstTwo = referrallink.slice(0, 10);
+  const firstTwo = referrallink.slice(0, 14);
   const lastTwo = referrallink.slice(-4);
   const middle = '...';
 
@@ -136,6 +137,17 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
                       </Typography>
                       <Stack direction="row" spacing={1} alignItems="center">
                         <Email email={userData.emailId} />
+                        {/* <RWebShare
+                          data={{
+                            text: "Welcome to GRAVITUS. Trading Platform for Budding Crypto Traders, Register Now. Using this Referral ID",
+                            url: `${userData.emailId}`,
+                            title: "Gravitus Crypto Exchange",
+                          }}
+                        >
+                          <Tooltip placement="top" arrow title='Share'>
+                            <ShareIcon sx={{ cursor: 'pointer', fontSize: '20px' }}></ShareIcon>
+                          </Tooltip>
+                        </RWebShare> */}
                         <CopyToClipboard text={userData.emailId} onCopy={() => handleCopy(1)}>
                           <Tooltip placement="top" disableFocusListener title={activeId === 1 && copied ? 'Copied' : 'Click to copy'} arrow>
                             <IconButton disableRipple>
@@ -160,6 +172,7 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
                   >
                     <Grid
                       p={1}
+                      pr={2}
                       style={{
                         display: 'flex',
                         flexDirection: 'row',
@@ -173,7 +186,18 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
                       </Typography>
                       <Stack direction="row" spacing={1} alignItems="center">
                         <Referrallink referrallink={`${hostName}/register/${userData.emailId}`} />
-                        <CopyToClipboard text={`${hostName}/register/${userData.emailId}`} onCopy={() => handleCopy(2)}>
+                        <RWebShare
+                          data={{
+                            text: "Welcome to GRAVITUS. Trading Platform for Budding Crypto Traders, Register Now. Through this Referral Link",
+                            url: `${hostName}/register/${userData.emailId}`,
+                            title: "Gravitus Crypto Exchange",
+                          }}
+                        >
+                          <Tooltip placement="top" arrow title='Share'>
+                            <ShareIcon sx={{ cursor: 'pointer', fontSize: '20px' }}></ShareIcon>
+                          </Tooltip>
+                        </RWebShare>
+                        {/* <CopyToClipboard text={`${hostName}/register/${userData.emailId}`} onCopy={() => handleCopy(2)}>
                           <Tooltip placement="top" disableFocusListener title={activeId === 2 && copied ? 'Copied' : 'Click to copy'} arrow>
                             <IconButton disableRipple>
                               {activeId === 2 && copied ? (
@@ -183,7 +207,7 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
                               )}
                             </IconButton>
                           </Tooltip>
-                        </CopyToClipboard>
+                        </CopyToClipboard> */}
                       </Stack>
                     </Grid>
                   </Card>

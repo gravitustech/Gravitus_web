@@ -39,7 +39,7 @@ import warninggif from '../../../assets/images/gravitusimage/warninggif.svg';
 const GravitusAuthRegister = () => {
 
   const theme = useTheme();
-  let {emailId} = useParams();
+  let { emailId } = useParams();
   const navigate = useNavigate();
   const inputs = { accountType: 'GRAVITUS' };
 
@@ -50,8 +50,11 @@ const GravitusAuthRegister = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formikValues, setFormikValues] = useState(false);
 
+  const [referralisLoading, setIsReferrralLoading] = useState(false);
+
   const handleConfirm = async () => {
     // console.log({ formikValues });
+    setIsReferrralLoading(true);
     const { data } = await validateReferral({ ...inputs, postData: { emailId: formikValues.email, referralId: formikValues.referralid } });
     if (data.error === 'ok') {
       const { data: resp } = await signupUser({
@@ -61,14 +64,19 @@ const GravitusAuthRegister = () => {
       if (resp.error === 'ok') {
         navigate('/registerstatus')
         setIsSuccessDialogOpen(true);
+        setIsReferrralLoading(false);
       } else {
         setIsLoading(false);
         setSnackbarMessage({ msg: resp.error, success: false });
         setSnackbarOpen(true);
+        setIsSuccessDialogOpen(false);
+        setIsReferrralLoading(false);
       }
     } else {
       setSnackbarMessage({ msg: data.error, success: false });
       setSnackbarOpen(true);
+      setIsSuccessDialogOpen(false);
+      setIsReferrralLoading(false);
     }
   };
 
@@ -95,7 +103,7 @@ const GravitusAuthRegister = () => {
     setIsSuccessDialogOpen(false);
   };
 
-  
+
 
   return (
     <>
@@ -273,7 +281,7 @@ const GravitusAuthRegister = () => {
             </form>
             <br />
             <Dialog open={isSuccessDialogOpen} onClose={handleCloseSuccessDialog}>
-              <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Stack p={3} spacing={1} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }} >
                 <img src={warninggif} alt="warninggif" />
                 <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                   Confirm ?
@@ -283,16 +291,19 @@ const GravitusAuthRegister = () => {
                   variant="body1"
                   sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}
                 >
-                  please confirm that,
+                  Please confirm that,
                   <br />
-                  {values.referralid} is your referral id
+                  <span style={{ color: theme.palette.mode === 'dark' ? '#f7f7f7' : '#000', fontWeight: 600 }}>
+                    {values.referralid}
+                  </span>
+                  &nbsp; is your referral id
                 </Typography>
                 <Stack pt={1} direction="row" spacing={2} justifyContent="space-between">
                   <Button variant="contained5" onClick={handleCloseSuccessDialog}>
                     Cancel
                   </Button>
                   <Button variant="contained4" onClick={handleConfirm}>
-                    Confirm
+                    {referralisLoading ? <CircularProgress color="inherit" size={30} /> : 'Confirm'}
                   </Button>
                 </Stack>
               </Stack>

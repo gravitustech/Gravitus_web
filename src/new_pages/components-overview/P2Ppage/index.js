@@ -44,34 +44,34 @@ const P2Ppage = () => {
 
   function useP2PPreTrade() {
     var postData = { "platformId": platformId };
-  
-    const {data, error, isLoading} = useSWR([P2P_PreTrade_URL(), postData], fetcherP2P, {
+
+    const { data, error, isLoading } = useSWR([P2P_PreTrade_URL(), postData], fetcherP2P, {
       revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
     });
-    
-    return {data, error, isLoading};
+
+    return { data, error, isLoading };
   }
 
   const {
-    data : P2PRc, 
-    error : P2PEr,
-    isLoading : isP2PDataLoading
+    data: P2PRc,
+    error: P2PEr,
+    isLoading: isP2PDataLoading
   } = useP2PPreTrade();
 
-  if(P2PEr) {
+  if (P2PEr) {
     // Call Logout User
   }
 
   useEffect(() => {
-    if(P2PRc != undefined) {
-      if(P2PRc.error != 'ok') {
-        if(P2PRc?.error?.name === "Missing Authorization") {
+    if (P2PRc != undefined) {
+      if (P2PRc.error != 'ok') {
+        if (P2PRc?.error?.name === "Missing Authorization") {
           // LogOut User;
         }
         else if (P2PRc?.error?.name === "Invalid Authorization") {
           // LogOut User;
         }
-        else if(P2PRc?.error?.name != 'Invalid Authorization') {
+        else if (P2PRc?.error?.name != 'Invalid Authorization') {
           // setSnackbarMessage({ msg: P2PRc?.error?.name, success: false });
           // setSnackbarOpen(true);
         }
@@ -82,15 +82,16 @@ const P2Ppage = () => {
       }
       else {
         setP2PData({ type: 'getUPDATE', data: P2PRc.result });
-        setConfig_ng('P2PPair', {platformId : P2PRc.result.pairInfo.id});
+        setConfig_ng('P2PPair', { platformId: P2PRc.result.pairInfo.id });
         setPlatformId(P2PRc.result.pairInfo.id);
       }
     }
 
     // P2P Pre Trade Events
     let P2PPreTradeEvent = '/P2PPreTrade/POST';
-    socket.on(P2PPreTradeEvent, function(res) {
-      if(parseInt(res.pairInfo.id) === parseInt(platformId)) {
+    socket.on(P2PPreTradeEvent, function (res) {
+      // mutate(P2P_PreTrade_URL);
+      if (parseInt(res.pairInfo.id) === parseInt(platformId)) {
         setP2PData({ type: 'sockUPDATE', data: res });
       }
     });
@@ -101,6 +102,7 @@ const P2Ppage = () => {
 
   }, [P2PRc]);
 
+  // console.log('P2PData', P2PData)
   return (
     <>
       {P2PData ? (

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import {
   Box, Typography, OutlinedInput, Card, Stack, useTheme, Avatar,
@@ -20,6 +20,14 @@ import { Formik } from "formik";
 const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMessage, setSnackbarOpen }) => {
   const reversedMessages = messages && [...messages].reverse();
   const [input, setInput] = React.useState(""); // Message in Use Sate
+  const messagesContainerRef = useRef(null);
+
+  useEffect(() => {
+    // Scroll to the bottom when messages are updated
+    if (messagesContainerRef?.current) {
+      messagesContainerRef?.current.scrollTop === messagesContainerRef?.current.scrollHeight;
+    }
+  }, [messages]);
 
   const theme = useTheme();
   const formikMSG = useRef();
@@ -234,6 +242,13 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
           </Stack>
 
           <Box
+            ref={(ref) => {
+              messagesContainerRef.current = ref;
+              // Scroll to the bottom when messages are updated
+              if (ref) {
+                ref.scrollTop = ref.scrollHeight;
+              }
+            }}
             sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -509,6 +524,7 @@ const Message = ({ message }) => {
 
   return (
     <><Box
+
       sx={{
         display: "flex",
         justifyContent: message?.align === 'left' ? 'flex-start' : 'flex-end',
