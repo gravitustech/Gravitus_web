@@ -157,23 +157,22 @@ function ColorlibStepIcon(props) {
   );
 }
 
-const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
+const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage }) => {
   const theme = useTheme();
   const formikMP = useRef();
   const formikAPL = useRef();
   const navigate = useNavigate();
 
-  const resultdata = data?.result;
-  const counterPart = data?.result?.counterPart;
-  const orderDetails = data?.result?.orderDetails;
+  const counterPart = SUPERData?.counterPart;
+  const orderDetails = SUPERData?.orderDetails;
 
   const [timeLeftOver, setTimeLeftOver] = useReducer(updateTimeLeftOver, null);
   const [expiryTime, setExpiryTime] = useReducer(updateLeftOverMins, null);
-  // console.log('resultdata', resultdata);
+  // console.log('SUPERData', SUPERData);
 
   function updateTimeLeftOver(state, action) {
     if (action.type === 'setDATA') {
-      console.log(action.data, 'Time Left Over');
+      // console.log(action.data, 'Time Left Over');
       return action.data;
     }
   }
@@ -185,9 +184,9 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
   }
   
   const [activeStep, setActiveStep] = React.useState(
-    resultdata?.actionCaption === "Order Timed Out" ? 3 :
-      resultdata?.superStatus === 3 ? 3
-        : (resultdata?.superStatus === 0 ? 0 : 2)
+    SUPERData?.actionCaption === "Order Timed Out" ? 3 :
+      SUPERData?.superStatus === 3 ? 3
+        : (SUPERData?.superStatus === 0 ? 0 : 2)
   );
 
   useEffect(() => {
@@ -211,8 +210,6 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
             setTimeLeftOver({ type: 'setDATA', data: 0 });
           }
         }, 10000);
-
-        
       }
       else {
         setTimeLeftOver({ type: 'setDATA', data: 0 });
@@ -224,14 +221,13 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
 
   React.useEffect(() => {
     setActiveStep(
-      resultdata?.actionCaption === "Order Timed Out" ? 3 :
-        resultdata?.superStatus === 3 ? 3
-          : (resultdata?.superStatus === 0 ? 0 : 2)
+      SUPERData?.actionCaption === "Order Timed Out" ? 3 :
+        SUPERData?.superStatus === 3 ? 3
+          : (SUPERData?.superStatus === 0 ? 0 : 2)
     );
     
-    console.log(resultdata.orderDetails.expiryTime, 'expiryTime');
-    setExpiryTime({ type: 'setDATA', data: resultdata.orderDetails.expiryTime });
-  }, [resultdata]);
+    setExpiryTime({ type: 'setDATA', data: SUPERData.orderDetails.expiryTime });
+  }, [SUPERData]);
 
   const [skipped, setSkipped] = useState(new Set());
   const [open, setOpen] = useState(false); // Confirm Dialog
@@ -542,16 +538,16 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
           <Stack pt={2} pl={2} pr={2} sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
             <Stack pt={2} direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
               <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                {resultdata?.actionCaption}
+                {SUPERData?.actionCaption}
               </Typography>
               <Typography pl={10} variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                {resultdata?.leftOverMins} minutes
+                {timeLeftOver} minutes
               </Typography>
             </Stack>
 
             <Stack pt={0.8} direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
               <Typography variant="subtitle1">
-                {resultdata?.actionMessage} {timeLeftOver} minutes.
+                {SUPERData?.actionMessage} {timeLeftOver} minutes.
               </Typography>
               <Typography textAlign='end' variant="subtitle2" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                 Duration
@@ -584,16 +580,16 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
           <Stack pt={2} pl={2} pr={2} sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
             <Stack pt={2} direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
               <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                {resultdata?.actionCaption}
+                {SUPERData?.actionCaption}
               </Typography>
               <Typography pl={10} variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                {resultdata?.leftOverMins} minutes
+                {timeLeftOver} minutes
               </Typography>
             </Stack>
 
             <Stack pt={0.8} direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
               <Typography variant="subtitle1">
-                {resultdata?.actionMessage} {resultdata?.leftOverMins} minutes.
+                {SUPERData?.actionMessage} {timeLeftOver} minutes.
               </Typography>
               <Typography textAlign='end' variant="subtitle2" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                 Duration
@@ -854,15 +850,15 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                 <Stack pt={2} direction="row" justifyContent="space-between">
                   <Stack spacing={1}>
                     <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                      {resultdata?.actionCaption}
+                      {SUPERData?.actionCaption}
                     </Typography>
                     <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                      {resultdata?.actionMessage} {
-                        resultdata?.appealStatus === '1' ? (
+                      {SUPERData?.actionMessage} {
+                        SUPERData?.appealStatus === '1' ? (
                           <></>
                         ) : (
                           <>
-                            {resultdata?.leftOverMins} minutes.
+                            {timeLeftOver} minutes.
                           </>
                         )
                       }
@@ -870,12 +866,12 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                   </Stack>
                   <Stack pt={0.8}>
                     {
-                      resultdata?.appealStatus === '1' ? (
+                      SUPERData?.appealStatus === '1' ? (
                         <></>
                       ) : (
                         <>
                           <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                            {resultdata?.leftOverMins} minutes
+                            {timeLeftOver} minutes
                           </Typography>
                           <Typography textAlign='end' variant="subtitle2" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                             Duration
@@ -901,7 +897,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
 
                 <Stack direction="row" spacing={3} pt={3}>
                   {
-                    resultdata?.actionLabel_2 === 'Cancel Appeal' ? (
+                    SUPERData?.actionLabel_2 === 'Cancel Appeal' ? (
                       <>
                         <Button disableRipple variant="p2pcancelbutton" onClick={goBack}>Close</Button>
                         <Button type="submit" variant="p2pnextbutton" onClick={() => AppealCancel(orderDetails)}>
@@ -911,7 +907,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                     ) : (
                       <>
                         {
-                          resultdata?.actionLabel_2 === 'Appeal' ? (
+                          SUPERData?.actionLabel_2 === 'Appeal' ? (
                             <>
                               <Button disableRipple variant="p2pcancelbutton" sx={{ cursor: 'not-allowed' }}>Cancel</Button>
                               <Button type="submit" variant="p2pnextbutton" onClick={handleButtonClick}>
@@ -935,12 +931,12 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                       Appeal To EScrow
                     </Typography>
                     <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                      {resultdata?.actionMessage}
+                      {SUPERData?.actionMessage}
                     </Typography>
                   </Stack>
                   <Stack pt={0.8}>
                     <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                      {resultdata?.leftOverMins} Minutes
+                      {timeLeftOver} Minutes
                     </Typography>
                     <Typography textAlign='end' variant="subtitle2" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                       Duration
@@ -1195,16 +1191,16 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
         return (
           <Stack>
             <Stack pt={0} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              {resultdata?.actionCaption === "Order Completed" ? (
+              {SUPERData?.actionCaption === "Order Completed" ? (
                 <img src={ordersuccessgif} alt='ordersuccessgif' />
               ) : (
                 <img src={Timeoutgif} alt='Timeoutgif' />
               )}
               <Typography pt={3} variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} >
-                {resultdata?.actionCaption}
+                {SUPERData?.actionCaption}
               </Typography>
               <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                {resultdata?.actionMessage}
+                {SUPERData?.actionMessage}
               </Typography>
             </Stack>
 
@@ -1215,7 +1211,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
                   Duration
                 </Typography>
                 <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                  {resultdata?.leftOverMins} minutes
+                  {timeLeftOver} minutes
                 </Typography>
               </Stack>
             </Stack>
@@ -1299,7 +1295,7 @@ const Trade_Buyer_Dts_Ext = ({ data, setSnackbarOpen, setSnackbarMessage }) => {
               stepProps.completed = false;
             }
             return (
-              resultdata?.actionCaption === "Order Timed Out" || resultdata?.superStatus >= 3 ? (
+              SUPERData?.actionCaption === "Order Timed Out" || SUPERData?.superStatus >= 3 ? (
                 <></>
               ) : (
                 <Step key={label} {...stepProps}>

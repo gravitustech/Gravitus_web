@@ -13,13 +13,13 @@ import { socket } from '../../../../../../socket';
 import { P2P_OrderDetails_URL, P2P_AppealMessages_URL, P2P_TradeMessages_URL, fetcherP2P } from 'src/api_ng/peer2peer_ng';
 import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../../../../utils_ng/localStorage_ng';
 
-const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
+const Chat_Appeal_Tab = ({ SUPERData, counterPart }) => {
   const theme = useTheme();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
 
   const [value, setValue] = React.useState('0'); // Chat or Appeal Tab
-  const orderDetails = orderData?.orderDetails;
+  const orderDetails = SUPERData?.orderDetails;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -27,8 +27,8 @@ const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
 
   function useTradeMessages() {
     var postData = {
-      orderId: orderDetails?.orderId,
-      platformId: getConfig_ng('P2PPair').platformId
+      orderId     : orderDetails?.orderId,
+      platformId  : getConfig_ng('P2PPair').platformId
     };
 
     const { data, error, isLoading, isValidating } = useSWR([P2P_TradeMessages_URL(), postData], fetcherP2P, {
@@ -45,8 +45,8 @@ const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
 
   function useAppealMessages() {
     var postData = {
-      platformId: getConfig_ng('P2PPair').platformId,
-      orderId: orderDetails?.orderId,
+      orderId     : orderDetails?.orderId,
+      platformId  : getConfig_ng('P2PPair').platformId
     };
 
     const { data, error, isLoading, isValidating } = useSWR([P2P_AppealMessages_URL(), postData], fetcherP2P, {
@@ -62,15 +62,14 @@ const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
   } = useAppealMessages();
 
   useEffect(() => {
-
     let P2POrderEvent = '/P2POrder_' + getConfig_sp().userId + '/POST';
     socket.on(P2POrderEvent, function (res) {
 
-      console.log(res, 'Super Res');
-      if (orderDetails.orderId == res.orderId && res.notifyType == 'notifyMessage') {
+      console.log(res, 'Chat & Appeal Res');
+      if (SUPERData.orderDetails.orderId == res.orderId && res.notifyType == 'notifyMessage') {
         mutate(P2P_TradeMessages_URL); // Temp solution need to update chat array
       }
-      else if (orderDetails.orderId == res.orderId && res.notifyType == 'updateAppeal') {
+      else if (SUPERData.orderDetails.orderId == res.orderId && res.notifyType == 'updateAppeal') {
         mutate(P2P_AppealMessages_URL); // Temp solution need to update appeal array
       }
 
@@ -80,7 +79,7 @@ const Chat_Appeal_Tab = ({ orderData, counterPart, appealMessage }) => {
       socket.off(P2POrderEvent);
     };
 
-  }, []);
+  }, [SUPERData]);
 
   return (
     <>
