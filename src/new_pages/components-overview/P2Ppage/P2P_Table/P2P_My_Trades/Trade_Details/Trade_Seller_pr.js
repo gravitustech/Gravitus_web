@@ -9,7 +9,7 @@ import { useTheme, Grid, Stack, Typography, Card, Box } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import useSWR, { mutate } from 'swr';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { socket } from '../../../../../../socket';
 
 import { P2P_OrderDetails_URL, fetcherP2P } from 'src/api_ng/peer2peer_ng'
@@ -21,11 +21,32 @@ const Trade_Seller_Dts = (route) => {
   const [snackbarMessage, setSnackbarMessage] = useState(null);
 
   const location = useLocation();
-  const tradeDetails = location.state;
+  const tradeDetails = JSON.parse(JSON.stringify(location.state));
+
+  const [SUPERData, setSUPERData] = useReducer(updateData, null);
+  const [platformId, setPlatformId] = useState(getConfig_ng('spotPair').platformId);
 
   const navigate = useNavigate();
   const goBack = () => {
     navigate(-1);
+  }
+
+  function updateData(state, action) {
+    if (action.type === 'getUPDATE') {
+      return action.data;
+    }
+    // sockUPDATE future use case
+    // else if (action.type === 'sockUPDATE') {
+    //   var superState = JSON.parse(JSON.stringify(state));
+    //   superState.pairInfo = action.data.pairInfo;
+    //   superState.priceInfo = action.data.priceInfo;
+
+    //   superState.orderBook = action.data.orderBook;
+    //   superState.marketTrades = action.data.marketTrades;
+    //   return superState;
+    // }
+
+    throw Error('Unknown action.');
   }
 
   function useTradeDetails() {
@@ -38,34 +59,57 @@ const Trade_Seller_Dts = (route) => {
     return { data: data, error: error, isLoading }
   }
 
-  const { data, error } = useTradeDetails();
-  const orderData = data?.result; // Overall Data
-  const counterPart = data?.result?.counterPart;
+  const { data : tradeRc, error : tradeEr} = useTradeDetails();
+  const orderData = tradeRc?.result; // Overall Data
+  const counterPart = tradeRc?.result?.counterPart;
 
-  if (data != undefined && data.error != 'ok') {
-    console.log(data.error, 'Error in Response');
+  if (tradeEr) {
+    // Logout User
   }
-  // else {
-  //   console.log(orderData, 'Order Details');
-  // }
 
   useEffect(() => {
-    let P2POrderEvent = '/P2POrder_' + getConfig_sp().userId + '/POST';
+    if (tradeRc != undefined) {
+      if (tradeRc.error != 'ok') {
+        if (tradeRc?.error?.name === "Missing Authorization") {
+          // LogOut User;
+        }
+        else if (tradeRc?.error?.name === "Invalid Authorization") {
+          // LogOut User;
+        }
+        else if (tradeRc?.error?.name != 'Invalid Authorization') {
+          // Show 'tradeRc.error.name' snack bar
+        }
+        else {
+          // Show 'tradeRc.error' snack bar
+        }
+      }
+      else {
+        // console.log(tradeRc.result, 'Refresh Trade Record');
+        setSUPERData({ type: 'getUPDATE', data: tradeRc.result });
+      }
+    }
+  }, [tradeRc]);
 
-    if (orderData != undefined) {
+  useEffect(() => {
+    if(SUPERData) {
+      setConfig_ng('P2PPair', { platformId: SUPERData?.orderDetails?.platformId });
+      setPlatformId(SUPERData?.orderDetails?.platformId);
+
+      let P2POrderEvent = '/P2POrder_' + getConfig_sp().userId + '/POST';
       socket.on(P2POrderEvent, function (res) {
-
-        if (orderData.orderDetails.orderId == res.orderId && res.notifyType == 'orderUpdate') {
+        
+        console.log(SUPERData.orderDetails.orderId, 'Order Id in SOCK Seller');
+        if (SUPERData?.orderDetails.orderId == res.orderId && res.notifyType == 'orderUpdate') {
           mutate(P2P_OrderDetails_URL);
         }
       });
+
+      return () => {
+        console.log('Clear P2P Order Event Seller');
+        socket.off(P2POrderEvent);
+      };
     }
-
-    return () => {
-      socket.off(P2POrderEvent);
-    };
-
-  }, [orderData]);
+  }, [SUPERData]);
 
   return (
     <>
@@ -95,12 +139,12 @@ const Trade_Seller_Dts = (route) => {
           sx={{
             backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground',
           }}>
-          {data ? (
+          {SUPERData ? (
             <Grid container pt={2} pb={3} sx={{ background: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground' }} >
-              <Trade_Seller_Dts_Ext data={data} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
+              <Trade_Seller_Dts_Ext SUPERData={SUPERData} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
 
               <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Chat_Appeal_Tab orderData={orderData} counterPart={counterPart} appealMessage={orderData?.appealMessage} />
+                <Chat_Appeal_Tab SUPERData={SUPERData} counterPart={counterPart} />
               </Grid>
             </Grid>
           ) : (

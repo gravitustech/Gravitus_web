@@ -39,17 +39,23 @@ const P2P_My_Trades = () => {
     return { data: data, error: error, isLoading }
   }
 
-  const { data : myTradeRc, error : myTradeEr, isLoading } = useRetrieveTrades();
-  console.log(myTradeRc, 'My Trades');
+  const { 
+    data  : myTradeRc,
+    error : myTradeEr,
+    isLoading
+  } = useRetrieveTrades();
 
   if (myTradeEr) {
     // Call Logout User
   }
 
+  if (myTradeRc) {
+    setConfig_ng('P2PPair', { platformId: myTradeRc?.result?.pairInfo.id });
+  }
+
   useEffect(() => {
     let P2POrderEvent = '/P2POrder_' + getConfig_sp().userId + '/POST';
     socket.on(P2POrderEvent, function (res) {
-      console.log("Refresh Trade History");
       mutate(P2P_SuperTrades_URL);
     });
 
