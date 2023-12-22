@@ -44,7 +44,10 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
     setInput(event.target.value);
   };
 
+  const [mgsisLoading, setMgsIsLoading] = useState(false);
+
   const handleConfirm = () => {
+    setMgsIsLoading(true);
     if (input.trim() === '') {
       return;
     }
@@ -56,7 +59,8 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
     };
 
     postDataP2P(P2P_SendMessage_URL(), postData).then(function (res) {
-      console.log(res);
+      setMgsIsLoading(false);
+      // console.log(res);
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User
@@ -88,6 +92,7 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
       }
     }, function (err) {
       console.log(err);
+      setMgsIsLoading(false);
       // Logout User
     });
   };
@@ -326,9 +331,11 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
                             </InputAdornment>}
                           endAdornment={
                             <InputAdornment position="end" >
-                              <IconButton onClick={handleConfirm}>
-                                <SendIcon />
-                              </IconButton>
+                              <IconButton disableRipple onClick={handleConfirm} disabled={!input.trim()}>
+                                {mgsisLoading ? <CircularProgress color="success" size={24} /> : (
+                                  <SendIcon />)
+                                }
+                              </IconButton> 
                             </InputAdornment>}
                         />
                       </Grid>

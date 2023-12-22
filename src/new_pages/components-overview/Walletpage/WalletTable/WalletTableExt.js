@@ -1,7 +1,8 @@
 import {
   useTheme, Typography, Box, Stack, Link, Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow, Drawer, List, IconButton, TableSortLabel,
-  ButtonBase
+  ButtonBase,
+  CircularProgress
 } from '@mui/material';
 
 import Refresh from '../../../../assets/images/gravitusimage/refresh.svg';
@@ -191,6 +192,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackbarMessage }) {
   const navigate = useNavigate();
   const theme = useTheme();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [order, setOrder] = React.useState('desc');
   const [orderBy, setOrderBy] = React.useState('totalInUsd');
@@ -222,11 +224,18 @@ export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackba
   };
 
   const fetchWalletById = (wallet, actionType) => {
+    setIsLoading((prevState) => ({
+      ...prevState,
+      [wallet.id]: true, // Set loading to true for the specific coin
+    }));
     var postData = { "walletId": wallet.id };
 
     postDataWallet(Wallet_Fetch_ById(), postData).then(function (res) {
       // console.log(res, "Fetch Wallet By Id");
-
+      setIsLoading((prevState) => ({
+        ...prevState,
+        [wallet.id]: false, // Set loading to false for the specific coin
+      }));
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User
@@ -250,6 +259,10 @@ export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackba
         }
         else if (actionType == 'reloadWallet') {
           mutate(Wallet_Fetch_Info);
+          setIsLoading((prevState) => ({
+            ...prevState,
+            [wallet.id]: false, // Set loading to false for the specific coin
+          }));
         }
       }
     }, function (err) {
@@ -539,17 +552,19 @@ export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackba
                         >
                           More
                         </Link>
-                        <ButtonBase
-                          disableRipple
-                          onClick={() => syncWalletData(row.listing)}
-                        >
-                          <img
-                            src={Refresh}
-                            alt="Refresh"
-                            width={15}
-                            style={{ cursor: 'pointer' }}
-                          />
-                        </ButtonBase>
+                        {isLoading[row.listing.id] ? <CircularProgress color="success" size={15.5} /> : (
+                          <ButtonBase
+                            disableRipple
+                            onClick={() => syncWalletData(row.listing)}
+                          >
+                            <img
+                              src={Refresh}
+                              alt="Refresh"
+                              width={15}
+                              style={{ cursor: 'pointer' }}
+                            />
+                          </ButtonBase>)}
+
                       </Stack>
                     </TableCell>
                   </TableRow>

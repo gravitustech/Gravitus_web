@@ -45,10 +45,14 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
     setInput(event.target.value);
   };
 
+  const [mgsisLoading, setMgsIsLoading] = useState(false);
+
   const handleConfirm = () => {
+    setMgsIsLoading(true);
     if (input.trim() === '') {
       return;
     }
+
     var postData = {
       updateInfo: {
         platformId: getConfig_ng('P2PPair').platformId,
@@ -61,7 +65,8 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
     };
 
     formDataP2P(P2P_UpdateAppeal_URL(), postData).then(function (res) {
-      console.log(res);
+      // console.log(res);
+      setMgsIsLoading(false);
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User
@@ -334,8 +339,10 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
                             </InputAdornment>}
                           endAdornment={
                             <InputAdornment position="end" >
-                              <IconButton onClick={handleConfirm}>
-                                <SendIcon />
+                              <IconButton disableRipple onClick={handleConfirm} disabled={!input.trim()}>
+                                {mgsisLoading ? <CircularProgress color="success" size={24} /> : (
+                                  <SendIcon />)
+                                }
                               </IconButton>
                             </InputAdornment>}
                         />

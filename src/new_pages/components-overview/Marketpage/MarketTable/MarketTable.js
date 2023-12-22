@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 // material-ui
-import { Box, Stack, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useTheme, Button, ButtonBase } from '@mui/material';
+import { Box, Stack, Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useTheme, Button, ButtonBase, CircularProgress } from '@mui/material';
 
 // Icon import
 import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
@@ -19,13 +19,16 @@ import { setConfig_ng } from 'src/utils_ng/localStorage_ng';
 import { MarketOverview_URL, FavouritesCrypto_URL, postDataSystem } from 'src/api_ng/system_ng';
 
 function MyComponent({ id, row }) {
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleFavourites = (row) => {
+    setIsLoading(true);
     var postData = {
       "platformId": row?.platformId
     };
 
     postDataSystem(FavouritesCrypto_URL(), postData).then(function (res) {
+      setIsLoading(false);
       // console.log("res", res);
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
@@ -45,6 +48,7 @@ function MyComponent({ id, row }) {
       } else {
         // console.log('No error')
         mutate(MarketOverview_URL);
+        setIsLoading(false);
       }
     }, function (err) {
       // console.log(err);
@@ -55,9 +59,11 @@ function MyComponent({ id, row }) {
   return (
     <>
       {row.favourites ? (
-        <StarIcon onClick={() => toggleFavourites(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />
+        isLoading ? <CircularProgress color="success" size={24} /> : (
+          <StarIcon onClick={() => toggleFavourites(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />)
       ) : (
-        <StarBorderIcon onClick={() => toggleFavourites(row)} style={{ cursor: 'pointer' }} />
+        isLoading ? <CircularProgress color="success" size={24} /> : (
+          <StarBorderIcon onClick={() => toggleFavourites(row)} style={{ cursor: 'pointer' }} />)
       )}
     </>
   );

@@ -1,6 +1,6 @@
 import {
   useTheme, Grid, Box, Stack, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Typography, Button
+  TableHead, TableRow, Typography, Button, CircularProgress
 } from '@mui/material';
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -64,13 +64,16 @@ function getColor(value, theme) {
 }
 
 function MyComponent({ id, row }) {
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleFavourites = (row) => {
+    setIsLoading(true);
     var postData = {
       "platformId": row?.platformId
     };
 
     postDataSystem(FavouritesCrypto_URL(), postData).then(function (res) {
+      setIsLoading(false);
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User
@@ -89,6 +92,7 @@ function MyComponent({ id, row }) {
       } else {
         // console.log('No error')
         mutate(MarketOverview_URL);
+        setIsLoading(false);
       }
     }, function (err) {
       // console.log(err);
@@ -99,9 +103,11 @@ function MyComponent({ id, row }) {
   return (
     <>
       {row.favourites ? (
-        <StarIcon onClick={() => toggleFavourites(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />
+        isLoading ? <CircularProgress color="success" size={24} /> : (
+          <StarIcon onClick={() => toggleFavourites(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />)
       ) : (
-        <StarBorderIcon onClick={() => toggleFavourites(row)} style={{ cursor: 'pointer' }} />
+        isLoading ? <CircularProgress color="success" size={24} /> : (
+          <StarBorderIcon onClick={() => toggleFavourites(row)} style={{ cursor: 'pointer' }} />)
       )}
     </>
   );

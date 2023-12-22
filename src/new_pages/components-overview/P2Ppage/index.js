@@ -91,20 +91,22 @@ const P2Ppage = () => {
   useEffect(() => {
     let P2PPreTradeEvent = '/P2PPreTrade/POST';
     socket.on(P2PPreTradeEvent, function (res) {
-      // console.log(res, "Refresh Pre Trade Event");
-      if(parseInt(res.pairInfo.id) === parseInt(platformId)) {
-        setP2PData({ type: 'sockUPDATE', data: res });
-        // mutate(P2P_PreTrade_URL);
+      console.log(res, "Refresh Pre Trade Event");
+      if (parseInt(res.pairInfo.id) === parseInt(platformId)) {
+        // setP2PData({ type: 'sockUPDATE', data: res });
+        console.log('P2P_PreTrade_URL', P2P_PreTrade_URL)
+        mutate(P2P_PreTrade_URL);
       }
     });
 
     return () => {
-      // console.log('Close PreTrade Socket');
+      console.log('Close PreTrade Socket');
       socket.off(P2PPreTradeEvent);
     };
 
   }, [platformId]);
 
+  console.log('listing Page')
   return (
     <>
       {P2PData ? (
