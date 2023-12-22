@@ -50,7 +50,7 @@ const GravitusAuthForgetpassword = () => {
             const { data } = await resetPassword({ ...inputs, postData: { emailId: values.email } });
             if (data.error === 'ok') {
               // console.log({ data });
-              navigate('/forgetpasswordstatus');
+              navigate('/forgetpasswordstatus', { state: { email: values.email } });
             } else {
               setIsLoading(false);
               setSnackbarMessage({ msg: data.error, success: false });
@@ -71,7 +71,7 @@ const GravitusAuthForgetpassword = () => {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <Typography htmlFor="email-login" variant="body1"  sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                  <Typography htmlFor="email-login" variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                     Enter your Registered Email Id
                   </Typography>
                   <OutlinedInput

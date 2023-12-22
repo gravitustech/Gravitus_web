@@ -1,17 +1,19 @@
-// import { Link } from 'react-router-dom';
+import React from 'react'
 
-// material-ui
 import { Grid, Stack, Typography, useTheme } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 
-// project import
 import AuthWrapper from './AuthWrapper';
 import GravitusAuthForgetpasswordStatus from './auth-forms/AuthForgetpasswordstatus';
 
 // ================================|| LOGIN ||================================ //
-import React from 'react'
 
 const Forgetpasswordstatus = () => {
   const theme = useTheme();
+
+  const location = useLocation();
+  const email = location.state?.email;
+
   return (
     <AuthWrapper>
       <Grid container spacing={3}>
@@ -23,7 +25,11 @@ const Forgetpasswordstatus = () => {
           </Stack>
           <br />
           <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-            Reset your password via link sent to your Email Login after resetting your password
+            Reset your password via a link sent to &nbsp;
+            <span style={{ color: theme.palette.mode === 'dark' ? '#f7f7f7' : '#000', fontWeight: 600 }}>
+              {email}.
+            </span>
+            &nbsp; Please Log in after resetting your password.
           </Typography>
         </Grid>
 

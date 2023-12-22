@@ -209,8 +209,9 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
       });
     }
     else {
-      setSnackbarMessage({ msg: "Image is empty", success: false });
+      setSnackbarMessage({ msg: "Cropped Image is Empty, So please Crop the image before Upload", success: false });
       setSnackbarOpen(true);
+      setIsLoading(false);
     }
   };
 
@@ -335,7 +336,7 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
                                 {mgsisLoading ? <CircularProgress color="success" size={24} /> : (
                                   <SendIcon />)
                                 }
-                              </IconButton> 
+                              </IconButton>
                             </InputAdornment>}
                         />
                       </Grid>
@@ -353,7 +354,15 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
                   <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                     {/* <Stack direction='row' spacing={1}> */}
                     <Grid xs={12} md={6}>
-                      <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Selected Image</Typography>
+                      <Stack spacing={1}>
+                        <Typography sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
+                          Selected Image
+                        </Typography>
+                        <Typography variant='title1' pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
+                          Please crop the image before you upload.
+                        </Typography>
+                      </Stack>
+
                       <Box >
                         <ImageCropper
                           imageToCrop={imageToCrop}

@@ -56,7 +56,7 @@ const Marketpage = () => {
             </Grid>
 
             <Marquee
-              speed={75}
+              speed={95}
               gradient={true}
               gradientWidth={56}
               gradientColor={theme.palette.mode === 'dark' ? '#0F121A' : '#F7F7F7'}

@@ -224,18 +224,15 @@ export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackba
   };
 
   const fetchWalletById = (wallet, actionType) => {
-    setIsLoading((prevState) => ({
-      ...prevState,
-      [wallet.id]: true, // Set loading to true for the specific coin
-    }));
+    if (actionType == 'reloadWallet') {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        [wallet.id]: true, // Set loading to true for the specific coin
+      }));
+    }
     var postData = { "walletId": wallet.id };
 
     postDataWallet(Wallet_Fetch_ById(), postData).then(function (res) {
-      // console.log(res, "Fetch Wallet By Id");
-      setIsLoading((prevState) => ({
-        ...prevState,
-        [wallet.id]: false, // Set loading to false for the specific coin
-      }));
       if (res.error !== 'ok') {
         if (res.error.name == "Missing Authorization") {
           // Logout User

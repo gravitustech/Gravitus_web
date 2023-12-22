@@ -3,11 +3,14 @@ import { Button, Grid, Stack, Typography, useTheme } from '@mui/material';
 import AuthWrapper from './AuthWrapper';
 import { Link as RouterLink } from 'react-router-dom';
 import AnimateButton from 'src/components/@extended/AnimateButton';
-
+import { useLocation } from 'react-router-dom';
 // ================================|| Registerstatus ||================================ //
 
 const Registerstatus = () => {
   const theme = useTheme();
+
+  const location = useLocation();
+  const email = location.state?.email;
   return (
     <AuthWrapper>
       <Grid container spacing={3}>
@@ -19,8 +22,11 @@ const Registerstatus = () => {
           </Stack>
           <br />
           <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-            Your verification email link has been sent to your email address.
-            Please proceed with the login once you have completed the verification.
+            Your verification email link has been sent to &nbsp;
+            <span style={{ color: theme.palette.mode === 'dark' ? '#f7f7f7' : '#000', fontWeight: 600 }}>
+              {email}.
+            </span>
+            &nbsp; Please proceed with the login once you have completed the verification.
           </Typography>
         </Grid>
 

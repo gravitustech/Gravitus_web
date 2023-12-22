@@ -180,9 +180,8 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
       };
 
       formDataP2P(P2P_UpdateAppeal_URL(), postData).then(function (res) {
-
-        handleModalClose();
         setIsLoading(false);
+        handleModalClose();
 
         console.log(res);
         if (res.error !== 'ok') {
@@ -196,10 +195,14 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
             if (res.error.name != undefined) {
               setSnackbarMessage({ msg: res.error.name, success: false });
               setSnackbarOpen(true);
+              setIsLoading(false);
+
             }
             else {
               setSnackbarMessage({ msg: res.error, success: false });
               setSnackbarOpen(true);
+              setIsLoading(false);
+
             }
           }
         } else {
@@ -217,8 +220,9 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
       });
     }
     else {
-      setSnackbarMessage({ msg: "Image is empty", success: false });
+      setSnackbarMessage({ msg: "Cropped Image is Empty, So please Crop the image before Upload", success: false });
       setSnackbarOpen(true);
+      setIsLoading(false);
     }
   };
 
@@ -361,8 +365,14 @@ const AppealChatscreen = ({ messages, orderDetails, counterPart, mutate, setSnac
                   <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                     {/* <Stack direction='row' spacing={1}> */}
                     <Grid xs={12} md={6} >
-                      <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Selected Image</Typography>
-                      <Box >
+                      <Stack spacing={1}>
+                        <Typography sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
+                          Selected Image
+                        </Typography>
+                        <Typography variant='title1' pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
+                          Please crop the image before you upload.
+                        </Typography>
+                      </Stack>                      <Box >
                         <ImageCropper
                           imageToCrop={imageToCrop}
                           onImageCropped={(croppedImage) => setCroppedImage(croppedImage)}

@@ -115,7 +115,7 @@ function ProfileScreen() {
   React.useEffect(() => {
     setValue(indexToTabname[page]);
   }, [page]);
-  
+
   const handleMenuItemClick = (newValue) => {
     navigate(`/profile/${tabNameToIndex[newValue]}`);
     setValue(newValue);
@@ -269,18 +269,18 @@ function ProfileScreen() {
                 <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
                   <img src={warninggif} alt='warninggif' />
                   <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                    Confirm ?
+                    Logout ?
                   </Typography>
                   <Typography textAlign='center' variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                    Are you sure you did like to logout your account?
+                    Confirm, if you would like to log out of your account.
                   </Typography>
 
                   <Stack pt={3} direction="row" spacing={2} justifyContent="space-between">
                     <Button variant="contained5" onClick={handleCloseDialog}>
-                      No
+                      Cancel
                     </Button>
                     <Button variant='contained4' onClick={handleLogout}>
-                      Yes
+                      Logout
                     </Button>
                   </Stack>
 

@@ -62,7 +62,7 @@ const GravitusAuthRegister = () => {
         postData: { emailId: formikValues.email, password: formikValues.password, referralId: formikValues.referralid }
       });
       if (resp.error === 'ok') {
-        navigate('/registerstatus')
+        navigate('/registerstatus', { state: { email: formikValues.email } })
         setIsSuccessDialogOpen(true);
         setIsReferrralLoading(false);
       } else {
@@ -131,7 +131,7 @@ const GravitusAuthRegister = () => {
               setIsLoading(true);
               const { data } = await signupUser({ ...inputs, postData: { emailId: values.email, password: values.password } });
               if (data.error === 'ok') {
-                navigate('/registerstatus');
+                navigate('/registerstatus', { state: { email: values.email } });
               } else {
                 setIsLoading(false);
                 setSnackbarMessage({ msg: data.error, success: false });

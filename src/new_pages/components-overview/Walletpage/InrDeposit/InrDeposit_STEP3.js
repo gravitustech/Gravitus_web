@@ -246,8 +246,8 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
                         <Stack backgroundColor={theme.palette.mode === 'dark' ? '#262B39' : '#FFFFFF'}
                           sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
                           {...props} direction="row" spacing={1}>
-                          <Typography sx={{color:theme.palette.mode === 'dark' ? '#F7F7F7' : 'text.secondary'}}>{option.AcNumber}</Typography>
-                          <Typography sx={{color:theme.palette.mode === 'dark' ? '#F7F7F7' : 'text.secondary'}}>({option.Beneficiary})</Typography>
+                          <Typography sx={{ color: theme.palette.mode === 'dark' ? '#F7F7F7' : 'text.secondary' }}>{option.AcNumber}</Typography>
+                          <Typography sx={{ color: theme.palette.mode === 'dark' ? '#F7F7F7' : 'text.secondary' }}>({option.Beneficiary})</Typography>
                         </Stack>
                       )}
                       renderInput={(params) => (
@@ -366,7 +366,14 @@ const InrDeposit_STEP3 = ({ depositFrom, depositTo, setStep, setFormikValues, fo
                               <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                                 {/* <Stack direction='row' spacing={1}> */}
                                 <Grid xs={12} md={6}>
-                                  <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Selected Image</Typography>
+                                  <Stack spacing={1}>
+                                    <Typography sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
+                                      Selected Image
+                                    </Typography>
+                                    <Typography variant='title1' pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
+                                      Please crop the image before you upload.
+                                    </Typography>
+                                  </Stack>
                                   <Box >
                                     <ImageCropper
                                       imageToCrop={imageToCrop}

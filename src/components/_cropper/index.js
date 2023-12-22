@@ -19,8 +19,8 @@ function ImageCropper(props) {
     // Center Crop Config
     {
       unit: '%',
-      width: '50%',
-      height: '50%',
+      width: 50,
+      height: 50,
       x: 25,
       y: 25
     }

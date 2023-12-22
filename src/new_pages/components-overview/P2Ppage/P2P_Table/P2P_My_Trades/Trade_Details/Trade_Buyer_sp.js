@@ -182,7 +182,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
       return action.data;
     }
   }
-  
+
   const [activeStep, setActiveStep] = React.useState(
     SUPERData?.actionCaption === "Order Timed Out" ? 3 :
       SUPERData?.superStatus === 3 ? 3
@@ -190,20 +190,20 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
   );
 
   useEffect(() => {
-    if(orderDetails != undefined) {
+    if (orderDetails != undefined) {
       var remaining = parseInt(expiryTime) - parseInt(moment().format('x'));
       var nLeftOverMins = (parseInt(remaining) / 60000).toFixed(0);
       var stopTimer = undefined;
-      
-      if(nLeftOverMins > 0 && orderDetails.status != 1 && orderDetails.status != -1 && orderDetails.status != -2) {
+
+      if (nLeftOverMins > 0 && orderDetails.status != 1 && orderDetails.status != -1 && orderDetails.status != -2) {
         setTimeLeftOver({ type: 'setDATA', data: nLeftOverMins });
-  
+
         stopTimer = setInterval(() => {
           var remaining = parseInt(expiryTime) - parseInt(moment().format('x'));
           var nLeftOverMins = (parseInt(remaining) / 60000).toFixed(0);
           // console.log(nLeftOverMins, 'nLeftOverMins');
 
-          if(nLeftOverMins > 0) {
+          if (nLeftOverMins > 0) {
             setTimeLeftOver({ type: 'setDATA', data: nLeftOverMins });
           }
           else {
@@ -215,7 +215,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
         setTimeLeftOver({ type: 'setDATA', data: 0 });
       }
     }
-    
+
     return () => clearInterval(stopTimer);
   }, [expiryTime]);
 
@@ -225,7 +225,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
         SUPERData?.superStatus === 3 ? 3
           : (SUPERData?.superStatus === 0 ? 0 : 2)
     );
-    
+
     setExpiryTime({ type: 'setDATA', data: SUPERData.orderDetails.expiryTime });
   }, [SUPERData]);
 
@@ -756,7 +756,14 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                           <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                             {/* <Stack direction='row' spacing={1}> */}
                             <Grid xs={12} md={6}>
-                              <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Selected Image</Typography>
+                              <Stack spacing={1}>
+                                <Typography sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
+                                  Selected Image
+                                </Typography>
+                                <Typography variant='title1' pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
+                                  Please crop the image before you upload.
+                                </Typography>
+                              </Stack>
                               <Box >
                                 <ImageCropper
                                   imageToCrop={imageToCrop}
@@ -990,7 +997,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                               value={values.reason}
                               onChange={(e, val) => setFieldValue('reason', val)}
                               renderOption={(props, option) => (
-                                <Stack {...props} direction='row' spacing={1}  backgroundColor={theme.palette.mode === 'dark' ? '#0F121A' : '#FFFFFF'}>
+                                <Stack {...props} direction='row' spacing={1} backgroundColor={theme.palette.mode === 'dark' ? '#0F121A' : '#FFFFFF'}>
                                   <Typography >
                                     {option}
                                   </Typography>
@@ -1117,7 +1124,14 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                               <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                                 {/* <Stack direction='row' spacing={1}> */}
                                 <Grid xs={12} md={6}>
-                                  <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Selected Image</Typography>
+                                  <Stack spacing={1}>
+                                    <Typography sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
+                                      Selected Image
+                                    </Typography>
+                                    <Typography variant='title1' pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
+                                      Please crop the image before you upload.
+                                    </Typography>
+                                  </Stack>
                                   <Box >
                                     <ImageCropper
                                       imageToCrop={imageToCrop}

@@ -185,20 +185,20 @@ const Trade_Seller_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage }
   );
 
   useEffect(() => {
-    if(orderDetails != undefined) {
+    if (orderDetails != undefined) {
       var remaining = parseInt(expiryTime) - parseInt(moment().format('x'));
       var nLeftOverMins = (parseInt(remaining) / 60000).toFixed(0);
       var stopTimer = undefined;
-      
-      if(nLeftOverMins > 0 && orderDetails.status != 1 && orderDetails.status != -1 && orderDetails.status != -2) {
+
+      if (nLeftOverMins > 0 && orderDetails.status != 1 && orderDetails.status != -1 && orderDetails.status != -2) {
         setTimeLeftOver({ type: 'setDATA', data: nLeftOverMins });
-  
+
         stopTimer = setInterval(() => {
           var remaining = parseInt(expiryTime) - parseInt(moment().format('x'));
           var nLeftOverMins = (parseInt(remaining) / 60000).toFixed(0);
           // console.log(nLeftOverMins, 'nLeftOverMins');
 
-          if(nLeftOverMins > 0) {
+          if (nLeftOverMins > 0) {
             setTimeLeftOver({ type: 'setDATA', data: nLeftOverMins });
           }
           else {
@@ -830,7 +830,14 @@ const Trade_Seller_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage }
                               <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                                 {/* <Stack direction='row' spacing={1}> */}
                                 <Grid xs={12} md={6}>
-                                  <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Selected Image</Typography>
+                                  <Stack spacing={1}>
+                                    <Typography sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
+                                      Selected Image
+                                    </Typography>
+                                    <Typography variant='title1' pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
+                                      Please crop the image before you upload.
+                                    </Typography>
+                                  </Stack>
                                   <Box >
                                     <ImageCropper
                                       imageToCrop={imageToCrop}

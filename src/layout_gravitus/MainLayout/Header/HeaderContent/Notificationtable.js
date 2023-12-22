@@ -17,17 +17,7 @@ const rows = [
   createData(
     'Welcome to all',
     'We are happy to announce that our new version is live.',
-    '09 Sep, 02 PM',
-  ),
-  createData(
-    'Deposit Explanation',
-    'If you own cryptocurrency on another platform or wallet, you can transfer it to your Gravitus Wallet for trading or grow your crypto holdings with our suite of services on Gravitus Earn.',
-    '21 Oct, 12 PM',
-  ),
-  createData(
-    'Deposit Explanation',
-    'If you own cryptocurrency on another platform or wallet, you can transfer it to your Gravitus Wallet for trading or grow your crypto holdings with our suite of services on Gravitus Earn.',
-    '21 Oct, 12 PM',
+    '23/12/2023, 11:00 Am',
   ),
 ];
 // ==============================|| Notificationtable ||============================== //
