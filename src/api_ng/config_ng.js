@@ -104,7 +104,7 @@ export const axiosP2PInstance = () => {
 
 export const axiosWalletInstance = () => {
   const axiosClient = axios.create({
-    baseURL: process.env.REACT_APP_TRADE_API_URL,
+    baseURL: process.env.REACT_APP_WALLET_API_URL,
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
