@@ -18,7 +18,7 @@ import AnimateButton from '../../../../../../components/@extended/AnimateButton'
 import useSWR, { mutate } from 'swr';
 import React, { useState, useRef, useEffect } from 'react';
 
-import { Send_OTP } from '../../../../../../api_ng/system_ng';
+import { Send_OTP, postDataSystem } from '../../../../../../api_ng/system_ng';
 import { sendOtpSecurity } from '../../../../../../api/profile';
 import { Wallet_Fetch_ById, Estimate_Withdrawal, Sign_Withdrawal, postDataWallet } from '../../../../../../api_ng/wallet_ng';
 
@@ -143,7 +143,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
   function reqSendOTP(action) {
     try {
       var postData = { verifyType: 'wSecurity', action }
-      postDataWallet(Send_OTP(), postData).then(function (res) {
+      postDataSystem(Send_OTP(), postData).then(function (res) {
         if (res.error !== 'ok') {
           if (res.error.name == "Missing Authorization") {
             // Logout User

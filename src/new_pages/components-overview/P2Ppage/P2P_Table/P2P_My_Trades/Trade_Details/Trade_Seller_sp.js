@@ -910,29 +910,388 @@ const Trade_Seller_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage }
       case 2:
         return (
           <Stack>
-            <Stack pt={0} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              {SUPERData?.actionCaption === "Order Completed" ? (
-                <img src={ordersuccessgif} alt='ordersuccessgif' />
-              ) : (
-                <img src={Timeoutgif} alt='Timeoutgif' />
-              )}
-              <Typography pt={3} variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} >
-                {SUPERData?.actionCaption}
-              </Typography>
-              <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                {SUPERData?.actionMessage}
-              </Typography>
-            </Stack>
+            {SUPERData?.actionCaption === "Order Timed Out" ? (
+              <>
+                {!isHidden ? (
+                  <Stack pt={2} pl={2} pr={2} sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                    <Stack pt={0} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <img src={Timeoutgif} alt='Timeoutgif' width={150} />
+                    </Stack>
+                    <Stack pt={2} direction="row" justifyContent="space-between">
+                      <Stack>
+                        <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                          {SUPERData?.actionCaption}
+                        </Typography>
+                        <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                          {SUPERData?.actionMessage} {
+                            SUPERData?.appealStatus === '1' ? (
+                              <></>
+                            ) : (
+                              <>
+                                {/* {timeLeftOver} minutes. */}
+                              </>
+                            )
+                          }
+                        </Typography>
+                      </Stack>
+                      <Stack pt={0.8}>
+                        {
+                          SUPERData?.appealStatus === '1' ? (
+                            <></>
+                          ) : (
+                            <>
+                              <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                                {timeLeftOver} minutes
+                              </Typography>
+                              <Typography textAlign='end' variant="subtitle2" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                                Duration
+                              </Typography>
+                            </>
+                          )
+                        }
+                      </Stack>
+                    </Stack>
 
-            <Stack pl={2} pr={2} sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-              <Trade_Price_Dts orderDetails={orderDetails} />
-              <Stack pt={3} direction="row" justifyContent="space-between">
-                <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>Duration</Typography>
-                <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                  {timeLeftOver} minutes
-                </Typography>
-              </Stack>
-            </Stack>
+                    {/* buyorderdeatils */}
+                    <Trade_Price_Dts orderDetails={orderDetails} />
+
+                    <Stack pt={3}>
+                      <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        Payment Methods
+                      </Typography>
+                    </Stack>
+
+                    <Stack pt={2}>
+                      <UpiImpsTabs orderDetails={orderDetails} />
+                    </Stack>
+
+                    <Stack direction="row" spacing={3} pt={3}>
+                      {SUPERData.superStatus === 1 ? (
+                        <>
+                          <Button variant="sellAppealbutton" onClick={goBack}>
+                            Close
+                          </Button>
+                          <Button variant="confirmrecipt" onClick={handleButtonClick} >
+                            Appeal
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                        </>
+                      )}
+                    </Stack>
+
+                    <Dialog
+                      onClose={closeConfirmDlg}
+                      open={open}
+                    >
+                      <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: theme.palette.mode === 'dark' ? '#131722' : 'text.white', }}>
+                        <img src={warninggif} alt='warninggif' />
+                        <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                          Confirm ?
+                        </Typography>
+                        <Typography textAlign='center' variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                          I confirm that the payment was received with <br /> the correct amount and sender information.
+                        </Typography>
+                        <Stack pt={1} direction='row' spacing={2} justifyContent='space-between'>
+                          <Button variant="contained5" onClick={closeConfirmDlg}>
+                            Cancel
+                          </Button>
+                          <Button
+                            // onClick={handleNext}
+                            onClick={releaseCrypto}
+                            variant="contained4">
+                            {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Confirm'}
+                          </Button>
+                        </Stack>
+                      </Stack>
+                    </Dialog>
+                  </Stack>
+                ) : (
+                  <Stack pt={2} pl={2} pr={2} sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                    <Stack pt={2} direction="row" justifyContent="space-between">
+                      <Stack spacing={1}>
+                        <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                          Appeal to Escrow
+                        </Typography>
+                        <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                          {SUPERData?.actionMessage}
+                        </Typography>
+                      </Stack>
+                      <Stack pt={0.8}>
+                        <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                          {timeLeftOver} minutes
+                        </Typography>
+                        <Typography textAlign='end' variant="subtitle2" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                          Duration
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                    <Stack pt={3}>
+                      <Formik
+                        innerRef={formikAPL}
+                        initialValues={{
+                          reason: null,
+                          message: '',
+                          submit: null
+                        }}
+                        validationSchema={Yup.object().shape({
+                          reason: Yup.string().max(255).nullable().required('Select the type of reason'),
+                          message: Yup.string().max(255).required('Don\'t leave empty')
+                        })}
+                        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+                          try {
+                            setStatus({ success: false });
+                            setSubmitting(false);
+                            // handleAppeal(values);
+                          } catch (err) {
+                            setStatus({ success: false });
+                            setErrors({ submit: err.message });
+                            setSubmitting(false);
+                          }
+                        }}
+                      >
+                        {({ errors, handleBlur, handleChange, handleSubmit, setFieldValue, isSubmitting, touched, values }) => (
+                          <>
+                            <form noValidate onSubmit={handleSubmit}>
+                              <Typography pt={1} variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                                Reason Type
+                              </Typography>
+                              <Grid pt={1}>
+                                <Autocomplete
+                                  id="country-customized-option-demo"
+                                  options={Reason.map((item) => item.Reason)}
+                                  value={values.reason}
+                                  onChange={(e, val) => setFieldValue('reason', val)}
+                                  renderOption={(props, option) => (
+                                    <Stack {...props} direction='row' spacing={1} backgroundColor={theme.palette.mode === 'dark' ? '#0F121A' : '#FFFFFF'}>
+                                      <Typography >
+                                        {option}
+                                      </Typography>
+                                    </Stack>
+                                  )}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      placeholder="Select your reason type"
+                                      name="reason"
+                                      value={values.reason}
+                                      onBlur={handleBlur}
+                                      onChange={handleChange}
+                                      error={Boolean(touched.reason && errors.reason)}
+                                      sx={{
+                                        "& .MuiInputBase-input": {
+                                          height: '10px',
+                                          borderRadius: '5px',
+                                          borderColor: '#959595',
+                                        },
+                                      }} />
+                                  )}
+                                />
+                                {touched.reason && errors.reason && (
+                                  <FormHelperText error id="standard-weight-helper-text-reason">
+                                    {errors.reason}
+                                  </FormHelperText>
+                                )}
+                              </Grid>
+
+                              <Typography pt={2} variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                                Reason Description
+                              </Typography>
+
+                              <Grid container spacing={3} pt={1}>
+                                <Grid item xs={12}>
+                                  <Stack spacing={1}>
+                                    <StyledTextarea
+                                      aria-label="minimum height"
+                                      minRows={4}
+                                      id="message"
+                                      type="message"
+                                      value={values.message}
+                                      name="message"
+                                      onBlur={handleBlur}
+                                      onChange={handleChange}
+                                      placeholder="Enter your message"
+                                      fullWidth
+                                      error={Boolean(touched.message && errors.message)} />
+                                    {touched.message && errors.message && (
+                                      <FormHelperText error id="standard-weight-helper-text-email-login">
+                                        {errors.message}
+                                      </FormHelperText>
+                                    )}
+                                  </Stack>
+                                </Grid>
+                              </Grid>
+                              <Stack pt={3}>
+                                <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                                  Upload Screenshot
+                                </Typography>
+                              </Stack>
+
+                              <Stack pt={1}>
+                                <Card
+                                  sx={{
+                                    width: ' 330.98px',
+                                    height: '100%',
+                                    boxShadow: 'none',
+                                    borderRadius: '5px',
+                                    border: '2px solid',
+                                    borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
+                                    backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'
+                                  }}
+                                >
+                                  <Stack
+                                    pt={5}
+                                    sx={{
+                                      alignItems: 'center',
+                                      textAlign: 'center'
+                                    }}
+                                  >
+                                    {croppedImage ? (
+                                      <Box>
+                                        <img src={croppedImage} alt="wew" width="100%" height='auto' />
+                                        <Tooltip title="click to clear the image" placement="top" arrow>
+                                          <DeleteForever
+                                            onClick={() => setCroppedImage(null)}
+                                            sx={{
+                                              cursor: 'pointer',
+                                              color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
+                                            }}
+                                          />
+                                        </Tooltip>
+                                      </Box>
+                                    ) : (
+                                      <IconButton
+                                        disableRipple
+                                        onClick={handleModalOpen}
+                                        sx={{
+                                          paddingBottom: '46px',
+                                        }}
+                                      >
+                                        <AddCircleOutlinedIcon
+                                          sx={{
+                                            width: '42px',
+                                            height: '42px',
+                                            color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary'
+                                          }}
+                                        />
+                                        <input id="superFile" type="file" accept="image/*" onChange={onUploadFile} style={{ display: 'none' }} />
+                                      </IconButton>
+                                    )}
+                                  </Stack>
+                                </Card>
+                              </Stack>
+                              <Modal
+                                open={modalOpen}
+                                onClose={handleModalClose}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description">
+                                <Box sx={modalStyle}>
+                                  <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
+                                    {/* <Stack direction='row' spacing={1}> */}
+                                    <Grid xs={12} md={6}>
+                                      <Stack spacing={1}>
+                                        <Typography sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
+                                          Selected Image
+                                        </Typography>
+                                        <Typography variant='title1' pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
+                                          Please crop the image before you upload.
+                                        </Typography>
+                                      </Stack>
+                                      <Box >
+                                        <ImageCropper
+                                          imageToCrop={imageToCrop}
+                                          onImageCropped={(croppedImage) => setCroppedImage(croppedImage)}
+                                        >
+                                        </ImageCropper>
+                                      </Box>
+                                    </Grid>
+                                    <Grid xs={12} md={6}>
+                                      <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Cropped Image</Typography>
+                                      {
+                                        croppedImage &&
+                                        <Box
+                                          display="flex"
+                                          justifyContent="center"
+                                          alignItems="center"
+                                          maxHeight="auto"
+                                          maxWidth="auto"
+                                        >
+                                          <img
+                                            style={{
+                                              display: "flex",
+                                              justifyContent: "center",
+                                              alignItems: "center",
+                                              minHeight: 'auto',
+                                              maxHeight: 'auto',
+                                              maxWidth: "auto"
+                                            }}
+                                            alt="Cropped Img"
+                                            src={croppedImage}
+                                          />
+                                        </Box>
+                                      }
+                                    </Grid>
+                                    {/* </Stack> */}
+                                  </Grid>
+                                  <Stack pt={1} direction="row" spacing={2} justifyContent="space-around">
+                                    <Button variant="contained5" onClick={handleImageCancel}>
+                                      Cancel
+                                    </Button>
+                                    <Button variant="contained4"
+                                      onClick={handleImageUpload}
+                                    >
+                                      Upload
+                                    </Button>
+                                  </Stack>
+                                </Box>
+                              </Modal>
+
+                              <Stack direction="row" spacing={3} pt={3}>
+                                {/* {SUPERData?.action_2 === 'sodc.cancelAppeal()' ? (
+                                <Button variant="p2pcancelbutton" onClick={() => AppealCancel(orderDetails)}>Cancel Appeal</Button>
+                              ) : (
+                                <Button variant="p2pcancelbutton" onClick={handleButtonClick}>Cancel</Button>
+                              )} */}
+                                <Button variant="p2pcancelbutton" onClick={handleButtonClick}>Cancel</Button>
+                                <Button type="submit" variant="confirmrecipt" onClick={() => handleAppeal(values)} >
+                                  {isLoading ? <CircularProgress color="inherit" size={30} /> : 'File a Appeal'}
+                                </Button>
+                              </Stack>
+                            </form>
+                          </>
+                        )}
+                      </Formik>
+                    </Stack>
+                  </Stack>
+                )}
+              </>
+
+            ) : (
+              <>
+                <Stack pt={0} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <img src={ordersuccessgif} alt='ordersuccessgif' />
+                  <Typography pt={3} variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} >
+                    {SUPERData?.actionCaption}
+                  </Typography>
+                  <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                    {SUPERData?.actionMessage}
+                  </Typography>
+                </Stack>
+
+                <Stack pl={2} pr={2} sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                  <Trade_Price_Dts orderDetails={orderDetails} />
+                  <Stack pt={3} direction="row" justifyContent="space-between">
+                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                      Duration
+                    </Typography>
+                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                      {timeLeftOver} minutes
+                    </Typography>
+                  </Stack>
+                </Stack>
+              </>
+            )}
           </Stack>
         );
       default:

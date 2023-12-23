@@ -18,7 +18,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSWR, { mutate } from 'swr';
 
-import { Send_OTP } from '../../../../api_ng/system_ng';
+import { Send_OTP, postDataSystem } from '../../../../api_ng/system_ng';
 import { sendOtpSecurity } from '../../../../api/profile';
 import { Estimate_Withdrawal, Sign_Withdrawal, Pre_Rs_Withdraw, postDataWallet } from '../../../../api_ng/wallet_ng';
 
@@ -112,7 +112,7 @@ const InrWithdraw_EXT = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen,
   function reqSendOTP(action) {
     try {
       var postData = { verifyType: 'wSecurity', action }
-      postDataWallet(Send_OTP(), postData).then(function (res) {
+      postDataSystem(Send_OTP(), postData).then(function (res) {
         if (res.error !== 'ok') {
           if (res.error.name == "Missing Authorization") {
             // Logout User

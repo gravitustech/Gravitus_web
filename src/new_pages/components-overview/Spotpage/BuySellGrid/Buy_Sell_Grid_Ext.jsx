@@ -156,8 +156,8 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
 
     postDataSPOT(Spot_PostOrder_URL(), postData).then(function (res) {
       handleCloseDialog();
+      setIsLoading(false);
       if (res.error !== 'ok') {
-        setIsLoading(false);
         if (res.error.name == "Missing Authorization") {
           // Logout User
         }
