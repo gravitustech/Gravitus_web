@@ -1,6 +1,6 @@
 import WalletHeadExt from './WalletHead/WalletHeadExt';
 import WalletHead from './WalletHead/WalletHead';
-import { Grid, Divider } from '@mui/material';
+import { Grid, Divider, useTheme, Stack } from '@mui/material';
 
 import Lodergif from 'src/components/Gravitusloader';
 import Footer from '../Homepage/Footer/Footer';
@@ -16,6 +16,7 @@ import { getConfig_sp } from '../../../utils_ng/localStorage_ng';
 import { Wallet_Fetch_Info, fetcherWallet } from 'src/api_ng/wallet_ng';
 
 const Walletpage = () => {
+  const theme = useTheme();
   const isAuthorised = useSelector((state) => state.user.isAuthenticated);
   const [WALLETData, setWALLETData] = useReducer(updateData, null);
 
@@ -35,16 +36,16 @@ const Walletpage = () => {
     return { data, error, isLoading };
   }
 
-  const { 
-    data: walletRc, 
-    error: walletEr, 
-    isLoading: isWALLETDataLoading 
+  const {
+    data: walletRc,
+    error: walletEr,
+    isLoading: isWALLETDataLoading
   } = useWalletFetchInfo();
 
   if (walletEr) {
     // Call Logout User
   }
-  
+
   useEffect(() => {
     if (walletRc != undefined) {
       if (walletRc.error != 'ok') {
@@ -69,7 +70,7 @@ const Walletpage = () => {
       }
     }
 
-    let WALLETUpdateEvt = '/WALLETUpdate_'+ getConfig_sp().userId +'/POST';
+    let WALLETUpdateEvt = '/WALLETUpdate_' + getConfig_sp().userId + '/POST';
     socket.on(WALLETUpdateEvt, function (res) {
       // Show Loader if necessary
       mutate(Wallet_Fetch_Info);
@@ -88,20 +89,42 @@ const Walletpage = () => {
     <>
       {WALLETData ? (
         <>
-          <Grid container pl={15} pr={15} pt={3} pb={5}>
-            <Grid item xs={12} sm={12} md={6} lg={4}>
+          <Grid container
+            pt={{ xs: 2, sm: 3, md: 3, lg: 3 }}
+            pb={{ xs: 2, sm: 2, md: 3, lg: 3 }}
+            pl={{ xs: 2, sm: 3, md: 6, lg: 15 }}
+            pr={{ xs: 2, sm: 3, md: 6, lg: 15 }}
+            sx={{
+              backgroundColor:
+              {
+                xs: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
+                sm: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
+                md: 'transparent',
+                lg: 'transparent'
+              }
+            }}
+          >
+            <Grid item xs={12} sm={12} md={6} lg={4} pt={{ xs: 0, sm: 0, md: 10, lg: 10 }}>
               {WALLETData && <WalletHead totalInUsd={WALLETData?.totalInUsd} />}
             </Grid>
+
             <Grid item lg={2} pt={5} pr={6} display={{ xs: 'none', md: 'none', lg: 'block' }}>
               <Divider orientation="vertical" pt={5} sx={{ height: '309px' }} />
             </Grid>
+
             <Grid item xs={12} md={6} lg={6} display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
               <WalletHeadExt />
             </Grid>
           </Grid>
+          {/* <Stack
+            display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
+            pl={{ xs: 2, sm: 3 }}
+            pr={{ xs: 2, sm: 3 }}
+          >
+            <Divider></Divider>
+          </Stack> */}
+          {WALLETData && <WalletTable walletList={WALLETData?.walletList} />}
 
-          { WALLETData && <WalletTable walletList={WALLETData?.walletList} /> }
-          
           <Footer isAuthorised={isAuthorised} />
         </>
       ) : (

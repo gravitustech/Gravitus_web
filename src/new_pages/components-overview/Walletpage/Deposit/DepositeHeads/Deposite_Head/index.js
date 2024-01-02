@@ -10,7 +10,9 @@ import DepositAddressCard from './DepositAddressCard';
 const DepositHead = ({ walletList, depositData, setDepositData, setHistoryData }) => {
   return (
     <Grid>
-      <Stack spacing={6} direction="column">
+      <Stack
+        spacing={{ xs: 3, sm: 3, md: 6, lg: 6 }}
+        direction="column">
         <FormLabel number="01." title="Select the coin" />
         <CoinSelectTextfield walletList={walletList} setDepositData={setDepositData} setHistoryData={setHistoryData} />
 

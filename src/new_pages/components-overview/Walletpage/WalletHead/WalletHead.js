@@ -20,9 +20,9 @@ const WalletIcon = () => (
 
 const WalletHead = ({ totalInUsd }) => {
   const theme = useTheme();
-  
+
   return (
-    <Grid container pt={10}>
+    <Grid container>
       <Stack>
         <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
           Welcome to your safe and secure wallet
@@ -38,7 +38,7 @@ const WalletHead = ({ totalInUsd }) => {
             pt={1.9}
             variant="h1"
             sx={{
-              color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary'
+              color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
             }}
           >
             {totalInUsd}
@@ -47,7 +47,7 @@ const WalletHead = ({ totalInUsd }) => {
             pl={2}
             variant="title2"
             sx={{
-              color: theme.palette.mode === 'dark' ? 'text.tertiarydark' : 'text.tertiary'
+              color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
             }}
             pt={3}
           >
@@ -55,14 +55,30 @@ const WalletHead = ({ totalInUsd }) => {
           </Typography>
         </Stack>
 
-        <Stack direction="row" spacing={2} pt={3}>
+        <Stack direction="row" spacing={2} pt={3} justifyContent='space-between'>
+          <Stack spacing={0.5} textAlign='start' justifyContent='start'>
+            <Button variant="walletbutton" component={RouterLink} to="/deposit">
+              Deposit
+            </Button>
+          </Stack>
+
+
+          <Stack spacing={0.5} textAlign='end' justifyContent='end'>
+            <Button variant="walletbutton" component={RouterLink} to="/withdraw">
+              Withdraw
+            </Button>
+          </Stack>
+
+
+        </Stack>
+        {/* <Stack direction="row" spacing={2} pt={3}>
           <Button variant="walletbutton" component={RouterLink} to="/deposit">
-            Deposit
+            INR Deposit
           </Button>
           <Button variant="walletbutton" component={RouterLink} to="/withdraw">
-            Withdraw
+            INR Withdraw
           </Button>
-        </Stack>
+        </Stack> */}
       </Stack>
     </Grid>
   );

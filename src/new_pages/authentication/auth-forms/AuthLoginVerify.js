@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 // material-ui
-import { Button, FormHelperText, Grid, OutlinedInput, Stack, InputLabel, InputAdornment, Link, useTheme, Typography } from '@mui/material';
+import { Button, FormHelperText, Grid, OutlinedInput, Stack, InputLabel, InputAdornment, Link, useTheme, Typography, CircularProgress } from '@mui/material';
 
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -15,8 +15,7 @@ import AnimateButton from '../../../components/@extended/AnimateButton';
 import useSWR from 'swr';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAdminUserStateAction } from '../../../appRedux/actions/adminUser';
-import { fetcher, getSecurityURL, sendOtpSecurity, signinSecurity } from '../../../api/profile';
-import { Send_OTP, postDataSystem } from 'src/api_ng/system_ng';
+import { Security_URL, Send_OTP, SignIn_security, fetcherSystem, postDataSystem } from 'src/api_ng/system_ng';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -71,11 +70,19 @@ const GravitusAuthLoginVerify = () => {
   const [isResendMOTP, setIsResendMOTP] = useState(false);
   const [isResendPOTP, setIsResendPOTP] = useState(false);
 
-  const { data, error, isLoading } = useSWR(
-    getSecurityURL(),
-    (url) => fetcher(url, { accountType: 'GRAVITUS' })
-    // { suspense: true }
-  );
+  function useSecurity() {
+    var postData = { accountType: 'GRAVITUS' };
+
+    const { data, error, isLoading } = useSWR([Security_URL(), postData], fetcherSystem, {
+      revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
+    });
+
+    return { data, error, isLoading };
+  }
+
+  const { data, error, isLoading } = useSecurity();
+
+  const [isbtnLoading, setIsLoading] = useState(false);
 
   const handleVerifyMethod = (str) => {
     setVerifyMethod(str);
@@ -133,7 +140,7 @@ const GravitusAuthLoginVerify = () => {
       setStatus({ success: false });
     }
   }
- 
+
   useEffect(() => {
     let timeoutId;
 
@@ -159,6 +166,62 @@ const GravitusAuthLoginVerify = () => {
     }
     return () => clearTimeout(timeoutId);
   }, [isResendPOTP]);
+
+  const LoginInVerfiy = (values) => {
+    setIsLoading(true);
+    const phoneOTP = values.otpmbl;
+    const emailOTP = values.otpmail;
+    const googleOTP = values.authcode;
+    const postData = {
+      verifyType: 'sSecurity',
+      userId: userDetails.id,
+      emailId: userDetails.emailId,
+      password: userDetails.password,
+      ...(phoneOTP && { phoneOTP }),
+      ...(emailOTP && { emailOTP }),
+      ...(googleOTP && { googleOTP })
+    };
+
+    postDataSystem(SignIn_security(), postData).then(function (res) {
+      setIsLoading(false);
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        setIsLoading(false);
+        setSnackbarMessage({ msg: 'login verified successfully', success: true });
+        setSnackbarOpen(true);
+        dispatch(
+          setAdminUserStateAction({
+            isAuthenticated: true
+          })
+        );
+
+        navigate('/', { replace: true });
+      }
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
+  }
 
   return (
     <>
@@ -233,42 +296,13 @@ const GravitusAuthLoginVerify = () => {
             otpmbl: verifyMethod === 'phone' && Yup.number().positive().required('OTP is required*'),
             authcode: verifyMethod === 'google' && Yup.number().positive().required('G-Code is required*')
           })}
-          // validationSchema={
-          //   (verifyMethod === 'email' && Yup.object().shape({ otpmail: Yup.string().max(5).required('OTP is required') }),
-          //   verifyMethod === 'phone' && Yup.object().shape({ otpmbl: Yup.string().max(5).required('OTP is required') }),
-          //   verifyMethod === 'google' && Yup.object().shape({ authcode: Yup.string().max(6).required('Auth code is required') }))
-          // }
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-            // console.log({ values });
-            const phoneOTP = values.otpmbl;
-            const emailOTP = values.otpmail;
-            const googleOTP = values.authcode;
-            const postData = {
-              verifyType: 'sSecurity',
-              userId: userDetails.id,
-              emailId: userDetails.emailId,
-              password: userDetails.password,
-              ...(phoneOTP && { phoneOTP }),
-              ...(emailOTP && { emailOTP }),
-              ...(googleOTP && { googleOTP })
-            };
+            setIsLoading(true);
             try {
-              const { data } = await signinSecurity({ accountType: 'GRAVITUS', postData });
-              if (Object.keys(data.result).length) {
-                // console.log({ data });
-                setSnackbarMessage({ msg: 'login verified successfully', success: true });
-                setSnackbarOpen(true);
-                dispatch(
-                  setAdminUserStateAction({
-                    isAuthenticated: true
-                  })
-                );
-
-                navigate('/', { replace: true });
-              } else {
-                setSnackbarMessage({ msg: 'Request failed', success: false });
-                setSnackbarOpen(true);
-              }
+              setIsLoading(true);
+              setStatus({ success: false });
+              setSubmitting(false);
+              LoginInVerfiy(values);
             } catch (err) {
               setSnackbarMessage({ msg: err.message, success: false });
               setSnackbarOpen(true);
@@ -383,68 +417,10 @@ const GravitusAuthLoginVerify = () => {
                   )}
                 </Grid>
 
-                {/* mobilenumber verify textfield */}
-                {/* <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="otpmbl-login" variant='subtitle3' >Enter the OTP sent to 8508275959</InputLabel>
-                  <OutlinedInput
-                    id="otpmbl-login"
-                    type="text"
-                    value={values.otpmbl}
-                    name="otpmbl"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="Enter OTP"
-                    fullWidth
-                    error={Boolean(touched.otpmbl && errors.otpmbl)}
-                    endAdornment={
-                      <InputAdornment  >
-                        <Button
-                          style={{
-                            color: color || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
-                            fontSize: "12px"
-                          }}
-                          onClick={reqSendOTP}
-                        >
-                          {displayText}
-                        </Button>
-                      </InputAdornment>
-                    }
-                  />
-                  {touched.otpmbl && errors.otpmbl && (
-                    <FormHelperText error id="standard-weight-helper-text-otp-login">
-                      {errors.otpmbl}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid> */}
-
-                {/* GoogleAuth verify textfield */}
-                {/* <Grid item xs={12}>
-                <Stack spacing={1}>
-                  <InputLabel htmlFor="authcode-login" variant='subtitle3' >Enter the Google Authentication Code</InputLabel>
-                  <OutlinedInput
-                    id="authcode-login"
-                    type="text"
-                    value={values.authcode}
-                    name="authcode"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="Enter CODE"
-                    fullWidth
-                    error={Boolean(touched.authcode && errors.authcode)}
-                  />
-                  {touched.authcode && errors.authcode && (
-                    <FormHelperText error id="standard-weight-helper-text-otp-login">
-                      {errors.authcode}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid> */}
                 <Grid item xs={12}>
                   <AnimateButton>
                     <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained">
-                      NEXT
+                      {isbtnLoading ? <CircularProgress color="inherit" size={30} /> : 'NEXT'}
                     </Button>
                   </AnimateButton>
                 </Grid>

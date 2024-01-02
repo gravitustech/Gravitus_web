@@ -1,15 +1,20 @@
 import React from 'react';
 
-import { Typography, Box, Stack, Grid, Divider, useTheme, Tab } from '@mui/material';
+import { Typography, Box, Stack, Grid, Divider, useTheme, Tab, IconButton } from '@mui/material';
 import { TabContext, TabPanel, TabList } from "@mui/lab";
 
 import ExternalTab from './MoreEssentials/ExternalTab';
 import InternalTab from './MoreEssentials/InternalTab';
 import ScheduleTab from './ScheduleTab';
+import External_mbl from './MoreEssentials/Mobile_view/External_mbl';
+import Internal_mbl from './MoreEssentials/Mobile_view/Internal_mbl';
+import Schedule_mbl from './MoreEssentials/Mobile_view/Schedule_mbl';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 const MoreDrawer = ({ walletListing, walletData }) => {
   const theme = useTheme();
-  
+
   const [value, setValue] = React.useState("0");
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -19,6 +24,7 @@ const MoreDrawer = ({ walletListing, walletData }) => {
   const InternalData = walletData?.internal;
   const ScheduleData = walletData?.schedules;
 
+  // console.log('walletListing',walletListing)
   return (
     <>
       <Grid pl={4} >
@@ -127,9 +133,22 @@ const MoreDrawer = ({ walletListing, walletData }) => {
           <Typography pl={2} pb={1} variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
             History
           </Typography>
-          <Typography variant='body2' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }} pl={2} >
-            Last 25 Transactions
-          </Typography>
+          <Stack display={{ xs: 'block', sm: 'none', md: 'none', lg: 'none' }}>
+            <IconButton
+              component={RouterLink}
+              to={'/history'}
+              state={{ walletId: walletListing?.id }}
+              >
+              <ChevronRightIcon />
+            </IconButton>
+          </Stack>
+
+          <Stack display={{ xs: 'none', sm: 'block', md: 'block', lg: 'block' }}>
+            <Typography variant='body2' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }} pl={2} >
+              Last 25 Transactions
+            </Typography>
+          </Stack>
+
         </Stack>
 
         <TabContext value={value}>
@@ -215,16 +234,97 @@ const MoreDrawer = ({ walletListing, walletData }) => {
           </TabList>
 
           <TabPanel value="0" sx={{ pt: 0, pl: 0 }}>
-            <ExternalTab externalData={ExternalData} />
+            <Stack display={{ xs: 'none', sm: 'block', md: 'block', lg: 'block' }}>
+              <ExternalTab externalData={ExternalData} />
+            </Stack>
+            <Stack display={{ xs: 'block', sm: 'none', md: 'none', lg: 'none' }}
+              paddingBottom='54px'
+              sx={{
+                width: '100%',
+                maxWidth: '100%',
+                '& td, & th': { whiteSpace: 'nowrap' },
+                overflowY: 'scroll',
+                /* Custom scrollbar styles */
+                scrollbarWidth: 'thin',
+                scrollbarColor: 'gray lightgray',
+                height: '462px',
+                '&::-webkit-scrollbar': {
+                  width: '0px', // Width of the scrollbar
+                },
+                '&::-webkit-scrollbar-track': {
+                  background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  background: theme.palette.mode === "dark" ? '#262B39' : "lightgray",
+                  borderRadius: '8px', // Round the corners of the thumb
+                },
+              }}
+            >
+              <External_mbl externalData={ExternalData} />
+            </Stack>
           </TabPanel>
 
           <TabPanel value="1" sx={{ pt: 0, pl: 0 }}>
-            <InternalTab internalData={InternalData} />
+            <Stack display={{ xs: 'none', sm: 'block', md: 'block', lg: 'block' }}>
+              <InternalTab internalData={InternalData} />
+            </Stack>
+            <Stack display={{ xs: 'block', sm: 'none', md: 'none', lg: 'none' }}
+              paddingBottom='54px'
+              sx={{
+                width: '100%',
+                maxWidth: '100%',
+                '& td, & th': { whiteSpace: 'nowrap' },
+                overflowY: 'scroll',
+                /* Custom scrollbar styles */
+                scrollbarWidth: 'thin',
+                scrollbarColor: 'gray lightgray',
+                height: '462px',
+                '&::-webkit-scrollbar': {
+                  width: '0px', // Width of the scrollbar
+                },
+                '&::-webkit-scrollbar-track': {
+                  background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  background: theme.palette.mode === "dark" ? '#262B39' : "lightgray",
+                  borderRadius: '8px', // Round the corners of the thumb
+                },
+              }}
+            >
+              <Internal_mbl internalData={InternalData} />
+            </Stack>
           </TabPanel>
 
           {walletListing?.crypto === 'Gravitus' && (
             <TabPanel value="2" sx={{ pt: 0, pl: 0 }}>
-              <ScheduleTab scheduleData={ScheduleData} />
+              <Stack display={{ xs: 'none', sm: 'block', md: 'block', lg: 'block' }}>
+                <ScheduleTab scheduleData={ScheduleData} />
+              </Stack>
+              <Stack display={{ xs: 'block', sm: 'none', md: 'none', lg: 'none' }}
+                paddingBottom='54px'
+                sx={{
+                  width: '100%',
+                  maxWidth: '100%',
+                  '& td, & th': { whiteSpace: 'nowrap' },
+                  overflowY: 'scroll',
+                  /* Custom scrollbar styles */
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: 'gray lightgray',
+                  height: '462px',
+                  '&::-webkit-scrollbar': {
+                    width: '0px', // Width of the scrollbar
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    background: theme.palette.mode === "dark" ? '#262B39' : "lightgray",
+                    borderRadius: '8px', // Round the corners of the thumb
+                  },
+                }}
+              >
+                <Schedule_mbl scheduleData={ScheduleData} />
+              </Stack>
             </TabPanel>
           )}
 

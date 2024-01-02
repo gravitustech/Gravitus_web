@@ -21,7 +21,7 @@ import notesicon from '../../../../assets/images/gravitusimage/notesicon.svg';
 import ResetDialog from './resetDialog';
 import AnimateButton from 'src/components/@extended/AnimateButton';
 import { updateAuth, sendOtpSecurity, enableSecurity, disableSecurity } from '../../../../api/profile';
-import { Send_OTP, postDataSystem } from 'src/api_ng/system_ng';
+import { Disable_Security, Enable_Security, Send_OTP, Update_PhFeatures, postDataSystem } from 'src/api_ng/system_ng';
 
 const IOSSwitch = styled((props) => <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />)(({ theme }) => ({
   width: 42,
@@ -232,18 +232,38 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
     setOtpState(true);
     const postData = phone ? { action: 'updatePAuth', mobileNo: phone, intCode: '+91' } : { action: 'updateGAuth' };
     try {
-      const { data } = await updateAuth({
-        accountType: 'GRAVITUS',
-        postData
+      postDataSystem(Update_PhFeatures(), postData).then(function (res) {
+        setIsLoading(false);
+        if (res.error !== 'ok') {
+          if (res.error.name == "Missing Authorization") {
+            // Logout User
+          }
+          else if (res.error.name == "Invalid Authorization") {
+            // Logout User
+          }
+          else {
+            if (res.error.name != undefined) {
+              setSnackbarMessage({ msg: res.error.name, success: false });
+              setSnackbarOpen(true);
+            }
+            else if (res.error.action != undefined) {
+              setSnackbarMessage({ msg: res.error.message, success: false });
+              setSnackbarOpen(true);
+            }
+            else {
+              setSnackbarMessage({ msg: res.error, success: false });
+              setSnackbarOpen(true);
+            }
+          }
+        } else {
+          mutate();
+          setSnackbarMessage({ msg: 'Authentication request sent', success: true });
+          setSnackbarOpen(true);
+        }
+      }, function (err) {
+        // console.log(err);
+        // Logout User
       });
-      if (Object.keys(data.result).length) {
-        // console.log({ data });
-        setSnackbarMessage({ msg: 'Authentication request sent', success: true });
-        setSnackbarOpen(true);
-      } else {
-        setSnackbarMessage({ msg: 'Auth request failed', success: false });
-        setSnackbarOpen(true);
-      }
     } catch (err) {
       setSnackbarMessage({ msg: err.message, success: false });
       setSnackbarOpen(true);
@@ -314,6 +334,118 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
     }, 2000);
   };
 
+  const PhoneEnableDisable = (values) => {
+    setIsLoading(true);
+    const googleOTP = values.gcode;
+    const postData = {
+      verifyType: securityData?.pSecurity?.enabled === '1' ? 'dSecurity' : 'vSecurity',
+      secFeature: 'phone',
+      phoneOTP: values.otpmbl,
+      emailOTP: values.otpmail,
+      ...(securityData?.gSecurity?.enabled === '1' && { googleOTP })
+    };
+
+    postDataSystem(securityData?.pSecurity?.enabled === '1' ? Disable_Security() : Enable_Security(),
+      postData).then(function (res) {
+        setIsLoading(false);
+        smshandleCloseDialog();
+        if (res.error !== 'ok') {
+          if (res.error.name == "Missing Authorization") {
+            // Logout User
+          }
+          else if (res.error.name == "Invalid Authorization") {
+            // Logout User
+          }
+          else {
+            if (res.error.name != undefined) {
+              setSnackbarMessage({ msg: res.error.name, success: false });
+              setSnackbarOpen(true);
+            }
+            else if (res.error.action != undefined) {
+              setSnackbarMessage({ msg: res.error.message, success: false });
+              setSnackbarOpen(true);
+            }
+            else {
+              setSnackbarMessage({ msg: res.error, success: false });
+              setSnackbarOpen(true);
+            }
+          }
+        } else {
+          mutate();
+          setOtpState(false);
+          {
+            securityData?.pSecurity?.enabled === '1' ? (
+              setSnackbarMessage({ msg: 'Phone Authentication is disabled', success: true })
+            ) : (
+              setSnackbarMessage({ msg: 'Phone Authentication is Enabled', success: true })
+            )
+          }
+          setSnackbarOpen(true);
+          smshandleCloseDialog();
+          setIsLoading(false);
+        }
+      }, function (err) {
+        // console.log(err);
+        // Logout User
+      });
+  }
+
+  const GoogleEnableDisable = (values) => {
+    setIsLoading(true);
+    const phoneOTP = values.otpmbl;
+    const postData = {
+      verifyType: securityData?.gSecurity?.enabled === '1' ? 'dSecurity' : 'vSecurity',
+      secFeature: 'google',
+      googleOTP: values.gcode,
+      emailOTP: values.otpmail,
+      ...(securityData?.pSecurity?.enabled === '1' && { phoneOTP })
+    };
+
+    postDataSystem(securityData?.gSecurity?.enabled === '1' ? Disable_Security() : Enable_Security(),
+      postData).then(function (res) {
+        setIsLoading(false);
+        smshandleCloseDialog();
+        if (res.error !== 'ok') {
+          if (res.error.name == "Missing Authorization") {
+            // Logout User
+          }
+          else if (res.error.name == "Invalid Authorization") {
+            // Logout User
+          }
+          else {
+            if (res.error.name != undefined) {
+              setSnackbarMessage({ msg: res.error.name, success: false });
+              setSnackbarOpen(true);
+            }
+            else if (res.error.action != undefined) {
+              setSnackbarMessage({ msg: res.error.message, success: false });
+              setSnackbarOpen(true);
+            }
+            else {
+              setSnackbarMessage({ msg: res.error, success: false });
+              setSnackbarOpen(true);
+            }
+          }
+        } else {
+          mutate();
+          {
+            securityData?.gSecurity?.enabled === '1' ? (
+              setSnackbarMessage({ msg: 'Google Authentication is disabled', success: true })
+            ) : (
+              setSnackbarMessage({ msg: 'Google Authentication is Enabled', success: true })
+            )
+          }
+          setSnackbarOpen(true);
+          setOtpState(true);
+          handleCloseDialog();
+          setIsLoading(false);
+        }
+      }, function (err) {
+        // console.log(err);
+        // Logout User
+      });
+  }
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -372,35 +504,9 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                             gcode: Yup.string().max(6).required('G-Code is requried*')
                           })}
                           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                            // console.log({ values });
-                            const phoneOTP = values.otpmbl;
-                            const postData = {
-                              verifyType: securityData?.gSecurity?.enabled === '1' ? 'dSecurity' : 'vSecurity',
-                              secFeature: 'google',
-                              googleOTP: values.gcode,
-                              emailOTP: values.otpmail,
-                              ...(securityData?.pSecurity?.enabled === '1' && { phoneOTP })
-                            };
-                            // console.log('securityData?.pSecurity?.enabled ', securityData?.pSecurity?.enabled)
                             try {
                               setIsLoading(true);
-                              const { data } =
-                                securityData?.gSecurity?.enabled === '1'
-                                  ? await disableSecurity({ accountType: 'GRAVITUS', postData })
-                                  : await enableSecurity({ accountType: 'GRAVITUS', postData });
-                              if (Object.keys(data.result).length) {
-                                // console.log({ data });
-                                mutate();
-                                setSnackbarMessage({ msg: 'otp validated', success: true });
-                                setSnackbarOpen(true);
-                                setOtpState(true);
-                                handleCloseDialog();
-                                setIsLoading(false);
-                              } else {
-                                setSnackbarMessage({ msg: 'Request failed', success: false });
-                                setSnackbarOpen(true);
-                                setIsLoading(false);
-                              }
+                              GoogleEnableDisable(values);
                             } catch (err) {
                               setStatus({ success: false });
                               setErrors({ submit: err.message });
@@ -666,45 +772,16 @@ const Securityscreen = ({ securityData, setSnackbarMessage, setSnackbarOpen, mut
                             otpmail: Yup.string().max(5).required('OTP is requried*'),
                             gcode: securityData?.gSecurity?.enabled === '1' && Yup.string().max(6).required('G-Code is requried*')
                           })
-                          : Yup.object().shape({ mobilenumber: Yup.string().max(10).required("Don't leave a empty") })
+                          : Yup.object().shape({ mobilenumber: Yup.string().max(10).min(10).required("Don't leave a empty") })
                       }
                       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                        // console.log({ values });
-                        const googleOTP = values.gcode;
-                        const postData = {
-                          verifyType: securityData?.pSecurity?.enabled === '1' ? 'dSecurity' : 'vSecurity',
-                          secFeature: 'phone',
-                          phoneOTP: values.otpmbl,
-                          emailOTP: values.otpmail,
-                          ...(securityData?.gSecurity?.enabled === '1' && { googleOTP })
-                        };
                         if (otpState) {
                           setIsLoading(true);
-                          // console.log('securityData?.pSecurity?.enabled', securityData?.pSecurity?.enabled)
                           try {
-                            const { data } =
-                              securityData?.pSecurity?.enabled === '1'
-                                ? await disableSecurity({ accountType: 'GRAVITUS', postData })
-                                : await enableSecurity({ accountType: 'GRAVITUS', postData });
-                            if (Object.keys(data.result).length) {
-                              // console.log({ data });
-                              mutate();
-                              setOtpState(false);
-                              {
-                                securityData?.pSecurity?.enabled === '1' ? (
-                                  setSnackbarMessage({ msg: 'Authentication is disabled', success: true })
-                                ) : (
-                                  setSnackbarMessage({ msg: 'Authentication is Enabled', success: true })
-                                )
-                              }
-                              setSnackbarOpen(true);
-                              smshandleCloseDialog();
-                              setIsLoading(false);
-                            } else {
-                              setSnackbarMessage({ msg: 'Request failed', success: false });
-                              setSnackbarOpen(true);
-                              setIsLoading(false);
-                            }
+                            setIsLoading(true);
+                            setStatus({ success: false });
+                            setSubmitting(false);
+                            PhoneEnableDisable(values);
                           } catch (err) {
                             setStatus({ success: false });
                             setErrors({ submit: err.message });

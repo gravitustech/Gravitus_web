@@ -23,8 +23,8 @@ const GravitusBankdeatils = ({ depositTo }) => {
   };
 
   return (
-    <Stack>
-      <Stack pt={2} direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
+    <Stack spacing={1.5}>
+      <Stack pt={3} direction="row" justifyContent="space-between" alignItems="center" spacing={1}>
         <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
           Account No 
         </Typography>

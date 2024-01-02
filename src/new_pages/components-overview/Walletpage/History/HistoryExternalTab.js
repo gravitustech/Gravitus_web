@@ -89,7 +89,7 @@ function OrderTableHead() {
 
   return (
     <TableHead>
-      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#0F121A' : '#fff' }}>
+      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
         {headCells.map((headCell, index) => (
           <TableCell
             sx={{ border: 'none' }}
@@ -129,7 +129,7 @@ const LightTooltip = styled(({ className, ...props }) => (
 }));
 
 const TransactionId = ({ transactionid }) => {
-  const first = transactionid.slice(0, 18);
+  const first = transactionid?.slice(0, 18);
   const end = '.....';
   const TransactionId = `${first} ${end}`;
 
@@ -154,7 +154,8 @@ export default function HistoryExternalTab({ tableData }) {
           /* Custom scrollbar styles */
           scrollbarWidth: 'thin',
           scrollbarColor: 'gray lightgray',
-          height: '480px',
+          // minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' },
+          height: '680px',
           '&::-webkit-scrollbar': {
             width: '0px ', // Width of the scrollbar
           },
@@ -182,8 +183,8 @@ export default function HistoryExternalTab({ tableData }) {
                 // const isItemSelected = isSelected(row.Name);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 const { userId, crypto, transType, transDesc, highlight, amount, charges, address, txId, href, status, date, timeStamp } = row;
-                const firstTenCharactersaddress = address.slice(0, 25);
-                const restOfCharactersaddress = address.slice(25);
+                const firstTenCharactersaddress = address?.slice(0, 25);
+                const restOfCharactersaddress = address?.slice(25);
                 return (
                   <TableRow
                     hover

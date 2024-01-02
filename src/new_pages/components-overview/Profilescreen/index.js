@@ -49,9 +49,10 @@ import { useLocation, useNavigate } from 'react-router';
 
 import { logoutUserWithToken } from '../../../api/auth';
 import CustomSnackBar from '../../../components/snackbar';
-import { getProfileURL, fetcher } from '../../../api/profile';
 import { logoutUser } from '../../../appRedux/actions/adminUser';
 import Lodergif from 'src/components/Gravitusloader';
+import { Account_Info, Logout_User, fetcherSystem } from 'src/api_ng/system_ng';
+import { mutate } from 'swr';
 
 function ProfileScreen() {
   const theme = useTheme();
@@ -74,13 +75,17 @@ function ProfileScreen() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
 
-  // console.log(page);
-  const { data, error, isLoading, mutate } = useSWR(
-    getProfileURL(),
-    (url) => fetcher(url, { accountType: 'GRAVITUS' })
-    // { suspense: true }
-  );
+  function useProfile() {
+    var postData = { accountType: 'GRAVITUS' };
 
+    const { data, error, isLoading, mutate } = useSWR([Account_Info(), postData], fetcherSystem, {
+      revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
+    });
+
+    return { data, error, isLoading, mutate };
+  }
+
+  const { data, error, isLoading, mutate } = useProfile();
   // console.log('res', data, error, isLoading);
 
   const tabNameToIndex = {
@@ -191,10 +196,10 @@ function ProfileScreen() {
     }
   ];
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     try {
       // console.log({ values });
-      await logoutUserWithToken(token);
+      Logout_User(token);
       dispatch(logoutUser());
       navigate('/');
     } catch (err) {

@@ -8,8 +8,10 @@ const FundsGrid = ({ isAuthorised, walletData, priceData }) => {
   return (
     <>
       {isAuthorised ? (
-        <Stack pt={0.5} spacing={2}>
-          <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+        <Stack
+          pt={{ xs: 0, sm: 0, md: 0.5, lg: 0.5 }}
+          spacing={2} >
+          <Typography variant="title2" display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }} sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
             Funds
           </Typography>
 
@@ -42,7 +44,7 @@ const FundsGrid = ({ isAuthorised, walletData, priceData }) => {
         </Stack>
       ) : (
         <Stack pt={0.5} spacing={2}>
-          <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+          <Typography variant="title2" display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }} sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
             Funds
           </Typography>
 

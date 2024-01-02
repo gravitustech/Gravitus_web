@@ -64,7 +64,7 @@ function OrderTableHead() {
   const theme = useTheme();
   return (
     <TableHead>
-      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#0F121A' : '#fff'}}>
+      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
         {headCells.map((headCell) => (
           <TableCell
             sx={{ border: 'none' }}
@@ -113,7 +113,7 @@ export default function OpenTradesTab({ trades, pairInfo }) {
           /* Custom scrollbar styles */
           scrollbarWidth: 'thin',
           scrollbarColor: 'gray lightgray',
-          height: '564px',
+          height: '580px',
           '&::-webkit-scrollbar': {
             width: '0px', // Width of the scrollbar
           },

@@ -172,6 +172,17 @@ const BuySellGridExt = ({ isAuthorised, platformId, priceData, pairData, walletD
           else if (res.error.action != undefined) {
             setSnackbarMessage({ msg: res.error.message, success: false });
             setSnackbarOpen(true);
+            if (res.error.message === 'Update your identity') {
+              const myTimeout = setTimeout(() => {
+                navigate('/profile/useridentity');
+              }, 1000);
+              return () => clearTimeout(myTimeout);
+            } else {
+              const myTimeout = setTimeout(() => {
+                navigate('/profile/payment')
+              }, 1000);
+              return () => clearTimeout(myTimeout);
+            }
           }
           else {
             setSnackbarMessage({ msg: res.error, success: false });

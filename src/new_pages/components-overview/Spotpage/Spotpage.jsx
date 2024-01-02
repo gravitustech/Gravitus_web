@@ -1,4 +1,4 @@
-import { Grid, useTheme, Card, CircularProgress } from '@mui/material';
+import { Grid, useTheme, Card, Stack } from '@mui/material';
 
 import MarketDrawer from './SpotHead/SpotHead';
 import BuySellGrid from './BuySellGrid/Buy_Sell_Grid';
@@ -7,11 +7,15 @@ import OrderAndMarket from './OrderBook/OrdersAndMarket';
 import MyOrders from './OrderTable/MyOrders';
 import FundsGrid from './FundsGrid/FundsGrid';
 
+import Buy_Sell_Mobileview from './BuySellGrid/Mobile_view/Buy_Sell';
+import SpotHead_Mobileview from './SpotHead/MobileView/SpotHead_mblview';
+import OrderDeatilsTab_Mblview from './SpotHead/MobileView/OrderDeatilsTab';
+import Chart_orderbook_Tabs from './SpotHead/MobileView/Chart_orderbook_Tabs';
+
 import Lodergif from '../../../components/Gravitusloader';
 import CustomSnackBar from 'src/components/snackbar';
 
 import { TVChartContainer } from './_TVChartContainer';
-import { useLocation } from 'react-router';
 import { useSelector } from 'react-redux';
 
 import { socket } from '../../../socket';
@@ -121,23 +125,59 @@ const Spotpage = () => {
   return (
     <>
       {SPOTData ? (
-        <Grid container p={0.5} pt={0.2}>
-          <Grid item xs={12} pl={0.5} pt={0.5} pr={0.5} lg={12}>
+        <Grid container
+          pt={{ xs: 0, sm: 0, md: 0.2, lg: 0.2 }}
+          p={{ xs: 0, sm: 0, md: 0.5, lg: 0.5 }}
+        >
+          {/* Desktop view Head*/}
+          <Grid item
+            display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}
+            md={12} lg={12}
+            pt={{ md: 0.5, lg: 0.5 }}
+            pl={{ md: 0.5, lg: 0.5 }}
+            pr={{ md: 0.5, lg: 0.5 }}
+          >
             <Card
               sx={{ padding: '8px', background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground', boxShadow: '0' }}>
               <MarketDrawer priceData={SPOTData?.priceInfo} pairData={SPOTData?.pairInfo} setPlatformId={setPlatformId} excType={excType} changeExcType={changeExcType} />
             </Card>
           </Grid>
 
-          <Grid container item xs={12} lg={9.5} p={0.5}>
-            <Grid item md={9} lg={9}>
+          {/* Mobile view Head*/}
+          <Grid item
+            display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
+            xs={12} sm={12}
+          >
+            <Card
+              sx={{
+                paddingLeft: { xs: '16px', sm: '24px' }, paddingRight: { xs: '16px', sm: '24px' },
+                paddingTop: { xs: '16px', sm: '16px' },
+                background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground', boxShadow: '0'
+              }}>
+              <SpotHead_Mobileview priceData={SPOTData?.priceInfo} pairData={SPOTData?.pairInfo} setPlatformId={setPlatformId} excType={excType} changeExcType={changeExcType} />
+            </Card>
+          </Grid>
+
+          <Grid container
+            xs={12} md={9.5} lg={9.5}
+            p={{ xs: 0, sm: 0, md: 0.5, lg: 0.5 }}
+          >
+            {/* Desktop view Chart*/}
+            <Grid item
+              display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}
+              md={9} lg={9}>
+
               <Card
                 sx={{ height: 520, background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground', boxShadow: '0' }}>
                 <TVChartContainer exchangeType={excType} pairData={SPOTData?.pairInfo} />
               </Card>
             </Grid>
 
-            <Grid item md={3} pl={0.5} lg={3}>
+            {/* Desktop view  Orderbook, Markettrades*/}
+            <Grid item
+              display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}
+              md={3} lg={3}
+              pl={0.5} >
               <Card
                 sx={{ padding: '14px', paddingTop: '2px', background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground', boxShadow: '0' }}>
                 <OrderAndMarket
@@ -150,7 +190,32 @@ const Spotpage = () => {
               </Card>
             </Grid>
 
-            <Grid item lg={12} md={12} pt={0.5}>
+            {/* Mobile view Chart, Orderbook, Markettrades*/}
+            <Grid item
+              display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
+              xs={12} sm={12}>
+              <Card
+                sx={{
+                  paddingLeft: { xs: '16px', sm: '24px' }, paddingRight: { xs: '16px', sm: '24px' },
+                  paddingTop: { xs: '16px', sm: '16px' },
+                  background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground', boxShadow: '0'
+                }}>
+                <Chart_orderbook_Tabs
+                  isAuthorised={isAuthorised}
+                  priceData={SPOTData?.priceInfo}
+                  orderBookData={SPOTData?.orderBook}
+                  marketTradesData={SPOTData?.marketTrades}
+                  setSelectedOrder={setSelectedOrder}
+                  exchangeType={excType} pairData={SPOTData?.pairInfo}
+                />
+              </Card>
+            </Grid>
+
+            {/* Desktop view Myorders, OrderHistory*/}
+            <Grid item
+              display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}
+              md={12} lg={12}
+              pt={0.5}>
               <Card
                 sx={{ padding: '4px', paddingTop: '2px', paddingBottom: '1px', background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground', boxShadow: '0' }}>
                 <MyOrders
@@ -162,9 +227,34 @@ const Spotpage = () => {
                 />
               </Card>
             </Grid>
+
+            {/* Mobile view Myorders, OrderHistory, Funds*/}
+            <Grid item
+              display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
+              xs={12} sm={12}>
+              <Card
+                sx={{
+                  paddingLeft: { xs: '16px', sm: '24px' }, paddingRight: { xs: '16px', sm: '24px' },
+                  paddingTop: { xs: '16px', sm: '16px' }, paddingBottom: { xs: '16px', sm: '16px' },
+                  background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground', boxShadow: '0'
+                }}>
+                <OrderDeatilsTab_Mblview isAuthorised={isAuthorised}
+                  platformId={platformId}
+                  orderTableData={SPOTData?.myOrders}
+                  setSnackbarOpen={setSnackbarOpen}
+                  setSnackbarMessage={setSnackbarMessage}
+                  walletData={SPOTData?.walletInfo}
+                  priceData={SPOTData?.priceInfo}
+                />
+              </Card>
+            </Grid>
           </Grid>
 
-          <Grid item xs={12} lg={2.5} pt={0.5} pr={0.5}>
+          {/* Desktop view Buy/sell, Funds*/}
+          <Grid item
+            display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}
+            md={2.5} lg={2.5}
+            pt={0.5} pr={0.5}>
             <Card
               sx={{ padding: '14px', background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground', boxShadow: '0' }}>
               <BuySellGrid
@@ -184,6 +274,21 @@ const Spotpage = () => {
               <FundsGrid isAuthorised={isAuthorised} walletData={SPOTData?.walletInfo} priceData={SPOTData?.priceInfo} />
             </Card>
           </Grid>
+
+          {/* Mobile view Buy/Sell*/}
+          <Stack display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}>
+            <Buy_Sell_Mobileview
+              isAuthorised={isAuthorised}
+              platformId={platformId}
+              pairData={SPOTData?.pairInfo}
+              priceData={SPOTData?.priceInfo}
+              walletData={SPOTData?.walletInfo}
+              selectedOrder={selectedOrder}
+              setSelectedOrder={setSelectedOrder}
+              setSnackbarOpen={setSnackbarOpen}
+              setSnackbarMessage={setSnackbarMessage} />
+          </Stack>
+
         </Grid>
       ) : (
         <Lodergif />

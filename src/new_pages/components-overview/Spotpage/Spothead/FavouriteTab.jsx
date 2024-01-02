@@ -355,7 +355,7 @@ export default function FavouriteTab({ flag, setPlatformId, handleClose, searchQ
         scrollbarColor: 'gray lightgray',
         height: '462px',
         '&::-webkit-scrollbar': {
-          width: '4px', // Width of the scrollbar
+          width: '0px', // Width of the scrollbar
         },
         '&::-webkit-scrollbar-track': {
           background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color

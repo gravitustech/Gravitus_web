@@ -314,6 +314,17 @@ export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackba
         else if (walletINRRc.error.action != undefined) {
           setSnackbarMessage({ msg: walletINRRc.error.message, success: false });
           setSnackbarOpen(true);
+          if (walletINRRc.error.message === 'Update your identity') {
+            const myTimeout = setTimeout(() => {
+              navigate('/profile/useridentity');
+            }, 1000);
+            return () => clearTimeout(myTimeout);
+          } else {
+            const myTimeout = setTimeout(() => {
+              navigate('/profile/payment')
+            }, 1000);
+            return () => clearTimeout(myTimeout);
+          }
         }
         else {
           setSnackbarMessage({ msg: walletINRRc.error, success: false });
@@ -342,6 +353,17 @@ export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackba
         else if (walletINRRc.error.action != undefined) {
           setSnackbarMessage({ msg: walletINRRc.error.message, success: false });
           setSnackbarOpen(true);
+          if (walletINRRc.error.message === 'Update your identity') {
+            const myTimeout = setTimeout(() => {
+              navigate('/profile/useridentity');
+            }, 1000);
+            return () => clearTimeout(myTimeout);
+          } else {
+            const myTimeout = setTimeout(() => {
+              navigate('/profile/payment')
+            }, 1000);
+            return () => clearTimeout(myTimeout);
+          }
         }
         else {
           setSnackbarMessage({ msg: walletINRRc.error, success: false });
@@ -572,11 +594,16 @@ export default function WalletTableExt({ walletList, setSnackbarOpen, setSnackba
         </Table>
       </TableContainer>
 
-      <Drawer open={openDrawer} onClose={handleCloseDrawer} anchor="right">
-        <Box sx={{ width: 520, backgroundColor: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
-          <IconButton sx={{ marginLeft: '450px' }} onClick={handleCloseDrawer}>
-            <CloseIcon />
-          </IconButton>
+      <Drawer open={openDrawer} onClose={handleCloseDrawer} anchor="right" >
+        <Box sx={{ width: 580, backgroundColor: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
+          <Stack pt={2} pr={2} direction="row" justifyContent="space-between" alignItems="center" spacing={4}>
+            <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+            </Typography>
+            <IconButton onClick={handleCloseDrawer}>
+              <CloseIcon />
+            </IconButton>
+          </Stack>
+
           <List>
             <MoreDrawerContent walletListing={walletListing} walletData={walletData} />
           </List>

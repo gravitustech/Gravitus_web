@@ -48,7 +48,7 @@ function OrderTableHead() {
   const theme = useTheme();
   return (
     <TableHead>
-      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#0F121A' : '#fff' }}>
+      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
         {headCells.map((headCell, index) => (
           <TableCell
             sx={{ border: 'none' }}
@@ -87,7 +87,8 @@ export default function HistoryInternalTab({ tableData }) {
           /* Custom scrollbar styles */
           scrollbarWidth: 'thin',
           scrollbarColor: 'gray lightgray',
-          height: '480px',
+          height: '680px',
+          // minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(10vh - 112px)' },
           '&::-webkit-scrollbar': {
             width: '0px ', // Width of the scrollbar
           },

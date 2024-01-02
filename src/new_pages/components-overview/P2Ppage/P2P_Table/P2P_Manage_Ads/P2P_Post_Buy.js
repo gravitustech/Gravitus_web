@@ -10,12 +10,14 @@ import {
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { P2P_PostOrder_URL, P2P_SuperOrders_URL, postDataP2P } from 'src/api_ng/peer2peer_ng';
+import { useNavigate } from 'react-router';
 
 const P2P_Post_Buy = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarOpen, setSnackbarMessage, }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
 
   const theme = useTheme();
+  const navigate = useNavigate();
   const formikPostBuy = useRef();
 
   var formikInit = {
@@ -121,6 +123,17 @@ const P2P_Post_Buy = ({ pfStatus, priceInfo, pairInfo, walletInfo, setSnackbarOp
           else if (res.error.action != undefined) {
             setSnackbarMessage({ msg: res.error.message, success: false });
             setSnackbarOpen(true);
+            if (res.error.message === 'Update your identity') {
+              const myTimeout = setTimeout(() => {
+                navigate('/profile/useridentity');
+              }, 1000);
+              return () => clearTimeout(myTimeout);
+            } else {
+              const myTimeout = setTimeout(() => {
+                navigate('/profile/payment')
+              }, 1000);
+              return () => clearTimeout(myTimeout);
+            }
           }
           else {
             setSnackbarMessage({ msg: res.error, success: false });

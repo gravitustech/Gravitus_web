@@ -11,7 +11,7 @@ import { Formik } from 'formik';
 import { useNavigate } from 'react-router';
 
 import Notes from './Notes';
-import { updatePayment } from '../../../../api/profile';
+import { Update_PayModes, postDataSystem } from 'src/api_ng/system_ng';
 
 const AddImps = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, mutate }) => {
   const theme = useTheme();
@@ -23,6 +23,50 @@ const AddImps = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, muta
     navigate('/profile/support');
     setValue('4');
   };
+
+  const UpdateIMPS = (values) => {
+    setIsLoading(true);
+    var postData = {
+      payMode: 'IMPS',
+      accountName: values.name,
+      accountNo: values.acnumber,
+      IFSCCode: values.ifsccode,
+      bankName: values.bankname
+    }
+    postDataSystem(Update_PayModes(), postData).then(function (res) {
+      setIsLoading(false);
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        mutate();
+        setSnackbarMessage({ msg: 'Payment updated successfully', success: true });
+        setSnackbarOpen(true);
+        setIsLoading(false);
+      }
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
+  }
   return (
     <>
       <Formik
@@ -33,39 +77,17 @@ const AddImps = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, muta
           bankname: userData?.details?.bankName,
         }}
         validationSchema={Yup.object().shape({
-          name: Yup.string().max(255).required("Don't leave empty"),
-          acnumber: Yup.string().max(255).required("Don't leave empty"),
-          ifsccode: Yup.string().max(255).required("Don't leave empty"),
-          bankname: Yup.string().max(255).required("Don't leave empty")
+          name: Yup.string().trim().max(255).required("Don't leave empty"),
+          acnumber: Yup.string().trim().max(255).required("Don't leave empty"),
+          ifsccode: Yup.string().trim().max(255).required("Don't leave empty"),
+          bankname: Yup.string().trim().max(255).required("Don't leave empty")
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          console.log({ values });
-          setIsLoading(true);
           try {
-            const { data } = await updatePayment({
-              accountType: 'GRAVITUS',
-              postData: {
-                payMode: 'IMPS',
-                accountName: values.name,
-                accountNo: values.acnumber,
-                IFSCCode: values.ifsccode,
-                bankName: values.bankname
-              }
-            });
-            if (Object.keys(data.result).length) {
-              console.log({ data });
-              mutate();
-              setSnackbarMessage({ msg: 'Payment updated successfully', success: true });
-              setSnackbarOpen(true);
-              console.log({ values });
-              setStatus({ success: false });
-              setSubmitting(false);
-              setIsLoading(false);
-            } else {
-              setSnackbarMessage({ msg: 'Payment updation failed', success: false });
-              setSnackbarOpen(true);
-              setIsLoading(false);
-            }
+            setIsLoading(true);
+            setStatus({ success: false });
+            setSubmitting(false);
+            UpdateIMPS(values);
           } catch (err) {
             setSnackbarMessage({ msg: err.message, success: false });
             setSnackbarOpen(true);

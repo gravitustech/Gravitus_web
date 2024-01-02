@@ -140,7 +140,7 @@ export default function ScheduleTab({ scheduleData }) {
 
                     <TableCell sx={{ border: 'none', }} align="right">
                       <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                        {new Date(Number(row.timeStamp)).toLocaleString('en-IN', {
+                        {new Date(Number(row.time)).toLocaleString('en-IN', {
                           timeZone: 'Asia/Kolkata',
                           day: '2-digit',
                           month: '2-digit',
@@ -151,7 +151,6 @@ export default function ScheduleTab({ scheduleData }) {
                         })}
                       </Typography>
                     </TableCell>
-
                   </TableRow>
                 );
               })

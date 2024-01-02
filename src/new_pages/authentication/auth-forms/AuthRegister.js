@@ -15,24 +15,22 @@ import {
   OutlinedInput,
   Stack,
   Typography,
-  CircularProgress
+  CircularProgress,
+  Dialog,
+  useTheme
 } from '@mui/material';
 
-// third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-// project import
+import CustomSnackBar from '../../../components/snackbar/index';
 import AnimateButton from '../../../components/@extended/AnimateButton';
 import { strengthColor, strengthIndicator } from '../../../utils/password-strength';
 
-// assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
-import CustomSnackBar from '../../../components/snackbar/index';
-import { signupUser, validateReferral } from '../../../api/auth';
-import { useTheme } from '@mui/material/styles';
-import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import warninggif from '../../../assets/images/gravitusimage/warninggif.svg';
+
+import { Referral_Id, SignUp_User, postDataSystem } from 'src/api_ng/system_ng';
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
@@ -52,33 +50,6 @@ const GravitusAuthRegister = () => {
 
   const [referralisLoading, setIsReferrralLoading] = useState(false);
 
-  const handleConfirm = async () => {
-    // console.log({ formikValues });
-    setIsReferrralLoading(true);
-    const { data } = await validateReferral({ ...inputs, postData: { emailId: formikValues.email, referralId: formikValues.referralid } });
-    if (data.error === 'ok') {
-      const { data: resp } = await signupUser({
-        ...inputs,
-        postData: { emailId: formikValues.email, password: formikValues.password, referralId: formikValues.referralid }
-      });
-      if (resp.error === 'ok') {
-        navigate('/registerstatus', { state: { email: formikValues.email } })
-        setIsSuccessDialogOpen(true);
-        setIsReferrralLoading(false);
-      } else {
-        setIsLoading(false);
-        setSnackbarMessage({ msg: resp.error, success: false });
-        setSnackbarOpen(true);
-        setIsSuccessDialogOpen(false);
-        setIsReferrralLoading(false);
-      }
-    } else {
-      setSnackbarMessage({ msg: data.error, success: false });
-      setSnackbarOpen(true);
-      setIsSuccessDialogOpen(false);
-      setIsReferrralLoading(false);
-    }
-  };
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -103,7 +74,114 @@ const GravitusAuthRegister = () => {
     setIsSuccessDialogOpen(false);
   };
 
+  const signUpUser = (values) => {
+    setIsLoading(true);
+    var postData = { emailId: values.email, password: values.password }
 
+    postDataSystem(SignUp_User(), postData).then(function (res) {
+      setIsLoading(false);
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        navigate('/registerstatus', { state: { email: values.email } });
+      }
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
+  }
+
+  const handleConfirm = () => {
+    setIsReferrralLoading(true);
+    // console.log('test',)
+    var ReferralpostData = { emailId: formikValues.email, referralId: formikValues.referralid }
+    postDataSystem(Referral_Id(), ReferralpostData).then(function (res) {
+      setIsReferrralLoading(false);
+      // console.log('res', res)
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        // console.log(err);
+      }
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
+
+    var postData = { emailId: formikValues.email, password: formikValues.password, referralId: formikValues.referralid }
+    postDataSystem(SignUp_User(), postData).then(function (res) {
+      setIsLoading(false);
+      setIsSuccessDialogOpen(false);
+      setIsReferrralLoading(false);
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        navigate('/registerstatus', { state: { email: formikValues.email } })
+        setIsSuccessDialogOpen(true);
+        setIsReferrralLoading(false);
+      }
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
+  };
 
   return (
     <>
@@ -117,29 +195,20 @@ const GravitusAuthRegister = () => {
         validationSchema={Yup.object().shape({
           // firstname: Yup.string().max(255).required('First Name is required'),
           // lastname: Yup.string().max(255).required('Last Name is required'),
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required*'),
-          password: Yup.string().max(255).required('Password is required*')
+          email: Yup.string().email('Must be a valid email').max(128, 'EmailId must be at most 128 characters').required('Email is required*'),
+          password: Yup.string().max(24, 'Password must be at most 24 characters').required('Password is required*'),
+          referralid: Yup.string().max(128, 'Referral ID must be at most 128 characters')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          // console.log('am in')
           try {
-            // console.log({ values });
             if (values.referralid.length) {
               setFormikValues({ ...formikValues, email: values.email, password: values.password, referralid: values.referralid });
               setIsSuccessDialogOpen(true);
             } else {
               setIsLoading(true);
-              const { data } = await signupUser({ ...inputs, postData: { emailId: values.email, password: values.password } });
-              if (data.error === 'ok') {
-                navigate('/registerstatus', { state: { email: values.email } });
-              } else {
-                setIsLoading(false);
-                setSnackbarMessage({ msg: data.error, success: false });
-                setSnackbarOpen(true);
-              }
+              signUpUser(values);
             }
           } catch (err) {
-            // console.error(err);
             setStatus({ success: false });
             setErrors({ submit: err.message });
             setSubmitting(false);
@@ -233,6 +302,7 @@ const GravitusAuthRegister = () => {
                       fullWidth
                       error={Boolean(touched.referralid && errors.referralid)}
                       id="referralid-signup"
+                      type='referralid'
                       value={values.referralid}
                       name="referralid"
                       onBlur={handleBlur}

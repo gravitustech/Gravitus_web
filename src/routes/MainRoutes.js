@@ -28,6 +28,7 @@ import ProfileScreen from 'src/new_pages/components-overview/Profilescreen';
 
 import Registerstatus from 'src/new_pages/authentication/Registerstatus';
 import Notificationpage from 'src/layout_gravitus/MainLayout/Header/HeaderContent/Notificationpage';
+import CoinDetails from 'src/new_pages/components-overview/Walletpage/WalletTable/Mobileview/CoinDetails';
 
 //Gravitus import pages
 const GravitusAuthLogin = Loadable(lazy(() => import('../new_pages/authentication/Login')));
@@ -177,6 +178,10 @@ const MainRoutes = {
     {
       path: 'notification',
       element: <Notificationpage />
+    },
+    {
+      path: 'coindetails',
+      element: <CoinDetails />
     },
   ]
 };

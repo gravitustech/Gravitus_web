@@ -121,14 +121,14 @@ const SpotHead = ({ pairData, priceData, setPlatformId, excType, changeExcType }
     return { data, error, isLoading };
   }
 
-  const { data:MarketRc, error } = useMarketOverview();
+  const { data: MarketRc, error } = useMarketOverview();
 
   return (
     <Stack direction="row" >
       <Stack direction="row" spacing={1}>
         <Stack spacing={1} direction="row" alignItems="center">
           <img src={priceData?.imagePath} alt="ico" height={32} width={32} />
-          <Stack>
+          <Stack >
             <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
               {priceData?.tradePair}
             </Typography>
@@ -136,10 +136,11 @@ const SpotHead = ({ pairData, priceData, setPlatformId, excType, changeExcType }
               {pairData?.buyNetwork}
             </Typography>
           </Stack>
+          <IconButton disableRipple onClick={handleClick} sx={{ paddingTop: '0px', borderRadius: '50%', backgroundColor: 'transparent' }}>
+            {isIconUp ? <ArrowDropUpIcon fontSize="large" /> : <ArrowDropDownIcon fontSize="large" />}
+          </IconButton>
         </Stack>
-        <IconButton disableRipple onClick={handleClick} sx={{ paddingTop: '0px', borderRadius: '50%', backgroundColor: 'transparent' }}>
-          {isIconUp ? <ArrowDropUpIcon fontSize="large" /> : <ArrowDropDownIcon fontSize="large" />}
-        </IconButton>
+
         <Divider orientation="vertical" />
         <Popper
           id={id}
@@ -326,15 +327,15 @@ const SpotHead = ({ pairData, priceData, setPlatformId, excType, changeExcType }
                         </TabList>
 
                         <TabPanel value="0" sx={{ padding: '0px' }}>
-                          <FavouriteTab setPlatformId={setPlatformId} handleClose={handleClose} searchQuery={searchQuery} Marketdata={MarketRc}/>
+                          <FavouriteTab setPlatformId={setPlatformId} handleClose={handleClose} searchQuery={searchQuery} Marketdata={MarketRc} />
                         </TabPanel>
 
                         <TabPanel value="1" sx={{ padding: '0px' }}>
-                          <MarketTable flag="USDT" setPlatformId={setPlatformId} handleClose={handleClose} searchQuery={searchQuery} Marketdata={MarketRc}/>
+                          <MarketTable flag="USDT" setPlatformId={setPlatformId} handleClose={handleClose} searchQuery={searchQuery} Marketdata={MarketRc} />
                         </TabPanel>
 
                         <TabPanel value="2" sx={{ padding: '0px' }}>
-                          <MarketTable flag="INR" setPlatformId={setPlatformId} handleClose={handleClose} searchQuery={searchQuery} Marketdata={MarketRc}/>
+                          <MarketTable flag="INR" setPlatformId={setPlatformId} handleClose={handleClose} searchQuery={searchQuery} Marketdata={MarketRc} />
                         </TabPanel>
                       </TabContext>
                     </Card>
@@ -397,7 +398,7 @@ const SpotHead = ({ pairData, priceData, setPlatformId, excType, changeExcType }
           <Divider orientation="vertical" />
         </Stack>
       )}
-      <Stack direction="row" spacing={5}>
+      <Stack direction="row" spacing={{ md: 3.2, lg: 5 }}>
         <Stack spacing={0.5} pl={3}>
           <Typography variant="body3" sx={{ color: getColor(priceData && priceData['24hChg'], theme) }}>
             {priceData?.lastPrice}

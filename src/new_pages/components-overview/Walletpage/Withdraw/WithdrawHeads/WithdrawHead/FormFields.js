@@ -21,6 +21,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send_OTP, postDataSystem } from '../../../../../../api_ng/system_ng';
 import { sendOtpSecurity } from '../../../../../../api/profile';
 import { Wallet_Fetch_ById, Estimate_Withdrawal, Sign_Withdrawal, postDataWallet } from '../../../../../../api_ng/wallet_ng';
+import { useNavigate } from 'react-router';
 
 const Email = ({ email }) => {
   const theme = useTheme();
@@ -54,6 +55,7 @@ const Mobilenumber = ({ number }) => {
 
 const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWalletData, setHistoryData, setSnackbarMessage, setSnackbarOpen }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
   const [otpisLoading, setOtpIsLoading] = useState(false);
@@ -278,6 +280,17 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
           else if (res.error.action != undefined) {
             setSnackbarMessage({ msg: res.error.message, success: false });
             setSnackbarOpen(true);
+            if (res.error.message === 'Update your identity') {
+              const myTimeout = setTimeout(() => {
+                navigate('/profile/useridentity');
+              }, 1000);
+              return () => clearTimeout(myTimeout);
+            } else {
+              const myTimeout = setTimeout(() => {
+                navigate('/profile/payment')
+              }, 1000);
+              return () => clearTimeout(myTimeout);
+            }
           }
           else {
             setSnackbarMessage({ msg: res.error, success: false });
@@ -403,7 +416,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
                   <FormLabel number="02." title="Withdrawal To" />
                 </Stack>
                 <Grid pl={5}>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" pb={1} sx={{ width: '90%' }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" pb={1} sx={{ width: { xs: '100%', sm: '100%', md: '90%', lg: '90%' } }}>
                     <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                       Address
                     </Typography>
@@ -417,7 +430,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
                       </Typography>
                     </Stack>
                   </Stack>
-                  <Stack spacing={1} sx={{ width: '90%' }}>
+                  <Stack spacing={1} sx={{ width: { xs: '100%', sm: '100%', md: '90%', lg: '90%' } }}>
                     <OutlinedInput
                       id="toAddress"
                       type="toAddress"
@@ -435,7 +448,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
                     )}
                   </Stack>
 
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" pt={2.5} pb={1} sx={{ width: '90%' }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" pt={2.5} pb={1} sx={{ width: { xs: '100%', sm: '100%', md: '90%', lg: '90%' } }}>
                     <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                       Amount
                     </Typography>
@@ -449,7 +462,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
                       </Typography>
                     </Stack>
                   </Stack>
-                  <Stack spacing={1} sx={{ width: '90%' }}>
+                  <Stack spacing={1} sx={{ width: { xs: '100%', sm: '100%', md: '90%', lg: '90%' } }}>
                     <TextField
                       id="amount"
                       type="amount"
@@ -470,7 +483,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
                     )}
                   </Stack>
 
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" pt={2.5} pb={1} sx={{ width: '90%' }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" pt={2.5} pb={1} sx={{ width: { xs: '100%', sm: '100%', md: '90%', lg: '90%' } }}>
                     <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                       Total Amount
                     </Typography>
@@ -484,32 +497,32 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
                       </Typography>
                     </Stack>
                   </Stack>
-                  <Stack spacing={1} sx={{ width: '90%' }}>
-                    <TextField
+                  <Stack spacing={1} sx={{ width: { xs: '100%', sm: '100%', md: '90%', lg: '90%' } }}>
+                    <OutlinedInput
                       id="total"
                       type="total"
                       value={values.total}
                       name="total"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
+                      // onBlur={handleBlur}
+                      // onChange={handleChange}
                       placeholder="Total Amount"
-                      disabled
-                      // readyonly
-                      error={Boolean(touched.total && errors.total)}
-                      InputProps={{
-                        inputComponent: NumericFormatCustom
-                      }}
+                      // disabled
+                      readyonly
+                    // error={Boolean(touched.total && errors.total)}
+                    // InputProps={{
+                    //   inputComponent: NumericFormatCustom
+                    // }}
                     />
-                    {touched.total && errors.total && (
+                    {/* {touched.total && errors.total && (
                       <FormHelperText error id="standard-weight-helper-text-email-login">
                         {errors.total}
                       </FormHelperText>
-                    )}
+                    )} */}
                   </Stack>
                   <Grid item xs={12} pt={5}>
                     <AnimateButton>
                       <Button
-                        sx={{ width: '90%' }}
+                        sx={{ width: { xs: '100%', sm: '100%', md: '90%', lg: '90%' } }}
                         disableElevation
                         disabled={isSubmitting}
                         fullWidth
@@ -584,7 +597,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
             </Dialog>
 
             <Dialog onClose={closeInitiateWDL} open={initiateWDL}>
-              <Stack p={4} spacing={2.5} width={480} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
+              <Stack p={4} spacing={2.5}  sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
                 <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                   Widthdraw Security
                 </Typography>

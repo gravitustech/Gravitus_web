@@ -7,23 +7,30 @@ import {
 
 import Securityscreen from './Security';
 
-import useSWR from 'swr';
-
-import Lodergif from 'src/components/Gravitusloader';
-import { fetcher, getSecurityURL } from '../../../../api/profile';
-
 import securitypageimagelight from '../../../../assets/images/gravitusimage/securitypageimglight.svg';
 import securitypageimagedark from '../../../../assets/images/gravitusimage/securitypageimgdark.svg';
 
+import useSWR from 'swr';
+import { Security_Features, fetcherSystem } from 'src/api_ng/system_ng';
+
 const Security = ({ setSnackbarMessage, setSnackbarOpen }) => {
   const theme = useTheme();
-  const { data, error, isLoading, mutate } = useSWR(
-    getSecurityURL(),
-    (url) => fetcher(url, { accountType: 'GRAVITUS' })
-    // { suspense: true }
-  );
+  // const { data, error, isLoading, mutate } = useSWR(
+  //   getSecurityURL(),
+  //   (url) => fetcher(url, { accountType: 'GRAVITUS' })
+  //   // { suspense: true }
+  // );
+  function useSecurityUrl() {
+    var postData = { accountType: 'GRAVITUS' };
 
-  // console.log('res', data, error, isLoading);
+    const { data, error, isLoading, mutate } = useSWR([Security_Features(), postData], fetcherSystem, {
+      revalidateIfStale: true, revalidateOnFocus: false, revalidateOnMount: true, revalidateOnReconnect: true
+    });
+
+    return { data, error, isLoading, mutate };
+  }
+
+  const { data, error, isLoading, mutate } = useSecurityUrl();
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -38,7 +45,7 @@ const Security = ({ setSnackbarMessage, setSnackbarOpen }) => {
         <Grid item xs={12} md={12}>
           {data && (
             <Securityscreen
-              securityData={data.result}
+              securityData={data?.result}
               setSnackbarMessage={setSnackbarMessage}
               setSnackbarOpen={setSnackbarOpen}
               mutate={mutate}

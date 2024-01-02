@@ -8,7 +8,7 @@ import { P2P_SuperOrders_URL, fetcherP2P } from '../../../../../api_ng/peer2peer
 import { getConfig_ng, getConfig_sp } from '../../../../../utils_ng/localStorage_ng';
 
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { useTheme, Stack, Typography, Grid, Tab, Link, Card, Box } from '@mui/material';
+import { useTheme, Stack, Typography, Grid, Tab, Link, Card, Box, IconButton } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 
 import P2P_Post_Buy from './P2P_Post_Buy';
@@ -91,7 +91,7 @@ const P2P_Manage_Ads = () => {
         // console.log(PostRc.result, 'Update from Use Effect');
         setP2POrders({ type: 'getUPDATE', data: PostRc.result });
 
-        if(PostRc.result.pfStatus.action != 'none') {
+        if (PostRc.result.pfStatus.action != 'none') {
           setSnackbarMessage({ msg: PostRc.result.pfStatus.message, success: false });
           setSnackbarOpen(true);
           // Go to Routes
@@ -113,128 +113,123 @@ const P2P_Manage_Ads = () => {
 
   return (
     <>
-      <Card
-        sx={{
-          border: 'none',
-          width: '100%',
-          boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
-        }}
-      >
-        <Grid container pl={15} pr={15} pt={2} pb={6} sx={{
-          backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
-        }}>
-          <Stack direction='row' spacing={2} alignItems='center'>
-            <ArrowBackIosNewIcon onClick={goBack} pt={10} sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} />
-            <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-              Manage Ads
-            </Typography>
-          </Stack>
-        </Grid>
-        <Box
-          pt={3}
-          pb={3}
-          pl={20}
-          pr={15}
-          lg={12}
+      <Grid container pl={14} pr={15} pt={3} pb={3}>
+        <Stack direction="row" spacing={0.8} alignItems="center">
+          <IconButton onClick={goBack} disableRipple>
+            <ArrowBackIosNewIcon
+              pt={10}
+              sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+            />
+          </IconButton>
+          <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+            Manage Ads
+          </Typography>
+        </Stack>
+      </Grid>
+
+      {P2POrders ? (
+        <Grid container pt={3} pb={3} pl={20} pr={15} lg={12}
           sx={{
-            minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' },
             backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
-          }}>
-          {P2POrders ? (
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={5.3} lg={5}>
-                <Typography variant='h3' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                  Post Ad
-                </Typography>
+            borderRadius: '78px 78px 0px 0px',
+            boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
+          }} >
+          <Grid
+            sx={{
+              minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' },
+            }}
+            container spacing={2}>
+            <Grid item xs={12} sm={5.3} lg={5}>
+              <Typography variant='h3' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                Post Ad
+              </Typography>
 
-                <Stack pt={3}>
-                  <TabContext value={value}>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between" pr={3}>
-                      <Stack direction="row">
-                        <TabList onChange={handleChange} indicatorColor="none" textColor='inherit'>
-                          <Tab
-                            disableRipple
-                            sx={{
-                              fontSize: value === '0' ? '14px' : '14px',
-                              fontWeight: value === '0' ? '500' : '500',
-                              color: value === '0' ? (theme.palette.mode === 'dark' ? 'white' : 'white') : theme.palette.mode === 'dark' ? 'white' : 'black',
-                              backgroundColor: value === '0'
-                                ? theme.palette.mode === 'dark'
-                                  ? 'text.buy'
-                                  : 'text.buy'
-                                : theme.palette.mode === 'dark'
-                                  ? '#262b39'
-                                  : '#F1F1F1',
-                              borderRadius: '5px  0 0 5px',
-                              minHeight: '40px',
+              <Stack pt={3}>
+                <TabContext value={value}>
+                  <Stack direction="row" alignItems="center" justifyContent="space-between" pr={3}>
+                    <Stack direction="row">
+                      <TabList onChange={handleChange} indicatorColor="none" textColor='inherit'>
+                        <Tab
+                          disableRipple
+                          sx={{
+                            fontSize: value === '0' ? '14px' : '14px',
+                            fontWeight: value === '0' ? '500' : '500',
+                            color: value === '0' ? (theme.palette.mode === 'dark' ? 'white' : 'white') : theme.palette.mode === 'dark' ? 'white' : 'black',
+                            backgroundColor: value === '0'
+                              ? theme.palette.mode === 'dark'
+                                ? 'text.buy'
+                                : 'text.buy'
+                              : theme.palette.mode === 'dark'
+                                ? '#262b39'
+                                : '#F1F1F1',
+                            borderRadius: '5px  0 0 5px',
+                            minHeight: '40px',
+                          }}
+                          label={<div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center'
                             }}
-                            label={<div
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center'
-                              }}
-                            >
-                              Buy
-                            </div>}
-                            value="0" />
-                          <Tab
-                            disableRipple
-                            sx={{
-                              fontSize: value === '1' ? '14px' : '14px',
-                              fontWeight: value === '1' ? '500' : '500',
-                              color: value === '1' ? (theme.palette.mode === 'dark' ? 'white' : 'white') : theme.palette.mode === 'dark' ? 'white' : 'black',
-                              backgroundColor: value === '1'
-                                ? theme.palette.mode === 'dark'
-                                  ? 'text.sell'
-                                  : 'text.sell'
-                                : theme.palette.mode === 'dark'
-                                  ? '#262b39'
-                                  : '#F1F1F1',
-                              borderRadius: '0 5px 5px 0',
-                              minHeight: '40px',
+                          >
+                            Buy
+                          </div>}
+                          value="0" />
+                        <Tab
+                          disableRipple
+                          sx={{
+                            fontSize: value === '1' ? '14px' : '14px',
+                            fontWeight: value === '1' ? '500' : '500',
+                            color: value === '1' ? (theme.palette.mode === 'dark' ? 'white' : 'white') : theme.palette.mode === 'dark' ? 'white' : 'black',
+                            backgroundColor: value === '1'
+                              ? theme.palette.mode === 'dark'
+                                ? 'text.sell'
+                                : 'text.sell'
+                              : theme.palette.mode === 'dark'
+                                ? '#262b39'
+                                : '#F1F1F1',
+                            borderRadius: '0 5px 5px 0',
+                            minHeight: '40px',
+                          }}
+                          label={<div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center'
                             }}
-                            label={<div
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center'
-                              }}
-                            >
-                              sell
-                            </div>}
-                            value="1" />
-                        </TabList>
-                      </Stack>
-                      <Stack>
-                        <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                          {P2POrders.priceInfo.tradePair}
-                        </Typography>
-                        <Typography variant="caption" pl={2.4} sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                          Trade Pair
-                        </Typography>
-                      </Stack>
+                          >
+                            sell
+                          </div>}
+                          value="1" />
+                      </TabList>
                     </Stack>
-                    <TabPanel value="0" sx={{ pt: 3, pl: 0 }}>
-                      <P2P_Post_Buy pfStatus={P2POrders.pfStatus} priceInfo={P2POrders.priceInfo} pairInfo={P2POrders.pairInfo} walletInfo={P2POrders.walletInfo} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
-                    </TabPanel>
-                    <TabPanel value="1" sx={{ pt: 3, pl: 0 }}>
-                      <P2P_Post_Sell pfStatus={P2POrders.pfStatus} priceInfo={P2POrders.priceInfo} pairInfo={P2POrders.pairInfo} walletInfo={P2POrders.walletInfo} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
-                    </TabPanel>
-                  </TabContext>
-                </Stack>
-              </Grid>
-
-              <Grid item xs={12} sm={6.7} lg={7}>
-                <Stack>
-                  <Order_Status orders={P2POrders.orders} pairInfo={P2POrders.pairInfo} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
-                </Stack>
-              </Grid>
+                    <Stack>
+                      <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        {P2POrders.priceInfo.tradePair}
+                      </Typography>
+                      <Typography variant="caption" pl={2.4} sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                        Trade Pair
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                  <TabPanel value="0" sx={{ pt: 3, pl: 0 }}>
+                    <P2P_Post_Buy pfStatus={P2POrders.pfStatus} priceInfo={P2POrders.priceInfo} pairInfo={P2POrders.pairInfo} walletInfo={P2POrders.walletInfo} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
+                  </TabPanel>
+                  <TabPanel value="1" sx={{ pt: 3, pl: 0 }}>
+                    <P2P_Post_Sell pfStatus={P2POrders.pfStatus} priceInfo={P2POrders.priceInfo} pairInfo={P2POrders.pairInfo} walletInfo={P2POrders.walletInfo} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
+                  </TabPanel>
+                </TabContext>
+              </Stack>
             </Grid>
-          ) : (
-            <Lodergif />
-          )}
-        </Box>
-      </Card>
 
+            <Grid item xs={12} sm={6.7} lg={7}>
+              <Stack>
+                <Order_Status orders={P2POrders.orders} pairInfo={P2POrders.pairInfo} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
+              </Stack>
+            </Grid>
+          </Grid>
+        </Grid>
+      ) : (
+        <Lodergif />
+      )}
       <CustomSnackBar
         snackbarOpen={snackbarOpen}
         setSnackbarOpen={setSnackbarOpen}

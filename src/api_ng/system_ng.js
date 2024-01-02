@@ -65,12 +65,12 @@ export async function formDataSystem(url, postData) {
     uploadData.append('fileName', postData.fileName);
     uploadData.append('updateInfo', JSON.stringify(postData.updateInfo));
 
-    var superData = {
-      "accountType": "GRAVITUS",
-      "postData": { "appVersion": 205 }
-    };
+    // var superData = {
+    //   "accountType": "GRAVITUS",
+    //   "postData": { "appVersion": 205 }
+    // };
 
-    axiosClient.post(url, superData)
+    axiosClient.post(url, uploadData)
       .then(response => {
         // Handle response
         resolve(JSON.parse(JSON.stringify(response.data)));
@@ -99,10 +99,104 @@ export const Security_URL = () => {
   return 'api/activity/security/secFeatures'
 }
 
+//Dashboard Profile
+export const SEND_OTP = () => {
+  return 'api/activity/manageUsers/sendOTP'
+}
+
+export const sendMOTP = () => {
+  return 'api/activity/manageUsers/sendMOTP'
+}
+
+export const Reset_Mobile_Number = () => {
+  return 'api/activity/manageUsers/resetMobileNo'
+}
+
+export const set_Mobile_Number = () => {
+  return 'api/activity/manageUsers/setMobileNo'
+}
+
+export const Update_Mobile_Number = () => {
+  return 'api/activity/manageUsers/updateMobileNo'
+}
+
+//
+export const Update_PhFeatures = () => {
+  return 'api/activity/security/updateFeatures'
+}
+
 // Identity
+export const Update_Identity = () => {
+  return 'api/activity/manageUsers/identity'
+}
 
 // Paymethods
+export const Update_PayModes = () => {
+  return 'api/activity/manageUsers/payModes'
+}
 
-// Security Enable, Disable & Reset
+//
+export const Security_Features = () => {
+  return 'api/activity/security/secFeatures'
+}
+
+// Security Enable
+export const Enable_Security = () => {
+  return 'api/activity/security/vSecurity'
+}
+
+//Security Disable
+export const Disable_Security = () => {
+  return 'api/activity/security/dSecurity'
+}
+
+// Security Reset
+export const Security_Reset = () => {
+  return 'api/activity/security/rSecurity'
+}
 
 // Account Information
+export const Account_Info = () => {
+  return 'api/activity/dashboard/accountInfo'
+}
+
+//Ticket Raised
+export const Ticket_Raised = () => {
+  return 'api/activity/ticket/request'
+}
+
+//Ticket History
+export const Ticket_History = () => {
+  return 'api/activity/ticket/history'
+}
+
+
+//LogIn_User
+export const LogIn_User = () => {
+  return 'api/generic/email/loginUserNg'
+}
+
+//SignIn_securit
+export const SignIn_security = () => {
+  return 'api/generic/security/sSecurity'
+}
+
+//
+export const Reset_Password = () => {
+  return 'api/generic/email/resetPassword'
+}
+
+//
+export const SignUp_User = () => {
+  return 'api/generic/email/createUser'
+}
+
+//
+export const Referral_Id = () => {
+  return 'api/generic/email/validateUser'
+}
+
+//
+export const Logout_User = () => {
+  return 'api/users/logout?access_token='
+}

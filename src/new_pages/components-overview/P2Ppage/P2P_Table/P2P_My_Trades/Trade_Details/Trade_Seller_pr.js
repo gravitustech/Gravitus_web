@@ -5,7 +5,7 @@ import CustomSnackBar from 'src/components/snackbar';
 import Trade_Seller_Dts_Ext from './Trade_Seller_sp';
 import Chat_Appeal_Tab from './Chat_Screen_Tabs';
 
-import { useTheme, Grid, Stack, Typography, Card, Box } from '@mui/material';
+import { useTheme, Grid, Stack, Typography, Card, Box, IconButton } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import useSWR, { mutate } from 'swr';
@@ -59,7 +59,7 @@ const Trade_Seller_Dts = (route) => {
     return { data: data, error: error, isLoading }
   }
 
-  const { data : tradeRc, error : tradeEr} = useTradeDetails();
+  const { data: tradeRc, error: tradeEr } = useTradeDetails();
   const orderData = tradeRc?.result; // Overall Data
   const counterPart = tradeRc?.result?.counterPart;
 
@@ -91,13 +91,13 @@ const Trade_Seller_Dts = (route) => {
   }, [tradeRc]);
 
   useEffect(() => {
-    if(SUPERData) {
+    if (SUPERData) {
       setConfig_ng('P2PPair', { platformId: SUPERData?.orderDetails?.platformId });
       setPlatformId(SUPERData?.orderDetails?.platformId);
 
       let P2POrderEvent = '/P2POrder_' + getConfig_sp().userId + '/POST';
       socket.on(P2POrderEvent, function (res) {
-        
+
         console.log(SUPERData.orderDetails.orderId, 'Order Id in SOCK Seller');
         if (SUPERData?.orderDetails.orderId == res.orderId && res.notifyType == 'orderUpdate') {
           mutate(P2P_OrderDetails_URL);
@@ -113,45 +113,37 @@ const Trade_Seller_Dts = (route) => {
 
   return (
     <>
-      <Card
-        sx={{
-          border: 'none',
-          width: '100%',
-          boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
-        }}
-      >
-        <Grid container pl={15} pr={15} pt={2} pb={3} sx={{
-          backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground',
-        }}>
-          <Stack direction='row' spacing={2} alignItems='center'>
-            <ArrowBackIosNewIcon onClick={goBack} pt={10} sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} />
-            <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-              Sell USDT
-            </Typography>
-          </Stack>
-        </Grid>
-        <Box
-          pt={1}
-          pb={3}
-          pl={18.5}
-          pr={15}
-          lg={12}
-          sx={{
-            backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground',
-          }}>
-          {SUPERData ? (
-            <Grid container pt={2} pb={3} sx={{ background: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground' }} >
-              <Trade_Seller_Dts_Ext SUPERData={SUPERData} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
+      <Grid container pl={14} pr={15} pt={3} pb={3}>
+        <Stack direction="row" spacing={0.8} alignItems="center">
+          <IconButton onClick={goBack} disableRipple>
+            <ArrowBackIosNewIcon
+              pt={10}
+              sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+            />
+          </IconButton>
+          <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+            Sell USDT
+          </Typography>
+        </Stack>
+      </Grid>
 
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Chat_Appeal_Tab SUPERData={SUPERData} counterPart={counterPart} />
-              </Grid>
-            </Grid>
-          ) : (
-            <Lodergif />
-          )}
-        </Box>
-      </Card>
+      {SUPERData ? (
+        <Grid container pt={3} pb={3} pl={20} pr={15} lg={12}
+          sx={{
+            minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' },
+            backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
+            borderRadius: '78px 78px 0px 0px',
+            boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
+          }} >
+          <Trade_Seller_Dts_Ext SUPERData={SUPERData} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
+
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Chat_Appeal_Tab SUPERData={SUPERData} counterPart={counterPart} />
+          </Grid>
+        </Grid>
+      ) : (
+        <Lodergif />
+      )}
       <CustomSnackBar
         snackbarOpen={snackbarOpen}
         setSnackbarOpen={setSnackbarOpen}

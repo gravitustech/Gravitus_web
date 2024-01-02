@@ -16,7 +16,7 @@ import Dialog from '@mui/material/Dialog';
 import InputAdornment from '@mui/material/InputAdornment';
 import AnimateButton from 'src/components/@extended/AnimateButton';
 
-import { sendOTP, updateMobileNumber, resetMobileNumber, setMobileNumber, sendMOTP } from '../../../../api/profile';
+import { SEND_OTP, sendMOTP, postDataSystem, Reset_Mobile_Number, set_Mobile_Number, Update_Mobile_Number } from 'src/api_ng/system_ng';
 
 const Email = ({ email }) => {
   const theme = useTheme();
@@ -87,33 +87,89 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
     setIsResend(false)
   };
 
-  const handleOTP = async (action) => {
+  function reqSendMOTP() {
     try {
-      const { data } = action === 'POTP' ? await sendOTP({ accountType: 'GRAVITUS' }) : await sendMOTP({ accountType: 'GRAVITUS' });
-      if (Object.keys(data.result).length) {
-        // console.log({ data });
-        setSnackbarMessage({ msg: isResend ? 'OTP Resent successfully' : 'OTP Sent successfully', success: true });
-        setSnackbarOpen(true);
-        if (!isResend) {
-          setIsResend(true);
-          setDisplayText('RESEND OTP');
-        }
-        setColor('grey');
-      } else {
-        if (data.error && (data.error.name !== undefined)) {
-          setSnackbarMessage({ msg: data.error.name, success: false });
-        } else if (data.error) {
-          setSnackbarMessage({ msg: data.error, success: false });
+      var postData = { accountType: 'GRAVITUS' }
+      postDataSystem(sendMOTP(), postData).then(function (res) {
+        if (res.error !== 'ok') {
+          if (res.error.name == "Missing Authorization") {
+            // Logout User
+          }
+          else if (res.error.name == "Invalid Authorization") {
+            // Logout User
+          }
+          else {
+            if (res.error.name != undefined) {
+              setSnackbarMessage({ msg: res.error.name, success: false });
+              setSnackbarOpen(true);
+            }
+            else {
+              setSnackbarMessage({ msg: res.error, success: false });
+              setSnackbarOpen(true);
+            }
+          }
         } else {
-          setSnackbarMessage({ msg: 'OTP Request failed', success: false });
+          // console.log(res.result, 'SENT OTP');
+          setSnackbarMessage({ msg: 'OTP Sent successfully', success: true });
+          setSnackbarOpen(true);
+          if (!isResend) {
+            setIsResend(true);
+            setDisplayText('RESEND OTP');
+          }
+          setColor('grey');
+
         }
-        setSnackbarOpen(true);
-      }
+      }, function (err) {
+        // console.log(err);
+        // Logout User
+      });
     } catch (err) {
-      setSnackbarMessage({ msg: err.message, success: false });
-      setSnackbarOpen(true);
+      setErrors({ submit: err.message });
+      setStatus({ success: false });
     }
-  };
+  }
+
+  function reqSendOTP() {
+    try {
+      var postData = { accountType: 'GRAVITUS' }
+      postDataSystem(SEND_OTP(), postData).then(function (res) {
+        if (res.error !== 'ok') {
+          if (res.error.name == "Missing Authorization") {
+            // Logout User
+          }
+          else if (res.error.name == "Invalid Authorization") {
+            // Logout User
+          }
+          else {
+            if (res.error.name != undefined) {
+              setSnackbarMessage({ msg: res.error.name, success: false });
+              setSnackbarOpen(true);
+            }
+            else {
+              setSnackbarMessage({ msg: res.error, success: false });
+              setSnackbarOpen(true);
+            }
+          }
+        } else {
+          // console.log(res.result, 'SENT OTP');
+          setSnackbarMessage({ msg: 'OTP Sent successfully', success: true });
+          setSnackbarOpen(true);
+          if (!isResend) {
+            setIsResend(true);
+            setDisplayText('RESEND OTP');
+          }
+          setColor('grey');
+
+        }
+      }, function (err) {
+        // console.log(err);
+        // Logout User
+      });
+    } catch (err) {
+      setErrors({ submit: err.message });
+      setStatus({ success: false });
+    }
+  }
 
   useEffect(() => {
     let timeoutId;
@@ -127,6 +183,134 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
     }
     return () => clearTimeout(timeoutId);
   }, [isResend]);
+
+  const handleResetConfirm = (values) => {
+    setIsLoading(true);
+    var postData = {
+      validateOTP: values.otpemail
+    }
+    postDataSystem(Reset_Mobile_Number(), postData).then(function (res) {
+      setIsLoading(false);
+      resethandleCloseDialog();
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        mutate();
+        setIsLoading(false);
+        setSnackbarMessage({ msg: 'Mobile number reset successfully', success: true });
+        setSnackbarOpen(true);
+        resethandleCloseDialog();
+      }
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
+  };
+
+  const UpdateMobile = (values) => {
+    setIsLoading(true);
+    var PostData = {
+      mobileNo: values.mobilenumber, intCode: '+91'
+    }
+
+    postDataSystem(Update_Mobile_Number(), PostData).then(function (res) {
+      setIsLoading(false);
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        mutate();
+        setIsLoading(false);
+        setSnackbarMessage({ msg: 'Mobile no submitted', success: true });
+        setSnackbarOpen(true);
+        setOtpState(true);
+      }
+      setOtpState(true);
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
+  }
+
+  const SetMobile = (values) => {
+    setIsLoading(true);
+    var PostData = {
+      validateOTP: values.otpmbl
+    }
+    postDataSystem(set_Mobile_Number(), PostData).then(function (res) {
+      setIsLoading(false);
+      smshandleCloseDialog();
+      // setOtpState(false);
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        mutate();
+        setIsLoading(false);
+        setSnackbarMessage({ msg: 'otp validated', success: true });
+        setSnackbarOpen(true);
+        smshandleCloseDialog();
+      }
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
+  }
 
   return (
     <>
@@ -254,33 +438,16 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                         }
                         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                           setIsLoading(true);
-                          // console.log({ values });
                           try {
-                            const { data } = otpState
-                              ? await setMobileNumber({
-                                accountType: 'GRAVITUS',
-                                postData: { validateOTP: values.otpmbl }
-                              })
-                              : await updateMobileNumber({
-                                accountType: 'GRAVITUS',
-                                postData: { mobileNo: values.mobilenumber, intCode: '+91' }
-                              });
-                            if (Object.keys(data.result).length) {
-                              // console.log({ data });
-                              mutate();
-                              setIsLoading(false);
-                              setSnackbarMessage({ msg: otpState ? 'otp validated' : 'Mobile no submitted', success: true });
-                              setSnackbarOpen(true);
-                              if (otpState) {
-                                smshandleCloseDialog();
-                              }
-                              setOtpState(true);
-                            } else {
-                              setIsLoading(false);
-                              setSnackbarMessage({ msg: 'Request failed', success: false });
-                              setSnackbarOpen(true);
-                              smshandleCloseDialog();
-                            }
+                            setIsLoading(true);
+                            setStatus({ success: false });
+                            setSubmitting(false);
+                            otpState
+                              ? (
+                                SetMobile(values)
+                              ) : (
+                                UpdateMobile(values)
+                              )
                           } catch (err) {
                             setIsLoading(false);
                             setStatus({ success: false });
@@ -325,7 +492,7 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                                                 color: color || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                                                 fontSize: '12px'
                                               }}
-                                              onClick={() => handleOTP('POTP')}
+                                              onClick={() => reqSendOTP()}
                                               disabled={isResend}
                                             >
                                               {displayText}
@@ -415,25 +582,10 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                         })}
                         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                           setIsLoading(true);
-                          // console.log({ values });
                           try {
-                            const { data } = await resetMobileNumber({
-                              accountType: 'GRAVITUS',
-                              postData: { validateOTP: values.otpemail }
-                            });
-                            if (Object.keys(data.result).length) {
-                              // console.log({ data });
-                              mutate();
-                              setIsLoading(false);
-                              setSnackbarMessage({ msg: 'Mobile number reset successfully', success: true });
-                              setSnackbarOpen(true);
-                              resethandleCloseDialog();
-                            } else {
-                              setIsLoading(false);
-                              setSnackbarMessage({ msg: 'Request failed', success: false });
-                              setSnackbarOpen(true);
-                              resethandleCloseDialog();
-                            }
+                            setStatus({ success: false });
+                            setSubmitting(false);
+                            handleResetConfirm(values)
                           } catch (err) {
                             setIsLoading(false);
                             setStatus({ success: false });
@@ -446,51 +598,7 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                           <>
                             <form noValidate onSubmit={handleSubmit}>
-                              {/* <Grid item xs={12} sx={{ mt: -1 }}>
-                                <Typography
-                                  variant="body1"
-                                  sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                                >
-                                  Enter your mobile number
-                                </Typography>
-                              </Grid> */}
                               <Grid item spacing={3} pt={1}>
-                                {/* <Grid item xs={12}>
-                                  <Stack spacing={1}>
-                                    <OutlinedInput
-                                      id="mobilenumber"
-                                      type="mobilenumber"
-                                      value={values.mobilenumber}
-                                      name="mobilenumber"
-                                      onBlur={handleBlur}
-                                      // onChange={handleChange}
-                                      onChange={(e) => {
-                                        const numericValue = e.target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
-                                        handleChange({ target: { name: "mobilenumber", value: numericValue } });
-                                      }}
-                                      placeholder=""
-                                      fullWidth
-                                      error={Boolean(touched.mobilenumber && errors.mobilenumber)}
-                                      startAdornment={
-                                        <InputAdornment position="start">
-                                          <Select variant="standard" defaultValue={0}>
-                                            {countries.map((country, index) => (
-                                              <MenuItem key={index} value={index}>
-                                                {`${country.label} (+${country.phone})`}
-                                              </MenuItem>
-                                            ))}
-                                          </Select>
-                                        </InputAdornment>
-                                      }
-                                    />
-                                    {touched.mobilenumber && errors.mobilenumber && (
-                                      <FormHelperText error id="standard-weight-helper-text-email-login">
-                                        {errors.mobilenumber}
-                                      </FormHelperText>
-                                    )}
-                                  </Stack>
-                                </Grid> */}
-
                                 <Grid item xs={12} pt={1}>
                                   <Stack spacing={1} width={420}>
                                     <Typography
@@ -521,7 +629,7 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
                                               color: color || (theme.palette.mode === 'dark' ? '#fff' : '#000'),
                                               fontSize: '12px'
                                             }}
-                                            onClick={() => handleOTP('MOTP')}
+                                            onClick={() => reqSendMOTP()}
                                             disabled={isResend}
                                           >
                                             {displayText}
@@ -554,10 +662,10 @@ const Profiledetails = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate 
               </Stack>
             </Grid>
           </Grid>
-        </Grid>
+        </Grid >
 
         <Grid md={3}>{/* <img src={dashboardprofileimg} alt='dashboardprofileimg' width={200}/> */}</Grid>
-      </Grid>
+      </Grid >
     </>
   );
 };

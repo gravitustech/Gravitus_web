@@ -17,8 +17,8 @@ import googleplay from '../../../../assets/images/gravitusimage/googleplay.svg';
 
 const Referrallink = ({ referrallink }) => {
   const theme = useTheme();
-  const firstTwo = referrallink.slice(0, 14);
-  const lastTwo = referrallink.slice(-4);
+  const firstTwo = referrallink?.slice(0, 14);
+  const lastTwo = referrallink?.slice(-4);
   const middle = '...';
 
   const Referrallink = `${firstTwo}${middle}${lastTwo}`;
@@ -34,8 +34,8 @@ const Referrallink = ({ referrallink }) => {
 
 const Email = ({ email }) => {
   const theme = useTheme();
-  const firstTwo = email.slice(0, 4);
-  const lastTwo = email.slice(-10);
+  const firstTwo = email?.slice(0, 4);
+  const lastTwo = email?.slice(-10);
   const middle = '***';
 
   const maskedEmail = `${firstTwo}${middle}${lastTwo}`;
@@ -136,19 +136,11 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
                         Referral ID
                       </Typography>
                       <Stack direction="row" spacing={1} alignItems="center">
-                        <Email email={userData.emailId} />
-                        {/* <RWebShare
-                          data={{
-                            text: "Welcome to GRAVITUS. Trading Platform for Budding Crypto Traders, Register Now. Using this Referral ID",
-                            url: `${userData.emailId}`,
-                            title: "Gravitus Crypto Exchange",
-                          }}
-                        >
-                          <Tooltip placement="top" arrow title='Share'>
-                            <ShareIcon sx={{ cursor: 'pointer', fontSize: '20px' }}></ShareIcon>
-                          </Tooltip>
-                        </RWebShare> */}
-                        <CopyToClipboard text={userData.emailId} onCopy={() => handleCopy(1)}>
+                        <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                          GR{userData.userId}
+                        </Typography>
+                        {/* <Email email={userData.emailId} /> */}
+                        <CopyToClipboard text={`GR${userData.userId}`} onCopy={() => handleCopy(1)}>
                           <Tooltip placement="top" disableFocusListener title={activeId === 1 && copied ? 'Copied' : 'Click to copy'} arrow>
                             <IconButton disableRipple>
                               {activeId === 1 && copied ? (
@@ -185,11 +177,11 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
                         Referral Link
                       </Typography>
                       <Stack direction="row" spacing={1} alignItems="center">
-                        <Referrallink referrallink={`${hostName}/register/${userData.emailId}`} />
+                        <Referrallink referrallink={`${hostName}/register/GR${userData.userId}`} />
                         <RWebShare
                           data={{
                             text: "Welcome to GRAVITUS. Trading Platform for Budding Crypto Traders, Register Now. Through this Referral Link",
-                            url: `${hostName}/register/${userData.emailId}`,
+                            url: `${hostName}/register/GR${userData.userId}`,
                             title: "Gravitus Crypto Exchange",
                           }}
                         >
@@ -197,17 +189,6 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
                             <ShareIcon sx={{ cursor: 'pointer', fontSize: '20px' }}></ShareIcon>
                           </Tooltip>
                         </RWebShare>
-                        {/* <CopyToClipboard text={`${hostName}/register/${userData.emailId}`} onCopy={() => handleCopy(2)}>
-                          <Tooltip placement="top" disableFocusListener title={activeId === 2 && copied ? 'Copied' : 'Click to copy'} arrow>
-                            <IconButton disableRipple>
-                              {activeId === 2 && copied ? (
-                                <DoneIcon color="#C1C1C1" />
-                              ) : (
-                                <img src={copyicon} alt="copy" style={{ cursor: 'pointer' }} />
-                              )}
-                            </IconButton>
-                          </Tooltip>
-                        </CopyToClipboard> */}
                       </Stack>
                     </Grid>
                   </Card>
@@ -248,8 +229,8 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate }) =>
             </Grid>
           </Card>
         </Grid>
-      </Grid>
-    </Box>
+      </Grid >
+    </Box >
   );
 };
 

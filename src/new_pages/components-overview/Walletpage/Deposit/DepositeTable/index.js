@@ -79,7 +79,7 @@ OrderTableHead.propTypes = {
 // ==============================|| DEPOSITE TABLE ||============================== //
 
 const TransactionId = ({ transactionid }) => {
-  const first = transactionid.slice(0, 18);
+  const first = transactionid?.slice(0, 18);
   const end = '.....';
   const TransactionId = `${first} ${end}`;
 
@@ -103,9 +103,9 @@ function DepositeTable({ historyData }) {
         /* Custom scrollbar styles */
         scrollbarWidth: 'thin',
         scrollbarColor: 'gray lightgray',
-        height: '260px',
+        height: '460px',
         '&::-webkit-scrollbar': {
-          width: '4px ', // Width of the scrollbar
+          width: '0px ', // Width of the scrollbar
         },
         '&::-webkit-scrollbar-track': {
           background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
@@ -132,8 +132,8 @@ function DepositeTable({ historyData }) {
                 // const isItemSelected = isSelected(row.Name);
                 const labelId = `enhanced-table-checkbox-${index}`;
                 const { userId, crypto, transType, transDesc, highlight, amount, charges, address, txId, href, status, date, timeStamp } = row;
-                const firstTenCharactersaddress = address.slice(0, 25);
-                const restOfCharactersaddress = address.slice(25);
+                const firstTenCharactersaddress = address?.slice(0, 25);
+                const restOfCharactersaddress = address?.slice(25);
 
                 return (
                   <>

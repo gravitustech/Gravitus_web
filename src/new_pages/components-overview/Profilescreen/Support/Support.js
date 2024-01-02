@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 import { raiseTicket } from '../../../../api/profile';
 import AnimateButton from '../../../../components/@extended/AnimateButton';
 import notesicon from '../../../../assets/images/gravitusimage/notesicon.svg';
+import { Ticket_Raised, postDataSystem } from 'src/api_ng/system_ng';
 
 const StyledTextarea = styled(TextareaAutosize)(({ theme, error }) => ({
   width: 'auto',
@@ -60,6 +61,47 @@ const SupportScreen = ({ setSnackbarMessage, setSnackbarOpen, mutate }) => {
     }
   };
 
+  const ticketRaised = (values, actions) => {
+    setIsLoading(true);
+    var postData = {
+      category: values.category,
+      message: values.message
+    }
+    postDataSystem(Ticket_Raised(), postData).then(function (res) {
+      setIsLoading(false);
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        actions.resetForm({ values: { message: '', category: null } });
+        mutate();
+        setSnackbarMessage({ msg: 'Ticket raised successfully', success: true });
+        setSnackbarOpen(true);
+        setIsLoading(false);
+      }
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
+  }
   return (
     <Grid pt={4} pb={4} pl={4} pr={4}>
       <Stack>
@@ -73,24 +115,13 @@ const SupportScreen = ({ setSnackbarMessage, setSnackbarOpen, mutate }) => {
             submit: null
           }}
           validationSchema={Yup.object().shape({
-            message: Yup.string().max(255).required("Don't leave empty"),
+            message: Yup.string().trim().max(255).required("Don't leave empty"),
             category: Yup.string().max(255).nullable().required('Select the type of category')
           })}
           onSubmit={async (values, actions) => {
-            // console.log({ values });
             setIsLoading(true);
-            const postData = { category: values.category, message: values.message };
             try {
-              const { data } = await raiseTicket({ accountType: 'GRAVITUS', postData });
-              if (Object.keys(data.result).length) {
-                // console.log({ data });
-                actions.resetForm({ values: { message: '', category: null } });
-                // document.getElementById('country-customized-option-demo').value =values.category;
-                mutate();
-                setSnackbarMessage({ msg: 'Ticket raised successfully', success: true });
-                setSnackbarOpen(true);
-                setIsLoading(false);
-              }
+              ticketRaised(values, actions)
             } catch (err) {
               setSnackbarMessage({ msg: err.message, success: false });
               setSnackbarOpen(true);

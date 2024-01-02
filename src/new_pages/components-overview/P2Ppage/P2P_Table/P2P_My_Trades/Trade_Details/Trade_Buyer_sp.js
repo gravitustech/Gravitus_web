@@ -704,7 +704,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                             borderRadius: '5px',
                             border: '2px solid',
                             borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
-                            backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'
+                            background: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'
                           }}
                         >
                           <Stack
@@ -1073,8 +1073,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                                 borderRadius: '5px',
                                 border: '2px solid',
                                 borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
-                                backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'
-                              }}
+                                background: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'                              }}
                             >
                               <Stack
                                 pt={5}
@@ -1219,15 +1218,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                           {SUPERData?.actionCaption}
                         </Typography>
                         <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                          {SUPERData?.actionMessage} {
-                            SUPERData?.appealStatus === '1' ? (
-                              <></>
-                            ) : (
-                              <>
-                                {/* {timeLeftOver} minutes. */}
-                              </>
-                            )
-                          }
+                          {SUPERData?.actionMessage} 
                         </Typography>
                       </Stack>
                       <Stack pt={0.8}>
@@ -1251,7 +1242,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                     {/* Buyorderdeatils */}
                     <Trade_Price_Dts orderDetails={orderDetails} />
 
-                    <Stack pt={3}>
+                    {/* <Stack pt={3}>
                       <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                         Payment Methods
                       </Typography>
@@ -1259,7 +1250,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
 
                     <Stack pt={2}>
                       <UpiImpsTabs orderDetails={orderDetails} />
-                    </Stack>
+                    </Stack> */}
 
                     <Stack direction="row" spacing={3} pt={3}>
                       {
@@ -1278,7 +1269,8 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                                   <Button disableRipple variant="p2pcancelbutton" onClick={goBack}>Cancel</Button>
                                   <Button type="submit" variant="p2pnextbutton" onClick={handleButtonClick}>
                                     Appeal
-                                  </Button></>
+                                  </Button>
+                                  </>
                               ) : (
                                 <>
                                 </>
@@ -1430,8 +1422,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                                     borderRadius: '5px',
                                     border: '2px solid',
                                     borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
-                                    backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'
-                                  }}
+                                    background: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'                                  }}
                                 >
                                   <Stack
                                     pt={5}

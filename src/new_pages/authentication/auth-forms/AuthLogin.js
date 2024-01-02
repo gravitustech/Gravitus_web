@@ -45,13 +45,13 @@ const GravitusAuthLogin = () => {
 
   const [checked, setChecked] = useState(localStorage.checkbox === 'true');
   const [inputs, setInputs] = useState({ accountType: 'GRAVITUS' });
-  
+
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState(null);
 
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -81,8 +81,8 @@ const GravitusAuthLogin = () => {
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required*'),
-          password: Yup.string().max(255).required('Password is required*')
+          email: Yup.string().email('Must be a valid email').max(128, 'EmailId must be at most 128 characters').required('Email is required*'),
+          password: Yup.string().max(24, 'Password must be at most 24 characters').required('Password is required*')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           setInputs({ ...inputs, postData: { emailId: values.email, password: values.password } });

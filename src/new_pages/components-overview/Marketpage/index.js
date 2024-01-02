@@ -48,8 +48,14 @@ const Marketpage = () => {
     <>
       {marketRc?.result ? (
         <>
-          <Grid pl={15} pr={15} pt={3} pb={3}>
-            <Grid item xs={12} lg={12} md={12} pb={3}>
+          <Grid
+            display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}
+            pt={{ md: 3, lg: 3 }}
+            pb={{ md: 3, lg: 3 }}
+            pl={{ md: 6, lg: 15 }}
+            pr={{ md: 6, lg: 15 }}
+          >
+            <Grid item pb={3}>
               <Typography sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} variant="h1">
                 Market Overview
               </Typography>
@@ -81,8 +87,8 @@ const Marketpage = () => {
                 <ComponentsCardLoss title="Top Losers" TopLosers={marketRc} />
               </Grid>
             </Grid> */}
-
           </Grid>
+
           <MarketpageTable
             marketData={marketRc?.result}
             setPlatformId={setPlatformId}

@@ -17,24 +17,24 @@ function CoinSelectTextfield({ walletList, setDepositData, setHistoryData }) {
 
   function fetchWalletAddr(walletId) {
     var postData = {
-      "walletId" : walletId
+      "walletId": walletId
     };
 
     postDataWallet(Deposit_Address(), postData).then(function (res) {
       // console.log(res);
-      
+
       if (res.error !== 'ok') {
         handleCloseDialog();
         setIsLoading(false);
 
-        if(res.error.name == "Missing Authorization") {
+        if (res.error.name == "Missing Authorization") {
           // Logout User
         }
         else if (res.error.name == "Invalid Authorization") {
           // Logout User
         }
         else {
-          if(res.error.name != undefined) {
+          if (res.error.name != undefined) {
             setSnackbarMessage({ msg: res.error.name, success: false });
             setSnackbarOpen(true);
           }
@@ -56,24 +56,24 @@ function CoinSelectTextfield({ walletList, setDepositData, setHistoryData }) {
 
   function fetchWalletById(walletId) {
     var postData = {
-      "walletId" : walletId
+      "walletId": walletId
     };
 
     postDataWallet(Wallet_Fetch_ById(), postData).then(function (res) {
       // console.log(res);
-      
+
       if (res.error !== 'ok') {
         handleCloseDialog();
         setIsLoading(false);
 
-        if(res.error.name == "Missing Authorization") {
+        if (res.error.name == "Missing Authorization") {
           // Logout User
         }
         else if (res.error.name == "Invalid Authorization") {
           // Logout User
         }
         else {
-          if(res.error.name != undefined) {
+          if (res.error.name != undefined) {
             setSnackbarMessage({ msg: res.error.name, success: false });
             setSnackbarOpen(true);
           }
@@ -119,14 +119,20 @@ function CoinSelectTextfield({ walletList, setDepositData, setHistoryData }) {
   }, [walletId]);
 
   return (
-    <Stack pl={5} sx={{ width: '90%' }}>
+    <Stack pl={5} 
+    // pr={{ xs: 2, sm: 2 }}
+    sx={{
+      width: { xs: '100%', sm: '100%', md: '90%', lg: '90%' }
+    }}>
       <Autocomplete
         id="country-customized-option-demo"
         options={walletList}
         // disableCloseOnSelect
         getOptionLabel={(option) => `${option.listing.ticker} (${option.listing.crypto})`}
         renderOption={(props, option) => (
-          <Stack {...props} direction="row" spacing={1} alignItems="center" backgroundColor={theme.palette.mode === 'dark' ? '#0F121A' : '#FFFFFF'}>
+          <Stack {...props} direction="row" spacing={1} alignItems="center" sx={{
+            backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
+          }}>
             <img src={option.listing.additionalI} alt="ico" width="24" height="24" />
             <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
               {option.listing.ticker}

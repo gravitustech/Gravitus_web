@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '@mui/material';
+import { Stack, useTheme } from '@mui/material';
 
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
@@ -12,6 +12,7 @@ import Box from '@mui/material/Box';
 import MarketTable from './MarketTable';
 import USDTTable from './UsdtTable';
 import INRTable from './InrTable';
+import MarketTable_Mobile from './MarketTable_Mobile';
 
 const SpotTabs = ({ marketData, searchQuery, listings, setPlatformId }) => {
   const [value, setValue] = React.useState('0');
@@ -103,10 +104,20 @@ const SpotTabs = ({ marketData, searchQuery, listings, setPlatformId }) => {
         />
       </TabList>
       <TabPanel value="0" sx={{ padding: '0px' }}>
-        <MarketTable flag="USDT" marketData={marketData} searchQuery={searchQuery} listings={listings} setPlatformId={setPlatformId} />
+        <Stack display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
+          <MarketTable flag="USDT" marketData={marketData} searchQuery={searchQuery} listings={listings} setPlatformId={setPlatformId} />
+        </Stack>
+        <Stack display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}>
+          <MarketTable_Mobile flag="USDT" marketData={marketData} searchQuery={searchQuery} listings={listings} setPlatformId={setPlatformId} />
+        </Stack>
       </TabPanel>
       <TabPanel value="1" sx={{ padding: '0px' }}>
-        <MarketTable flag="INR" marketData={marketData} searchQuery={searchQuery} listings={listings} setPlatformId={setPlatformId} />
+        <Stack display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
+          <MarketTable flag="INR" marketData={marketData} searchQuery={searchQuery} listings={listings} setPlatformId={setPlatformId} />
+        </Stack>
+        <Stack display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}>
+          <MarketTable_Mobile flag="INR" marketData={marketData} searchQuery={searchQuery} listings={listings} setPlatformId={setPlatformId} />
+        </Stack>
       </TabPanel>
     </TabContext>
   );

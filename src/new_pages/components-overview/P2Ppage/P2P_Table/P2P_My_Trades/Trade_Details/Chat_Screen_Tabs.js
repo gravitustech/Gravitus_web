@@ -27,8 +27,8 @@ const Chat_Appeal_Tab = ({ SUPERData, counterPart }) => {
 
   function useTradeMessages() {
     var postData = {
-      orderId     : orderDetails?.orderId,
-      platformId  : getConfig_ng('P2PPair').platformId
+      orderId: orderDetails?.orderId,
+      platformId: getConfig_ng('P2PPair').platformId
     };
 
     const { data, error, isLoading, isValidating } = useSWR([P2P_TradeMessages_URL(), postData], fetcherP2P, {
@@ -45,8 +45,8 @@ const Chat_Appeal_Tab = ({ SUPERData, counterPart }) => {
 
   function useAppealMessages() {
     var postData = {
-      orderId     : orderDetails?.orderId,
-      platformId  : getConfig_ng('P2PPair').platformId
+      orderId: orderDetails?.orderId,
+      platformId: getConfig_ng('P2PPair').platformId
     };
 
     const { data, error, isLoading, isValidating } = useSWR([P2P_AppealMessages_URL(), postData], fetcherP2P, {
@@ -81,6 +81,8 @@ const Chat_Appeal_Tab = ({ SUPERData, counterPart }) => {
 
   }, [SUPERData]);
 
+  // console.log('useAppealMessages', Appealdata)
+
   return (
     <>
       <TabContext value={value}>
@@ -99,10 +101,10 @@ const Chat_Appeal_Tab = ({ SUPERData, counterPart }) => {
                 }}
                 label={
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                  <span style={{ marginRight: '16px' }}>Chat</span>
-                  {/* <Badge badgeContent={2} color="primary">
+                    <span style={{ marginRight: '16px' }}>Chat</span>
+                    {/* <Badge badgeContent={2} color="primary">
                   </Badge> */}
-                </div>
+                  </div>
                 }
                 value="0"
               />
@@ -118,10 +120,15 @@ const Chat_Appeal_Tab = ({ SUPERData, counterPart }) => {
                 }}
                 label={
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                  <span style={{ marginRight: '16px' }}>  Appeal History</span>
-                  {/* <Badge badgeContent={2} color="primary">
-                  </Badge> */}
-                </div>
+                    <span style={{ marginRight: '16px' }}>  Appeal History</span>
+                    {/* {Appealdata?.result?.appealMessage?.length === 0 ? (
+                      <>
+                      </>
+                    ) : (
+                      <Badge badgeContent={Appealdata?.result?.appealMessage?.length} color="primary">
+                      </Badge>
+                    )} */}
+                  </div>
                 }
                 value="1"
               />

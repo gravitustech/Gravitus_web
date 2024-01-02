@@ -101,7 +101,7 @@ function OrderTableHead() {
         {headCells.map((headCell, index) => (
           <TableCell
             padding='none'
-            sx={{ border: 'none', padding: '12px', paddingBottom: '7px', paddingTop: '8px' }}
+            sx={{ border: 'none', padding: '12px', paddingBottom: '8px', paddingTop: '8px' }}
             key={index}
             align={headCell.align}
           >
@@ -130,32 +130,38 @@ export default function HistoryTab({ isAuthorised, orderTableData, priceData, ca
     <>
       {isAuthorised ? (
         <Box>
-          {orderTableData.history.length ? (
-            <TableContainer varaint="tablecontainer"
-              sx={{
-                overflowY: 'scroll',
-                /* Custom scrollbar styles */
-                scrollbarWidth: 'thin',
-                scrollbarColor: 'gray lightgray',
-                height: '240px',
-                '&::-webkit-scrollbar': {
-                  width: '4px', // Width of the scrollbar
-                },
-                '&::-webkit-scrollbar-track': {
-                  background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
-                },
-                '&::-webkit-scrollbar-thumb': {
-                  background: theme.palette.mode === "dark" ? '#0F121A' : "lightgray",
-                  borderRadius: '8px', // Round the corners of the thumb
-                },
-              }}
-            >
+          <TableContainer varaint="tablecontainer"
+            sx={{
+              overflowY: 'scroll',
+              /* Custom scrollbar styles */
+              scrollbarWidth: 'thin',
+              scrollbarColor: 'gray lightgray',
+              height: '254px',
+              '&::-webkit-scrollbar': {
+                width: '4px', // Width of the scrollbar
+              },
+              '&::-webkit-scrollbar-track': {
+                background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
+              },
+              '&::-webkit-scrollbar-thumb': {
+                background: theme.palette.mode === "dark" ? '#0F121A' : "lightgray",
+                borderRadius: '8px', // Round the corners of the thumb
+              },
+            }}
+          >
 
-              <Table aria-label="sticky table">
-                <OrderTableHead />
-
-                <TableBody>
-                  {orderTableData.history.map((row, index) => {
+            <Table aria-label="sticky table">
+              <OrderTableHead />
+              <TableBody>
+                {orderTableData.history.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
+                      <Norecordfoundcomponents
+                        description='You have no order histroy.' />
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  orderTableData.history.map((row, index) => {
                     // const isItemSelected = isSelected(row.Name);
                     const labelId = `enhanced-table-checkbox-${index}`;
                     const shouldRenderRow = !hideCancelled || (hideCancelled && row.status !== 'Cancelled');
@@ -265,21 +271,10 @@ export default function HistoryTab({ isAuthorised, orderTableData, priceData, ca
                         </TableCell>
                       </TableRow>
                     );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          ) : (
-            <>
-              <TableContainer varaint="tablecontainer">
-                <Table aria-labelledby="tableTitle">
-                  <OrderTableHead />
-                </Table>
-              </TableContainer>
-              <Norecordfoundcomponents
-                description=' You have no order histroy.' />
-            </>
-          )}
+                  }))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
       ) : (
         <>

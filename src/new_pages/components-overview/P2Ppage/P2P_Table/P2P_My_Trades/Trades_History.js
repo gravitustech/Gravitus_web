@@ -7,23 +7,6 @@ import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpag
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
-function createData(Type, Amount, Quantity, TotalAmount, TDS, Date, Status, Action) {
-  return { Type, Amount, Quantity, TotalAmount, TDS, Date, Status, Action };
-}
-
-const rows = [
-  createData(
-    'Buy',
-    '82.5',
-    '10',
-    '816.75',
-    '0.00',
-    '26 Dec, 12PM',
-    'Completed',
-    'view'
-  ),
-];
-
 const headCells = [
   {
     id: 'Type',
@@ -81,7 +64,7 @@ function OrderTableHead() {
   const theme = useTheme();
   return (
     <TableHead>
-      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#0F121A' : '#fff' }}>
+      <TableRow style={{ position: 'sticky', top: '0', background: theme.palette.mode === 'dark' ? '#131722' : '#fff' }}>
         {headCells.map((headCell) => (
           <TableCell
             sx={{ border: 'none' }}
@@ -130,7 +113,7 @@ export default function HistroyTradesTab({ trades, pairInfo }) {
           /* Custom scrollbar styles */
           scrollbarWidth: 'thin',
           scrollbarColor: 'gray lightgray',
-          height: '564px',
+          height: '580px',
           '&::-webkit-scrollbar': {
             width: '0px', // Width of the scrollbar
           },

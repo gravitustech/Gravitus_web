@@ -80,38 +80,35 @@ const HistoryPageNG = () => {
       }
     }
   }
-
+  // console.log('statementRc', statementRc)
   return (
     <>
-      <Card
-        sx={{
-          border: 'none',
-          width: '100%',
-          boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
-        }}
-      >
-        <Grid container pl={15} pr={15} pt={2} pb={3} sx={{
-          backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground',
-        }}>
-          <Stack direction='row' spacing={2} alignItems='center'>
-            <ArrowBackIosNewIcon onClick={goBack} pt={10} sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} />
-            <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-              Wallet History
-            </Typography>
-          </Stack>
-        </Grid>
-        <Box
-          pt={3}
-          pb={3}
-          pl={20}
-          pr={15}
-          lg={12}
+      <Grid container pl={14} pr={15} pt={3} pb={3}>
+        <Stack direction="row" spacing={0.8} alignItems="center">
+          <IconButton onClick={goBack} disableRipple>
+            <ArrowBackIosNewIcon
+              pt={10}
+              sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+            />
+          </IconButton>
+          <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+            History
+          </Typography>
+        </Stack>
+      </Grid>
+      {STATEMENTData ? (
+        <Grid container pt={2} pb={3} pl={18} pr={15} lg={12}
           sx={{
             minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' },
-            backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground',
-          }}>
-          {STATEMENTData ? (
-            <Stack>
+            backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
+            borderRadius: '78px 78px 0px 0px',
+            boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
+          }} >
+          <Grid
+            // sx={{
+            //   minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' },
+            // }}
+            item xs={12} sm={12} md={12} lg={12}>
               <TabContext value={value}>
                 <TabList onChange={handleChange} indicatorColor="none" textColor='inherit'>
                   <Tab
@@ -174,12 +171,11 @@ const HistoryPageNG = () => {
                   <HistoryInternalTab tableData={STATEMENTData?.internal} />
                 </TabPanel>
               </TabContext>
-            </Stack>
-          ) : (
-            <Lodergif />
-          )}
-        </Box>
-      </Card>
+          </Grid>
+        </Grid>
+      ) : (
+        <Lodergif />
+      )}
     </>
   );
 };

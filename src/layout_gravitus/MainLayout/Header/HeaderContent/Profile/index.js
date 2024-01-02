@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Box, ButtonBase, CardContent, ClickAwayListener, Divider,
-  Grid, IconButton, Paper, Popper, Stack, Tab, Tabs, Typography } from '@mui/material';
+import {
+  Avatar, Box, ButtonBase, CardContent, ClickAwayListener, Divider,
+  Grid, IconButton, Paper, Popper, Stack, Tab, Tabs, Typography
+} from '@mui/material';
 
 import Transitions from '../../../../../components/@extended/Transitions';
 import MainCard from '../../../../../components/MainCard';
@@ -16,6 +18,7 @@ import useSWR from 'swr';
 import { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Logout_User } from 'src/api_ng/system_ng';
 
 function TabPanel({ children, value, index, ...other }) {
   return (
@@ -61,10 +64,10 @@ const Profile = () => {
 
   const dispatch = useDispatch();
   const { token, user } = useSelector((state) => state.user);
-  
-  const handleLogout = async () => {
+
+  const handleLogout = () => {
     try {
-      await logoutUserWithToken(token);
+      Logout_User(token);
       dispatch(logoutUser());
       navigate('/');
     } catch (err) {
@@ -91,7 +94,7 @@ const Profile = () => {
     setValue(newValue);
   };
 
-  const { data, error, isLoading } = useSWR( getProfileURL(),
+  const { data, error, isLoading } = useSWR(getProfileURL(),
     (url) => fetcher(url, { accountType: 'GRAVITUS' })
     // { suspense: true }
   );
@@ -111,9 +114,9 @@ const Profile = () => {
         aria-controls={open ? 'profile-grow' : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
-        // onMouseEnter={handleToggle}
-        // onMouseLeave={handleToggle}
-        // component={RouterLink} to="/profile"
+      // onMouseEnter={handleToggle}
+      // onMouseLeave={handleToggle}
+      // component={RouterLink} to="/profile"
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
           <Avatar alt="profile user" src="" sx={{ width: 24, height: 24 }} />
@@ -160,22 +163,22 @@ const Profile = () => {
                         <Stack>
                           <Email email={user.emailId} />
                           <Stack direction='row' spacing={1} alignItems='flex-end'>
-                          <Typography
-                            noWrap
-                            variant="body1"
-                            sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                          >
-                            {data?.result?.userProfile?.userId}
-                          </Typography>
-                          <Typography
-                            noWrap
-                            variant="subtitle2"
-                            sx={{ color: theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' }}
-                          >
-                             ID
-                          </Typography>
+                            <Typography
+                              noWrap
+                              variant="body1"
+                              sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                            >
+                              {data?.result?.userProfile?.userId}
+                            </Typography>
+                            <Typography
+                              noWrap
+                              variant="subtitle2"
+                              sx={{ color: theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy' }}
+                            >
+                              ID
+                            </Typography>
                           </Stack>
-                          
+
                         </Stack>
                       </Stack>
                     </Grid>

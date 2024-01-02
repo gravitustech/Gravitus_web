@@ -777,8 +777,7 @@ const Trade_Seller_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage }
                                 borderRadius: '5px',
                                 border: '2px solid',
                                 borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
-                                backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'
-                              }}
+                                background: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'                              }}
                             >
                               <Stack
                                 pt={5}
@@ -955,7 +954,7 @@ const Trade_Seller_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage }
                     {/* buyorderdeatils */}
                     <Trade_Price_Dts orderDetails={orderDetails} />
 
-                    <Stack pt={3}>
+                    {/* <Stack pt={3}>
                       <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                         Payment Methods
                       </Typography>
@@ -963,7 +962,7 @@ const Trade_Seller_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage }
 
                     <Stack pt={2}>
                       <UpiImpsTabs orderDetails={orderDetails} />
-                    </Stack>
+                    </Stack> */}
 
                     <Stack direction="row" spacing={3} pt={3}>
                       {SUPERData.superStatus === 1 ? (
@@ -1137,8 +1136,7 @@ const Trade_Seller_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage }
                                     borderRadius: '5px',
                                     border: '2px solid',
                                     borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
-                                    backgroundColor: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'
-                                  }}
+                                    background: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'                                  }}
                                 >
                                   <Stack
                                     pt={5}

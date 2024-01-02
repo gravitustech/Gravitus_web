@@ -217,6 +217,19 @@ export default function Button(theme) {
             backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F0F0F0'
           }
         },
+        //Spotmbl cancel button
+        spotmblcancelbutton: {
+          // width: '40%',
+          // height: '38px',
+          backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F0F0F0',
+          borderRadius: '5px',
+          fontSize: '14px',
+          fontWeight: 500,
+          color: theme.palette.mode === 'dark' ? '#fff' : '#000',
+          '&:hover': {
+            backgroundColor: theme.palette.mode === 'dark' ? '#262B39' : '#F0F0F0'
+          }
+        },
         //
         supportbutton: {
           width: '50%',

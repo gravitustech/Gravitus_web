@@ -2,7 +2,7 @@
 import {getUserEssentials, getUserAccessToken} from "../utils/storage";
 
 var appConfig = {};
-const appVersion = 201;
+const appVersion = 0;
 
 export const initLocalStorage_ng = () => {
 	try {

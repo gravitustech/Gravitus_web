@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { setSocketStateAction } from './appRedux/actions/account';
-import { initLocalStorage_ng, getConfig_sp } from './utils_ng/localStorage_ng';
+import { initLocalStorage_ng, getConfig_sp, getConfig_ng, setConfig_ng } from './utils_ng/localStorage_ng';
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
@@ -16,12 +16,14 @@ const App = () => {
   const localStore = initLocalStorage_ng();
 
   useEffect(() => {
+    setConfig_ng('appVersion', 1000);
+    console.log(getConfig_ng('appVersion'), 'getConfig_ng')
     socket.on('connect', () => {
       if (socket.connected) {
         // console.log('Socket Connected');
 
-        var authenticate = {"userId" : "none"};
-        if(getConfig_sp().userId != 'guestUser' && getConfig_sp().token != 'none') {
+        var authenticate = { "userId": "none" };
+        if (getConfig_sp().userId != 'guestUser' && getConfig_sp().token != 'none') {
           authenticate = getConfig_sp();
         }
 

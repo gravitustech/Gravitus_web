@@ -98,7 +98,7 @@ export default function HistroyTab({ orders, pairInfo }) {
           /* Custom scrollbar styles */
           scrollbarWidth: 'thin',
           scrollbarColor: 'gray lightgray',
-          height: '450px',
+          height: '480px',
           '&::-webkit-scrollbar': {
             width: '0px', // Width of the scrollbar
           },

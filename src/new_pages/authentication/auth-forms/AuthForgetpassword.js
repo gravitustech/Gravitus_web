@@ -17,11 +17,11 @@ import {
 // third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import { resetPassword } from '../../../api/auth';
 
 // project import
 import AnimateButton from '../../../components/@extended/AnimateButton';
 import { useState } from 'react';
+import { Reset_Password, postDataSystem } from 'src/api_ng/system_ng';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -29,8 +29,43 @@ const GravitusAuthForgetpassword = () => {
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const inputs = { accountType: 'GRAVITUS' };
   const [isLoading, setIsLoading] = useState(false);
+
+  const ResetPassword = (values) => {
+    setIsLoading(true);
+    var postData = { emailId: values.email }
+
+    postDataSystem(Reset_Password(), postData).then(function (res) {
+      setIsLoading(false);
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        navigate('/forgetpasswordstatus', { state: { email: values.email } });
+      }
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
+  }
 
   return (
     <>
@@ -40,25 +75,15 @@ const GravitusAuthForgetpassword = () => {
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required*')
+          email: Yup.string().email('Must be a valid email').max(128, 'EmailId must be at most 128 characters').required('Email is required*')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           setIsLoading(true);
 
           try {
-            // console.log({ values });
-            const { data } = await resetPassword({ ...inputs, postData: { emailId: values.email } });
-            if (data.error === 'ok') {
-              // console.log({ data });
-              navigate('/forgetpasswordstatus', { state: { email: values.email } });
-            } else {
-              setIsLoading(false);
-              setSnackbarMessage({ msg: data.error, success: false });
-              setSnackbarOpen(true);
-            }
-
             setStatus({ success: false });
             setSubmitting(false);
+            ResetPassword(values);
           } catch (err) {
             setStatus({ success: false });
             setErrors({ submit: err.message });

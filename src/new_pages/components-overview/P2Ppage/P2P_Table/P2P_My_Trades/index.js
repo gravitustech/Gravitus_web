@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { useTheme, Card, Stack, Typography, Grid, Box, Tab } from '@mui/material';
+import { useTheme, Card, Stack, Typography, Grid, Box, Tab, IconButton } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 import { socket } from '../../../../../socket';
@@ -39,9 +39,9 @@ const P2P_My_Trades = () => {
     return { data: data, error: error, isLoading }
   }
 
-  const { 
-    data  : myTradeRc,
-    error : myTradeEr,
+  const {
+    data: myTradeRc,
+    error: myTradeEr,
     isLoading
   } = useRetrieveTrades();
 
@@ -67,34 +67,29 @@ const P2P_My_Trades = () => {
 
   return (
     <>
-      <Card
-        sx={{
-          border: 'none',
-          width: '100%',
-          boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
-        }}
-      >
-        <Grid container pl={15} pr={15} pt={2} pb={3} sx={{
-          backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground',
-        }}>
-          <Stack direction='row' spacing={2} alignItems='center'>
-            <ArrowBackIosNewIcon onClick={goBack} pt={10} sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }} />
-            <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-              My Trades
-            </Typography>
-          </Stack>
-        </Grid>
-        <Box
-          pt={3}
-          pb={3}
-          pl={20}
-          pr={15}
-          lg={12}
+      <Grid container pl={14} pr={15} pt={3} pb={3}>
+        <Stack direction="row" spacing={0.8} alignItems="center">
+          <IconButton onClick={goBack} disableRipple>
+            <ArrowBackIosNewIcon
+              pt={10}
+              sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+            />
+          </IconButton>
+          <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+            My Trades
+          </Typography>
+        </Stack>
+      </Grid>
+
+      {myTradeRc ? (
+        <Grid container pt={3} pb={3} pl={20} pr={15} lg={12}
           sx={{
             minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' },
-            backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : 'text.cardbackground',
-          }}>
-          {myTradeRc ? (
+            backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
+            borderRadius: '78px 78px 0px 0px',
+            boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
+          }} >
+          <Grid item lg={12}>
             <Stack>
               <TabContext value={value}>
                 <TabList onChange={handleChange} indicatorColor="none" textColor='inherit'>
@@ -159,12 +154,11 @@ const P2P_My_Trades = () => {
                 </TabPanel>
               </TabContext>
             </Stack>
-          ) : (
-            <Lodergif />
-          )}
-
-        </Box>
-      </Card>
+          </Grid>
+        </Grid>
+      ) : (
+        <Lodergif />
+      )}
     </>
   )
 }

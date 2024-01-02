@@ -79,6 +79,18 @@ const Inrdepositwithdrawbutton = ({ setSnackbarOpen,
           setSnackbarMessage({ msg: walletINRRc.error.message, success: false });
           setSnackbarOpen(true);
           handleCloseDialog();
+          if (walletINRRc.error.message === 'Update your identity') {
+            const myTimeout = setTimeout(() => {
+              navigate('/profile/useridentity');
+            }, 1000);
+
+            return () => clearTimeout(myTimeout);
+          } else {
+            const myTimeout = setTimeout(() => {
+              navigate('/profile/payment')
+            }, 1000);
+            return () => clearTimeout(myTimeout);
+          }
         }
         else {
           setSnackbarMessage({ msg: walletINRRc.error, success: false });
@@ -109,6 +121,17 @@ const Inrdepositwithdrawbutton = ({ setSnackbarOpen,
           setSnackbarMessage({ msg: walletINRRc.error.message, success: false });
           setSnackbarOpen(true);
           handleCloseDialog();
+          if (walletINRRc.error.message === 'Update your identity') {
+            const myTimeout = setTimeout(() => {
+              navigate('/profile/useridentity');
+            }, 1000);
+            return () => clearTimeout(myTimeout);
+          } else {
+            const myTimeout = setTimeout(() => {
+              navigate('/profile/payment')
+            }, 1000);
+            return () => clearTimeout(myTimeout);
+          }
         }
         else {
           setSnackbarMessage({ msg: walletINRRc.error, success: false });

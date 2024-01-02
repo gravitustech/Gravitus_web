@@ -15,6 +15,7 @@ import useSWR, { mutate } from 'swr';
 import { Link as RouterLink } from 'react-router-dom';
 import { Spot_PreTrade_URL, Spot_CancelOrder_URL, postDataSPOT } from 'src/api_ng/spotTrade_ng';
 import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../../utils_ng/localStorage_ng';
+import Norecordfoundcomponents from '../../Walletpage/_Essentials/NoRecordFound';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
@@ -187,16 +188,14 @@ export default function OpenTab({ isAuthorised, platformId, orderTableData, setS
   return (
     <>
       {isAuthorised ? (
-
         <Box>
-          {orderTableData?.ongoing?.length ? (
             <TableContainer varaint="tablecontainer"
               sx={{
                 overflowY: 'scroll',
                 /* Custom scrollbar styles */
                 scrollbarWidth: 'thin',
                 scrollbarColor: 'gray lightgray',
-                height: '240px',
+                height: '254px',
                 '&::-webkit-scrollbar': {
                   width: '4px', // Width of the scrollbar
                 },
@@ -212,7 +211,14 @@ export default function OpenTab({ isAuthorised, platformId, orderTableData, setS
                 <OrderTableHead />
 
                 <TableBody>
-                  {orderTableData?.ongoing.map((row, index) => {
+                  {orderTableData?.ongoing?.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
+                        <Norecordfoundcomponents
+                          description='You have no open orders.' />
+                      </TableCell>
+                    </TableRow>
+                  ) : (orderTableData?.ongoing.map((row, index) => {
                     // const isItemSelected = isSelected(row.Name);
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (
@@ -322,7 +328,7 @@ export default function OpenTab({ isAuthorised, platformId, orderTableData, setS
                         </TableCell>
                       </TableRow>
                     );
-                  })}
+                  }))}
                 </TableBody>
 
                 <Dialog open={openDialog} onClose={handleCloseDialog} >
@@ -348,17 +354,6 @@ export default function OpenTab({ isAuthorised, platformId, orderTableData, setS
                 </Dialog>
               </Table>
             </TableContainer>
-          ) : (
-            <>
-              <TableContainer varaint="tablecontainer">
-                <Table aria-labelledby="tableTitle">
-                  <OrderTableHead />
-                </Table>
-              </TableContainer>
-              <NoRecordFound
-                description=' You have no open orders.' />
-            </>
-          )}
         </Box>
       ) : (
         <>

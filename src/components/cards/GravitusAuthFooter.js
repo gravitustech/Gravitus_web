@@ -11,7 +11,7 @@ const GravitusAuthFooter = () => {
         variant="subtitle1"
         style={{ textAlign: 'center', color: theme.palette.mode === 'dark' ? 'text.tertiarydark' : 'text.tertiary' }}
       >
-        &copy; 2023 Gravitus&nbsp;
+        &copy; 2024 Gravitus&nbsp;
       </Typography>
     </Container>
   );

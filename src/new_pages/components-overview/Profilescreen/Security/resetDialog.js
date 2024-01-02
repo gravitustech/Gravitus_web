@@ -10,8 +10,7 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 import AnimateButton from 'src/components/@extended/AnimateButton';
-import { resetSecurity, sendOtpSecurity } from '../../../../api/profile';
-import { Send_OTP, postDataSystem } from 'src/api_ng/system_ng';
+import { Security_Reset, Send_OTP, postDataSystem } from 'src/api_ng/system_ng';
 
 const Email = ({ email }) => {
   const theme = useTheme();
@@ -146,6 +145,55 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
     setIsResendMOTP(false);
     setIsResendPOTP(false);
   };
+
+  const ResetSecurity = (values) => {
+    setIsLoading(true);
+    const phoneOTP = values.otpmbl;
+    const googleOTP = values.authcode;
+    var postData = {
+      verifyType: 'rSecurity',
+      secFeature: action === 'greset' ? 'google' : 'phone',
+      emailOTP: values.otpmail,
+      ...(securityData?.pSecurity?.enabled === '1' && { phoneOTP }),
+      ...(securityData?.gSecurity?.enabled === '1' && { googleOTP })
+    }
+
+    postDataSystem(Security_Reset(), postData).then(function (res) {
+      setIsLoading(false);
+      handleCloseDialog();
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            setSnackbarMessage({ msg: res.error.name, success: false });
+            setSnackbarOpen(true);
+          }
+          else if (res.error.action != undefined) {
+            setSnackbarMessage({ msg: res.error.message, success: false });
+            setSnackbarOpen(true);
+          }
+          else {
+            setSnackbarMessage({ msg: res.error, success: false });
+            setSnackbarOpen(true);
+          }
+        }
+      } else {
+        mutate();
+        setSnackbarMessage({ msg: 'Reset your Authentication', success: true });
+        setSnackbarOpen(true);
+        handleCloseDialog();
+        setIsLoading(false);
+      }
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
+  }
   return (
     <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title">
       <Stack p={4} spacing={2} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
@@ -166,31 +214,11 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
           })}
           onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
             setIsLoading(true);
-            // console.log({ values });
-            const phoneOTP = values.otpmbl;
-            const googleOTP = values.authcode;
-            const postData = {
-              verifyType: 'rSecurity',
-              secFeature: action === 'greset' ? 'google' : 'phone',
-              emailOTP: values.otpmail,
-              ...(securityData?.pSecurity?.enabled === '1' && { phoneOTP }),
-              ...(securityData?.gSecurity?.enabled === '1' && { googleOTP })
-            };
             try {
-              const { data } = await resetSecurity({ accountType: 'GRAVITUS', postData });
-              if (Object.keys(data.result).length) {
-                // console.log({ data });
-                mutate();
-                setSnackbarMessage({ msg: 'Reset your Authentication', success: true });
-                setSnackbarOpen(true);
-                handleCloseDialog();
-                setIsLoading(false);
-              } else {
-                setSnackbarMessage({ msg: 'Request failed', success: false });
-                setSnackbarOpen(true);
-                handleCloseDialog();
-                setIsLoading(false);
-              }
+              setIsLoading(true);
+              setStatus({ success: false });
+              setSubmitting(false);
+              ResetSecurity(values);
             } catch (err) {
               setSnackbarMessage({ msg: err.message, success: false });
               setSnackbarOpen(true);

@@ -14,7 +14,7 @@ import DeleteForever from '@mui/icons-material/DeleteForever';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 
 import ImageCropper from 'src/components/_cropper';
-import { updateIdentity } from '../../../../api/profile';
+import { Update_Identity, formDataSystem } from 'src/api_ng/system_ng';
 
 
 const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, mutate }) => {
@@ -83,6 +83,57 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
     textAlign: 'center'
   };
 
+  const UpdateIndentity = (values) => {
+    setIsLoading(true);
+    if (croppedImage != undefined) {
+      var postData = {
+        fileName: 'identity',
+        fileI: croppedImage,
+        updateInfo: {
+          fullName: values.name,
+          pancard: values.pannumber,
+          docType: values.docType
+        },
+      };
+      formDataSystem(Update_Identity(), postData).then(function (res) {
+        setIsLoading(false);
+        mutate();
+        if (res.error !== 'ok') {
+          if (res.error.name == "Missing Authorization") {
+            // Logout User
+          }
+          else if (res.error.name == "Invalid Authorization") {
+            // Logout User
+          }
+          else {
+            if (res.error.name != undefined) {
+              console.log('res.error', res.error.name)
+              setSnackbarMessage({ msg: res.error.name, success: false });
+              setSnackbarOpen(true);
+            }
+            else {
+              console.log('res.error', res.error)
+              setSnackbarMessage({ msg: res.error, success: false });
+              setSnackbarOpen(true);
+            }
+          }
+        } else {
+          setSnackbarMessage({ msg: 'Identity updated successfully', success: true });
+          setSnackbarOpen(true);
+          setIsLoading(false);
+          mutate();
+        }
+      }, function (err) {
+        console.log(err);
+        // Logout User
+      });
+    }
+    else {
+      setSnackbarMessage({ msg: "Please Upload Pancard Image", success: false });
+      setSnackbarOpen(true);
+      setIsLoading(false);
+    }
+  };
   return (
     <>
       <Formik
@@ -92,38 +143,17 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
           docType: userData?.docType
         }}
         validationSchema={Yup.object().shape({
-          name: Yup.string().max(255).required("Don't leave empty"),
-          pannumber: Yup.string().max(10).required("Don't leave empty"),
+          name: Yup.string().trim().max(255).required("Don't leave empty"),
+          pannumber: Yup.string().trim().max(10).required("Don't leave empty"),
           docType: Yup.string().max(255).nullable().required('Select an Identity Type')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           setIsLoading(true);
-          // console.log({ values });
-          formData.append('updateInfo', JSON.stringify({ fullName: values.name, pancard: values.pannumber, docType: values.docType }));
-          formData.append('fileName', imageToCrop);
-          if (croppedImage) {
-            formData.append('fileI', croppedImage);
-          } else {
-            formData.append('fileI', imageToCrop);
-          }
-
           try {
-            const { data } = await updateIdentity(formData);
-            if (Object.keys(data.result).length) {
-              // console.log("data", data);
-              setSnackbarMessage({ msg: 'Identity updated successfully', success: true });
-              setSnackbarOpen(true);
-              // console.log({ values });
-              setStatus({ success: false });
-              setSubmitting(false);
-              setIsLoading(false);
-              mutate();
-            } else {
-              setSnackbarMessage({ msg: 'Identity updation failed', success: false });
-              setSnackbarOpen(true);
-              setIsLoading(false);
-              mutate();
-            }
+            setIsLoading(true);
+            setStatus({ success: false });
+            setSubmitting(false);
+            UpdateIndentity(values);
           } catch (err) {
             setSnackbarMessage({ msg: err.message, success: false });
             setSnackbarOpen(true);
