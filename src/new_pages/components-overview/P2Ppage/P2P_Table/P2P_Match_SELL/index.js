@@ -1,6 +1,6 @@
 import Noteicon from '../../../../../assets/images/gravitusimage/notesicon.svg';
 import ordersuccessgif from '../../../../../assets/images/gravitusimage/ordersuccesgif.svg';
-
+import CloseIcon from '@mui/icons-material/Close';
 import React, { useState, useEffect, useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useNavigate } from 'react-router';
@@ -40,6 +40,7 @@ import {
   FormControlLabel,
   CircularProgress,
   Card,
+  Drawer,
 } from '@mui/material';
 
 import HIW_Sell from '../_HIW_Sell';
@@ -48,6 +49,7 @@ import { P2P_MatchTrade_URL, postDataP2P } from 'src/api_ng/peer2peer_ng';
 import { socket } from '../../../../../socket';
 import DialogBoxValue from 'src/new_pages/components-overview/Spotpage/BuySellGrid/Dialog_Box_Val';
 import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/_Essentials/NoRecordFound';
+import Sell_FormField from './Sell_FormField';
 
 // ==============================|| ORDER TABLE - HEADER CELL ||============================== //
 
@@ -405,263 +407,20 @@ function OrderTableBody(props) {
                         </Typography>
                       </Stack>
                     </Stack>
-
-                    {/* <Stack pt={3} pl={5.6} pr={12} spacing={2.5}>
-                    <Importantnotescomponents
-                      img={Noteicon}
-                      description={'Lorem ipsum dolor sit amet consectetur. Lorem ipsum.'}
-                    />
-                    <Importantnotescomponents img={Noteicon} description={'Lorem ipsum dolor sit amet consectetur.'} />
-                  </Stack> */}
                   </Grid>
+
                   <Grid item xs={12} sm={6} lg={6}>
-                    <Stack pl={2} pr={2}>
-                      <Formik
-                        innerRef={formikMatchSell}
-                        initialValues={{
-                          totalamount: '',
-                          quantity: '',
-                          paymentoption: '',
-                          submit: null
-                        }}
-                        validationSchema={Yup.object().shape({
-                          totalamount: Yup.number().required("Don't leave empty").positive('Enter a positive number').test(
-                            'minimum-amount',
-                            'Ensure that the total amount remains within the order amount limit.',
-                            (value) => parseFloat(value) <= (row.amount)
-                          ).test(
-                            'minimum-amount',
-                            'Minimum amount must be at least ₹ 500',
-                            (value) => parseFloat(value) >= 500
-                          ),
-                          quantity: Yup.number().positive('Enter a positive number').required("Don't leave empty"),
-                          paymentoption: Yup.array()
-                            .min(1, 'Please select a payment option')
-                            .required('Please select a payment option'),
-                        })}
-                        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                          handleClickOpenDialog();
-                          try {
-                            setInputs(values);
-                            setStatus({ success: false });
-                            setSubmitting(false);
-                          } catch (err) {
-                            setStatus({ success: false });
-                            setErrors({ submit: err.message });
-                            setSubmitting(false);
-                          }
-                        }}
-                      >
-                        {({ errors, handleBlur, handleChange, handleSubmit, setFieldValue, isSubmitting, touched, values }) => (
-                          <form noValidate onSubmit={handleSubmit}>
-                            <Grid container spacing={3}>
-                              <Grid item xs={12}>
-                                <Stack spacing={1} >
-                                  <Grid>
-                                    <Stack direction="row" justifyContent="space-between">
-                                      <Typography
-                                        variant="body1"
-                                        sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                                      >
-                                        Quantity
-                                      </Typography>
-                                      <Typography
-                                        variant="body1"
-                                        sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                                      >
-                                        Balance : {walletInfo.buyPair} {pairInfo.buyPair}
-                                      </Typography>
-                                    </Stack>
-                                  </Grid>
-
-                                  <OutlinedInput
-                                    id="quantity"
-                                    type="quantity"
-                                    value={values.quantity}
-                                    name="quantity"
-                                    onBlur={handleBlur}
-                                    // onChange={handleChange}
-                                    onChange={(e) => handleCustomChange(e, setFieldValue, values)}
-                                    placeholder=""
-                                    fullWidth
-                                    error={Boolean(touched.quantity && errors.quantity)}
-                                    endAdornment={
-                                      <InputAdornment position="end">
-                                        <Stack direction='row' spacing={2}>
-                                          <Typography
-                                            onClick={() => handleAllClick(setFieldValue)}
-                                            variant="body1"
-                                            sx={{ color: theme.palette.mode === 'dark' ? 'text.buy' : 'text.buy', cursor: 'pointer' }}
-                                          >
-                                            All
-                                          </Typography>
-                                          <Typography
-                                            variant="subtitle1"
-                                            sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                                          >
-                                            {pairInfo.buyPair}
-                                          </Typography>
-                                        </Stack>
-                                      </InputAdornment>
-                                    }
-                                  />
-                                  {touched.quantity && errors.quantity && (
-                                    <FormHelperText error id="standard-weight-helper-text-quantity">
-                                      {errors.quantity}
-                                    </FormHelperText>
-                                  )}
-                                </Stack>
-
-                                <Stack spacing={1} pt={3}>
-                                  <Typography
-                                    variant="body1"
-                                    sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                                  >
-                                    Total Amount
-                                  </Typography>
-                                  <OutlinedInput
-                                    id="totalamount-login"
-                                    type="totalamount"
-                                    value={values.totalamount}
-                                    name="totalamount"
-                                    onBlur={handleBlur}
-                                    // onChange={handleChange}
-                                    onChange={(e) => handleCustomChange(e, setFieldValue, values)}
-                                    placeholder={row.TotalAmount}
-                                    fullWidth
-                                    error={Boolean(touched.totalamount && errors.totalamount)}
-                                    endAdornment={
-                                      <InputAdornment position="end">
-                                        <Typography
-                                          variant="subtitle1"
-                                          sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                                        >
-                                          {pairInfo.sellPair}
-                                        </Typography>
-                                      </InputAdornment>
-                                    }
-                                  />
-                                  {touched.totalamount && errors.totalamount && (
-                                    <FormHelperText error id="standard-weight-helper-text-totalamount-login">
-                                      {errors.totalamount}
-                                    </FormHelperText>
-                                  )}
-                                </Stack>
-
-                                <Stack pt={3}>
-                                  <Typography
-                                    variant="body1"
-                                    sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                                  >
-                                    Payment Options
-                                  </Typography>
-                                  <FormGroup>
-                                    <Stack direction="row" spacing={5} pt={2}>
-                                      {pfStatus?.modes
-                                        .filter(
-                                          (paymentMode) =>
-                                            paymentMode.mode === 'UPI' || paymentMode.mode === 'IMPS'
-                                        )
-                                        .map((paymentMode, index) => (
-                                          <FormControlLabel
-                                            key={index}
-                                            control={
-                                              <Checkbox
-                                                name="paymentoption"
-                                                value={paymentMode.mode}
-                                                onChange={handleChange}
-                                              />
-                                            }
-                                            label={paymentMode.mode}
-                                          />
-                                        ))}
-                                    </Stack>
-                                    {touched.paymentoption && errors.paymentoption && (
-                                      <FormHelperText error id="standard-weight-helper-text-totalamount-paymentoption">
-                                        {errors.paymentoption}
-                                      </FormHelperText>
-                                    )}
-                                  </FormGroup>
-                                </Stack>
-                              </Grid>
-
-                              <Grid item xs={12}>
-                                <Stack direction="row" spacing={3} pt={1.5}>
-                                  <Button onClick={handleCancelClick} variant="cancelbutton">
-                                    Cancel
-                                  </Button>
-                                  <Button
-                                    disableElevation
-                                    disabled={isSubmitting}
-                                    type="submit"
-                                    variant="sellbutton"
-                                  >
-                                    Sell {pairInfo.buyPair}
-                                  </Button>
-
-                                </Stack>
-                              </Grid>
-                            </Grid>
-                          </form>
-                        )}
-                      </Formik>
-                      <Dialog open={openDialog} onClose={handleCloseDialog} aria-labelledby="dialog-title">
-                        <Stack p={4} spacing={2.5} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
-                          <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                            <Typography variant="title1" sx={{ color: 'text.sell' }}>
-                              Sell {pairInfo.buyPair}
-                            </Typography>
-                            <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                              P2P Order
-                            </Typography>
-                          </Stack>
-                          <Divider>
-                          </Divider>
-                          <DialogBoxValue
-                            title='Price'
-                            value={row.price}
-                            pair={pairInfo.sellPair}
-                          />
-                          <DialogBoxValue
-                            title='Quantity'
-                            value={inputs.quantity}
-                            pair={pairInfo.buyPair}
-                          />
-                          <DialogBoxValue
-                            title='After TDS 1%'
-                            value={SellTds}
-                            pair={pairInfo.buyPair}
-                          />
-                          <Divider></Divider>
-                          <DialogBoxValue
-                            title='Total Amount'
-                            value={inputs.totalamount}
-                            pair={pairInfo.sellPair}
-                          />
-
-                          <Divider></Divider>
-                          <Stack pt={1} direction='row' spacing={2} justifyContent='space-between'>
-                            <Button variant="contained5" onClick={handleCloseDialog} >
-                              Cancel
-                            </Button>
-                            <Button component={RouterLink}
-                              // to="/sellorderpage"
-                              onClick={() => handleConfirm()}
-                              variant="confirmsell">
-                              {isLoading ? <CircularProgress color="inherit" size={30} /> : 'Confirm'}
-                            </Button>
-                          </Stack>
-                        </Stack>
-
-                        {/* <Stack p={4} spacing={2.5} alignItems="center">
-                          <img src={ordersuccessgif} alt='ordersuccessgif' width={60} />
-                          <Typography variant='title2' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                            Order matched successfully
-                          </Typography>
-                        </Stack> */}
-
-                      </Dialog>
-                    </Stack>
+                    <Sell_FormField
+                      pfStatus={pfStatus}
+                      walletInfo={walletInfo}
+                      isAuthorised={isAuthorised}
+                      pairInfo={pairInfo}
+                      row={row}
+                      props={props}
+                      handleCancelClick={handleCancelClick}
+                      setSnackbarOpen={setSnackbarOpen}
+                      setSnackbarMessage={setSnackbarMessage}
+                    />
                   </Grid>
                 </Grid>
               </Stack>
@@ -735,9 +494,22 @@ export default function P2psellordertab({ isAuthorised, pairInfo, orderBook, wal
 
   const filteredOrderbook = orderbookpagenation;
 
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [selectedRow, setSelectedrow] = useState();
+
+  const handleCloseDrawer = () => {
+    setOpenDrawer(false);
+  };
+
+  const DrawerOpen = (row) => {
+    setOpenDrawer(!openDrawer);
+    setSelectedrow(row)
+  }
   return (
     <Box>
-      <TableContainer variant="tablecontainer">
+      <TableContainer variant="tablecontainer"
+        sx={{ display: { xs: 'none', sm: 'none', md: 'block', lg: 'block' } }}
+      >
         <Table
           aria-labelledby="tableTitle"
           sx={{
@@ -795,6 +567,148 @@ export default function P2psellordertab({ isAuthorised, pairInfo, orderBook, wal
           </TableBody>
         </Table>
       </TableContainer>
+      {/* Mobileview */}
+      <Stack sx={{ display: { xs: 'block', sm: 'block', md: 'none', lg: 'none' } }}>
+        {orderBooksell && filteredOrderbook?.length === 0 ? (
+          <Grid p={2} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Stack direction="row" spacing={1}>
+              <Norecordfoundcomponents
+                description='No Record Found.' />
+            </Stack>
+          </Grid>
+        ) : filteredOrderbook && filteredOrderbook.map((row, index) => (
+          <>
+            <Card key={index} sx={{ boxShadow: 'none', bgcolor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground', }}>
+              <Grid item xs={12} >
+                <Stack
+                  p={1}
+                  direction="row"
+                  justifyContent="space-between"
+                  sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}
+                >
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Avatar
+                      alt=''
+                      src=''
+                      sx={{
+                        width: 39,
+                        height: 39,
+                        fontSize: 20
+                      }}
+                    />
+                    <Stack>
+                      <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                        {row.userId}
+                      </Typography>
+                      <Stack direction="row" spacing={1} sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                        <Typography pt={0.2} variant="subtitle2" >
+                          0 Trades
+                        </Typography>
+                        <Typography>|</Typography>
+                        <Typography pt={0.2} variant="subtitle2">
+                          100%
+                        </Typography>
+                        <Typography pt={0.2} variant="subtitle2">
+                          Completion
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                  </Stack>
+                </Stack>
+
+                <Stack p={1} spacing={1.5} sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>Price</Typography>
+                    <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                      {row.price} {pairInfo.sellPair}
+                    </Typography>
+                  </Stack>
+
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}> Quantity</Typography>
+                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                      {row.quantity} {pairInfo.buyPair}
+                    </Typography>
+                  </Stack>
+
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }} >Total Amount</Typography>
+                    <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                      {row.amount} {pairInfo.sellPair}
+                    </Typography>
+                  </Stack>
+
+                </Stack>
+
+                {isAuthorised ? (
+                  <Stack p={1}>
+                    <Button variant="spotsellbutton" onClick={() => DrawerOpen(row)}>
+                      <Typography variant="body1" color="white" >
+                        Sell {pairInfo.buyPair}
+                      </Typography>
+                    </Button>
+                  </Stack>
+                ) : (
+                  <Stack p={1}>
+                    <Button variant="spotsellbutton" component={RouterLink} to="/login">
+                      <Typography variant="body1" color="white">
+                        Login
+                      </Typography>
+                    </Button>
+                  </Stack>
+                )}
+              </Grid>
+            </Card>
+            <Stack pt={1} pb={1}>
+              <Divider />
+            </Stack>
+          </>
+        )
+        )}
+      </Stack>
+      <Drawer open={openDrawer} onClose={handleCloseDrawer} anchor="bottom"
+        PaperProps={{
+          style: {
+            borderRadius: '15px 15px 0px 0px',
+            display: { xs: 'block', sm: 'block', md: 'none', lg: 'none' }
+          },
+        }}
+      >
+        <Card
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            bgcolor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
+            padding: '16px',
+          }}
+        >
+          <Stack>
+            <Stack pb={2} direction='row' spacing={0.5} justifyContent="space-between">
+              <Typography
+                variant='body1'
+                sx={{
+                  color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
+                }}>
+                Sell USDT
+              </Typography>
+              <CloseIcon fontSize="small" onClick={handleCloseDrawer} sx={{
+                color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+              }} />
+            </Stack>
+            <Sell_FormField
+              isAuthorised={isAuthorised}
+              orderBookData={orderBooksell}
+              row={selectedRow}
+              pairInfo={pairInfo}
+              pfStatus={pfStatus}
+              walletInfo={walletInfo}
+              handleCancelClick={handleCloseDrawer}
+              setSnackbarOpen={setSnackbarOpen}
+              setSnackbarMessage={setSnackbarMessage}
+            />
+          </Stack>
+        </Card>
+      </Drawer >
       <Box pt={2} display="flex" justifyContent="center">
         {orderBooksell && filteredOrderbook?.length === 0 ? (
           <>

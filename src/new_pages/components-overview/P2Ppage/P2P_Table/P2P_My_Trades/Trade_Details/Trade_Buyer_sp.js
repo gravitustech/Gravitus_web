@@ -265,11 +265,20 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
     position: 'absolute',
     top: '50%', left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 1024, height: 'auto',
+    width: '80%', // Default width for larger screens
+    maxWidth: 1024, // Set a maximum width if needed
+    height: 'auto',
     bgcolor: theme.palette.mode === 'dark' ? '#131722' : 'text.white',
     border: '1px solid #808080 !important',
     boxShadow: 24, p: 4,
-    textAlign: 'center'
+    textAlign: 'center',
+    '@media (max-width: 600px)': {
+      // Adjust styles for screens with a maximum width of 600px
+      width: '80%', // Set the width to 100% for smaller screens
+      maxHeight: '80vh',
+    },
+    maxHeight: '100vh', // Set a maximum height for the modal
+    overflowY: 'auto',
   };
 
   const isStepOptional = (step) => {
@@ -750,6 +759,10 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                       </Stack>
 
                       <Modal
+                        xs={12}
+                        sm={12}
+                        lg={12}
+                        width={120}
                         open={modalOpen}
                         onClose={handleModalClose}
                         aria-labelledby="modal-modal-title"
@@ -757,7 +770,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                         <Box sx={modalStyle}>
                           <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                             {/* <Stack direction='row' spacing={1}> */}
-                            <Grid xs={12} md={6}>
+                            <Grid xs={12} sm={6} md={6} lg={6}>
                               <Stack spacing={1}>
                                 <Typography sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
                                   Selected Image
@@ -774,7 +787,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                                 </ImageCropper>
                               </Box>
                             </Grid>
-                            <Grid xs={12} md={6}>
+                            <Grid xs={12} sm={6} md={6} lg={6}>
                               <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Cropped Image</Typography>
                               {
                                 croppedImage &&
@@ -1073,7 +1086,8 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                                 borderRadius: '5px',
                                 border: '2px solid',
                                 borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
-                                background: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'                              }}
+                                background: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'
+                              }}
                             >
                               <Stack
                                 pt={5}
@@ -1117,6 +1131,10 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                             </Card>
                           </Stack>
                           <Modal
+                            xs={12}
+                            sm={12}
+                            lg={12}
+                            width={120}
                             open={modalOpen}
                             onClose={handleModalClose}
                             aria-labelledby="modal-modal-title"
@@ -1124,7 +1142,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                             <Box sx={modalStyle}>
                               <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                                 {/* <Stack direction='row' spacing={1}> */}
-                                <Grid xs={12} md={6}>
+                                <Grid xs={12} sm={6} md={6} lg={6}>
                                   <Stack spacing={1}>
                                     <Typography sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
                                       Selected Image
@@ -1141,7 +1159,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                                     </ImageCropper>
                                   </Box>
                                 </Grid>
-                                <Grid xs={12} md={6}>
+                                <Grid xs={12} sm={6} md={6} lg={6}>
                                   <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Cropped Image</Typography>
                                   {
                                     croppedImage &&
@@ -1218,7 +1236,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                           {SUPERData?.actionCaption}
                         </Typography>
                         <Typography variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                          {SUPERData?.actionMessage} 
+                          {SUPERData?.actionMessage}
                         </Typography>
                       </Stack>
                       <Stack pt={0.8}>
@@ -1270,7 +1288,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                                   <Button type="submit" variant="p2pnextbutton" onClick={handleButtonClick}>
                                     Appeal
                                   </Button>
-                                  </>
+                                </>
                               ) : (
                                 <>
                                 </>
@@ -1422,7 +1440,8 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                                     borderRadius: '5px',
                                     border: '2px solid',
                                     borderColor: theme.palette.mode === 'dark' ? '#232323' : '#EFEFEF',
-                                    background: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'                                  }}
+                                    background: theme.palette.mode === 'dark' ? 'transparent' : 'transparent'
+                                  }}
                                 >
                                   <Stack
                                     pt={5}
@@ -1473,7 +1492,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                                 <Box sx={modalStyle}>
                                   <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                                     {/* <Stack direction='row' spacing={1}> */}
-                                    <Grid xs={12} md={6}>
+                                    <Grid xs={12} sm={6} md={6} lg={6}>
                                       <Stack spacing={1}>
                                         <Typography sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
                                           Selected Image
@@ -1490,7 +1509,7 @@ const Trade_Buyer_Dts_Ext = ({ SUPERData, setSnackbarOpen, setSnackbarMessage })
                                         </ImageCropper>
                                       </Box>
                                     </Grid>
-                                    <Grid xs={12} md={6}>
+                                    <Grid xs={12} sm={6} md={6} lg={6}>
                                       <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Cropped Image</Typography>
                                       {
                                         croppedImage &&

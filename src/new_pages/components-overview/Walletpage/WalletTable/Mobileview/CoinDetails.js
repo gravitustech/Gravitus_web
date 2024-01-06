@@ -44,7 +44,7 @@ const CoinDetails = () => {
     <>
       <Grid
         display={{ xs: 'block', sm: 'none', md: 'none', lg: 'none' }}
-        pt={{ xs: 2, sm: 2 }}
+        pt={{ xs: 0, sm: 0 }}
         pb={{ xs: 2, sm: 2 }}
         pl={{ xs: 0, sm: 0 }}
         pr={{ xs: 0, sm: 0 }}
@@ -54,7 +54,7 @@ const CoinDetails = () => {
         }}
       >
         <Stack direction="row" spacing={1} alignItems='center' pb={1}>
-          <Stack pl={2} justifyContent='start'>
+          <Stack justifyContent='start'>
             <IconButton onClick={goBack} disableRipple>
               <ArrowBackIcon
                 sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}

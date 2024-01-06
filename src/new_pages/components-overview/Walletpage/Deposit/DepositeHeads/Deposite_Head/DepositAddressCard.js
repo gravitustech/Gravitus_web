@@ -29,7 +29,7 @@ const DepositAddressCard = ({ depositData }) => {
     <>
       {depositData ? (
         <>
-          <Stack pl={5}
+          <Stack pl={{ xs: 0, sm: 0, md: 5, lg: 5 }}
             display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}
             sx={{
               width: { xs: '100%', sm: '100%', md: '90%', lg: '90%' }
@@ -101,7 +101,7 @@ const DepositAddressCard = ({ depositData }) => {
               </Stack>
             </Card>
           </Stack>
-          <Stack pl={5}
+          <Stack pl={{ xs: 0, sm: 0, md: 5, lg: 5 }}
             display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
             sx={{
               width: { xs: '100%', sm: '100%', md: '90%', lg: '90%' }
@@ -167,7 +167,7 @@ const DepositAddressCard = ({ depositData }) => {
         </>
       ) : (
         <>
-          <Stack pl={5} sx={{
+          <Stack pl={{ xs: 0, sm: 0, md: 5, lg: 5 }} sx={{
             width: { xs: '100%', sm: '100%', md: '90%', lg: '90%' }
           }} justifyContent="center">
             <Card variant="outlined" justifyContent="space-around" alignItems="center">

@@ -443,7 +443,7 @@ const InrWithdraw_sp = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen, 
               </form>
 
               <Dialog onClose={closeConfirmWDL} open={confirmWDL}>
-                <Stack p={4} spacing={2.5} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
+                <Stack p={4} spacing={2.5} width={{ xs: '100%', sm: '100%', md: 480, lg: 480 }} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
                   <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                     <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                       Withdrawal Details
@@ -491,7 +491,7 @@ const InrWithdraw_sp = ({ inrWithdrawData, setSnackbarMessage, setSnackbarOpen, 
               </Dialog>
 
               <Dialog onClose={closeInitiateWDL} open={initiateWDL}>
-                <Stack p={4} spacing={2.5} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
+                <Stack p={4} width={{ xs: '100%', sm: '100%', md: 480, lg: 480 }} spacing={2.5} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
                   <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                     Widthdraw Security
                   </Typography>

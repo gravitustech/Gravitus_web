@@ -117,23 +117,23 @@ const InrDeposit = () => {
               }}
             >
               <Stack pb={{ xs: 2, sm: 2, md: 3, lg: 3 }}
-                pl={{ xs: 2, sm: 2, md: 5, lg: 5 }}>
+                pl={{ xs: 0, sm: 0, md: 5, lg: 5 }}>
                 <Divider></Divider>
               </Stack>
               <Typography
-                pl={{ xs: 2, sm: 2, md: 5, lg: 5 }}
+                pl={{ xs: 0, sm: 0, md: 5, lg: 5 }}
                 variant="h4"
                 sx={{
                   color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
                 }}
               >
-                INR Deposit History
+                Deposit History
               </Typography>
               <Stack pl={{ xs: 0, sm: 0, md: 3.6, lg: 3.6 }}
                 pt={1}>
                 <>
                   <Stack display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
-                  <InrDepositTable historyData={walletINRRc?.result?.external} />
+                    <InrDepositTable historyData={walletINRRc?.result?.external} />
                   </Stack>
                   <Stack display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
                     pt={2}

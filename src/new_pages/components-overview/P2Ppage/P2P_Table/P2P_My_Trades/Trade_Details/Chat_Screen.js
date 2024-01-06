@@ -121,11 +121,20 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
     position: 'absolute',
     top: '50%', left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 1024, height: 'auto',
+    width: '80%', // Default width for larger screens
+    maxWidth: 1024, // Set a maximum width if needed
+    height: 'auto',
     bgcolor: theme.palette.mode === 'dark' ? '#131722' : 'text.white',
     border: '1px solid #808080 !important',
     boxShadow: 24, p: 4,
-    textAlign: 'center'
+    textAlign: 'center',
+    '@media (max-width: 600px)': {
+      // Adjust styles for screens with a maximum width of 600px
+      width: '80%', // Set the width to 100% for smaller screens
+      maxHeight: '80vh',
+    },
+    maxHeight: '100vh', // Set a maximum height for the modal
+    overflowY: 'auto',
   };
 
   const handleModalOpen = () => {
@@ -217,7 +226,10 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
 
   return (
     <>
-      <Stack pl={10} pr={5}>
+      <Stack
+        pl={{ xs: 0, sm: 0, md: 10, lg: 10 }}
+        pr={{ xs: 0, sm: 0, md: 5, lg: 5 }}
+      >
         <Card sx={{
           height: '100%',
           borderRadius: '5px',
@@ -345,6 +357,10 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
                 )}
               </Formik>
               <Modal
+                xs={12}
+                sm={12}
+                lg={12}
+                width={120}
                 open={modalOpen}
                 onClose={handleModalClose}
                 aria-labelledby="modal-modal-title"
@@ -353,7 +369,7 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
 
                   <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                     {/* <Stack direction='row' spacing={1}> */}
-                    <Grid xs={12} md={6}>
+                    <Grid xs={12} sm={6} md={6} lg={6}>
                       <Stack spacing={1}>
                         <Typography sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
                           Selected Image
@@ -363,7 +379,7 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
                         </Typography>
                       </Stack>
 
-                      <Box >
+                      <Box>
                         <ImageCropper
                           imageToCrop={imageToCrop}
                           onImageCropped={(croppedImage) => setCroppedImage(croppedImage)}
@@ -371,7 +387,7 @@ const Chatscreen = ({ messages, orderDetails, counterPart, mutate, setSnackbarMe
                         </ImageCropper>
                       </Box>
                     </Grid>
-                    <Grid xs={12} md={6}>
+                    <Grid xs={12} sm={6} md={6} lg={6}>
                       <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Cropped Image</Typography>
                       {
                         croppedImage &&

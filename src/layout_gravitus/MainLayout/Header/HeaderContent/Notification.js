@@ -89,6 +89,8 @@ const Description = ({ description }) => {
 const Notification = () => {
   const theme = useTheme();
   const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
+  const isLargeScreen = useMediaQuery('(min-width: 1023px)');  
+
   const navigate = useNavigate();
 
   const anchorRef = useRef(null);
@@ -103,6 +105,7 @@ const Notification = () => {
     }
     setOpen(false);
   };
+
   return (
     <Box
       sx={{
@@ -123,8 +126,8 @@ const Notification = () => {
         ref={anchorRef}
         aria-controls={open ? 'profile-grow' : undefined}
         aria-haspopup="true"
-        onClick={handleToggle}
-      >
+        onClick={isLargeScreen ? handleToggle : () => navigate('/notification')}
+        >
         <Badge badgeContent={1} color="primary">
           <BellOutlined color="red" style={{ fontSize: 18 }} />
         </Badge>

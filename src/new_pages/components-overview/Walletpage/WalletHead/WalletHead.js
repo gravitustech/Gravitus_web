@@ -55,7 +55,7 @@ const WalletHead = ({ totalInUsd }) => {
           </Typography>
         </Stack>
 
-        <Stack direction="row" spacing={2} pt={3} justifyContent='space-between'>
+        <Stack direction="row" spacing={{ xs: 2, sm: 2, md: 2, lg: 2 }} pt={3}  >
           <Stack spacing={0.5} textAlign='start' justifyContent='start'>
             <Button variant="walletbutton" component={RouterLink} to="/deposit">
               Deposit
@@ -80,7 +80,7 @@ const WalletHead = ({ totalInUsd }) => {
           </Button>
         </Stack> */}
       </Stack>
-    </Grid>
+    </Grid >
   );
 };
 

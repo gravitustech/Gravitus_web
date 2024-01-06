@@ -1,10 +1,11 @@
 
-import { Stack, useTheme, Tab, Badge } from '@mui/material';
+import { Stack, useTheme, Tab, Badge, Grid, IconButton, Typography } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 
 import Chatscreen from './Chat_Screen';
 import AppealChatscreen from './Chat_Screen_APL';
 import CustomSnackBar from 'src/components/snackbar';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import useSWR, { mutate } from 'swr';
 import React, { useState, useEffect } from 'react';
@@ -12,6 +13,7 @@ import { socket } from '../../../../../../socket';
 
 import { P2P_OrderDetails_URL, P2P_AppealMessages_URL, P2P_TradeMessages_URL, fetcherP2P } from 'src/api_ng/peer2peer_ng';
 import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../../../../utils_ng/localStorage_ng';
+import { useNavigate } from 'react-router';
 
 const Chat_Appeal_Tab = ({ SUPERData, counterPart }) => {
   const theme = useTheme();
@@ -82,12 +84,38 @@ const Chat_Appeal_Tab = ({ SUPERData, counterPart }) => {
   }, [SUPERData]);
 
   // console.log('useAppealMessages', Appealdata)
-
+  const navigate = useNavigate();
+  const goBack = () => {
+    navigate(-1);
+  }
   return (
     <>
       <TabContext value={value}>
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Stack direction="row" pl={10}>
+        <Grid
+          sx={{
+            backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
+          }}
+          width='100%'
+          display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
+        >
+          <Stack direction="row" spacing={1} pl={0} alignItems='center' justifyContent='space-between' >
+            <Stack justifyContent='start' direction='row' alignItems='center'pb={2}>
+              <IconButton onClick={goBack} disableRipple>
+                <ArrowBackIcon
+                  sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                />
+              </IconButton>
+              <Typography  variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                Chat Screen
+              </Typography>
+            </Stack>
+          </Stack>
+        </Grid>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" backgroundColor={{
+          xs: theme.palette.mode === 'dark' ? '#131722' : 'white',
+          sm: theme.palette.mode === 'dark' ? '#131722' : 'white',
+        }}>
+          <Stack direction="row" pl={{ xs: 2, sm: 2, md: 10, lg: 10 }}>
             <TabList onChange={handleChange} indicatorColor="none" textColor='inherit'>
               <Tab
                 disableRipple
@@ -136,7 +164,7 @@ const Chat_Appeal_Tab = ({ SUPERData, counterPart }) => {
           </Stack>
         </Stack>
 
-        <TabPanel value="0" sx={{ padding: '0', paddingTop: '12px' }} >
+        <TabPanel value="0" sx={{ padding: '0', paddingTop: { xs: '0px', sm: '0px', md: '12px', lg: '12px' } }} >
           < Chatscreen
             messages={chatData?.result?.messages}
             orderDetails={chatData?.result?.orderDetails}
@@ -146,7 +174,7 @@ const Chat_Appeal_Tab = ({ SUPERData, counterPart }) => {
             setSnackbarMessage={setSnackbarMessage}
           />
         </TabPanel>
-        <TabPanel value="1" sx={{ padding: '0', paddingTop: '12px' }}>
+        <TabPanel value="1" sx={{ padding: '0', paddingTop: { xs: '0px', sm: '0px', md: '12px', lg: '12px' } }}>
           <AppealChatscreen
             messages={Appealdata?.result?.appealMessage}
             orderDetails={Appealdata?.result?.orderDetails}

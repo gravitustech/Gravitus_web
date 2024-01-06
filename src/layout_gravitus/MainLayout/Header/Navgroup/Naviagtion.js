@@ -12,7 +12,9 @@ const GravitusNavigation = () => {
     return <GravitusNavGroup key={item.id} item={item} />;
   });
 
-  return <Box sx={{ display: 'flex', flexDirection: 'row', pt: 1, pl: 5 }}>{navGroups}</Box>;
+  return <Box
+    pl={{ xs: 2, sm: 2, md: 5, lg: 5 }}
+    sx={{ display: 'flex', flexDirection: 'row', pt: 1, }}>{navGroups}</Box>;
 };
 
 export default GravitusNavigation;

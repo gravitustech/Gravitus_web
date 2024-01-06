@@ -4,6 +4,7 @@ import CardInr from '../InrWithdraw/Card';
 import { Grid, Typography, Stack, Button, useTheme, Box, IconButton } from '@mui/material';
 import AnimateButton from '../../../../components/@extended/AnimateButton';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
@@ -35,7 +36,12 @@ const InrDeposit_Step2_sp = ({ depositFrom, depositTo, setStep, setFormikValues,
 
   return (
     <>
-      <Grid container pl={14} pr={15} pt={3} pb={3}>
+      <Grid container
+        display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}
+        pt={{ md: 3, lg: 3 }}
+        pb={{ md: 3, lg: 3 }}
+        pl={{ md: 6, lg: 14 }}
+        pr={{ md: 6, lg: 15 }}>
         <Stack direction="row" spacing={0.8} alignItems="center">
           <IconButton onClick={handlePrev} disableRipple>
             <ArrowBackIosNewIcon
@@ -49,12 +55,37 @@ const InrDeposit_Step2_sp = ({ depositFrom, depositTo, setStep, setFormikValues,
         </Stack>
       </Grid>
 
-      <Grid container pl={15} pr={15} pb={3} pt={3} sx={{
-        backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
-        borderRadius: '78px 78px 0px 0px',
-        boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
-      }}>
-        <Grid item pl={5} xs={12} sm={12} md={6} lg={5}>
+      <Grid container
+        pt={{ xs: 0, sm: 0, md: 3, lg: 3 }}
+        pb={{ xs: 2, sm: 2, md: 3, lg: 3 }}
+        pl={{ xs: 0, sm: 0, md: 6, lg: 15 }}
+        pr={{ xs: 2, sm: 2, md: 6, lg: 15 }} sx={{
+          backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
+          borderRadius: { xs: '0', sm: '0', md: '78px 78px 0 0', lg: '78px 78px 0 0' },
+          boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
+        }}>
+        <Grid
+          display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
+          >
+          <Stack direction="row" spacing={1} pl={0} alignItems='center'  >
+            <Stack justifyContent='start'>
+              <IconButton onClick={handlePrev} disableRipple>
+                <ArrowBackIcon
+                  sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                />
+              </IconButton>
+            </Stack>
+            <Stack justifyContent='start'>
+              <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                INR Deposit
+              </Typography>
+            </Stack>
+          </Stack>
+        </Grid>
+        <Grid item
+          pb={{ xs: 2, sm: 2, md: 3, lg: 3 }}
+          pl={{ xs: 2, sm: 2, md: 5, lg: 5 }}
+          pr={{ xs: 2, sm: 2, }} xs={12} sm={12} md={5} lg={5}>
           <>
             <Stack pt={2}>
               <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
@@ -98,17 +129,17 @@ const InrDeposit_Step2_sp = ({ depositFrom, depositTo, setStep, setFormikValues,
 
           </>
         </Grid>
-        <Grid item lg={1}>
+        <Grid item lg={1} md={1} display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
         </Grid>
-        <Grid item xs={12} md={6} lg={5}>
+        <Grid item xs={12} sm={6} md={5} lg={5} pt={2}>
           <>
-            <Stack pt={2}>
+            <Stack pl={{ xs: 2, sm: 2, md: 0, lg: 0 }}>
               <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                 Kindly read and check all the boxes of each points below.
               </Typography>
             </Stack>
             <FormGroup>
-              <Stack pt={2} spacing={1}>
+              <Stack pt={2} pl={{ xs: 2, sm: 2, md: 0, lg: 0 }} spacing={1}>
                 <Stack direction="row" style={{ alignItems: 'flex-start' }}>
                   <FormControlLabel
                     control={
@@ -178,7 +209,7 @@ const InrDeposit_Step2_sp = ({ depositFrom, depositTo, setStep, setFormikValues,
             </Stack>
 
             <Stack pt={1}>
-              <Grid item xs={12} pt={3}>
+              <Grid item xs={12} pt={3} pl={{ xs: 2, sm: 2, md: 0, lg: 0 }}>
                 <AnimateButton>
                   <Button disableElevation fullWidth size="large" variant="contained" onClick={handleSubmit}>
                     SUBMIT

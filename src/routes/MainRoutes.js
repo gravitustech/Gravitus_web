@@ -29,6 +29,8 @@ import ProfileScreen from 'src/new_pages/components-overview/Profilescreen';
 import Registerstatus from 'src/new_pages/authentication/Registerstatus';
 import Notificationpage from 'src/layout_gravitus/MainLayout/Header/HeaderContent/Notificationpage';
 import CoinDetails from 'src/new_pages/components-overview/Walletpage/WalletTable/Mobileview/CoinDetails';
+import Chat_Appeal_Tab from 'src/new_pages/components-overview/P2Ppage/P2P_Table/P2P_My_Trades/Trade_Details/Chat_Screen_Tabs';
+import Chat_Mobile from 'src/new_pages/components-overview/P2Ppage/P2P_Table/P2P_My_Trades/Trade_Details/Chat_Mobile';
 
 //Gravitus import pages
 const GravitusAuthLogin = Loadable(lazy(() => import('../new_pages/authentication/Login')));
@@ -182,6 +184,10 @@ const MainRoutes = {
     {
       path: 'coindetails',
       element: <CoinDetails />
+    },
+    {
+      path: 'chat',
+      element: <Chat_Mobile />
     },
   ]
 };

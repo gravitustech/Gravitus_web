@@ -1,10 +1,23 @@
-import React from 'react'
-import { Button, Card, CircularProgress, Dialog, Divider, Grid, Link, Stack, Typography, useTheme } from '@mui/material';
+import React, { useState } from 'react'
+import { Card, Divider, Drawer, Grid, Stack, Tooltip, Typography, useTheme } from '@mui/material';
 import Norecordfoundcomponents from '../../../_Essentials/NoRecordFound';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Deposit_mbl = ({ historyData }) => {
   const theme = useTheme();
-  // console.log('historyData',historyData)
+
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [selectedRow, setSelectedrow] = useState();
+
+  const handleCloseDrawer = () => {
+    setOpenDrawer(false);
+  };
+
+  const DrawerOpen = (row) => {
+    setOpenDrawer(!openDrawer);
+    setSelectedrow(row)
+  }
+
   return (
     <>
       {historyData ? (
@@ -24,11 +37,12 @@ const Deposit_mbl = ({ historyData }) => {
               <>
                 <Card
                   key={index}
+                  onClick={() => DrawerOpen(row)}
                   sx={{
                     backgroundColor: theme.palette.mode === 'dark' ? '#131722' : 'text.backgroundcard',
                     boxShadow: 'none',
                   }}>
-                  <Stack spacing={2} pl={2} pr={2} sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#131722' : 'text.backgroundcard', }}>
+                  <Stack spacing={2} sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#131722' : 'text.backgroundcard', }}>
                     <Stack direction="row" justifyContent="space-between"  >
                       <Stack spacing={1} textAlign='start' justifyContent='start'>
                         <Typography variant='subtitle1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
@@ -93,8 +107,89 @@ const Deposit_mbl = ({ historyData }) => {
             </Stack>
           </Grid>
         </>
-      )
-      }
+      )}
+      <Drawer open={openDrawer} onClose={handleCloseDrawer} anchor="bottom"
+        PaperProps={{
+          style: {
+            borderRadius: '15px 15px 0px 0px',
+          },
+        }}
+      >
+        <Card
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            bgcolor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
+            padding: '16px',
+          }}
+        >
+          <Stack p={1}>
+            <Stack pb={3} direction='row' spacing={0.5} justifyContent="space-between">
+              <Typography
+                variant='body1'
+                sx={{
+                  color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
+                }}>
+                Transaction Info
+                {/* {selectedRow?.transType} Details */}
+              </Typography>
+              <CloseIcon fontSize="small" onClick={handleCloseDrawer} sx={{
+                color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+              }} />
+            </Stack>
+            <Stack spacing={2}>
+              <Stack spacing={0.5} textAlign='start' justifyContent='start'>
+                <Typography variant='subtitle1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                  Amount
+                </Typography>
+                <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                  {selectedRow?.amount} {selectedRow?.crypto}
+                </Typography>
+              </Stack>
+
+              <Stack spacing={0.5} textAlign='start' justifyContent='start'>
+                <Typography variant='subtitle1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                  Fees
+                </Typography>
+                <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                  {selectedRow?.charges} {selectedRow?.crypto}
+                </Typography>
+              </Stack>
+
+              <Stack spacing={0.5} textAlign='start' justifyContent='start'>
+                <Typography variant='subtitle1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                  Address
+                </Typography>
+                <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                  {selectedRow?.address}
+                </Typography>
+              </Stack>
+
+              <Stack spacing={0.5} textAlign='start' justifyContent='start'>
+                <Typography variant='subtitle1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                  Transaction Id
+                </Typography>
+                <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                  <Tooltip title='Click to see the status' arrow placement='top' >
+                    <a href={selectedRow?.href} target="_blank" rel="noopener noreferrer">
+                      {selectedRow?.txId}
+                    </a>
+                  </Tooltip>
+                </Typography>
+              </Stack>
+
+              <Stack spacing={0.5} textAlign='start' justifyContent='start'>
+                <Typography variant='subtitle1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                  Status
+                </Typography>
+                <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                  {selectedRow?.status}
+                </Typography>
+              </Stack>
+            </Stack>
+          </Stack>
+        </Card>
+      </Drawer >
     </>
   )
 }

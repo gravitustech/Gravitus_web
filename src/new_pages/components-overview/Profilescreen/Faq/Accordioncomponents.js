@@ -16,7 +16,7 @@ const Accordioncomponents = ({ title, description, description2, description3 })
   };
   return (
     <Accordion
-      sx={{ boxShadow: 'none', backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground' }}
+      sx={{ boxShadow: 'none', backgroundColor: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}
       expanded={expanded === "panel4"}
       onChange={handleChange("panel4")}
     >
@@ -26,12 +26,12 @@ const Accordioncomponents = ({ title, description, description2, description3 })
         aria-controls="panel4bh-content"
         id="panel4bh-header"
       >
-        <Typography variant="title3" sx={{ flexShrink: 0, color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+        <Typography variant="title3" pl={{ xs: 2, sm: 2, md: 0, lg: 0 }} pr={{ xs: 2, sm: 2, md: 0, lg: 0 }} sx={{ flexShrink: 0, color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
           {title}
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Stack spacing={1}>
+        <Stack spacing={1} pl={{ xs: 2, sm: 2, md: 0, lg: 0 }} pr={{ xs: 2, sm: 2, md: 0, lg: 0 }} >
           <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
             {description}
           </Typography>

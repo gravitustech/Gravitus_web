@@ -34,7 +34,7 @@ const HistoryTab_mblview = ({ isAuthorised, orderTableData,
         <>
           {orderTableData?.history?.length === 0 ? (
             <>
-              <Grid p={6} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Grid p={2} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Stack direction="row" spacing={1}>
                   <Norecordfoundcomponents
                     description='You have no order histroy.' />

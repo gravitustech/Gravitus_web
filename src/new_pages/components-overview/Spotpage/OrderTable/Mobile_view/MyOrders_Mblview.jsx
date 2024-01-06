@@ -94,7 +94,7 @@ const MyOrders_Mblview = ({ isAuthorised, platformId,
         <>
           {orderTableData?.ongoing?.length === 0 ? (
             <>
-              <Grid p={6} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Grid p={2} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Stack direction="row" spacing={1}>
                   <Norecordfoundcomponents
                     description='You have no open orders.' />

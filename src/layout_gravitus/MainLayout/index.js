@@ -18,7 +18,8 @@ import {
   Drawer,
   List,
   ListItem,
-  Button
+  Button,
+  Stack
 } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -124,21 +125,32 @@ const GravitusMainLayout = () => {
                   <MenuIcon sx={{ width: '28px', height: '28px' }} />
                 </IconButton>
               </Grid>
-              <Drawer open={openDrawer} onClose={handleCloseDrawer} anchor="right">
-                <List sx={{backgroundColor:theme.palette.mode==='dark'?'#131722':'text.white'}}>
-                  <Box sx={{ width: 350 }}>
-                    <IconButton disableRipple sx={{ marginLeft: '290px' }} onClick={toggleDrawer}>
-                      <CloseIcon />
-                    </IconButton>
+              <Drawer
+                PaperProps={{
+                  style: {
+                    width: '100%',
+                    backgroundColor: theme.palette.mode === 'dark' ? theme.palette.text.cardbackgrounddark : theme.palette.text.cardbackground,
+                  },
+                }}
+                open={openDrawer} onClose={handleCloseDrawer} anchor="right">
+                <List
+                // sx={{backgroundColor:theme.palette.mode==='dark'?'#131722':'text.white'}}
+                >
+                  <Box>
+                    <Stack pb={1} pt={3} pr={3} direction='row' spacing={0.5} justifyContent="end">
+                      <IconButton disableRipple onClick={toggleDrawer}>
+                        <CloseIcon fontSize="large" />
+                      </IconButton>
+                    </Stack>
 
                     <ListItem onClick={() => setopenDrawer(false)}>
                       <GravitusNavigation />
                     </ListItem>
 
-                    <ListItem sx={{ pl: 9 }}>
+                    <ListItem sx={{ pl: 6 }}>
                       <Button
                         disableRipple
-                        onClick={() => toggleSuperTheme()} 
+                        onClick={() => toggleSuperTheme()}
                         color="inherit"
                         sx={{ height: '32px' }}
                       >
@@ -212,7 +224,7 @@ const GravitusMainLayout = () => {
           )}
         </Toolbar>
       </AppBar>
-      <Box component="main" sx={{ width: '100%', flexGrow: 1 ,background: theme.palette.mode === 'dark' ? '#0F121A' : '#F7F7F7',}}>
+      <Box component="main" sx={{ width: '100%', flexGrow: 1, background: theme.palette.mode === 'dark' ? '#0F121A' : '#F7F7F7', }}>
         <Toolbar />
         <Outlet />
       </Box>

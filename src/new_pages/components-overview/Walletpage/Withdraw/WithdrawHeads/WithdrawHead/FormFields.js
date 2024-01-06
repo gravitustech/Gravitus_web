@@ -415,7 +415,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
                 <Stack direction="row" justifyContent="space-between" alignItems="center" pt={3} pb={3} sx={{ width: '100%' }}>
                   <FormLabel number="02." title="Withdrawal To" />
                 </Stack>
-                <Grid pl={5}>
+                <Grid pl={{ xs: 0, sm: 0, md: 5, lg: 5 }}>
                   <Stack direction="row" justifyContent="space-between" alignItems="center" pb={1} sx={{ width: { xs: '100%', sm: '100%', md: '90%', lg: '90%' } }}>
                     <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                       Address
@@ -539,7 +539,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
             </form>
 
             <Dialog onClose={closeConfirmWDL} open={confirmWDL}>
-              <Stack p={4} spacing={2.5} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
+              <Stack p={4} spacing={2.5} width={{ xs: '100%', sm: '100%', md: 520, lg: 520 }} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                   <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                     Withdrawal Details
@@ -597,7 +597,7 @@ const FormWithdraw = ({ walletList, walletId, walletData, setWalletId, setWallet
             </Dialog>
 
             <Dialog onClose={closeInitiateWDL} open={initiateWDL}>
-              <Stack p={4} spacing={2.5}  sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
+              <Stack p={4} spacing={2.5} width={{ xs: '100%', sm: '100%', md: 520, lg: 520 }} sx={{ background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
                 <Typography variant="h1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                   Widthdraw Security
                 </Typography>

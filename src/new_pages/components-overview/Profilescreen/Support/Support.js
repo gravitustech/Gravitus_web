@@ -103,7 +103,10 @@ const SupportScreen = ({ setSnackbarMessage, setSnackbarOpen, mutate }) => {
     });
   }
   return (
-    <Grid pt={4} pb={4} pl={4} pr={4}>
+    <Grid pb={4}
+      pt={{ xs: 0, sm: 0, md: 4, lg: 4 }}
+      pl={{ xs: 0, sm: 0, md: 4, lg: 4 }}
+      pr={4}>
       <Stack>
         <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
           Create Ticket

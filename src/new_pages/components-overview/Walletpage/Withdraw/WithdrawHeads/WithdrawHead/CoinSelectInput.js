@@ -30,7 +30,9 @@ function CoinSelectTextfield({ values, errors, touched, walletList,
   }, [walletId]);
 
   return (
-    <Stack pl={5} sx={{ width: { xs: '100%', sm: '100%', md: '90%', lg: '90%' } }}>
+    <Stack
+      pl={{ xs: 0, sm: 0, md: 5, lg: 5 }}
+      sx={{ width: { xs: '100%', sm: '100%', md: '90%', lg: '90%' } }}>
       <Autocomplete
         id="country-customized-option-demo"
         options={walletList}

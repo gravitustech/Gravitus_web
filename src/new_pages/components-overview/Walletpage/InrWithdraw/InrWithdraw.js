@@ -69,9 +69,9 @@ const InrWithdraw = () => {
         <>
           <Grid
             container
-            pt={{ xs: 2, sm: 2, md: 3, lg: 3 }}
+            pt={{ xs: 0, sm: 0, md: 3, lg: 3 }}
             pb={{ xs: 2, sm: 2, md: 3, lg: 3 }}
-            pl={{ xs: 2, sm: 2, md: 6, lg: 15 }}
+            pl={{ xs: 0, sm: 0, md: 6, lg: 15 }}
             pr={{ xs: 2, sm: 2, md: 6, lg: 15 }}
             sx={{
               backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
@@ -82,8 +82,8 @@ const InrWithdraw = () => {
             <Grid container>
               <Grid
                 display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
-                pb={{ xs: 2, sm: 2 }}>
-                <Stack direction="row" spacing={1} pl={0} alignItems='center'  >
+              >
+                <Stack direction="row" spacing={1} pl={0.5} alignItems='center'  >
                   <Stack justifyContent='start'>
                     <IconButton onClick={goBack} disableRipple>
                       <ArrowBackIcon
@@ -137,17 +137,17 @@ const InrWithdraw = () => {
               }}
             >
               <Stack pb={{ xs: 2, sm: 2, md: 3, lg: 3 }}
-                pl={{ xs: 2, sm: 2, md: 5, lg: 5 }}>
+                pl={{ xs: 0, sm: 0, md: 5, lg: 5 }}>
                 <Divider></Divider>
               </Stack>
               <Typography
-                pl={{ xs: 2, sm: 2, md: 5, lg: 5 }}
+                pl={{ xs: 0, sm: 0, md: 5, lg: 5 }}
                 variant="h4"
                 sx={{
                   color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary'
                 }}
               >
-                INR Withdraw History
+                Withdraw History
               </Typography>
               <Stack pl={{ xs: 0, sm: 0, md: 3.6, lg: 3.6 }}
                 pt={1}>

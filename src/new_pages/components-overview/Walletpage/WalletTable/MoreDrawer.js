@@ -27,7 +27,7 @@ const MoreDrawer = ({ walletListing, walletData }) => {
   // console.log('walletListing',walletListing)
   return (
     <>
-      <Grid pl={4} >
+      <Grid pl={{ xs: 2, sm: 4, md: 4, lg: 4 }} >
         <Stack direction="row" spacing={1} alignItems="center">
           <img src={walletListing?.additionalI} alt="ico" width="32" height="32" />
 
@@ -126,19 +126,19 @@ const MoreDrawer = ({ walletListing, walletData }) => {
       </Grid>
 
       <Box pl={2.4} pt={2}>
-        <Grid pl={2} pr={4} pb={2}>
+        <Grid pl={{ xs: 0, sm: 2, md: 2, lg: 2 }} pr={4} pb={2}>
           <Divider></Divider>
         </Grid>
-        <Stack direction='row' alignItems='center' justifyContent='space-between' pr={4}>
-          <Typography pl={2} pb={1} variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+        <Stack direction='row' alignItems='center' justifyContent='space-between' pr={{ xs: 0, sm: 4, md: 4, lg: 4 }}  >
+          <Typography pl={{ xs: 0, sm: 2, md: 2, lg: 2 }} pb={1} variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
             History
           </Typography>
-          <Stack display={{ xs: 'block', sm: 'none', md: 'none', lg: 'none' }}>
+          <Stack display={{ xs: 'block', sm: 'none', md: 'none', lg: 'none' }} pr={2}>
             <IconButton
               component={RouterLink}
               to={'/history'}
               state={{ walletId: walletListing?.id }}
-              >
+            >
               <ChevronRightIcon />
             </IconButton>
           </Stack>
@@ -156,6 +156,8 @@ const MoreDrawer = ({ walletListing, walletData }) => {
             <Tab
               disableRipple
               sx={{
+                paddingLeft: { xs: '0', sm: '12px', md: '12px', lg: '12px' },
+                minWidth: '0px',
                 fontSize: value === '0' ? '16px' : '16px',
                 fontWeight: value === '0' ? '500' : '400',
                 color:

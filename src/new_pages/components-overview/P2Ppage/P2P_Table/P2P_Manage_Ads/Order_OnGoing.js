@@ -162,7 +162,7 @@ export default function OngoingTab({ orders, pairInfo, setSnackbarOpen, setSnack
               <TableRow>
                 <TableCell colSpan={12} align="center" sx={{ border: 'none', }}>
                   <Norecordfoundcomponents
-                    description='No Record Found' />
+                    description='You have no orders.' />
                 </TableCell>
               </TableRow>
             ) : (

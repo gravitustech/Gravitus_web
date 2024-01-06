@@ -100,7 +100,10 @@ const AddImps = ({ setValue, setSnackbarMessage, setSnackbarOpen, userData, muta
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Grid container spacing={3} pt={4} pb={2} pl={8} pr={8}>
+            <Grid container spacing={3} pb={2}
+              pt={{ xs: 2, sm: 2, md: 4, lg: 4 }}
+              pl={{ xs: 2, sm: 4, md: 8, lg: 8 }}
+              pr={{ xs: 2, sm: 4, md: 8, lg: 8 }}>
               <Grid item xs={12}>
                 <Stack>
                   <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>

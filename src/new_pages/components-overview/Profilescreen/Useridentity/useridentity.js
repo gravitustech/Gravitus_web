@@ -76,11 +76,20 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
     position: 'absolute',
     top: '50%', left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 1024, height: 'auto',
+    width: '80%', // Default width for larger screens
+    maxWidth: 1024, // Set a maximum width if needed
+    height: 'auto',
     bgcolor: theme.palette.mode === 'dark' ? '#131722' : 'text.white',
     border: '1px solid #808080 !important',
     boxShadow: 24, p: 4,
-    textAlign: 'center'
+    textAlign: 'center',
+    '@media (max-width: 600px)': {
+      // Adjust styles for screens with a maximum width of 600px
+      width: '80%', // Set the width to 100% for smaller screens
+      maxHeight: '80vh',
+    },
+    maxHeight: '100vh', // Set a maximum height for the modal
+    overflowY: 'auto',
   };
 
   const UpdateIndentity = (values) => {
@@ -167,7 +176,12 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values, setFieldValue }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Grid container spacing={3} pt={4} pb={4} pl={4} pr={4}>
+            <Grid container spacing={3}
+              pb={4}
+              pt={{ xs: 2, sm: 2, md: 4, lg: 4 }}
+              pl={{ xs: 2, sm: 4, md: 4, lg: 4 }}
+              pr={{ xs: 2, sm: 4, md: 4, lg: 4 }}
+            >
               <Grid item xs={12}>
                 <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                   Update Your Identity
@@ -321,6 +335,10 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
                       )}
                     </Stack>
                     <Modal
+                      xs={12}
+                      sm={12}
+                      lg={12}
+                      width={120}
                       open={modalOpen}
                       onClose={handleModalClose}
                       aria-labelledby="modal-modal-title"
@@ -328,7 +346,7 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
                       <Box sx={modalStyle}>
                         <Grid container spacing={0} bgcolor={theme.palette.mode === 'dark' ? '#131722' : 'text.white'}>
                           {/* <Stack direction='row' spacing={1}> */}
-                          <Grid xs={12} md={6}>
+                          <Grid xs={12} sm={6} md={6} lg={6}>
                             <Stack spacing={1}>
                               <Typography sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>
                                 Selected Image
@@ -337,7 +355,7 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
                                 Please crop the image before you upload.
                               </Typography>
                             </Stack>
-                            <Box >
+                            <Box>
                               <ImageCropper
                                 imageToCrop={imageToCrop}
                                 onImageCropped={(croppedImage) => setCroppedImage(croppedImage)}
@@ -345,7 +363,7 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
                               </ImageCropper>
                             </Box>
                           </Grid>
-                          <Grid xs={12} md={6}>
+                          <Grid xs={12} sm={6} md={6} lg={6}>
                             <Typography pb={2} sx={{ color: theme.palette.mode === "dark" ? 'text.secondarydark' : "text.secondary", }}>Cropped Image</Typography>
                             {
                               croppedImage &&
@@ -373,7 +391,7 @@ const Useridentitygrid = ({ setValue, setSnackbarMessage, setSnackbarOpen, userD
                           </Grid>
                           {/* </Stack> */}
                         </Grid>
-                        <Stack pt={1} direction="row" spacing={2} justifyContent="space-around">
+                        <Stack pt={3} direction="row" spacing={2} justifyContent="space-around">
                           <Button variant="contained5" onClick={handleModalClose}>
                             Cancel
                           </Button>

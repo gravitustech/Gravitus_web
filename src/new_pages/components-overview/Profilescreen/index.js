@@ -31,7 +31,7 @@ import React, { useState } from 'react';
 
 import {
   Button, Grid, Stack, Typography,
-  MenuItem, MenuList, Divider, Dialog, useTheme
+  MenuItem, MenuList, Divider, Dialog, useTheme, IconButton
 } from '@mui/material';
 
 import { TabContext, TabPanel } from '@mui/lab';
@@ -53,6 +53,8 @@ import { logoutUser } from '../../../appRedux/actions/adminUser';
 import Lodergif from 'src/components/Gravitusloader';
 import { Account_Info, Logout_User, fetcherSystem } from 'src/api_ng/system_ng';
 import { mutate } from 'swr';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MenuItems from './MenuItems';
 
 function ProfileScreen() {
   const theme = useTheme();
@@ -127,6 +129,16 @@ function ProfileScreen() {
     handleCloseMenu();
   };
 
+  const handleLogout = () => {
+    try {
+      // console.log({ values });
+      Logout_User(token);
+      dispatch(logoutUser());
+      navigate('/');
+    } catch (err) {
+      // console.log(err);
+    }
+  };
   const tabData = [
     {
       value: '0',
@@ -139,6 +151,9 @@ function ProfileScreen() {
           setSnackbarMessage={setSnackbarMessage}
           setSnackbarOpen={setSnackbarOpen}
           mutate={mutate}
+          setValue={setValue}
+          anchorEl={anchorEl} handleCloseMenu={handleCloseMenu} value={value} handleOpenDialog={handleOpenDialog} logout={logout} data={data} handleMenuItemClick={handleMenuItemClick}
+          openDialog={openDialog} handleCloseDialog={handleCloseDialog} warninggif={warninggif} handleLogout={handleLogout}
         />
       )
     },
@@ -196,135 +211,72 @@ function ProfileScreen() {
     }
   ];
 
-  const handleLogout = () => {
-    try {
-      // console.log({ values });
-      Logout_User(token);
-      dispatch(logoutUser());
-      navigate('/');
-    } catch (err) {
-      // console.log(err);
-    }
-  };
+
+  const goBack = () => {
+    navigate(-1);
+  }
 
   return (
-    <Grid lg={12} pt={0} sx={{ minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' }, backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : '#F7F7F7' }}>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <MenuList anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
-          {tabData.map((tab, index) => (
-            <MenuItem
-              key={index}
-              onClick={() => handleMenuItemClick(tab.value)}
-              sx={{
-                backgroundColor:
-                  value === tab.value ? (theme.palette.mode === 'dark' ? '#262B39' : '#FFFFFF') : theme.palette.mode === 'dark' ? '' : '',
-                width: '220px',
-                height: '51px',
-                display: 'flex',
-                alignItems: 'center',
-                paddingLeft: '42px',
-                paddingRight: '0px',
-                marginBottom: '8px',
-                '&:hover': {
-                  backgroundColor:
-                    value === tab.value ? (theme.palette.mode === 'dark' ? '#262B39' : '#FFFFFF') : theme.palette.mode === 'dark' ? '' : ''
-                }
-              }}
-            >
-              <Stack direction="row" spacing={1.5} alignItems="center">
-                <img src={theme.palette.mode === 'dark' ? tab.iconactivedark : tab.icon} alt={tab.label} width={24} />
-                <Typography
-                  sx={{
-                    fontSize: value === tab.value ? '14px' : '14px',
-                    fontWeight: value === tab.value ? '500' : '500',
-                    color:
-                      value === tab.value
-                        ? theme.palette.mode === 'dark'
-                          ? 'text.white'
-                          : 'text.secondary'
-                        : theme.palette.mode === 'dark'
-                          ? 'text.primary'
-                          : 'text.primary'
-                  }}
-                >
-                  {tab.label}
-                </Typography>
-              </Stack>
-            </MenuItem>
-          ))}
-          <MenuItem
-            onClick={handleCloseMenu}
-            sx={{ width: '220px', height: '51px' }}
-          >
-            <Button disableRipple fullWidth sx={{
-              backgroundColor: 'transparent',
-              '&:hover': {
-                backgroundColor: 'transparent',
-              },
-            }}>
-              <Stack direction="row" spacing={1.4} onClick={handleOpenDialog} sx={{ paddingRight: '52px' }}>
-                <img src={logout} alt="logout" width={24} />
-                <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary' }}>
-                  Logout
-                </Typography>
-              </Stack>
-            </Button>
-            {data ? (<>
-              <Dialog open={openDialog} onClose={handleCloseDialog} >
-                <Stack p={3} spacing={1} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: theme.palette.mode === 'dark' ? '#131722' : 'text.cardbackground' }}>
-                  <img src={warninggif} alt='warninggif' />
-                  <Typography variant='h1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
-                    Logout ?
-                  </Typography>
-                  <Typography textAlign='center' variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                    Confirm, if you would like to log out of your account.
-                  </Typography>
+    <>
+      <Grid
+        lg={12} pt={0} sx={{ minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' }, backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : '#F7F7F7' }}>
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <Grid display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
+            <MenuItems anchorEl={anchorEl} handleCloseMenu={handleCloseMenu} tabData={tabData} value={value} handleOpenDialog={handleOpenDialog} logout={logout} data={data} handleMenuItemClick={handleMenuItemClick}
+              openDialog={openDialog} handleCloseDialog={handleCloseDialog} warninggif={warninggif} handleLogout={handleLogout}
+            />
+          </Grid>
+          <Grid item pt={1} display={{ xs: 'none', md: 'block', lg: 'block' }}>
+            <Divider orientation="vertical" sx={{ height: '100%' }} />
+          </Grid>
 
-                  <Stack pt={3} direction="row" spacing={2} justifyContent="space-between">
-                    <Button variant="contained5" onClick={handleCloseDialog}>
-                      Cancel
-                    </Button>
-                    <Button variant='contained4' onClick={handleLogout}>
-                      Logout
-                    </Button>
-                  </Stack>
-
-                </Stack>
-              </Dialog>
-            </>) : (
+          <TabContext value={value}>
+            {data ? (
               <>
+                {data &&
+                  tabData.map((tab) => (
+                    <TabPanel key={tab.value} value={tab.value} sx={{
+                      width: '100%', padding:
+                      {
+                        xs: '0px',
+                        sm: '0px',
+                        md: '13px',
+                        lg: '13px'
+                      }
+                    }}>
+                      {tab.screen}
+                    </TabPanel>
+                  ))}
+              </>) : (
+              <>
+                <Stack sx={{ width: '100%' }}>
+                  <Lodergif />
+                </Stack>
               </>
             )}
-          </MenuItem>
-        </MenuList>
-        <Grid item pt={1} display={{ xs: 'none', md: 'none', lg: 'block' }}>
-          <Divider orientation="vertical" sx={{ height: '100%' }} />
-        </Grid>
-        <TabContext value={value}>
-          {data ? (
-            <>
-              {data &&
-                tabData.map((tab) => (
-                  <TabPanel key={tab.value} value={tab.value} sx={{ width: '100%', padding: '13px' }}>
-                    {tab.screen}
-                  </TabPanel>
-                ))}
-            </>) : (
-            <>
-              <Stack sx={{ width: '100%' }}>
-                <Lodergif />
-              </Stack>
-            </>
-          )}
-        </TabContext>
-      </div>
-      <CustomSnackBar
-        snackbarOpen={snackbarOpen}
-        setSnackbarOpen={setSnackbarOpen}
-        snackbarMessage={snackbarMessage && snackbarMessage.msg}
-        success={snackbarMessage && snackbarMessage.success}
-      />
-    </Grid>
+          </TabContext>
+        </div>
+        <CustomSnackBar
+          snackbarOpen={snackbarOpen}
+          setSnackbarOpen={setSnackbarOpen}
+          snackbarMessage={snackbarMessage && snackbarMessage.msg}
+          success={snackbarMessage && snackbarMessage.success}
+        />
+      </Grid>
+      {/* Mobile view */}
+
+      {/* <Grid
+        display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
+        sx={{
+          backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground'
+        }}
+      >
+        <Dashboard userData={data?.result?.userProfile}
+          setSnackbarMessage={setSnackbarMessage}
+          setSnackbarOpen={setSnackbarOpen}
+          mutate={mutate} />
+      </Grid> */}
+    </>
   );
 }
 

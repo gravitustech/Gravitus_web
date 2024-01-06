@@ -21,6 +21,8 @@ import MarketTable from '../MarketTable';
 import { MarketOverview_URL, fetcherSystem } from 'src/api_ng/system_ng';
 import { getConfig_sp } from 'src/utils_ng/localStorage_ng';
 import useSWR from 'swr';
+import FavouriteTab_Mobile_Spot from './Fav_mbl';
+import MarketTable_Mobile_Spot from './Market_mbl';
 
 
 
@@ -133,12 +135,13 @@ const SpotHead_Mobileview = ({ pairData, priceData, setPlatformId, excType, chan
                   // variant="outlined"
                   sx={{
                     // border: theme.palette.mode === 'dark' ? '0.5px solid #262626' : '1px solid #fff',
-                    height: '583px',
+                    // height: '643px',
                     display: 'flex',
                     flexDirection: 'column',
                     bgcolor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
                     paddingLeft: { xs: '16px', sm: '24px' }, paddingRight: { xs: '16px', sm: '24px' },
                     paddingTop: { xs: '16px', sm: '16px' },
+                    paddingBottom: { xs: '16px', sm: '16px' },
                   }}
                 >
                   <Stack>
@@ -187,7 +190,7 @@ const SpotHead_Mobileview = ({ pairData, priceData, setPlatformId, excType, chan
                       <Tab
                         disableRipple
                         sx={{
-                          paddingLeft: '10px',
+                          paddingLeft: '0px',
                           minHeight: '0px',
                           minWidth: '10px',
                           fontSize: value === '0' ? '14px' : '14px',
@@ -304,15 +307,15 @@ const SpotHead_Mobileview = ({ pairData, priceData, setPlatformId, excType, chan
                     </TabList>
 
                     <TabPanel value="0" sx={{ padding: '0px' }}>
-                      <FavouriteTab setPlatformId={setPlatformId} handleClose={drawerClose} searchQuery={searchQuery} Marketdata={MarketRc} />
+                      <FavouriteTab_Mobile_Spot setPlatformId={setPlatformId} handleClose={drawerClose} searchQuery={searchQuery} Marketdata={MarketRc} />
                     </TabPanel>
 
                     <TabPanel value="1" sx={{ padding: '0px' }}>
-                      <MarketTable flag="USDT" setPlatformId={setPlatformId} handleClose={drawerClose} searchQuery={searchQuery} Marketdata={MarketRc} />
+                      <MarketTable_Mobile_Spot flag="USDT" setPlatformId={setPlatformId} handleClose={drawerClose} searchQuery={searchQuery} Marketdata={MarketRc} />
                     </TabPanel>
 
                     <TabPanel value="2" sx={{ padding: '0px' }}>
-                      <MarketTable flag="INR" setPlatformId={setPlatformId} handleClose={drawerClose} searchQuery={searchQuery} Marketdata={MarketRc} />
+                      <MarketTable_Mobile_Spot flag="INR" setPlatformId={setPlatformId} handleClose={drawerClose} searchQuery={searchQuery} Marketdata={MarketRc} />
                     </TabPanel>
                   </TabContext>
                 </Card>

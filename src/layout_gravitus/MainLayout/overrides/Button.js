@@ -166,7 +166,19 @@ export default function Button(theme) {
         },
         //wallet deposit withdraw button
         walletbutton: {
-          width: '179px',
+          maxWidth: '179px',
+          '@media (min-width: 480px)': {
+            width: '200px',
+          },
+          '@media (min-width: 768px)': {
+            width: '179px',
+          },
+          '@media (min-width: 600px)': {
+            width: '179px',
+          },
+          '@media (min-width: 1200px)': {
+            width: '179px',
+          },
           height: '38px',
           backgroundColor: theme.palette.mode === 'dark' ? '#262b39' : '#FFFFFF',
           borderRadius: '5px',

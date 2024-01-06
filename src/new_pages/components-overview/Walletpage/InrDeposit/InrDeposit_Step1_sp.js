@@ -6,7 +6,7 @@ import {
 import AnimateButton from '../../../../components/@extended/AnimateButton';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Autocomplete from '@mui/material/Autocomplete';
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import doticon from '../../../../assets/images/gravitusimage/doticon.svg';
 import { NumericFormatCustom } from '../_Essentials/NumericFormatCustom';
 import CardInr from '../InrWithdraw/Card';
@@ -31,7 +31,12 @@ const InrDeposit_Step1_sp = ({ depositFrom, depositTo, setStep, setFormikValues,
     <>
       {depositFrom && depositTo && (
         <>
-          <Grid container pl={14} pr={15} pt={3} pb={3}>
+          <Grid container
+            display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}
+            pt={{ md: 3, lg: 3 }}
+            pb={{ md: 3, lg: 3 }}
+            pl={{ md: 6, lg: 14 }}
+            pr={{ md: 6, lg: 15 }}>
             <Stack direction="row" spacing={0.8} alignItems="center">
               <IconButton onClick={goBack} disableRipple>
                 <ArrowBackIosNewIcon
@@ -44,12 +49,38 @@ const InrDeposit_Step1_sp = ({ depositFrom, depositTo, setStep, setFormikValues,
               </Typography>
             </Stack>
           </Grid>
-          <Grid container pl={15} pr={15} pb={3} pt={3} sx={{
-            backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
-            borderRadius: '78px 78px 0px 0px',
-            boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
-          }}>
-            <Grid item pl={5} xs={12} sm={12} md={6} lg={5}>
+          <Grid container
+            pt={{ xs: 0, sm: 0, md: 3, lg: 3 }}
+            pb={{ xs: 2, sm: 2, md: 3, lg: 3 }}
+            pl={{ xs: 0, sm: 0, md: 6, lg: 15 }}
+            pr={{ xs: 2, sm: 2, md: 6, lg: 15 }} sx={{
+              backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
+              borderRadius: { xs: '0', sm: '0', md: '78px 78px 0 0', lg: '78px 78px 0 0' },
+              boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
+            }}>
+            <Grid
+              display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
+               >
+              <Stack direction="row" spacing={1} pl={0} alignItems='center'  >
+                <Stack justifyContent='start'>
+                  <IconButton onClick={goBack} disableRipple>
+                    <ArrowBackIcon
+                      sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                    />
+                  </IconButton>
+                </Stack>
+                <Stack justifyContent='start'>
+                  <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                    INR Deposit
+                  </Typography>
+                </Stack>
+              </Stack>
+            </Grid>
+            <Grid item
+              pb={{ xs: 2, sm: 2, md: 3, lg: 3 }}
+              pl={{ xs: 2, sm: 2, md: 5, lg: 5 }}
+              pr={{ xs: 2, sm: 2, md: 0, lg: 0 }}
+              xs={12} sm={12} md={5} lg={5}>
               <>
                 <Stack pt={2}>
                   <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
@@ -78,11 +109,11 @@ const InrDeposit_Step1_sp = ({ depositFrom, depositTo, setStep, setFormikValues,
                 </Stack>
               </>
             </Grid>
-            <Grid item lg={1}>
+            <Grid item lg={1} md={1} display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
             </Grid>
-            <Grid item xs={12} md={6} lg={5}>
+            <Grid item xs={12} sm={12} md={5} lg={5}>
               <>
-                <Stack>
+                <Stack pl={{ xs: 2, sm: 2, md: 0, lg: 0 }}>
                   <Formik
                     initialValues={{
                       depositamount: '',
@@ -189,8 +220,8 @@ const InrDeposit_Step1_sp = ({ depositFrom, depositTo, setStep, setFormikValues,
                                 error={Boolean(touched.depositamount && errors.depositamount)}
                                 InputProps={{
                                   inputComponent: NumericFormatCustom
-                                }} 
-                                />
+                                }}
+                              />
                               {touched.depositamount && errors.depositamount && (
                                 <FormHelperText error id="standard-weight-helper-text-email-login">
                                   {errors.depositamount}
@@ -250,7 +281,7 @@ const InrDeposit_Step1_sp = ({ depositFrom, depositTo, setStep, setFormikValues,
                       <Button variant="contained5" onClick={goBack}>
                         Cancel
                       </Button>
-                      <Button variant="contained6" onClick={handleClose}>I agree and continue further</Button>
+                      <Button variant="contained6" onClick={handleClose}>I agree and continue</Button>
                     </Stack>
                   </Stack>
                 </Dialog>

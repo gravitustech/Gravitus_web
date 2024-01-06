@@ -6,6 +6,8 @@ import HistoryTab from './Order_History';
 import OngoingTab from './Order_OnGoing';
 
 import React from 'react';
+import Order_OnGoing_mbl from './Order_OnGoing_mbl';
+import Order_History_mbl from './Order_History_mbl';
 
 const Order_Status = ({ orders, pairInfo, setSnackbarOpen, setSnackbarMessage }) => {
   const [value, setValue] = React.useState("0");
@@ -23,6 +25,10 @@ const Order_Status = ({ orders, pairInfo, setSnackbarOpen, setSnackbarMessage })
             <Tab
               disableRipple
               sx={{
+                paddingBottom: '0px',
+                paddingLeft: { xs: '0px', sm: '0px', md: '10px', lg: '10px', },
+                minHeight: '0px',
+                minWidth: '0px',
                 padding: '0',
                 fontSize: value === '0' ? '16px' : '16px',
                 fontWeight: value === '0' ? '700' : '400',
@@ -74,10 +80,62 @@ const Order_Status = ({ orders, pairInfo, setSnackbarOpen, setSnackbarMessage })
         </Stack>
 
         <TabPanel value="0" sx={{ pt: 0, pl: 0, pr: 0 }}>
-          <OngoingTab orders={orders} pairInfo={pairInfo} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
+          <Stack display={{ xs: 'none', sm: 'block', md: 'block', lg: 'block' }}>
+            <OngoingTab orders={orders} pairInfo={pairInfo} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
+          </Stack>
+          <Stack display={{ xs: 'block', sm: 'none', md: 'none', lg: 'none' }}
+            sx={{
+              width: '100%',
+              maxWidth: '100%',
+              '& td, & th': { whiteSpace: 'nowrap' },
+              overflowY: 'scroll',
+              /* Custom scrollbar styles */
+              scrollbarWidth: 'thin',
+              scrollbarColor: 'gray lightgray',
+              height: '800px',
+              '&::-webkit-scrollbar': {
+                width: '0px', // Width of the scrollbar
+              },
+              '&::-webkit-scrollbar-track': {
+                background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
+              },
+              '&::-webkit-scrollbar-thumb': {
+                background: theme.palette.mode === "dark" ? '#262B39' : "lightgray",
+                borderRadius: '8px', // Round the corners of the thumb
+              },
+            }}
+          >
+            <Order_OnGoing_mbl orders={orders} pairInfo={pairInfo} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
+          </Stack>
         </TabPanel>
         <TabPanel value="1" sx={{ pt: 0, pl: 0, pr: 0 }}>
-          <HistoryTab orders={orders} pairInfo={pairInfo} />
+          <Stack display={{ xs: 'none', sm: 'block', md: 'block', lg: 'block' }}>
+            <HistoryTab orders={orders} pairInfo={pairInfo} />
+          </Stack>
+          <Stack display={{ xs: 'block', sm: 'none', md: 'none', lg: 'none' }}
+            sx={{
+              width: '100%',
+              maxWidth: '100%',
+              '& td, & th': { whiteSpace: 'nowrap' },
+              overflowY: 'scroll',
+              /* Custom scrollbar styles */
+              scrollbarWidth: 'thin',
+              scrollbarColor: 'gray lightgray',
+              height: '800px',
+              '&::-webkit-scrollbar': {
+                width: '0px', // Width of the scrollbar
+              },
+              '&::-webkit-scrollbar-track': {
+                background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
+              },
+              '&::-webkit-scrollbar-thumb': {
+                background: theme.palette.mode === "dark" ? '#262B39' : "lightgray",
+                borderRadius: '8px', // Round the corners of the thumb
+              },
+            }}
+          >
+            <Order_History_mbl orders={orders} pairInfo={pairInfo} />
+          </Stack>
         </TabPanel>
       </TabContext>
     </>

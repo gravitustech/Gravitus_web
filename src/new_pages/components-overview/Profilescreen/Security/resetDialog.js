@@ -233,7 +233,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
           {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
             <form noValidate onSubmit={handleSubmit}>
               {action === 'greset' && securityData?.pSecurity?.enabled === '1' && (
-                <Stack spacing={1} pt={3} width={440}>
+                <Stack spacing={1} pt={3} width={{ xs: '100%', sm: '100%', md: 440, lg: 440 }}>
                   <InputLabel htmlFor="otpmbl-login" variant="subtitle3" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                     OTP will sent to <Mobilenumber number={securityData?.pSecurity?.authKey} />
                   </InputLabel>
@@ -274,7 +274,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
                   )}
                 </Stack>
               )}
-              <Stack spacing={1} pt={3} width={440}>
+              <Stack spacing={1} pt={3} width={{ xs: '100%', sm: '100%', md: 440, lg: 440 }}>
                 <InputLabel htmlFor="email-login" variant="body2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                   OTP will sent to <Email email={securityData?.mSecurity?.authKey} />
                 </InputLabel>
@@ -315,7 +315,7 @@ const ResetDialog = ({ openDialog, setOpenDialog, securityData, setSnackbarMessa
                 )}
               </Stack>
               {action === 'preset' && securityData?.gSecurity?.enabled === '1' && (
-                <Stack spacing={1} pt={3} width={440}>
+                <Stack spacing={1} pt={3} width={{ xs: '100%', sm: '100%', md: 440, lg: 440 }}>
                   <InputLabel htmlFor="authcode-login" variant="subtitle3" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                     Enter the Google Authentication Code
                   </InputLabel>

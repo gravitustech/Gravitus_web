@@ -5,7 +5,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import NumberFormat from 'react-number-format';
 
 // material-ui
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, Link, useTheme, Grid, List, Divider } from '@mui/material';
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Stack, Link, useTheme, Grid, List, Divider, Card } from '@mui/material';
 import Button from '../../overrides/Button';
 import MainCard from 'src/components/MainCard';
 import Norecordfoundcomponents from 'src/new_pages/components-overview/Walletpage/_Essentials/NoRecordFound';
@@ -17,7 +17,7 @@ const rows = [
   createData(
     'Welcome to all',
     'We are happy to announce that our new version is live.',
-    '23/12/2023, 11:00 Am',
+     '23/12/2023, 11:00 Am',
   ),
 ];
 // ==============================|| Notificationtable ||============================== //
@@ -41,7 +41,6 @@ const Description = ({ description }) => {
   return (
     <>
       <Typography
-        pr={62}
         onClick={handleTextClick}
         pt={1} variant="body1"
         sx={{
@@ -59,27 +58,7 @@ export default function Notificationtable() {
 
   return (
     <>
-      <Grid sx={{
-        backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : 'text.white',
-        width: '100%',
-        maxWidth: '100%',
-        '& td, & th': { whiteSpace: 'nowrap' },
-        overflowY: 'scroll',
-        /* Custom scrollbar styles */
-        scrollbarWidth: 'thin',
-        scrollbarColor: 'gray lightgray',
-        height: '534px',
-        '&::-webkit-scrollbar': {
-          width: '4px', // Width of the scrollbar
-        },
-        '&::-webkit-scrollbar-track': {
-          background: theme.palette.mode === "dark" ? 'transparent' : "transparent", // Track color
-        },
-        '&::-webkit-scrollbar-thumb': {
-          background: theme.palette.mode === "dark" ? '#0F121A' : "lightgray",
-          borderRadius: '8px', // Round the corners of the thumb
-        },
-      }}>
+      <Grid >
         {rows.length === 0 ? (
           <><TableContainer varaint="tablecontainer">
             <Table aria-labelledby="tableTitle">
@@ -92,51 +71,41 @@ export default function Notificationtable() {
           rows.map((row, index) => {
             return (
               <>
-                <MainCard
+                <Card
+                  key={index}
                   sx={{
-                    paddingTop: '8px',
-                    paddingBottom: '8px',
-                    color: theme.palette.mode === 'dark' ? 'text.black' : 'text.white',
-                    backgroundColor: theme.palette.mode === 'dark' ? '#0F121A' : 'text.white',
-                    borderRadius: '0',
-                    // '&:hover': {
-                    //   color: theme.palette.mode === 'dark' ? 'lightgrey' : '#D8D8D8', 
-                    //   backgroundColor: theme.palette.mode === 'dark' ? 'lightgrey' : '#D8D8D8', 
-                    // }
-                  }}
-                  elevation={0}
-                  border={false}
-                  content={false}
-                  key={row.Time}
-                >
-                  <List
-                    component="nav"
-                    sx={{
-                      p: 0,
-                      '& .MuiListItemButton-root': {
-                        py: 0.5,
-                      }
-                    }}
-                  >
-                    <Stack pt={1} pb={1} p={2}>
-                      <Grid style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', }}>
-                        <Typography variant="title1" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                    width:'100%',
+                    backgroundColor: theme.palette.mode === 'dark' ? '#131722' : 'text.backgroundcard',
+                    boxShadow: 'none',
+                  }}>
+                  <Stack spacing={1} pr={2} sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#131722' : 'text.backgroundcard', }}>
+                    <Stack direction="row" justifyContent="space-between" >
+                      <Stack spacing={1} textAlign='start' justifyContent='start'>
+                        <Typography variant='title1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                           {row.Heading}
                         </Typography>
-                        <Typography textAlign='end' alignItems='end' variant="body2" noWrap sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                      </Stack>
+
+                      <Stack spacing={1} textAlign='end' justifyContent='end'>
+                        <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                           {row.Time}
                         </Typography>
-                      </Grid>
-                      <Description description={row.Description} />
-                      {/* <Typography pt={1} variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
-                      {row.Description}
-                    </Typography> */}
+                      </Stack>
                     </Stack>
-                  </List>
-                </MainCard>
-                <Divider />
-              </>
 
+                    <Stack direction="row" >
+                      <Stack spacing={1} textAlign='start' justifyContent='start'>
+                        <Typography variant='body1' sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+                          <Description description={row.Description} />
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                  </Stack>
+                </Card>
+                <Stack pt={1} pb={1}>
+                  <Divider></Divider>
+                </Stack>
+              </>
             )
           })
         )}

@@ -16,7 +16,7 @@ import Payment from '../../../../../assets/images/gravitusimage/Paymenticon.svg'
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useLocation } from 'react-router-dom';  
+import { useLocation } from 'react-router-dom';
 
 // ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
 
@@ -63,6 +63,20 @@ const ProfileTab = ({ handleLogout, setOpen }) => {
           // selected={selectedIndex === item.index}
           selected={selectedIndex === item.index || currentPath === `/profile/${tabNameToIndex[item.index]}`}
           onClick={item.index === 7 ? handleLogout : (event) => handleListItemClick(event, item.index)}
+          sx={{
+            marginBottom: {
+              xs: 3,
+              sm: 4,
+              md: 0,
+              lg: 0
+            },
+            paddingLeft: {
+              xs: 5,
+              sm: 5,
+              md: 2.5,
+              lg: 2.5
+            }
+          }}
         >
           <ListItemIcon>
             <img src={item.icon} alt={item.label} width={22} />

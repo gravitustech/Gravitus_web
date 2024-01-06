@@ -8,7 +8,7 @@ const External_mbl = ({ externalData }) => {
     <>
       {externalData?.length === 0 ? (
         <>
-          <Grid p={6} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Grid p={2} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Stack direction="row" spacing={1}>
               <Norecordfoundcomponents
                 description='No Record Found.' />
@@ -26,7 +26,7 @@ const External_mbl = ({ externalData }) => {
                   backgroundColor: theme.palette.mode === 'dark' ? '#131722' : 'text.backgroundcard',
                   boxShadow: 'none',
                 }}>
-                <Stack spacing={2} pl={2} pr={2} sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#131722' : 'text.backgroundcard', }}>
+                <Stack spacing={2} sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#131722' : 'text.backgroundcard', }}>
                   <Stack direction="row" justifyContent="space-between"  >
                     <Stack spacing={1} textAlign='start' justifyContent='start'>
                       <Typography variant='subtitle1' sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>

@@ -7,10 +7,13 @@ import notesicon from '../../../../assets/images/gravitusimage/notesicon.svg';
 const Notes = ({ description }) => {
   const theme = useTheme();
   return (
-    <Stack pt={0} pl={8} pb={4} pr={8}>
-      <Stack direction="row" spacing={1}>
-        <img src={notesicon} alt="notesicon" width={16} />
-        <Typography pt={2.5} variant="subtitle1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+    <Stack pt={0}
+      pl={{ xs: 2, sm: 4, md: 8, lg: 8 }}
+      pr={{ xs: 2, sm: 4, md: 8, lg: 8 }}
+      pb={2} >
+      <Stack direction="row" spacing={1} style={{ alignItems: 'flex-start' }}>
+        <img src={notesicon} alt="notesicon" style={{ paddingTop: '8px' }} />
+        <Typography variant="body1" sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
           {description}
         </Typography>
       </Stack>

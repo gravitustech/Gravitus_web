@@ -1,6 +1,8 @@
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Lodergif from '../../../../../../components/Gravitusloader';
 import CustomSnackBar from 'src/components/snackbar';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ChatIcon from '@mui/icons-material/Chat';
 
 import Trade_Seller_Dts_Ext from './Trade_Seller_sp';
 import Chat_Appeal_Tab from './Chat_Screen_Tabs';
@@ -14,6 +16,7 @@ import { socket } from '../../../../../../socket';
 
 import { P2P_OrderDetails_URL, fetcherP2P } from 'src/api_ng/peer2peer_ng'
 import { getConfig_ng, getConfig_sp, setConfig_ng } from '../../../../../../utils_ng/localStorage_ng';
+import Chat_web from './Chat_web';
 
 const Trade_Seller_Dts = (route) => {
   const theme = useTheme();
@@ -111,9 +114,26 @@ const Trade_Seller_Dts = (route) => {
     }
   }, [SUPERData]);
 
+  const MyIconButton = ({ SUPERData, counterPart }) => {
+    const handleClick = () => {
+      navigate('/chat', { state: { SUPERData: SUPERData, counterPart: counterPart } })
+    };
+
+    return (
+      <IconButton disableRipple onClick={handleClick}>
+        <ChatIcon />
+      </IconButton>
+    );
+  };
+
   return (
     <>
-      <Grid container pl={14} pr={15} pt={3} pb={3}>
+      <Grid container
+        display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}
+        pt={{ md: 3, lg: 3 }}
+        pb={{ md: 3, lg: 3 }}
+        pl={{ md: 6, lg: 14 }}
+        pr={{ md: 6, lg: 15 }}>
         <Stack direction="row" spacing={0.8} alignItems="center">
           <IconButton onClick={goBack} disableRipple>
             <ArrowBackIosNewIcon
@@ -127,18 +147,50 @@ const Trade_Seller_Dts = (route) => {
         </Stack>
       </Grid>
 
+      <Grid
+        sx={{
+          backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
+        }}
+        width='100%'
+        display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
+      >
+        <Stack direction="row" spacing={1} pl={0} alignItems='center' justifyContent='space-between' >
+          <Stack justifyContent='start' direction='row' alignItems='center'>
+            <IconButton onClick={goBack} disableRipple>
+              <ArrowBackIcon
+                sx={{ cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+              />
+            </IconButton>
+            <Typography variant="h4" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
+              Sell USDT
+            </Typography>
+          </Stack>
+
+          <Stack justifyContent='end' pr={3.5}>
+            <MyIconButton SUPERData={SUPERData} counterPart={counterPart} />
+          </Stack>
+        </Stack>
+      </Grid>
+
       {SUPERData ? (
-        <Grid container pt={3} pb={3} pl={20} pr={15} lg={12}
+        <Grid pt={{ xs: 2, sm: 2, md: 2, lg: 3 }}
+          pb={{ xs: 2, sm: 2, md: 3, lg: 3 }}
+          pl={{ xs: 2, sm: 2, md: 12, lg: 20 }}
+          pr={{ xs: 2, sm: 2, md: 6, lg: 15 }}
+          xs={12} sm={12} ms={12} lg={12}
+          container
           sx={{
             minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' },
             backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
-            borderRadius: '78px 78px 0px 0px',
+            borderRadius: { xs: '0', sm: '0', md: '78px 78px 0 0', lg: '78px 78px 0 0' },
             boxShadow: '0px 5.133836269378662px 35.31077575683594px 0px rgba(0, 0, 0, 0.01), 0px 41px 282px 0px rgba(0, 0, 0, 0.02)'
           }} >
           <Trade_Seller_Dts_Ext SUPERData={SUPERData} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
 
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Chat_Appeal_Tab SUPERData={SUPERData} counterPart={counterPart} />
+          <Grid item md={6} lg={6}
+            display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}
+          >
+            <Chat_web SUPERData={SUPERData} counterPart={counterPart} />
           </Grid>
         </Grid>
       ) : (
