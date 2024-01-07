@@ -34,45 +34,6 @@ const MarketpageTable = ({ marketData, listings, setPlatformId }) => {
     setSearchQuery('');
   };
 
-  const Search = () => {
-    return (
-      <>
-        <StyledInputBase
-          sx={{
-            height: '100%',
-            borderRadius: '5px',
-            width: '100%',
-            borderColor: theme.palette.mode === 'dark' ? '#31384b' : 'text.tertiary',
-            borderWidth: '1px',
-            borderStyle: 'solid',
-            backgroundColor: 'transparent',
-            color: theme.palette.mode === 'dark' ? 'text.white' : 'text.black'
-          }}
-          placeholder="Search Coin Pair"
-          inputProps={{ 'aria-label': 'search' }}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          endAdornment={
-            <Stack direction='row' alignItems='center' spacing={.8} pr={1} >
-              {searchQuery && (
-                <IconButton disableRipple edge="end" onClick={handleCancel} size="small">
-                  <HighlightOffIcon fontSize="small" sx={{
-                    color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
-                  }} />
-                </IconButton>
-              )}
-              <SearchIcon
-                sx={{
-                  color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
-                }}
-              />
-            </Stack>
-          }
-        />
-      </>
-    )
-  }
-
   return (
     <Card
       sx={{
@@ -105,7 +66,38 @@ const MarketpageTable = ({ marketData, listings, setPlatformId }) => {
           display={{ xs: 'block', sm: 'none', md: 'none', lg: 'none' }}
           pb={{ xs: 3, sm: 3, md: 3, lg: 3 }}
         >
-          <Search />
+           <StyledInputBase
+          sx={{
+            height: '100%',
+            borderRadius: '5px',
+            width: '100%',
+            borderColor: theme.palette.mode === 'dark' ? '#31384b' : 'text.tertiary',
+            borderWidth: '1px',
+            borderStyle: 'solid',
+            backgroundColor: 'transparent',
+            color: theme.palette.mode === 'dark' ? 'text.white' : 'text.black'
+          }}
+          placeholder="Search Coin Pair"
+          inputProps={{ 'aria-label': 'search' }}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          endAdornment={
+            <Stack direction='row' alignItems='center' spacing={.8} pr={1} >
+              {searchQuery && (
+                <IconButton disableRipple edge="end" onClick={handleCancel} size="small">
+                  <HighlightOffIcon fontSize="small" sx={{
+                    color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+                  }} />
+                </IconButton>
+              )}
+              <SearchIcon
+                sx={{
+                  color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+                }}
+              />
+            </Stack>
+          }
+        />
         </Stack>
 
         <TabContext value={value}>
@@ -190,7 +182,38 @@ const MarketpageTable = ({ marketData, listings, setPlatformId }) => {
               />
             </TabList>
             <Stack display={{ xs: 'none', sm: 'block', md: 'block', lg: 'block' }}>
-              <Search />
+              <StyledInputBase
+                sx={{
+                  height: '100%',
+                  borderRadius: '5px',
+                  width: '100%',
+                  borderColor: theme.palette.mode === 'dark' ? '#31384b' : 'text.tertiary',
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  backgroundColor: 'transparent',
+                  color: theme.palette.mode === 'dark' ? 'text.white' : 'text.black'
+                }}
+                placeholder="Search Coin Pair"
+                inputProps={{ 'aria-label': 'search' }}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                endAdornment={
+                  <Stack direction='row' alignItems='center' spacing={.8} pr={1} >
+                    {searchQuery && (
+                      <IconButton disableRipple edge="end" onClick={handleCancel} size="small">
+                        <HighlightOffIcon fontSize="small" sx={{
+                          color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+                        }} />
+                      </IconButton>
+                    )}
+                    <SearchIcon
+                      sx={{
+                        color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+                      }}
+                    />
+                  </Stack>
+                }
+              />
             </Stack>
           </Stack>
 

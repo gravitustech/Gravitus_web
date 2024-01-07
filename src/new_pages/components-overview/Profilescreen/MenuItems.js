@@ -13,46 +13,46 @@ const MenuItems = ({ anchorEl, handleCloseMenu, tabData, value,
       <MenuList anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
         {tabData?.map((tab, index) => (
           <>
-              <Stack
-                key={index}
-                onClick={() => handleMenuItemClick(tab.value)}
-                display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
-                sx={{
-                  marginBottom: '38px',
-                  paddingLeft: {
-                    xs: '18px',
-                    sm: '18px',
-                  },
-                }}
-              >
-                <Stack direction="row" spacing={1.5} alignItems="center" justifyContent='space-between'>
-                  <Stack direction='row' spacing={1.5} alignItems="center">
-                    <img src={theme.palette.mode === 'dark' ? tab.iconactivedark : tab.icon} alt={tab.label} width={24} />
-                    <Typography
-                      sx={{
-                        fontSize: value === tab.value ? '14px' : '14px',
-                        fontWeight: value === tab.value ? '500' : '500',
-                        color: value === tab.value
-                          ? theme.palette.mode === 'dark'
-                            ? 'text.white'
-                            : 'text.secondary'
-                          : theme.palette.mode === 'dark'
-                            ? 'text.primarydark'
-                            : 'text.primary'
-                      }}
-                    >
-                      {tab.label}
-                    </Typography>
-                  </Stack>
+            <Stack
+              key={index}
+              onClick={() => handleMenuItemClick(tab.value)}
+              display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
+              sx={{
+                marginBottom: '38px',
+                paddingLeft: {
+                  xs: '18px',
+                  sm: '18px',
+                },
+              }}
+            >
+              <Stack direction="row" spacing={1.5} alignItems="center" justifyContent='space-between'>
+                <Stack direction='row' spacing={1.5} alignItems="center">
+                  <img src={theme.palette.mode === 'dark' ? tab.iconactivedark : tab.icon} alt={tab.label} width={24} />
+                  <Typography
+                    sx={{
+                      fontSize: value === tab.value ? '14px' : '14px',
+                      fontWeight: value === tab.value ? '500' : '500',
+                      color: value === tab.value
+                        ? theme.palette.mode === 'dark'
+                          ? 'text.white'
+                          : 'text.secondary'
+                        : theme.palette.mode === 'dark'
+                          ? 'text.primarydark'
+                          : 'text.primary'
+                    }}
+                  >
+                    {tab.label}
+                  </Typography>
+                </Stack>
 
-                  <Stack justifyContent='end' textAlign='end' pr={3} display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}>
-                    <IconButton>
-                      <ChevronRightIcon />
-                    </IconButton>
-                  </Stack>
+                <Stack justifyContent='end' textAlign='end' pr={1} display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}>
+                  <IconButton disableRipple>
+                    <ChevronRightIcon />
+                  </IconButton>
                 </Stack>
               </Stack>
-            
+            </Stack>
+
             <MenuItem
               key={index}
               onClick={() => handleMenuItemClick(tab.value)}
@@ -71,7 +71,7 @@ const MenuItems = ({ anchorEl, handleCloseMenu, tabData, value,
                   md: '42px',
                   lg: '42px',
                 },
-                
+
                 paddingRight: '0px',
                 marginBottom: '8px',
                 '&:hover': {

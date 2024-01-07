@@ -188,7 +188,7 @@ const Dashboard = ({ userData, setSnackbarMessage, setSnackbarOpen, mutate,
             </Stack>
           </Stack>
 
-          <Stack justifyContent='end' pr={4}>
+          <Stack justifyContent='end' pr={2}>
             <Stack direction="row" spacing={1} alignItems="center">
               <RWebShare
                 data={{

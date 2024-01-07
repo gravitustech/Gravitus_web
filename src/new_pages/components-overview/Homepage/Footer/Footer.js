@@ -12,16 +12,16 @@ const Footer = ({ isAuthorised }) => {
   return (
     <Grid
       container
-      pl={{ md: 6, sm: 8, xs: 6, lg: 8 }}
-      pr={{ md: 6, sm: 8, xs: 6, lg: 8 }}
-      pt={8}
+      pl={{ sm: 3, xs: 2, md: 6, lg: 8 }}
+      pr={{ sm: 3, xs: 2, md: 6, lg: 8 }}
+      pt={{ sm: 6, xs: 4, md: 6, lg: 8 }}
       pb={3}
       sx={{
         background: theme.palette.mode === 'dark' ? '#0F121A' : '#00413C'
       }}
     >
       <Grid item lg={6} xs={12} md={6}>
-        <Stack spacing={8}>
+        <Stack spacing={{ xs: 4, sm: 6, md: 6, lg: 8 }}>
           <img src={footerlogo} alt="footerlogo" width={120} />
           <Grid style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <Typography variant="body1" sx={{ color: 'text.buy' }}>
@@ -101,7 +101,7 @@ const Footer = ({ isAuthorised }) => {
           </Grid>
         </Stack>
       </Grid>
-      <Grid item pb={5} pl={{ lg: 20, md: 8 }} pt={{ lg: 0, md: 0, xs: 6 }} lg={6} xs={12} md={6} textAlign={{ lg: 'end', md: 'center' }}>
+      <Grid item pb={5} pl={{ lg: 20, md: 8 }} pt={{ lg: 0, md: 0, xs: 3, sm: 6 }} lg={6} xs={12} md={6} textAlign={{ lg: 'end', md: 'center' }}>
         <Stack spacing={4}>
           <Typography
             variant="h4"

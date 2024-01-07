@@ -30,45 +30,6 @@ const CoinListing = ({ walletList, setSnackbarOpen, setSnackbarMessage }) => {
     setSearchQuery('');
   };
 
-  const Search = () => {
-    return (
-      <>
-        <StyledInputBase
-          sx={{
-            height: '100%',
-            borderRadius: '3px',
-            width: '100%',
-            borderColor: theme.palette.mode === 'dark' ? '#31384b' : 'text.tertiary',
-            borderWidth: '1px',
-            borderStyle: 'solid',
-            backgroundColor: 'transparent',
-            color: theme.palette.mode === 'dark' ? 'text.white' : 'text.black',
-          }}
-          placeholder="Search Coin Pair"
-          inputProps={{ 'aria-label': 'search' }}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          endAdornment={
-            <Stack direction='row' alignItems='center' spacing={.8} pr={1} >
-              {searchQuery && (
-                <IconButton disableRipple edge="end" onClick={handleCancel} size="small">
-                  <HighlightOffIcon fontSize="small" sx={{
-                    color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
-                  }} />
-                </IconButton>
-              )}
-              <SearchIcon
-                sx={{
-                  color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
-                }}
-              />
-            </Stack>
-          }
-        />
-      </>
-    )
-  }
-
   const filteredWalletList = walletList?.filter((row) =>
     row.listing.crypto.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -130,7 +91,38 @@ const CoinListing = ({ walletList, setSnackbarOpen, setSnackbarMessage }) => {
             </Typography>
           </Stack>
           <Stack spacing={1} pr={1} textAlign='end' justifyContent='end'>
-            <Search />
+            <StyledInputBase
+              sx={{
+                height: '100%',
+                borderRadius: '3px',
+                width: '100%',
+                borderColor: theme.palette.mode === 'dark' ? '#31384b' : 'text.tertiary',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                backgroundColor: 'transparent',
+                color: theme.palette.mode === 'dark' ? 'text.white' : 'text.black',
+              }}
+              placeholder="Search Coin Pair"
+              inputProps={{ 'aria-label': 'search' }}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              endAdornment={
+                <Stack direction='row' alignItems='center' spacing={.8} pr={1} >
+                  {searchQuery && (
+                    <IconButton disableRipple edge="end" onClick={handleCancel} size="small">
+                      <HighlightOffIcon fontSize="small" sx={{
+                        color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+                      }} />
+                    </IconButton>
+                  )}
+                  <SearchIcon
+                    sx={{
+                      color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+                    }}
+                  />
+                </Stack>
+              }
+            />
           </Stack>
         </Stack>
 

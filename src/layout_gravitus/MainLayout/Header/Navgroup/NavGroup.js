@@ -12,7 +12,8 @@ const GravitusNavGroup = ({ item }) => {
     <>
       {isMatch ? (
         <>
-          <Stack direction="column" sx={{ paddingBottom: '20px' }}>
+
+          <Stack direction="column" sx={{ paddingBottom: '20px' }} maxWidth='100%' width='100%' justifyContent='space-between'>
             {item.children?.map((menuItem) => (
               <GravitusNavItem key={menuItem.id} item={menuItem} level={1} />
             ))}

@@ -267,7 +267,7 @@ const MyOrders_Mblview = ({ isAuthorised, platformId,
         </>
       ) : (
         <>
-          <Grid p={6} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Grid p={2} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Stack direction="row" spacing={1}>
               <Link color="text.buy" variant="title2" component={RouterLink} to="/login">
                 login

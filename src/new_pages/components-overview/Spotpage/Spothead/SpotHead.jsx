@@ -5,6 +5,7 @@ import {
   Popper, Card, Divider, ButtonGroup, Box, Button
 } from '@mui/material';
 
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import SearchIcon from '@mui/icons-material/Search';
@@ -86,6 +87,10 @@ const SpotHead = ({ pairData, priceData, setPlatformId, excType, changeExcType }
   const handleClose = () => {
     setAnchorEl(null);
     setIsIconUp(false);
+  };
+
+  const handleCancel = () => {
+    setSearchQuery('');
   };
 
   const open = Boolean(anchorEl);
@@ -194,13 +199,27 @@ const SpotHead = ({ pairData, priceData, setPlatformId, excType, changeExcType }
                           onChange={(e) => setSearchQuery(e.target.value)}
                           inputProps={{ 'aria-label': 'search' }}
                           endAdornment={
-                            <SearchIconWrapper>
+                            <Stack direction='row' alignItems='center' spacing={.8} pr={1} >
+                              {searchQuery && (
+                                <IconButton disableRipple edge="end" onClick={handleCancel} size="small">
+                                  <HighlightOffIcon fontSize="small" sx={{
+                                    color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+                                  }} />
+                                </IconButton>
+                              )}
                               <SearchIcon
                                 sx={{
-                                  color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.tertiary'
+                                  color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
                                 }}
                               />
-                            </SearchIconWrapper>
+                            </Stack>
+                            // <SearchIconWrapper>
+                            //   <SearchIcon
+                            //     sx={{
+                            //       color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.tertiary'
+                            //     }}
+                            //   />
+                            // </SearchIconWrapper>
                           }
                         />
                       </Stack>

@@ -82,7 +82,7 @@ const Support = ({ setSnackbarMessage, setSnackbarOpen }) => {
           </Stack>
         </Grid>
         <Grid
-          pl={3}
+          pl={2}
           width='100%'
           display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
           sx={{

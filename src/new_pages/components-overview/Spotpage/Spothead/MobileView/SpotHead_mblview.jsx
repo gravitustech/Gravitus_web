@@ -5,6 +5,7 @@ import {
   Popper, Card, Divider, ButtonGroup, Box, Button, Drawer
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -102,6 +103,10 @@ const SpotHead_Mobileview = ({ pairData, priceData, setPlatformId, excType, chan
     setState(false)
   }
 
+  const handleCancel = () => {
+    setSearchQuery('');
+  };
+
   return (
     <>
       <Stack direction="row" spacing={1} justifyContent="space-between">
@@ -174,13 +179,20 @@ const SpotHead_Mobileview = ({ pairData, priceData, setPlatformId, excType, chan
                       onChange={(e) => setSearchQuery(e.target.value)}
                       inputProps={{ 'aria-label': 'search' }}
                       endAdornment={
-                        <SearchIconWrapper>
+                        <Stack direction='row' alignItems='center' spacing={.8} pr={1} >
+                          {searchQuery && (
+                            <IconButton disableRipple edge="end" onClick={handleCancel} size="small">
+                              <HighlightOffIcon fontSize="small" sx={{
+                                color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+                              }} />
+                            </IconButton>
+                          )}
                           <SearchIcon
                             sx={{
-                              color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.tertiary'
+                              color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
                             }}
                           />
-                        </SearchIconWrapper>
+                        </Stack>
                       }
                     />
                   </Stack>

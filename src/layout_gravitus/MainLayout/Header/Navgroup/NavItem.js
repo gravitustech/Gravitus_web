@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 // material-ui
-import { Box, Button, ListItemText, Typography, ListItemIcon, useMediaQuery, useTheme, ListItem } from '@mui/material';
+import { Box, Button, ListItemText, Typography, ListItemIcon, useMediaQuery, useTheme, ListItem, Stack, ButtonBase, IconButton } from '@mui/material';
 
 // project import
 import { setActiveItemAction } from '../../../../appRedux/actions/menu';
@@ -59,49 +59,87 @@ const GravitusNavItem = ({ item }) => {
   const iconSelectedColor = theme.palette.mode === 'dark' ? 'white' : '#262626';
   // '#262626';
   return (
-    <Box sx={{ flexShrink: 0, ml: 0.75 }}>
-      <ListItem
-        {...listItemProps}
-        disabled={item.disabled}
-        onClick={() => itemHandler(item.id)}
-        selected={isSelected}
-        style={{
-          bottom: '6px',
-          textAlign: 'center',
-          backgroundColor: 'inherit'
-        }}
-      >
-        {isMatch ? (
-          <>
-            <ListItemIcon variant="listicon">{itemIcon}</ListItemIcon>
-          </>
-        ) : (
-          <></>
-        )}
-
-        {isMatch ? (
-          <>
-            <ListItemText
-              primary={
+    <>
+      {isMatch ? (
+        <>
+          <ButtonBase disableRipple
+            {...listItemProps}
+            disabled={item.disabled}
+            onClick={() => itemHandler(item.id)}
+            selected={isSelected}
+          >
+            <Stack direction='row' justifyContent='space-evenly' spacing={120}  >
+              <Stack textAlign='start' direction='row' alignItems='center' pb={3}
+                pl={item.title === 'P2P' || item.title === 'Spot' ? 0 : 2}
+              >
+                {itemIcon}
                 <Typography sx={{ color: isSelected ? iconSelectedColor : textColor }} variant="subtitle4">
                   {item.title}
                 </Typography>
-              }
-            />
-          </>
-        ) : (
-          <>
-            <ListItemText
-              primary={
-                <Typography variant="body1" sx={{ color: isSelected ? iconSelectedColor : textColor }}>
-                  {item.title}
-                </Typography>
-              }
-            />
-          </>
-        )}
-      </ListItem>
-    </Box>
+              </Stack>
+              <Stack textAlign='end'>
+              </Stack>
+            </Stack>
+          </ButtonBase>
+
+        </>
+      ) : (
+        <>
+          <Box sx={{ flexShrink: 0, ml: 0.75 }}>
+            <ListItem
+              disableRipple
+              {...listItemProps}
+              disabled={item.disabled}
+              onClick={() => itemHandler(item.id)}
+              selected={isSelected}
+              style={{
+                bottom: '6px',
+                textAlign: 'center',
+                backgroundColor: 'inherit'
+              }}
+            >
+              <ListItemText
+                primary={
+                  <Typography variant="body1" sx={{ color: isSelected ? iconSelectedColor : textColor }}>
+                    {item.title}
+                  </Typography>
+                }
+              />
+              {/* {isMatch ? (
+                <>
+                  <ListItemIcon variant="listicon">{itemIcon}</ListItemIcon>
+                </>
+              ) : (
+                <></>
+              )}
+
+              {isMatch ? (
+                <>
+                  <ListItemText
+                    primary={
+                      <Typography sx={{ color: isSelected ? iconSelectedColor : textColor }} variant="subtitle4">
+                        {item.title}
+                      </Typography>
+                    }
+                  />
+                </>
+              ) : (
+                <>
+                  <ListItemText
+                    primary={
+                      <Typography variant="body1" sx={{ color: isSelected ? iconSelectedColor : textColor }}>
+                        {item.title}
+                      </Typography>
+                    }
+                  />
+                </>
+              )} */}
+            </ListItem>
+          </Box>
+        </>
+      )}
+    </>
+
   );
 };
 

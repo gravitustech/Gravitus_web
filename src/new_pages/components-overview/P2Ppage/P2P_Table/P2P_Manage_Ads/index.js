@@ -162,7 +162,7 @@ const P2P_Manage_Ads = () => {
           pt={{ xs: 2, sm: 2, md: 2, lg: 3 }}
           pb={{ xs: 2, sm: 2, md: 3, lg: 3 }}
           pl={{ xs: 2, sm: 2, md: 12, lg: 20 }}
-          pr={{ xs: 2, sm: 2, md: 6, lg: 15 }}
+          pr={{ xs: 0, sm: 0, md: 6, lg: 15 }}
           xs={12} sm={12} ms={12} lg={12}
           sx={{
             backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
@@ -181,7 +181,7 @@ const P2P_Manage_Ads = () => {
 
               <Stack pt={3}>
                 <TabContext value={value}>
-                  <Stack direction="row" alignItems="center" justifyContent="space-between" pr={3}>
+                  <Stack direction="row" alignItems="center" justifyContent="space-between" pr={2}>
                     <Stack direction="row">
                       <TabList onChange={handleChange} indicatorColor="none" textColor='inherit'>
                         <Tab
@@ -240,15 +240,15 @@ const P2P_Manage_Ads = () => {
                       <Typography variant="title2" sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}>
                         {P2POrders.priceInfo.tradePair}
                       </Typography>
-                      <Typography variant="caption" pl={2.4} sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
+                      <Typography variant="caption" pl={2.4} pr={0} sx={{ color: theme.palette.mode === 'dark' ? 'text.primarydark' : 'text.primary' }}>
                         Trade Pair
                       </Typography>
                     </Stack>
                   </Stack>
-                  <TabPanel value="0" sx={{ pt: 3, pl: 0 }}>
+                  <TabPanel value="0" sx={{ pt: 3, pl: 0, pr: 2, pb: 2 }}>
                     <P2P_Post_Buy pfStatus={P2POrders.pfStatus} priceInfo={P2POrders.priceInfo} pairInfo={P2POrders.pairInfo} walletInfo={P2POrders.walletInfo} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
                   </TabPanel>
-                  <TabPanel value="1" sx={{ pt: 3, pl: 0 }}>
+                  <TabPanel value="1" sx={{ pt: 3, pl: 0, pr: 2, pb: 2 }}>
                     <P2P_Post_Sell pfStatus={P2POrders.pfStatus} priceInfo={P2POrders.priceInfo} pairInfo={P2POrders.pairInfo} walletInfo={P2POrders.walletInfo} setSnackbarOpen={setSnackbarOpen} setSnackbarMessage={setSnackbarMessage} />
                   </TabPanel>
                 </TabContext>

@@ -19,55 +19,55 @@ import { setConfig_ng } from 'src/utils_ng/localStorage_ng';
 import { MarketOverview_URL, FavouritesCrypto_URL, postDataSystem } from 'src/api_ng/system_ng';
 
 function MyComponent({ id, row }) {
-    const [isLoading, setIsLoading] = useState(false);
-  
-    const toggleFavourites = (row) => {
-      setIsLoading(true);
-      var postData = {
-        "platformId": row?.platformId
-      };
-  
-      postDataSystem(FavouritesCrypto_URL(), postData).then(function (res) {
-        setIsLoading(false);
-        // console.log("res", res);
-        if (res.error !== 'ok') {
-          if (res.error.name == "Missing Authorization") {
-            // Logout User
-          }
-          else if (res.error.name == "Invalid Authorization") {
-            // Logout User
+  const [isLoading, setIsLoading] = useState(false);
+
+  const toggleFavourites = (row) => {
+    setIsLoading(true);
+    var postData = {
+      "platformId": row?.platformId
+    };
+
+    postDataSystem(FavouritesCrypto_URL(), postData).then(function (res) {
+      setIsLoading(false);
+      // console.log("res", res);
+      if (res.error !== 'ok') {
+        if (res.error.name == "Missing Authorization") {
+          // Logout User
+        }
+        else if (res.error.name == "Invalid Authorization") {
+          // Logout User
+        }
+        else {
+          if (res.error.name != undefined) {
+            // console.log(res.error.name)
           }
           else {
-            if (res.error.name != undefined) {
-              // console.log(res.error.name)
-            }
-            else {
-              // console.log('error')
-            }
+            // console.log('error')
           }
-        } else {
-          // console.log('No error')
-          mutate(MarketOverview_URL);
-          setIsLoading(false);
         }
-      }, function (err) {
-        // console.log(err);
-        // Logout User
-      });
-    };
-  
-    return (
-      <>
-        {row?.favourites ? (
-          isLoading ? <CircularProgress color="success" size={24} /> : (
-            <StarIcon onClick={() => toggleFavourites(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />)
-        ) : (
-          isLoading ? <CircularProgress color="success" size={24} /> : (
-            <StarBorderIcon onClick={() => toggleFavourites(row)} style={{ cursor: 'pointer' }} />)
-        )}
-      </>
-    );
-  }
+      } else {
+        // console.log('No error')
+        mutate(MarketOverview_URL);
+        setIsLoading(false);
+      }
+    }, function (err) {
+      // console.log(err);
+      // Logout User
+    });
+  };
+
+  return (
+    <>
+      {row?.favourites ? (
+        isLoading ? <CircularProgress color="success" size={24} /> : (
+          <StarIcon onClick={() => toggleFavourites(row)} style={{ color: '#F0B90B', cursor: 'pointer' }} />)
+      ) : (
+        isLoading ? <CircularProgress color="success" size={24} /> : (
+          <StarBorderIcon onClick={() => toggleFavourites(row)} style={{ cursor: 'pointer' }} />)
+      )}
+    </>
+  );
+}
 
 // ==============================|| ACS,DCS TABLE - HEADER CELL ||============================== //
 
@@ -115,42 +115,48 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                 Name
               </Typography>
               <Stack direction="column" spacing={-2.4}>
-                <ArrowDropUpIcon
-                  active={orderBy === 'tradePair'}
-                  direction={orderBy === 'tradePair' ? order : 'desc'}
-                  onClick={createSortHandler('tradePair')}
-                  sx={{
-                    width: '18px',
-                    paddingBottom: '6px',
-                    cursor: 'pointer',
-                    color:
-                      order === 'asc' && orderBy === 'tradePair'
-                        ? theme.palette.mode === 'dark'
-                          ? 'text.secondarydark'
-                          : 'text.secondary'
-                        : theme.palette.mode === 'dark'
-                          ? 'text.primary'
-                          : 'text.primary'
-                  }}
-                />
-                <ArrowDropDownIcon
-                  active={orderBy === 'tradePair'}
-                  direction={orderBy === 'tradePair' ? order : 'desc'}
-                  onClick={createSortHandler('tradePair')}
-                  sx={{
-                    width: '18px',
-                    paddingBottom: '6px',
-                    cursor: 'pointer',
-                    color:
-                      order === 'desc' && orderBy === 'tradePair'
-                        ? theme.palette.mode === 'dark'
-                          ? 'text.secondarydark'
-                          : 'text.secondary'
-                        : theme.palette.mode === 'dark'
-                          ? 'text.primary'
-                          : 'text.primary'
-                  }}
-                />
+                <ButtonBase disableRipple>
+                  <ArrowDropUpIcon
+                    active={orderBy === 'tradePair'}
+                    direction={orderBy === 'tradePair' ? order : 'desc'}
+                    onClick={createSortHandler('tradePair')}
+                    sx={{
+                      width: '18px',
+                      paddingBottom: '6px',
+                      cursor: 'pointer',
+                      color:
+                        order === 'asc' && orderBy === 'tradePair'
+                          ? theme.palette.mode === 'dark'
+                            ? 'text.secondarydark'
+                            : 'text.secondary'
+                          : theme.palette.mode === 'dark'
+                            ? 'text.primary'
+                            : 'text.primary'
+                    }}
+                  />
+                </ButtonBase>
+
+                <ButtonBase disableRipple>
+                  <ArrowDropDownIcon
+                    active={orderBy === 'tradePair'}
+                    direction={orderBy === 'tradePair' ? order : 'desc'}
+                    onClick={createSortHandler('tradePair')}
+                    sx={{
+                      width: '18px',
+                      paddingBottom: '6px',
+                      cursor: 'pointer',
+                      color:
+                        order === 'desc' && orderBy === 'tradePair'
+                          ? theme.palette.mode === 'dark'
+                            ? 'text.secondarydark'
+                            : 'text.secondary'
+                          : theme.palette.mode === 'dark'
+                            ? 'text.primary'
+                            : 'text.primary'
+                    }}
+                  />
+                </ButtonBase>
+
               </Stack>
             </Stack>
           </>
@@ -167,42 +173,46 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                 Price
               </Typography>
               <Stack direction="column" spacing={-2.4}>
-                <ArrowDropUpIcon
-                  active={orderBy === 'lastPrice'}
-                  direction={orderBy === 'lastPrice' ? order : 'lastPrice'}
-                  onClick={createSortHandler('lastPrice')}
-                  sx={{
-                    width: '18px',
-                    paddingBottom: '6px',
-                    cursor: 'pointer',
-                    color:
-                      order === 'asc' && orderBy === 'lastPrice'
-                        ? theme.palette.mode === 'dark'
-                          ? 'text.secondarydark'
-                          : 'text.secondary'
-                        : theme.palette.mode === 'dark'
-                          ? 'text.primary'
-                          : 'text.primary'
-                  }}
-                />
-                <ArrowDropDownIcon
-                  active={orderBy === 'lastPrice'}
-                  direction={orderBy === 'lastPrice' ? order : 'desc'}
-                  onClick={createSortHandler('lastPrice')}
-                  sx={{
-                    width: '18px',
-                    paddingBottom: '6px',
-                    cursor: 'pointer',
-                    color:
-                      order === 'desc' && orderBy === 'lastPrice'
-                        ? theme.palette.mode === 'dark'
-                          ? 'text.secondarydark'
-                          : 'text.secondary'
-                        : theme.palette.mode === 'dark'
-                          ? 'text.primary'
-                          : 'text.primary'
-                  }}
-                />
+                <ButtonBase disableRipple>
+                  <ArrowDropUpIcon
+                    active={orderBy === 'lastPrice'}
+                    direction={orderBy === 'lastPrice' ? order : 'lastPrice'}
+                    onClick={createSortHandler('lastPrice')}
+                    sx={{
+                      width: '18px',
+                      paddingBottom: '6px',
+                      cursor: 'pointer',
+                      color:
+                        order === 'asc' && orderBy === 'lastPrice'
+                          ? theme.palette.mode === 'dark'
+                            ? 'text.secondarydark'
+                            : 'text.secondary'
+                          : theme.palette.mode === 'dark'
+                            ? 'text.primary'
+                            : 'text.primary'
+                    }}
+                  />
+                </ButtonBase>
+                <ButtonBase disableRipple>
+                  <ArrowDropDownIcon
+                    active={orderBy === 'lastPrice'}
+                    direction={orderBy === 'lastPrice' ? order : 'desc'}
+                    onClick={createSortHandler('lastPrice')}
+                    sx={{
+                      width: '18px',
+                      paddingBottom: '6px',
+                      cursor: 'pointer',
+                      color:
+                        order === 'desc' && orderBy === 'lastPrice'
+                          ? theme.palette.mode === 'dark'
+                            ? 'text.secondarydark'
+                            : 'text.secondary'
+                          : theme.palette.mode === 'dark'
+                            ? 'text.primary'
+                            : 'text.primary'
+                    }}
+                  />
+                </ButtonBase>
               </Stack>
             </Stack>
           </>
@@ -218,42 +228,47 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                 24h Chg
               </Typography>
               <Stack direction="column" spacing={-2.4}>
-                <ArrowDropUpIcon
-                  active={orderBy === '24hChg'}
-                  direction={orderBy === '24hChg' ? order : 'desc'}
-                  onClick={createSortHandler('24hChg')}
-                  sx={{
-                    width: '18px',
-                    paddingBottom: '6px',
-                    cursor: 'pointer',
-                    color:
-                      order === 'asc' && orderBy === '24hChg'
-                        ? theme.palette.mode === 'dark'
-                          ? 'text.secondarydark'
-                          : 'text.secondary'
-                        : theme.palette.mode === 'dark'
-                          ? 'text.primary'
-                          : 'text.primary'
-                  }}
-                />
-                <ArrowDropDownIcon
-                  active={orderBy === '24hChg'}
-                  direction={orderBy === '24hChg' ? order : 'desc'}
-                  onClick={createSortHandler('24hChg')}
-                  sx={{
-                    width: '18px',
-                    paddingBottom: '6px',
-                    cursor: 'pointer',
-                    color:
-                      order === 'desc' && orderBy === '24hChg'
-                        ? theme.palette.mode === 'dark'
-                          ? 'text.secondarydark'
-                          : 'text.secondary'
-                        : theme.palette.mode === 'dark'
-                          ? 'text.primary'
-                          : 'text.primary'
-                  }}
-                />
+                <ButtonBase disableRipple>
+                  <ArrowDropUpIcon
+                    active={orderBy === '24hChg'}
+                    direction={orderBy === '24hChg' ? order : 'desc'}
+                    onClick={createSortHandler('24hChg')}
+                    sx={{
+                      width: '18px',
+                      paddingBottom: '6px',
+                      cursor: 'pointer',
+                      color:
+                        order === 'asc' && orderBy === '24hChg'
+                          ? theme.palette.mode === 'dark'
+                            ? 'text.secondarydark'
+                            : 'text.secondary'
+                          : theme.palette.mode === 'dark'
+                            ? 'text.primary'
+                            : 'text.primary'
+                    }}
+                  />
+                </ButtonBase>
+
+                <ButtonBase disableRipple>
+                  <ArrowDropDownIcon
+                    active={orderBy === '24hChg'}
+                    direction={orderBy === '24hChg' ? order : 'desc'}
+                    onClick={createSortHandler('24hChg')}
+                    sx={{
+                      width: '18px',
+                      paddingBottom: '6px',
+                      cursor: 'pointer',
+                      color:
+                        order === 'desc' && orderBy === '24hChg'
+                          ? theme.palette.mode === 'dark'
+                            ? 'text.secondarydark'
+                            : 'text.secondary'
+                          : theme.palette.mode === 'dark'
+                            ? 'text.primary'
+                            : 'text.primary'
+                    }}
+                  />
+                </ButtonBase>
               </Stack>
             </Stack>
           </>

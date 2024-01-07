@@ -37,7 +37,7 @@ const Notificationpage = () => {
           backgroundColor: theme.palette.mode === 'dark' ? 'text.cardbackgrounddark' : 'text.cardbackground',
         }}
         display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}
-        pl={2}
+        pl={1}
         pb={{ xs: 2, sm: 2 }}>
         <Stack direction="row" spacing={1} pl={0} alignItems='center'  >
           <Stack justifyContent='start'>
@@ -56,10 +56,10 @@ const Notificationpage = () => {
       </Grid>
 
       <Grid container
-        pt={{ xs: 2, sm: 2, md: 3, lg: 3 }}
+        pt={{ xs: 1, sm: 2, md: 3, lg: 3 }}
         pb={{ xs: 2, sm: 2, md: 3, lg: 3 }}
-        pl={{ xs: 4, sm: 3, md: 10, lg: 20 }}
-        pr={{ xs: 4, sm: 3, md: 6, lg: 15 }}
+        pl={{ xs: 2, sm: 3, md: 10, lg: 20 }}
+        pr={{ xs: 2, sm: 3, md: 6, lg: 15 }}
         lg={12}
         sx={{
           minHeight: { xs: 'calc(107vh - 134px)', md: 'calc(107vh - 112px)' },

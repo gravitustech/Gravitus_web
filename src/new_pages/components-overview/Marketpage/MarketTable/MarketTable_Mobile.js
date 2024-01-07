@@ -115,42 +115,46 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                 Name
               </Typography>
               <Stack direction="column" spacing={-2.4}>
-                <ArrowDropUpIcon
-                  active={orderBy === 'tradePair'}
-                  direction={orderBy === 'tradePair' ? order : 'desc'}
-                  onClick={createSortHandler('tradePair')}
-                  sx={{
-                    width: '18px',
-                    paddingBottom: '6px',
-                    cursor: 'pointer',
-                    color:
-                      order === 'asc' && orderBy === 'tradePair'
-                        ? theme.palette.mode === 'dark'
-                          ? 'text.secondarydark'
-                          : 'text.secondary'
-                        : theme.palette.mode === 'dark'
-                          ? 'text.primary'
-                          : 'text.primary'
-                  }}
-                />
-                <ArrowDropDownIcon
-                  active={orderBy === 'tradePair'}
-                  direction={orderBy === 'tradePair' ? order : 'desc'}
-                  onClick={createSortHandler('tradePair')}
-                  sx={{
-                    width: '18px',
-                    paddingBottom: '6px',
-                    cursor: 'pointer',
-                    color:
-                      order === 'desc' && orderBy === 'tradePair'
-                        ? theme.palette.mode === 'dark'
-                          ? 'text.secondarydark'
-                          : 'text.secondary'
-                        : theme.palette.mode === 'dark'
-                          ? 'text.primary'
-                          : 'text.primary'
-                  }}
-                />
+                <ButtonBase disableRipple>
+                  <ArrowDropUpIcon
+                    active={orderBy === 'tradePair'}
+                    direction={orderBy === 'tradePair' ? order : 'desc'}
+                    onClick={createSortHandler('tradePair')}
+                    sx={{
+                      width: '18px',
+                      paddingBottom: '6px',
+                      cursor: 'pointer',
+                      color:
+                        order === 'asc' && orderBy === 'tradePair'
+                          ? theme.palette.mode === 'dark'
+                            ? 'text.secondarydark'
+                            : 'text.secondary'
+                          : theme.palette.mode === 'dark'
+                            ? 'text.primary'
+                            : 'text.primary'
+                    }}
+                  />
+                </ButtonBase>
+                <ButtonBase disableRipple>
+                  <ArrowDropDownIcon
+                    active={orderBy === 'tradePair'}
+                    direction={orderBy === 'tradePair' ? order : 'desc'}
+                    onClick={createSortHandler('tradePair')}
+                    sx={{
+                      width: '18px',
+                      paddingBottom: '6px',
+                      cursor: 'pointer',
+                      color:
+                        order === 'desc' && orderBy === 'tradePair'
+                          ? theme.palette.mode === 'dark'
+                            ? 'text.secondarydark'
+                            : 'text.secondary'
+                          : theme.palette.mode === 'dark'
+                            ? 'text.primary'
+                            : 'text.primary'
+                    }}
+                  />
+                </ButtonBase>
               </Stack>
             </Stack>
           </>
@@ -167,42 +171,46 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                 Price
               </Typography>
               <Stack direction="column" spacing={-2.4}>
-                <ArrowDropUpIcon
-                  active={orderBy === 'lastPrice'}
-                  direction={orderBy === 'lastPrice' ? order : 'lastPrice'}
-                  onClick={createSortHandler('lastPrice')}
-                  sx={{
-                    width: '18px',
-                    paddingBottom: '6px',
-                    cursor: 'pointer',
-                    color:
-                      order === 'asc' && orderBy === 'lastPrice'
-                        ? theme.palette.mode === 'dark'
-                          ? 'text.secondarydark'
-                          : 'text.secondary'
-                        : theme.palette.mode === 'dark'
-                          ? 'text.primary'
-                          : 'text.primary'
-                  }}
-                />
-                <ArrowDropDownIcon
-                  active={orderBy === 'lastPrice'}
-                  direction={orderBy === 'lastPrice' ? order : 'desc'}
-                  onClick={createSortHandler('lastPrice')}
-                  sx={{
-                    width: '18px',
-                    paddingBottom: '6px',
-                    cursor: 'pointer',
-                    color:
-                      order === 'desc' && orderBy === 'lastPrice'
-                        ? theme.palette.mode === 'dark'
-                          ? 'text.secondarydark'
-                          : 'text.secondary'
-                        : theme.palette.mode === 'dark'
-                          ? 'text.primary'
-                          : 'text.primary'
-                  }}
-                />
+                <ButtonBase disableRipple>
+                  <ArrowDropUpIcon
+                    active={orderBy === 'lastPrice'}
+                    direction={orderBy === 'lastPrice' ? order : 'lastPrice'}
+                    onClick={createSortHandler('lastPrice')}
+                    sx={{
+                      width: '18px',
+                      paddingBottom: '6px',
+                      cursor: 'pointer',
+                      color:
+                        order === 'asc' && orderBy === 'lastPrice'
+                          ? theme.palette.mode === 'dark'
+                            ? 'text.secondarydark'
+                            : 'text.secondary'
+                          : theme.palette.mode === 'dark'
+                            ? 'text.primary'
+                            : 'text.primary'
+                    }}
+                  />
+                </ButtonBase>
+                <ButtonBase disableRipple>
+                  <ArrowDropDownIcon
+                    active={orderBy === 'lastPrice'}
+                    direction={orderBy === 'lastPrice' ? order : 'desc'}
+                    onClick={createSortHandler('lastPrice')}
+                    sx={{
+                      width: '18px',
+                      paddingBottom: '6px',
+                      cursor: 'pointer',
+                      color:
+                        order === 'desc' && orderBy === 'lastPrice'
+                          ? theme.palette.mode === 'dark'
+                            ? 'text.secondarydark'
+                            : 'text.secondary'
+                          : theme.palette.mode === 'dark'
+                            ? 'text.primary'
+                            : 'text.primary'
+                    }}
+                  />
+                </ButtonBase>
               </Stack>
             </Stack>
           </>
@@ -218,42 +226,46 @@ function OrderTableHead({ order, orderBy, onRequestSort }) {
                 24h Chg
               </Typography>
               <Stack direction="column" spacing={-2.4}>
-                <ArrowDropUpIcon
-                  active={orderBy === '24hChg'}
-                  direction={orderBy === '24hChg' ? order : 'desc'}
-                  onClick={createSortHandler('24hChg')}
-                  sx={{
-                    width: '18px',
-                    paddingBottom: '6px',
-                    cursor: 'pointer',
-                    color:
-                      order === 'asc' && orderBy === '24hChg'
-                        ? theme.palette.mode === 'dark'
-                          ? 'text.secondarydark'
-                          : 'text.secondary'
-                        : theme.palette.mode === 'dark'
-                          ? 'text.primary'
-                          : 'text.primary'
-                  }}
-                />
-                <ArrowDropDownIcon
-                  active={orderBy === '24hChg'}
-                  direction={orderBy === '24hChg' ? order : 'desc'}
-                  onClick={createSortHandler('24hChg')}
-                  sx={{
-                    width: '18px',
-                    paddingBottom: '6px',
-                    cursor: 'pointer',
-                    color:
-                      order === 'desc' && orderBy === '24hChg'
-                        ? theme.palette.mode === 'dark'
-                          ? 'text.secondarydark'
-                          : 'text.secondary'
-                        : theme.palette.mode === 'dark'
-                          ? 'text.primary'
-                          : 'text.primary'
-                  }}
-                />
+                <ButtonBase disableRipple>
+                  <ArrowDropUpIcon
+                    active={orderBy === '24hChg'}
+                    direction={orderBy === '24hChg' ? order : 'desc'}
+                    onClick={createSortHandler('24hChg')}
+                    sx={{
+                      width: '18px',
+                      paddingBottom: '6px',
+                      cursor: 'pointer',
+                      color:
+                        order === 'asc' && orderBy === '24hChg'
+                          ? theme.palette.mode === 'dark'
+                            ? 'text.secondarydark'
+                            : 'text.secondary'
+                          : theme.palette.mode === 'dark'
+                            ? 'text.primary'
+                            : 'text.primary'
+                    }}
+                  />
+                </ButtonBase>
+                <ButtonBase disableRipple>
+                  <ArrowDropDownIcon
+                    active={orderBy === '24hChg'}
+                    direction={orderBy === '24hChg' ? order : 'desc'}
+                    onClick={createSortHandler('24hChg')}
+                    sx={{
+                      width: '18px',
+                      paddingBottom: '6px',
+                      cursor: 'pointer',
+                      color:
+                        order === 'desc' && orderBy === '24hChg'
+                          ? theme.palette.mode === 'dark'
+                            ? 'text.secondarydark'
+                            : 'text.secondary'
+                          : theme.palette.mode === 'dark'
+                            ? 'text.primary'
+                            : 'text.primary'
+                    }}
+                  />
+                </ButtonBase>
               </Stack>
             </Stack>
           </>

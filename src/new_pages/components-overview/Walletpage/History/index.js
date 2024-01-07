@@ -129,7 +129,7 @@ const HistoryPageNG = () => {
       </Grid>
       {STATEMENTData ? (
         <Grid container
-          pt={{ xs: 2, sm: 2, md: 2, lg: 2 }}
+          pt={{ xs: 0, sm: 0, md: 2, lg: 2 }}
           pb={{ xs: 2, sm: 2, md: 3, lg: 3 }}
           pl={{ xs: 2, sm: 2, md: 10, lg: 18 }}
           pr={{ xs: 2, sm: 2, md: 6, lg: 15 }}

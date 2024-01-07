@@ -98,7 +98,7 @@ const GravitusMainLayout = () => {
           boxShadow: 'none',
         }}
       >
-        <Toolbar sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#131722' : 'text.white', height: '0px' }}>
+        <Toolbar sx={{ backgroundColor: theme.palette.mode === 'dark' ? '#131722' : 'text.white', height: '0px', paddingLeft: '16px', paddingRight: '16px' }}>
           {isMatch ? (
             <>
               <Grid container>
@@ -121,7 +121,7 @@ const GravitusMainLayout = () => {
                 </>
               )}
               <Grid item xs={6} align="right">
-                <IconButton sx={{ color: '#8C8C8C', marginLeft: 'auto', paddingLeft: '8px' }} onClick={toggleDrawer}>
+                <IconButton sx={{ color: '#8C8C8C', marginLeft: 'auto', paddingLeft: '18px' }} onClick={toggleDrawer}>
                   <MenuIcon sx={{ width: '28px', height: '28px' }} />
                 </IconButton>
               </Grid>
@@ -144,7 +144,7 @@ const GravitusMainLayout = () => {
                     </Stack>
 
                     <ListItem onClick={() => setopenDrawer(false)}>
-                      <GravitusNavigation />
+                        <GravitusNavigation />
                     </ListItem>
 
                     <ListItem sx={{ pl: 6 }}>

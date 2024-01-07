@@ -64,125 +64,6 @@ const P2P_Table = ({ isAuthorised, P2PData, setSnackbarOpen, setSnackbarMessage 
     setIsIconUp(false);
   }
 
-  const FilterField = () => {
-    return (
-      <>
-        <Stack spacing={{ xs: 1.5, sm: 1.5, md: 1, lg: 1 }} direction={{ xs: 'column', sm: 'column', md: 'row', lg: 'row' }}>
-          <OutlinedInput
-            id="Price"
-            type="Price"
-            name="Price"
-            placeholder="Enter Price"
-            value={priceSearchQuery}
-            onChange={(e) => setPriceSearchQuery(e.target.value)}
-            onKeyPress={(e) => {
-              // Allow only numeric values, Backspace, Enter, and decimal point
-              const isValidKey = /^[0-9\b\r.]+$/.test(e.key);
-              // Allow only one decimal point
-              const hasDecimalPoint = /\./.test(e.target.value);
-              if (hasDecimalPoint && e.key === '.') {
-                e.preventDefault();
-              }
-              if (!isValidKey) {
-                e.preventDefault();
-              }
-            }}
-            endAdornment={
-              <InputAdornment position="end">
-                <Stack direction='row' alignItems='center' spacing={.8}>
-                  {priceSearchQuery && (
-                    <IconButton disableRipple edge="end" onClick={() => handleCancel('price')} size="small">
-                      <HighlightOffIcon fontSize="small" sx={{
-                        color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
-                      }} />
-                    </IconButton>
-                  )}
-                  <Stack display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
-                    <img src={p2pinricon} alt='p2pinricon' width={18} />
-                  </Stack>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                  >
-                    INR
-                  </Typography>
-                </Stack>
-              </InputAdornment>
-            } />
-          <OutlinedInput
-            id="Quantity"
-            type="Quantity"
-            name="Quantity"
-            placeholder="Enter Quantity"
-            value={quantitySearchQuery}
-            onChange={(e) => setQuantitySearchQuery(e.target.value)}
-            onKeyPress={(e) => {
-              // Allow only numeric values, Backspace, Enter, and decimal point
-              const isValidKey = /^[0-9\b\r.]+$/.test(e.key);
-              // Allow only one decimal point
-              const hasDecimalPoint = /\./.test(e.target.value);
-              if (hasDecimalPoint && e.key === '.') {
-                e.preventDefault();
-              }
-              if (!isValidKey) {
-                e.preventDefault();
-              }
-            }}
-            endAdornment={
-              <InputAdornment position="end">
-                <Stack direction='row' alignItems='center' spacing={.8}>
-                  {quantitySearchQuery && (
-                    <IconButton disableRipple edge="end" onClick={() => handleCancel('quantity')} size="small">
-                      <HighlightOffIcon fontSize="small" sx={{
-                        color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
-                      }} />
-                    </IconButton>
-                  )}
-                  <Stack display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
-                    <img src={usdticon} alt='usdticon' width={18} />
-                  </Stack>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
-                  >
-                    USDT
-                  </Typography>
-                </Stack>
-              </InputAdornment>
-            } />
-          <OutlinedInput
-            id="Userid"
-            type="Userid"
-            name="Userid"
-            placeholder="Search UserID"
-            value={useridSearchQuery}
-            onChange={(e) => setUseridSearchQuery(e.target.value)}
-            onKeyPress={(e) => {
-              // Allow only numeric values (0-9), Backspace, and Enter
-              const isValidKey = /^[0-9\b\r]+$/.test(e.key);
-              if (!isValidKey) {
-                e.preventDefault();
-              }
-            }}
-            endAdornment={
-              <InputAdornment position="end">
-                <Stack direction='row' alignItems='center' spacing={.8}>
-                  {useridSearchQuery && (
-                    <IconButton disableRipple edge="end" onClick={() => handleCancel('userid')} size="small">
-                      <HighlightOffIcon fontSize="small" sx={{
-                        color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
-                      }} />
-                    </IconButton>
-                  )}
-                  <img src={usericon} alt='usericon' width={28} />
-                </Stack>
-              </InputAdornment>
-            }
-          />
-        </Stack>
-      </>
-    )
-  }
   return (
     <Card
       sx={{
@@ -277,7 +158,119 @@ const P2P_Table = ({ isAuthorised, P2PData, setSnackbarOpen, setSnackbarMessage 
           </Stack>
 
           <Stack pt={3} direction='row' spacing={3} display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
-            <FilterField />
+            <Stack spacing={{ xs: 1.5, sm: 1.5, md: 1, lg: 1 }} direction={{ xs: 'column', sm: 'column', md: 'row', lg: 'row' }}>
+              <OutlinedInput
+                id="Price"
+                type="Price"
+                name="Price"
+                placeholder="Enter Price"
+                value={priceSearchQuery}
+                onChange={(e) => setPriceSearchQuery(e.target.value)}
+                onKeyPress={(e) => {
+                  // Allow only numeric values, Backspace, Enter, and decimal point
+                  const isValidKey = /^[0-9\b\r.]+$/.test(e.key);
+                  // Allow only one decimal point
+                  const hasDecimalPoint = /\./.test(e.target.value);
+                  if (hasDecimalPoint && e.key === '.') {
+                    e.preventDefault();
+                  }
+                  if (!isValidKey) {
+                    e.preventDefault();
+                  }
+                }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <Stack direction='row' alignItems='center' spacing={.8}>
+                      {priceSearchQuery && (
+                        <IconButton disableRipple edge="end" onClick={() => handleCancel('price')} size="small">
+                          <HighlightOffIcon fontSize="small" sx={{
+                            color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+                          }} />
+                        </IconButton>
+                      )}
+                      <Stack display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
+                        <img src={p2pinricon} alt='p2pinricon' width={18} />
+                      </Stack>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                      >
+                        INR
+                      </Typography>
+                    </Stack>
+                  </InputAdornment>
+                } />
+              <OutlinedInput
+                id="Quantity"
+                type="Quantity"
+                name="Quantity"
+                placeholder="Enter Quantity"
+                value={quantitySearchQuery}
+                onChange={(e) => setQuantitySearchQuery(e.target.value)}
+                onKeyPress={(e) => {
+                  // Allow only numeric values, Backspace, Enter, and decimal point
+                  const isValidKey = /^[0-9\b\r.]+$/.test(e.key);
+                  // Allow only one decimal point
+                  const hasDecimalPoint = /\./.test(e.target.value);
+                  if (hasDecimalPoint && e.key === '.') {
+                    e.preventDefault();
+                  }
+                  if (!isValidKey) {
+                    e.preventDefault();
+                  }
+                }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <Stack direction='row' alignItems='center' spacing={.8}>
+                      {quantitySearchQuery && (
+                        <IconButton disableRipple edge="end" onClick={() => handleCancel('quantity')} size="small">
+                          <HighlightOffIcon fontSize="small" sx={{
+                            color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+                          }} />
+                        </IconButton>
+                      )}
+                      <Stack display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
+                        <img src={usdticon} alt='usdticon' width={18} />
+                      </Stack>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                      >
+                        USDT
+                      </Typography>
+                    </Stack>
+                  </InputAdornment>
+                } />
+              <OutlinedInput
+                id="Userid"
+                type="Userid"
+                name="Userid"
+                placeholder="Search UserID"
+                value={useridSearchQuery}
+                onChange={(e) => setUseridSearchQuery(e.target.value)}
+                onKeyPress={(e) => {
+                  // Allow only numeric values (0-9), Backspace, and Enter
+                  const isValidKey = /^[0-9\b\r]+$/.test(e.key);
+                  if (!isValidKey) {
+                    e.preventDefault();
+                  }
+                }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <Stack direction='row' alignItems='center' spacing={.8}>
+                      {useridSearchQuery && (
+                        <IconButton disableRipple edge="end" onClick={() => handleCancel('userid')} size="small">
+                          <HighlightOffIcon fontSize="small" sx={{
+                            color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+                          }} />
+                        </IconButton>
+                      )}
+                      <img src={usericon} alt='usericon' width={28} />
+                    </Stack>
+                  </InputAdornment>
+                }
+              />
+            </Stack>
           </Stack>
 
           <Stack pt={3} pb={1} direction='row' spacing={3} display={{ xs: 'block', sm: 'block', md: 'none', lg: 'none' }}>
@@ -349,7 +342,119 @@ const P2P_Table = ({ isAuthorised, P2PData, setSnackbarOpen, setSnackbarMessage 
               }} />
             </Stack>
             <Stack >
-              <FilterField />
+              <Stack spacing={{ xs: 1.5, sm: 1.5, md: 1, lg: 1 }} direction={{ xs: 'column', sm: 'column', md: 'row', lg: 'row' }}>
+                <OutlinedInput
+                  id="Price"
+                  type="Price"
+                  name="Price"
+                  placeholder="Enter Price"
+                  value={priceSearchQuery}
+                  onChange={(e) => setPriceSearchQuery(e.target.value)}
+                  onKeyPress={(e) => {
+                    // Allow only numeric values, Backspace, Enter, and decimal point
+                    const isValidKey = /^[0-9\b\r.]+$/.test(e.key);
+                    // Allow only one decimal point
+                    const hasDecimalPoint = /\./.test(e.target.value);
+                    if (hasDecimalPoint && e.key === '.') {
+                      e.preventDefault();
+                    }
+                    if (!isValidKey) {
+                      e.preventDefault();
+                    }
+                  }}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <Stack direction='row' alignItems='center' spacing={.8}>
+                        {priceSearchQuery && (
+                          <IconButton disableRipple edge="end" onClick={() => handleCancel('price')} size="small">
+                            <HighlightOffIcon fontSize="small" sx={{
+                              color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+                            }} />
+                          </IconButton>
+                        )}
+                        <Stack display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
+                          <img src={p2pinricon} alt='p2pinricon' width={18} />
+                        </Stack>
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                        >
+                          INR
+                        </Typography>
+                      </Stack>
+                    </InputAdornment>
+                  } />
+                <OutlinedInput
+                  id="Quantity"
+                  type="Quantity"
+                  name="Quantity"
+                  placeholder="Enter Quantity"
+                  value={quantitySearchQuery}
+                  onChange={(e) => setQuantitySearchQuery(e.target.value)}
+                  onKeyPress={(e) => {
+                    // Allow only numeric values, Backspace, Enter, and decimal point
+                    const isValidKey = /^[0-9\b\r.]+$/.test(e.key);
+                    // Allow only one decimal point
+                    const hasDecimalPoint = /\./.test(e.target.value);
+                    if (hasDecimalPoint && e.key === '.') {
+                      e.preventDefault();
+                    }
+                    if (!isValidKey) {
+                      e.preventDefault();
+                    }
+                  }}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <Stack direction='row' alignItems='center' spacing={.8}>
+                        {quantitySearchQuery && (
+                          <IconButton disableRipple edge="end" onClick={() => handleCancel('quantity')} size="small">
+                            <HighlightOffIcon fontSize="small" sx={{
+                              color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+                            }} />
+                          </IconButton>
+                        )}
+                        <Stack display={{ xs: 'none', sm: 'none', md: 'block', lg: 'block' }}>
+                          <img src={usdticon} alt='usdticon' width={18} />
+                        </Stack>
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ color: theme.palette.mode === 'dark' ? 'text.secondarydark' : 'text.secondary' }}
+                        >
+                          USDT
+                        </Typography>
+                      </Stack>
+                    </InputAdornment>
+                  } />
+                <OutlinedInput
+                  id="Userid"
+                  type="Userid"
+                  name="Userid"
+                  placeholder="Search UserID"
+                  value={useridSearchQuery}
+                  onChange={(e) => setUseridSearchQuery(e.target.value)}
+                  onKeyPress={(e) => {
+                    // Allow only numeric values (0-9), Backspace, and Enter
+                    const isValidKey = /^[0-9\b\r]+$/.test(e.key);
+                    if (!isValidKey) {
+                      e.preventDefault();
+                    }
+                  }}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <Stack direction='row' alignItems='center' spacing={.8}>
+                        {useridSearchQuery && (
+                          <IconButton disableRipple edge="end" onClick={() => handleCancel('userid')} size="small">
+                            <HighlightOffIcon fontSize="small" sx={{
+                              color: theme.palette.mode === 'dark' ? 'text.primary' : 'text.primary'
+                            }} />
+                          </IconButton>
+                        )}
+                        <img src={usericon} alt='usericon' width={28} />
+                      </Stack>
+                    </InputAdornment>
+                  }
+                />
+              </Stack>
             </Stack>
             <Stack direction='row' spacing={1} pt={2} >
               <Button variant='spotsellbutton' onClick={ResetButton}>
