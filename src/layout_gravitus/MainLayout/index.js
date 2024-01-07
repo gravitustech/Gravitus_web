@@ -147,7 +147,7 @@ const GravitusMainLayout = () => {
                         <GravitusNavigation />
                     </ListItem>
 
-                    <ListItem sx={{ pl: 6 }}>
+                    <ListItem sx={{ pl: 5.5 }}>
                       <Button
                         disableRipple
                         onClick={() => toggleSuperTheme()}
